@@ -99,7 +99,7 @@ namespace org.objectweb.asm.commons
 	  /// <returns> a <seealso cref="System.Reflection.MethodInfo"/> corresponding to the given Java method declaration. </returns>
 	  public static Method getMethod(System.Reflection.MethodInfo method)
 	  {
-		return new Method(method.getName(), org.objectweb.asm.JType.getMethodDescriptor(method));
+		return new Method(method.Name, org.objectweb.asm.JType.getMethodDescriptor(method));
 	  }
 
 	  /// <summary>
@@ -107,7 +107,7 @@ namespace org.objectweb.asm.commons
 	  /// </summary>
 	  /// <param name="constructor"> a java.lang.reflect constructor descriptor </param>
 	  /// <returns> a <seealso cref="System.Reflection.MethodInfo"/> corresponding to the given Java constructor declaration. </returns>
-	  public static Method getMethod<T1>(System.Reflection.ConstructorInfo<T1> constructor)
+	  public static Method getMethod<T1>(System.Reflection.ConstructorInfo constructor)
 	  {
 		return new Method("<init>", org.objectweb.asm.JType.getConstructorDescriptor(constructor));
 	  }

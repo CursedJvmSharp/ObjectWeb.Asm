@@ -265,11 +265,12 @@ namespace org.objectweb.asm.tree
 			  this.outerInstance = outerInstance;
 		  }
 
-		  public override bool add(object o)
+		  public new bool Add(object o)
 		  {
 			outerInstance.annotationDefault = o;
-			return base.add(o);
-		  }
+			base.Add(o);
+            return true;
+          }
 	  }
 
 	  public override AnnotationVisitor visitAnnotation(string descriptor, bool visible)
@@ -319,7 +320,7 @@ namespace org.objectweb.asm.tree
 		{
 		  if (visibleParameterAnnotations == null)
 		  {
-			int @params = org.objectweb.asm.JType.getArgumentTypes(desc).length;
+			int @params = org.objectweb.asm.JType.getArgumentTypes(desc).Length;
 			visibleParameterAnnotations = (IList<AnnotationNode>[]) new IList<object>[@params];
 		  }
 		  visibleParameterAnnotations[parameter] = Util.add(visibleParameterAnnotations[parameter], annotation);
@@ -328,7 +329,7 @@ namespace org.objectweb.asm.tree
 		{
 		  if (invisibleParameterAnnotations == null)
 		  {
-			int @params = org.objectweb.asm.JType.getArgumentTypes(desc).length;
+			int @params = org.objectweb.asm.JType.getArgumentTypes(desc).Length;
 			invisibleParameterAnnotations = (IList<AnnotationNode>[]) new IList<object>[@params];
 		  }
 		  invisibleParameterAnnotations[parameter] = Util.add(invisibleParameterAnnotations[parameter], annotation);
@@ -612,7 +613,7 @@ namespace org.objectweb.asm.tree
 			else if (insn is LdcInsnNode)
 			{
 			  object value = ((LdcInsnNode) insn).cst;
-			  if (value is Handle || (value is org.objectweb.asm.JType && ((org.objectweb.asm.JType) value).getSort() == org.objectweb.asm.JType.METHOD))
+			  if (value is Handle || (value is org.objectweb.asm.JType && ((org.objectweb.asm.JType) value).Sort == org.objectweb.asm.JType.METHOD))
 			  {
 				throw new UnsupportedClassVersionException();
 			  }

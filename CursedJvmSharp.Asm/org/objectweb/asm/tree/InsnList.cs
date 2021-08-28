@@ -1,4 +1,6 @@
-﻿using org.objectweb.asm;
+﻿using System;
+using System.Collections;
+using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System.Collections.Generic;
 using MethodVisitor = org.objectweb.asm.MethodVisitor;
@@ -169,7 +171,7 @@ namespace org.objectweb.asm.tree
 	  /// <returns> an iterator over the instructions in this list. </returns>
 	  public virtual IEnumerator<AbstractInsnNode> GetEnumerator()
 	  {
-		return iterator(0);
+		return GetEnumerator(0);
 	  }
 
 	  /// <summary>
@@ -546,7 +548,7 @@ namespace org.objectweb.asm.tree
 	  }
 
 	  // Note: this class is not generified because it would create bridges.
-	  private sealed class InsnListIterator : System.Collections.IEnumerator
+	  private sealed class InsnListIterator : IEnumerator<AbstractInsnNode>
 	  {
 		  private readonly InsnList outerInstance;
 
@@ -556,8 +558,9 @@ namespace org.objectweb.asm.tree
 		internal AbstractInsnNode previousInsn;
 
 		internal AbstractInsnNode remove_Conflict;
+        private AbstractInsnNode _current;
 
-		public InsnListIterator(InsnList outerInstance, int index)
+        public InsnListIterator(InsnList outerInstance, int index)
 		{
 			this.outerInstance = outerInstance;
 		  if (index < 0 || index > outerInstance.size())
@@ -582,16 +585,16 @@ namespace org.objectweb.asm.tree
 		  }
 		}
 
-		public override bool hasNext()
+		public bool hasNext()
 		{
 		  return nextInsn != null;
 		}
 
-		public override object next()
+		public AbstractInsnNode next()
 		{
 		  if (nextInsn == null)
 		  {
-			throw new NoSuchElementException();
+			throw new System.InvalidOperationException();
 		  }
 		  AbstractInsnNode result = nextInsn;
 		  previousInsn = result;
@@ -600,7 +603,7 @@ namespace org.objectweb.asm.tree
 		  return result;
 		}
 
-		public override void remove()
+		public void remove()
 		{
 		  if (remove_Conflict != null)
 		  {
@@ -621,16 +624,16 @@ namespace org.objectweb.asm.tree
 		  }
 		}
 
-		public override bool hasPrevious()
+		public bool hasPrevious()
 		{
 		  return previousInsn != null;
 		}
 
-		public override object previous()
+		public object previous()
 		{
 		  if (previousInsn == null)
 		  {
-			throw new NoSuchElementException();
+			throw new InvalidOperationException("NoSuchElement");
 		  }
 		  AbstractInsnNode result = previousInsn;
 		  nextInsn = result;
@@ -639,7 +642,7 @@ namespace org.objectweb.asm.tree
 		  return result;
 		}
 
-		public override int nextIndex()
+		public int nextIndex()
 		{
 		  if (nextInsn == null)
 		  {
@@ -652,7 +655,7 @@ namespace org.objectweb.asm.tree
 		  return nextInsn.index;
 		}
 
-		public override int previousIndex()
+		public int previousIndex()
 		{
 		  if (previousInsn == null)
 		  {
@@ -665,7 +668,7 @@ namespace org.objectweb.asm.tree
 		  return previousInsn.index;
 		}
 
-		public override void add(object o)
+		public void add(object o)
 		{
 		  if (nextInsn != null)
 		  {
@@ -683,7 +686,7 @@ namespace org.objectweb.asm.tree
 		  remove_Conflict = null;
 		}
 
-		public override void set(object o)
+		public void set(object o)
 		{
 		  if (remove_Conflict != null)
 		  {
@@ -702,7 +705,32 @@ namespace org.objectweb.asm.tree
 			throw new System.InvalidOperationException();
 		  }
 		}
-	  }
-	}
+
+		
+        public bool MoveNext()
+        {
+            Current = next();
+            return true;
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        object IEnumerator.Current => Current;
+
+        public AbstractInsnNode Current { get; private set;  }
+
+        public void Dispose()
+        {
+        }
+      }
+
+      IEnumerator IEnumerable.GetEnumerator()
+      {
+          return GetEnumerator();
+      }
+    }
 
 }

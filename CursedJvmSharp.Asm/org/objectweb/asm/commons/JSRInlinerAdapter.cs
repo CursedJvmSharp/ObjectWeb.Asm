@@ -1,7 +1,9 @@
-﻿using org.objectweb.asm;
+﻿using System;
+using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Label = org.objectweb.asm.Label;
 using MethodVisitor = org.objectweb.asm.MethodVisitor;
 using Opcodes = org.objectweb.asm.Opcodes;
@@ -60,7 +62,7 @@ namespace org.objectweb.asm.commons
 	  /// The instructions that belong to the main "subroutine". Bit i is set iff instruction at index i
 	  /// belongs to this main "subroutine".
 	  /// </summary>
-	  private readonly BitArray mainSubroutineInsns = new BitArray();
+	  private readonly BitArray mainSubroutineInsns = new BitArray(64);
 
 	  /// <summary>
 	  /// The instructions that belong to each subroutine. For each label which is the target of a JSR
@@ -73,7 +75,7 @@ namespace org.objectweb.asm.commons
 	  /// The instructions that belong to more that one subroutine. Bit i is set iff instruction at index
 	  /// i belongs to more than one subroutine.
 	  /// </summary>
-	  internal readonly BitArray sharedSubroutineInsns = new BitArray();
+	  internal readonly BitArray sharedSubroutineInsns = new BitArray(64);
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="JSRInlinerAdapter"/>. <i>Subclasses must not use this constructor</i>.
@@ -118,9 +120,9 @@ namespace org.objectweb.asm.commons
 	  {
 		base.visitJumpInsn(opcode, label);
 		LabelNode labelNode = ((JumpInsnNode) instructions.Last).label;
-		if (opcode == JSR && !subroutinesInsns.ContainsKey(labelNode))
+		if (opcode == Opcodes.JSR && !subroutinesInsns.ContainsKey(labelNode))
 		{
-		  subroutinesInsns[labelNode] = new BitArray();
+		  subroutinesInsns[labelNode] = new BitArray(64);
 		}
 	  }
 
@@ -143,7 +145,7 @@ namespace org.objectweb.asm.commons
 	  private void findSubroutinesInsns()
 	  {
 		// Find the instructions that belong to main subroutine.
-		BitArray visitedInsns = new BitArray();
+		BitArray visitedInsns = new BitArray(64);
 		findSubroutineInsns(0, mainSubroutineInsns, visitedInsns);
 		// For each subroutine, find the instructions that belong to this subroutine.
 		foreach (KeyValuePair<LabelNode, BitArray> entry in subroutinesInsns.SetOfKeyValuePairs())
@@ -186,7 +188,7 @@ namespace org.objectweb.asm.commons
 			// can be reached from the routine, and its instructions must be added to the subroutine.
 			int startIndex = instructions.indexOf(tryCatchBlockNode.start);
 			int endIndex = instructions.indexOf(tryCatchBlockNode.end);
-			int firstSubroutineInsnAfterTryCatchStart = subroutineInsns.nextSetBit(startIndex);
+			int firstSubroutineInsnAfterTryCatchStart = subroutineInsns.OfType<bool>().ToList().IndexOf(true, startIndex);
 			if (firstSubroutineInsnAfterTryCatchStart >= startIndex && firstSubroutineInsnAfterTryCatchStart < endIndex)
 			{
 			  findReachableInsns(handlerIndex, subroutineInsns, visitedInsns);
@@ -216,9 +218,9 @@ namespace org.objectweb.asm.commons
 	  {
 		int currentInsnIndex = insnIndex;
 		// We implicitly assume below that execution can always fall through to the next instruction
-		// after a JSR. But a subroutine may never return, in which case the code after the JSR is
+		// after a JSR. But a subroutine may never return, in which case Opcodes.the code after the JSR is
 		// unreachable and can be anything. In particular, it can seem to fall off the end of the
-		// method, so we must handle this case here (we could instead detect whether execution can
+		// method, so we must handle this case Opcodes.here (we could instead detect whether execution can
 		// return or not from a JSR, but this is more complicated).
 		while (currentInsnIndex < instructions.size())
 		{
@@ -237,7 +239,7 @@ namespace org.objectweb.asm.commons
 		  visitedInsns.Set(currentInsnIndex, true);
 
 		  AbstractInsnNode currentInsnNode = instructions.get(currentInsnIndex);
-		  if (currentInsnNode.Type == AbstractInsnNode.JUMP_INSN && currentInsnNode.Opcode != JSR)
+		  if (currentInsnNode.Type == AbstractInsnNode.JUMP_INSN && currentInsnNode.Opcode != Opcodes.JSR)
 		  {
 			// Don't follow JSR instructions in the control flow graph.
 			JumpInsnNode jumpInsnNode = (JumpInsnNode) currentInsnNode;
@@ -263,19 +265,19 @@ namespace org.objectweb.asm.commons
 		  }
 
 		  // Check if this instruction falls through to the next instruction; if not, return.
-		  switch (instructions.get(currentInsnIndex).getOpcode())
+		  switch (instructions.get(currentInsnIndex).Opcode)
 		  {
-			case GOTO:
-			case RET:
-			case TABLESWITCH:
-			case LOOKUPSWITCH:
-			case IRETURN:
-			case LRETURN:
-			case FRETURN:
-			case DRETURN:
-			case ARETURN:
-			case RETURN:
-			case ATHROW:
+			case Opcodes.GOTO:
+			case Opcodes.RET:
+			case Opcodes.TABLESWITCH:
+			case Opcodes.LOOKUPSWITCH:
+			case Opcodes.IRETURN:
+			case Opcodes.LRETURN:
+			case Opcodes.FRETURN:
+			case Opcodes.DRETURN:
+			case Opcodes.ARETURN:
+			case Opcodes.RETURN:
+			case Opcodes.ATHROW:
 			  // Note: this either returns from this subroutine, or from a parent subroutine.
 			  return;
 			default:
@@ -301,9 +303,11 @@ namespace org.objectweb.asm.commons
 		IList<TryCatchBlockNode> newTryCatchBlocks = new List<TryCatchBlockNode>();
 		IList<LocalVariableNode> newLocalVariables = new List<LocalVariableNode>();
 		while (worklist.Count > 0)
-		{
-		  Instantiation instantiation = worklist.RemoveFirst();
-		  emitInstantiation(instantiation, worklist, newInstructions, newTryCatchBlocks, newLocalVariables);
+        {
+
+            Instantiation instantiation = worklist.First!.Value;
+            worklist.RemoveFirst();
+            emitInstantiation(instantiation, worklist, newInstructions, newTryCatchBlocks, newLocalVariables);
 		}
 		instructions = newInstructions;
 		tryCatchBlocks = newTryCatchBlocks;
@@ -322,7 +326,7 @@ namespace org.objectweb.asm.commons
 	  ///     appended. </param>
 	  /// <param name="newLocalVariables"> the local variables list to which the instantiated local variables
 	  ///     must be appended. </param>
-	  private void emitInstantiation(Instantiation instantiation, IList<Instantiation> worklist, InsnList newInstructions, IList<TryCatchBlockNode> newTryCatchBlocks, IList<LocalVariableNode> newLocalVariables)
+	  private void emitInstantiation(Instantiation instantiation, LinkedList<Instantiation> worklist, InsnList newInstructions, IList<TryCatchBlockNode> newTryCatchBlocks, IList<LocalVariableNode> newLocalVariables)
 	  {
 		LabelNode previousLabelNode = null;
 		for (int i = 0; i < instructions.size(); ++i)
@@ -345,7 +349,7 @@ namespace org.objectweb.asm.commons
 			// is still possible for a given instruction to be emitted twice because it may belong to
 			// two subroutines that do not invoke each other.
 
-			if (insnNode.Opcode == RET)
+			if (insnNode.Opcode == Opcodes.RET)
 			{
 			  // Translate RET instruction(s) to a jump to the return label for the appropriate
 			  // instantiation. The problem is that the subroutine may "fall through" to the ret of a
@@ -365,9 +369,9 @@ namespace org.objectweb.asm.commons
 				// never happen for verifiable code.
 				throw new System.ArgumentException("Instruction #" + i + " is a RET not owned by any subroutine");
 			  }
-			  newInstructions.add(new JumpInsnNode(GOTO, retLabel));
+			  newInstructions.add(new JumpInsnNode(Opcodes.GOTO, retLabel));
 			}
-			else if (insnNode.Opcode == JSR)
+			else if (insnNode.Opcode == Opcodes.JSR)
 			{
 			  LabelNode jsrLabelNode = ((JumpInsnNode) insnNode).label;
 			  BitArray subroutineInsns = subroutinesInsns.GetValueOrNull(jsrLabelNode);
@@ -377,11 +381,11 @@ namespace org.objectweb.asm.commons
 			  // for what was once the return address value. This hack allows us to avoid doing any sort
 			  // of data flow analysis to figure out which instructions manipulate the old return
 			  // address value pointer which is now known to be unneeded.
-			  newInstructions.add(new InsnNode(ACONST_NULL));
-			  newInstructions.add(new JumpInsnNode(GOTO, clonedJsrLabelNode));
+			  newInstructions.add(new InsnNode(Opcodes.ACONST_NULL));
+			  newInstructions.add(new JumpInsnNode(Opcodes.GOTO, clonedJsrLabelNode));
 			  newInstructions.add(newInstantiation.returnLabel);
 			  // Insert this new instantiation into the queue to be emitted later.
-			  worklist.Add(newInstantiation);
+			  worklist.AddLast(newInstantiation);
 			}
 			else
 			{
@@ -400,7 +404,7 @@ namespace org.objectweb.asm.commons
 			LabelNode handler = instantiation.getClonedLabelForJumpInsn(tryCatchBlockNode.handler);
 			if (start == null || end == null || handler == null)
 			{
-			  throw new AssertionError("Internal error!");
+			  throw new InvalidOperationException("Internal error!");
 			}
 			newTryCatchBlocks.Add(new TryCatchBlockNode(start, end, handler, tryCatchBlockNode.type));
 		  }
@@ -420,7 +424,7 @@ namespace org.objectweb.asm.commons
 
 	  /// <summary>
 	  /// An instantiation of a subroutine. </summary>
-	  private class Instantiation : AbstractMap<LabelNode, LabelNode>
+	  private class Instantiation : Dictionary<LabelNode, LabelNode>
 	  {
 		  private readonly JSRInlinerAdapter outerInstance;
 
@@ -561,12 +565,12 @@ namespace org.objectweb.asm.commons
 
 		// AbstractMap implementation
 
-		public override ISet<KeyValuePair<LabelNode, LabelNode>> entrySet()
+		public ISet<KeyValuePair<LabelNode, LabelNode>> entrySet()
 		{
 		  throw new System.NotSupportedException();
 		}
 
-		public override LabelNode get(object key)
+		public LabelNode get(object key)
 		{
 		  return getClonedLabelForJumpInsn((LabelNode) key);
 		}
