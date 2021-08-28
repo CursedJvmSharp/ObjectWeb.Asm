@@ -524,7 +524,7 @@ namespace CursedJvmSharp.Asm.Java.IO
         ///     another I/O error occurs.
         /// </exception>
         /// <seealso cref="ReadLong()" />
-        /// <seealso cref="double.LongBitsToDouble(long)" />
+        /// <seealso cref="BitConverter.Int64BitsToDouble(long)" />
         /// <exception cref="System.IO.IOException" />
         public double ReadDouble()
         {

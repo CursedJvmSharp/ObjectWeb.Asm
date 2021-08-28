@@ -1008,60 +1008,8 @@ namespace org.objectweb.asm
 	  /// <returns> the internal name of the common super class of the two given classes. </returns>
 	  public virtual string getCommonSuperClass(string type1, string type2)
 	  {
-		ClassLoader classLoader = ClassLoader;
-		System.Type class1;
-		try
-		{
-		  class1 = System.Type.GetType(type1.Replace('/', '.'), false, classLoader);
-		}
-		catch (System.Exception e)
-		{
-		  throw new TypeNotPresentException(type1, e);
-		}
-		System.Type class2;
-		try
-		{
-		  class2 = System.Type.GetType(type2.Replace('/', '.'), false, classLoader);
-		}
-		catch (System.Exception e)
-		{
-		  throw new TypeNotPresentException(type2, e);
-		}
-		if (class1.IsAssignableFrom(class2))
-		{
-		  return type1;
-		}
-		if (class2.IsAssignableFrom(class1))
-		{
-		  return type2;
-		}
-		if (class1.IsInterface || class2.IsInterface)
-		{
 		  return "java/lang/Object";
-		}
-		else
-		{
-		  do
-		  {
-			class1 = class1.BaseType;
-		  } while (!class1.IsAssignableFrom(class2));
-		  return class1.FullName.Replace('.', '/');
-		}
 	  }
-
-	  /// <summary>
-	  /// Returns the <seealso cref="ClassLoader"/> to be used by the default implementation of {@link
-	  /// #getCommonSuperClass(String, String)}, that of this <seealso cref="ClassWriter"/>'s runtime type by
-	  /// default.
-	  /// </summary>
-	  /// <returns> ClassLoader </returns>
-	  public virtual ClassLoader ClassLoader
-	  {
-		  get
-		  {
-			return this.GetType().getClassLoader();
-		  }
-	  }
-	}
+    }
 
 }

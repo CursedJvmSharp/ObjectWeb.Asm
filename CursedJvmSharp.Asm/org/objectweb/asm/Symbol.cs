@@ -29,16 +29,16 @@ using CursedJvmSharp.Asm.Java.IO;
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace org.objectweb.asm
 {
-	/// <summary>
-	/// An entry of the constant pool, of the BootstrapMethods attribute, or of the (ASM specific) type
-	/// table of a class.
-	/// </summary>
-	/// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.4">JVMS
-	///     4.4</a> </seealso>
-	/// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.23">JVMS
-	///     4.7.23</a>
-	/// @author Eric Bruneton </seealso>
-	internal abstract class Symbol
+    /// <summary>
+    /// An entry of the constant pool, of the BootstrapMethods attribute, or of the (ASM specific) type
+    /// table of a class.
+    /// </summary>
+    /// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.4">JVMS
+    ///     4.4</a> </seealso>
+    /// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.23">JVMS
+    ///     4.7.23</a>
+    /// @author Eric Bruneton </seealso>
+    public abstract class Symbol
 	{
 
 	  // Tag values for the constant pool entries (using the same order as in the JVMS).

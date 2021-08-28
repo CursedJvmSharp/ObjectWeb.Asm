@@ -296,7 +296,7 @@ namespace org.objectweb.asm
 	  /// V_PREVIEW}.
 	  /// </para>
 	  /// </summary>
-	  public const int V_PREVIEW = 0xFFFF0000;
+	  public const uint V_PREVIEW = 0xFFFF0000;
 
 	  // Access flags values, defined in
 	  // - https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.1-200-E.1
@@ -396,13 +396,13 @@ namespace org.objectweb.asm
 
 	  // Standard stack map frame element types, used in {@link ClassVisitor#visitFrame}.
 
-	  public static int? TOP = Frame.ITEM_TOP;
-	  public static int? INTEGER = Frame.ITEM_INTEGER;
-	  public static int? FLOAT = Frame.ITEM_FLOAT;
-	  public static int? DOUBLE = Frame.ITEM_DOUBLE;
-	  public static int? LONG = Frame.ITEM_LONG;
-	  public static int? NULL = Frame.ITEM_NULL;
-	  public static int? UNINITIALIZED_THIS = Frame.ITEM_UNINITIALIZED_THIS;
+	  public static int TOP = Frame.ITEM_TOP;
+	  public static int INTEGER = Frame.ITEM_INTEGER;
+	  public static int FLOAT = Frame.ITEM_FLOAT;
+	  public static int DOUBLE = Frame.ITEM_DOUBLE;
+	  public static int LONG = Frame.ITEM_LONG;
+	  public static int NULL = Frame.ITEM_NULL;
+	  public static int UNINITIALIZED_THIS = Frame.ITEM_UNINITIALIZED_THIS;
 
 	  // The JVM opcode values (with the MethodVisitor method name used to visit them in comment, and
 	  // where '-' means 'same method name as on the previous line').

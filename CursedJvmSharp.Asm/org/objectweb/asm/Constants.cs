@@ -2,6 +2,7 @@
 using CursedJvmSharp.Asm.Java.IO;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -160,24 +161,24 @@ namespace org.objectweb.asm
 
 	  // ASM specific opcodes, used for long forward jump instructions.
 
-	  internal static readonly int ASM_IFEQ = Opcodes.IFEQ + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IFNE = Opcodes.IFNE + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IFLT = Opcodes.IFLT + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IFGE = Opcodes.IFGE + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IFGT = Opcodes.IFGT + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IFLE = Opcodes.IFLE + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IF_ICMPEQ = Opcodes.IF_ICMPEQ + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IF_ICMPNE = Opcodes.IF_ICMPNE + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IF_ICMPLT = Opcodes.IF_ICMPLT + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IF_ICMPGE = Opcodes.IF_ICMPGE + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IF_ICMPGT = Opcodes.IF_ICMPGT + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IF_ICMPLE = Opcodes.IF_ICMPLE + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IF_ACMPEQ = Opcodes.IF_ACMPEQ + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IF_ACMPNE = Opcodes.IF_ACMPNE + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_GOTO = Opcodes.GOTO + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_JSR = Opcodes.JSR + ASM_OPCODE_DELTA;
-	  internal static readonly int ASM_IFNULL = Opcodes.IFNULL + ASM_IFNULL_OPCODE_DELTA;
-	  internal static readonly int ASM_IFNONNULL = Opcodes.IFNONNULL + ASM_IFNULL_OPCODE_DELTA;
+	  internal const int ASM_IFEQ = Opcodes.IFEQ + ASM_OPCODE_DELTA;
+	  internal const int ASM_IFNE = Opcodes.IFNE + ASM_OPCODE_DELTA;
+	  internal const int ASM_IFLT = Opcodes.IFLT + ASM_OPCODE_DELTA;
+	  internal const int ASM_IFGE = Opcodes.IFGE + ASM_OPCODE_DELTA;
+	  internal const int ASM_IFGT = Opcodes.IFGT + ASM_OPCODE_DELTA;
+	  internal const int ASM_IFLE = Opcodes.IFLE + ASM_OPCODE_DELTA;
+	  internal const int ASM_IF_ICMPEQ = Opcodes.IF_ICMPEQ + ASM_OPCODE_DELTA;
+	  internal const int ASM_IF_ICMPNE = Opcodes.IF_ICMPNE + ASM_OPCODE_DELTA;
+	  internal const int ASM_IF_ICMPLT = Opcodes.IF_ICMPLT + ASM_OPCODE_DELTA;
+	  internal const int ASM_IF_ICMPGE = Opcodes.IF_ICMPGE + ASM_OPCODE_DELTA;
+	  internal const int ASM_IF_ICMPGT = Opcodes.IF_ICMPGT + ASM_OPCODE_DELTA;
+	  internal const int ASM_IF_ICMPLE = Opcodes.IF_ICMPLE + ASM_OPCODE_DELTA;
+	  internal const int ASM_IF_ACMPEQ = Opcodes.IF_ACMPEQ + ASM_OPCODE_DELTA;
+	  internal const int ASM_IF_ACMPNE = Opcodes.IF_ACMPNE + ASM_OPCODE_DELTA;
+	  internal const int ASM_GOTO = Opcodes.GOTO + ASM_OPCODE_DELTA;
+	  internal const int ASM_JSR = Opcodes.JSR + ASM_OPCODE_DELTA;
+	  internal const int ASM_IFNULL = Opcodes.IFNULL + ASM_IFNULL_OPCODE_DELTA;
+	  internal const int ASM_IFNONNULL = Opcodes.IFNONNULL + ASM_IFNULL_OPCODE_DELTA;
 	  internal const int ASM_GOTO_W = 220;
 
 	  private Constants()
@@ -186,12 +187,6 @@ namespace org.objectweb.asm
 
 	  internal static void checkAsmExperimental(object caller)
 	  {
-		System.Type callerClass = caller.GetType();
-		string internalName = callerClass.FullName.Replace('.', '/');
-		if (!isWhitelisted(internalName))
-		{
-		  checkIsPreview(callerClass.getClassLoader().getResourceAsStream(internalName + ".class"));
-		}
 	  }
 
 	  internal static bool isWhitelisted(string internalName)
@@ -201,10 +196,10 @@ namespace org.objectweb.asm
 		  return false;
 		}
 		string member = "(Annotation|Class|Field|Method|Module|RecordComponent|Signature)";
-		return internalName.Contains("Test$") || Pattern.matches("org/objectweb/asm/util/Trace" + member + "Visitor(\\$.*)?", internalName) || Pattern.matches("org/objectweb/asm/util/Check" + member + "Adapter(\\$.*)?", internalName);
+		return internalName.Contains("Test$") || Regex.IsMatch(internalName, "org/objectweb/asm/util/Trace" + member + "Visitor(\\$.*)?") || Regex.IsMatch(internalName, "org/objectweb/asm/util/Check" + member + "Adapter(\\$.*)?");
 	  }
 
-	  internal static void checkIsPreview(Stream classInputStream)
+	  internal static void checkIsPreview(MemoryStream classInputStream)
 	  {
 		if (classInputStream == null)
 		{
@@ -213,7 +208,7 @@ namespace org.objectweb.asm
 		int minorVersion;
 		try
 		{
-				using (DataInputStream callerClassStream = new DataInputStream(classInputStream),)
+				using (DataInputStream callerClassStream = new DataInputStream(classInputStream))
 				{
 			  callerClassStream.ReadInt();
 			  minorVersion = callerClassStream.ReadUnsignedShort();

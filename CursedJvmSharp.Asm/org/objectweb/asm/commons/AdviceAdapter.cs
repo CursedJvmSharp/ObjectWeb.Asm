@@ -153,161 +153,161 @@ namespace org.objectweb.asm.commons
 		  int stackSize;
 		  switch (opcode)
 		  {
-			case IRETURN:
-			case FRETURN:
-			case ARETURN:
-			case LRETURN:
-			case DRETURN:
+			case Opcodes.IRETURN:
+			case Opcodes.FRETURN:
+			case Opcodes.ARETURN:
+			case Opcodes.LRETURN:
+			case Opcodes.DRETURN:
 			  throw new System.ArgumentException("Invalid return in constructor");
-			case RETURN: // empty stack
+			case Opcodes.RETURN: // empty stack
 			  onMethodExit(opcode);
 			  endConstructorBasicBlockWithoutSuccessor();
 			  break;
-			case ATHROW: // 1 before n/a after
+			case Opcodes.ATHROW: // 1 before n/a after
 			  popValue();
 			  onMethodExit(opcode);
 			  endConstructorBasicBlockWithoutSuccessor();
 			  break;
-			case NOP:
-			case LALOAD: // remove 2 add 2
-			case DALOAD: // remove 2 add 2
-			case LNEG:
-			case DNEG:
-			case FNEG:
-			case INEG:
-			case L2D:
-			case D2L:
-			case F2I:
-			case I2B:
-			case I2C:
-			case I2S:
-			case I2F:
-			case ARRAYLENGTH:
+			case Opcodes.NOP:
+			case Opcodes.LALOAD: // remove 2 add 2
+			case Opcodes.DALOAD: // remove 2 add 2
+			case Opcodes.LNEG:
+			case Opcodes.DNEG:
+			case Opcodes.FNEG:
+			case Opcodes.INEG:
+			case Opcodes.L2D:
+			case Opcodes.D2L:
+			case Opcodes.F2I:
+			case Opcodes.I2B:
+			case Opcodes.I2C:
+			case Opcodes.I2S:
+			case Opcodes.I2F:
+			case Opcodes.ARRAYLENGTH:
 			  break;
-			case ACONST_NULL:
-			case ICONST_M1:
-			case ICONST_0:
-			case ICONST_1:
-			case ICONST_2:
-			case ICONST_3:
-			case ICONST_4:
-			case ICONST_5:
-			case FCONST_0:
-			case FCONST_1:
-			case FCONST_2:
-			case F2L: // 1 before 2 after
-			case F2D:
-			case I2L:
-			case I2D:
+			case Opcodes.ACONST_NULL:
+			case Opcodes.ICONST_M1:
+			case Opcodes.ICONST_0:
+			case Opcodes.ICONST_1:
+			case Opcodes.ICONST_2:
+			case Opcodes.ICONST_3:
+			case Opcodes.ICONST_4:
+			case Opcodes.ICONST_5:
+			case Opcodes.FCONST_0:
+			case Opcodes.FCONST_1:
+			case Opcodes.FCONST_2:
+			case Opcodes.F2L: // 1 before 2 after
+			case Opcodes.F2D:
+			case Opcodes.I2L:
+			case Opcodes.I2D:
 			  pushValue(OTHER);
 			  break;
-			case LCONST_0:
-			case LCONST_1:
-			case DCONST_0:
-			case DCONST_1:
+			case Opcodes.LCONST_0:
+			case Opcodes.LCONST_1:
+			case Opcodes.DCONST_0:
+			case Opcodes.DCONST_1:
 			  pushValue(OTHER);
 			  pushValue(OTHER);
 			  break;
-			case IALOAD: // remove 2 add 1
-			case FALOAD: // remove 2 add 1
-			case AALOAD: // remove 2 add 1
-			case BALOAD: // remove 2 add 1
-			case CALOAD: // remove 2 add 1
-			case SALOAD: // remove 2 add 1
-			case POP:
-			case IADD:
-			case FADD:
-			case ISUB:
-			case LSHL: // 3 before 2 after
-			case LSHR: // 3 before 2 after
-			case LUSHR: // 3 before 2 after
-			case L2I: // 2 before 1 after
-			case L2F: // 2 before 1 after
-			case D2I: // 2 before 1 after
-			case D2F: // 2 before 1 after
-			case FSUB:
-			case FMUL:
-			case FDIV:
-			case FREM:
-			case FCMPL: // 2 before 1 after
-			case FCMPG: // 2 before 1 after
-			case IMUL:
-			case IDIV:
-			case IREM:
-			case ISHL:
-			case ISHR:
-			case IUSHR:
-			case IAND:
-			case IOR:
-			case IXOR:
-			case MONITORENTER:
-			case MONITOREXIT:
+			case Opcodes.IALOAD: // remove 2 add 1
+			case Opcodes.FALOAD: // remove 2 add 1
+			case Opcodes.AALOAD: // remove 2 add 1
+			case Opcodes.BALOAD: // remove 2 add 1
+			case Opcodes.CALOAD: // remove 2 add 1
+			case Opcodes.SALOAD: // remove 2 add 1
+			case Opcodes.POP:
+			case Opcodes.IADD:
+			case Opcodes.FADD:
+			case Opcodes.ISUB:
+			case Opcodes.LSHL: // 3 before 2 after
+			case Opcodes.LSHR: // 3 before 2 after
+			case Opcodes.LUSHR: // 3 before 2 after
+			case Opcodes.L2I: // 2 before 1 after
+			case Opcodes.L2F: // 2 before 1 after
+			case Opcodes.D2I: // 2 before 1 after
+			case Opcodes.D2F: // 2 before 1 after
+			case Opcodes.FSUB:
+			case Opcodes.FMUL:
+			case Opcodes.FDIV:
+			case Opcodes.FREM:
+			case Opcodes.FCMPL: // 2 before 1 after
+			case Opcodes.FCMPG: // 2 before 1 after
+			case Opcodes.IMUL:
+			case Opcodes.IDIV:
+			case Opcodes.IREM:
+			case Opcodes.ISHL:
+			case Opcodes.ISHR:
+			case Opcodes.IUSHR:
+			case Opcodes.IAND:
+			case Opcodes.IOR:
+			case Opcodes.IXOR:
+			case Opcodes.MONITORENTER:
+			case Opcodes.MONITOREXIT:
 			  popValue();
 			  break;
-			case POP2:
-			case LSUB:
-			case LMUL:
-			case LDIV:
-			case LREM:
-			case LADD:
-			case LAND:
-			case LOR:
-			case LXOR:
-			case DADD:
-			case DMUL:
-			case DSUB:
-			case DDIV:
-			case DREM:
-			  popValue();
-			  popValue();
-			  break;
-			case IASTORE:
-			case FASTORE:
-			case AASTORE:
-			case BASTORE:
-			case CASTORE:
-			case SASTORE:
-			case LCMP: // 4 before 1 after
-			case DCMPL:
-			case DCMPG:
-			  popValue();
+			case Opcodes.POP2:
+			case Opcodes.LSUB:
+			case Opcodes.LMUL:
+			case Opcodes.LDIV:
+			case Opcodes.LREM:
+			case Opcodes.LADD:
+			case Opcodes.LAND:
+			case Opcodes.LOR:
+			case Opcodes.LXOR:
+			case Opcodes.DADD:
+			case Opcodes.DMUL:
+			case Opcodes.DSUB:
+			case Opcodes.DDIV:
+			case Opcodes.DREM:
 			  popValue();
 			  popValue();
 			  break;
-			case LASTORE:
-			case DASTORE:
-			  popValue();
+			case Opcodes.IASTORE:
+			case Opcodes.FASTORE:
+			case Opcodes.AASTORE:
+			case Opcodes.BASTORE:
+			case Opcodes.CASTORE:
+			case Opcodes.SASTORE:
+			case Opcodes.LCMP: // 4 before 1 after
+			case Opcodes.DCMPL:
+			case Opcodes.DCMPG:
 			  popValue();
 			  popValue();
 			  popValue();
 			  break;
-			case DUP:
+			case Opcodes.LASTORE:
+			case Opcodes.DASTORE:
+			  popValue();
+			  popValue();
+			  popValue();
+			  popValue();
+			  break;
+			case Opcodes.DUP:
 			  pushValue(peekValue());
 			  break;
-			case DUP_X1:
+			case Opcodes.DUP_X1:
 			  stackSize = stackFrame.Count;
 			  stackFrame.Insert(stackSize - 2, stackFrame[stackSize - 1]);
 			  break;
-			case DUP_X2:
+			case Opcodes.DUP_X2:
 			  stackSize = stackFrame.Count;
 			  stackFrame.Insert(stackSize - 3, stackFrame[stackSize - 1]);
 			  break;
-			case DUP2:
+			case Opcodes.DUP2:
 			  stackSize = stackFrame.Count;
 			  stackFrame.Insert(stackSize - 2, stackFrame[stackSize - 1]);
 			  stackFrame.Insert(stackSize - 2, stackFrame[stackSize - 1]);
 			  break;
-			case DUP2_X1:
+			case Opcodes.DUP2_X1:
 			  stackSize = stackFrame.Count;
 			  stackFrame.Insert(stackSize - 3, stackFrame[stackSize - 1]);
 			  stackFrame.Insert(stackSize - 3, stackFrame[stackSize - 1]);
 			  break;
-			case DUP2_X2:
+			case Opcodes.DUP2_X2:
 			  stackSize = stackFrame.Count;
 			  stackFrame.Insert(stackSize - 4, stackFrame[stackSize - 1]);
 			  stackFrame.Insert(stackSize - 4, stackFrame[stackSize - 1]);
 			  break;
-			case SWAP:
+			case Opcodes.SWAP:
 			  stackSize = stackFrame.Count;
 			  stackFrame.Insert(stackSize - 2, stackFrame[stackSize - 1]);
 			  stackFrame.RemoveAt(stackSize);
@@ -320,13 +320,13 @@ namespace org.objectweb.asm.commons
 		{
 		  switch (opcode)
 		  {
-			case RETURN:
-			case IRETURN:
-			case FRETURN:
-			case ARETURN:
-			case LRETURN:
-			case DRETURN:
-			case ATHROW:
+			case Opcodes.RETURN:
+			case Opcodes.IRETURN:
+			case Opcodes.FRETURN:
+			case Opcodes.ARETURN:
+			case Opcodes.LRETURN:
+			case Opcodes.DRETURN:
+			case Opcodes.ATHROW:
 			  onMethodExit(opcode);
 			  break;
 			default:
@@ -343,29 +343,29 @@ namespace org.objectweb.asm.commons
 		{
 		  switch (opcode)
 		  {
-			case ILOAD:
-			case FLOAD:
+			case Opcodes.ILOAD:
+			case Opcodes.FLOAD:
 			  pushValue(OTHER);
 			  break;
-			case LLOAD:
-			case DLOAD:
+			case Opcodes.LLOAD:
+			case Opcodes.DLOAD:
 			  pushValue(OTHER);
 			  pushValue(OTHER);
 			  break;
-			case ALOAD:
+			case Opcodes.ALOAD:
 			  pushValue(var == 0 ? UNINITIALIZED_THIS : OTHER);
 			  break;
-			case ASTORE:
-			case ISTORE:
-			case FSTORE:
+			case Opcodes.ASTORE:
+			case Opcodes.ISTORE:
+			case Opcodes.FSTORE:
 			  popValue();
 			  break;
-			case LSTORE:
-			case DSTORE:
+			case Opcodes.LSTORE:
+			case Opcodes.DSTORE:
 			  popValue();
 			  popValue();
 			  break;
-			case RET:
+			case Opcodes.RET:
 			  endConstructorBasicBlockWithoutSuccessor();
 			  break;
 			default:
@@ -383,21 +383,21 @@ namespace org.objectweb.asm.commons
 		  bool longOrDouble = firstDescriptorChar == 'J' || firstDescriptorChar == 'D';
 		  switch (opcode)
 		  {
-			case GETSTATIC:
+			case Opcodes.GETSTATIC:
 			  pushValue(OTHER);
 			  if (longOrDouble)
 			  {
 				pushValue(OTHER);
 			  }
 			  break;
-			case PUTSTATIC:
+			case Opcodes.PUTSTATIC:
 			  popValue();
 			  if (longOrDouble)
 			  {
 				popValue();
 			  }
 			  break;
-			case PUTFIELD:
+			case Opcodes.PUTFIELD:
 			  popValue();
 			  popValue();
 			  if (longOrDouble)
@@ -405,7 +405,7 @@ namespace org.objectweb.asm.commons
 				popValue();
 			  }
 			  break;
-			case GETFIELD:
+			case Opcodes.GETFIELD:
 			  if (longOrDouble)
 			  {
 				pushValue(OTHER);
@@ -420,7 +420,7 @@ namespace org.objectweb.asm.commons
 	  public override void visitIntInsn(int opcode, int operand)
 	  {
 		base.visitIntInsn(opcode, operand);
-		if (isConstructor && !superClassConstructorCalled && opcode != NEWARRAY)
+		if (isConstructor && !superClassConstructorCalled && opcode != Opcodes.NEWARRAY)
 		{
 		  pushValue(OTHER);
 		}
@@ -456,7 +456,7 @@ namespace org.objectweb.asm.commons
 	  {
 		base.visitTypeInsn(opcode, type);
 		// ANEWARRAY, CHECKCAST or INSTANCEOF don't change stack.
-		if (isConstructor && !superClassConstructorCalled && opcode == NEW)
+		if (isConstructor && !superClassConstructorCalled && opcode == Opcodes.NEW)
 		{
 		  pushValue(OTHER);
 		}
@@ -483,18 +483,18 @@ namespace org.objectweb.asm.commons
 		  foreach (org.objectweb.asm.JType argumentType in org.objectweb.asm.JType.getArgumentTypes(descriptor))
 		  {
 			popValue();
-			if (argumentType.getSize() == 2)
+			if (argumentType.Size == 2)
 			{
 			  popValue();
 			}
 		  }
 		  switch (opcode)
 		  {
-			case INVOKEINTERFACE:
-			case INVOKEVIRTUAL:
+			case Opcodes.INVOKEINTERFACE:
+			case Opcodes.INVOKEVIRTUAL:
 			  popValue();
 			  break;
-			case INVOKESPECIAL:
+			case Opcodes.INVOKESPECIAL:
 			  object value = popValue();
 			  if (value == UNINITIALIZED_THIS && !superClassConstructorCalled && name.Equals("<init>"))
 			  {
@@ -510,7 +510,7 @@ namespace org.objectweb.asm.commons
 		  if (returnType != org.objectweb.asm.JType.VOID_TYPE)
 		  {
 			pushValue(OTHER);
-			if (returnType.getSize() == 2)
+			if (returnType.Size == 2)
 			{
 			  pushValue(OTHER);
 			}
@@ -531,31 +531,31 @@ namespace org.objectweb.asm.commons
 		{
 		  switch (opcode)
 		  {
-			case IFEQ:
-			case IFNE:
-			case IFLT:
-			case IFGE:
-			case IFGT:
-			case IFLE:
-			case IFNULL:
-			case IFNONNULL:
+			case Opcodes.IFEQ:
+			case Opcodes.IFNE:
+			case Opcodes.IFLT:
+			case Opcodes.IFGE:
+			case Opcodes.IFGT:
+			case Opcodes.IFLE:
+			case Opcodes.IFNULL:
+			case Opcodes.IFNONNULL:
 			  popValue();
 			  break;
-			case IF_ICMPEQ:
-			case IF_ICMPNE:
-			case IF_ICMPLT:
-			case IF_ICMPGE:
-			case IF_ICMPGT:
-			case IF_ICMPLE:
-			case IF_ACMPEQ:
-			case IF_ACMPNE:
+			case Opcodes.IF_ICMPEQ:
+			case Opcodes.IF_ICMPNE:
+			case Opcodes.IF_ICMPLT:
+			case Opcodes.IF_ICMPGE:
+			case Opcodes.IF_ICMPGT:
+			case Opcodes.IF_ICMPLE:
+			case Opcodes.IF_ACMPEQ:
+			case Opcodes.IF_ACMPNE:
 			  popValue();
 			  popValue();
 			  break;
-			case JSR:
+			case Opcodes.JSR:
 			  pushValue(OTHER);
 			  break;
-			case GOTO:
+			case Opcodes.GOTO:
 			  endConstructorBasicBlockWithoutSuccessor();
 			  break;
 			default:
@@ -628,20 +628,23 @@ namespace org.objectweb.asm.commons
 	  {
 		// The next instruction is not reachable from this instruction. If it is dead code, we
 		// should not try to simulate stack operations, and there is no need to insert advices
-		// here. If it is reachable with a backward jump, the only possible case is that the super
+		// here. If it is reachable with a backward jump, the only possible case Opcodes.is that the super
 		// class constructor has already been called (backward jumps are forbidden before it is
 		// called). If it is reachable with a forward jump, there are two sub-cases. Either the
 		// super class constructor has already been called when reaching the next instruction, or
-		// it has not been called. But in this case there must be a forwardJumpStackFrames entry
+		// it has not been called. But in this case Opcodes.there must be a forwardJumpStackFrames entry
 		// for a Label designating the next instruction, and superClassConstructorCalled will be
 		// reset to false there. We can therefore always reset this field to true here.
 		superClassConstructorCalled = true;
 	  }
 
 	  private object popValue()
-	  {
-		return stackFrame.RemoveAt(stackFrame.Count - 1);
-	  }
+      {
+          var index = stackFrame.Count - 1;
+		  var oldValue = stackFrame[index];
+          stackFrame.RemoveAt(index);
+          return oldValue;
+      }
 
 	  private object peekValue()
 	  {

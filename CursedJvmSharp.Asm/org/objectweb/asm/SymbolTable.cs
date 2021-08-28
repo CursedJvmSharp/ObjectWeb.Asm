@@ -31,16 +31,16 @@ using System;
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace org.objectweb.asm
 {
-	/// <summary>
-	/// The constant pool entries, the BootstrapMethods attribute entries and the (ASM specific) type
-	/// table entries of a class.
-	/// 
-	/// @author Eric Bruneton </summary>
-	/// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.4">JVMS
-	///     4.4</a> </seealso>
-	/// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.23">JVMS
-	///     4.7.23</a> </seealso>
-	internal sealed class SymbolTable
+    /// <summary>
+    /// The constant pool entries, the BootstrapMethods attribute entries and the (ASM specific) type
+    /// table entries of a class.
+    /// 
+    /// @author Eric Bruneton </summary>
+    /// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.4">JVMS
+    ///     4.4</a> </seealso>
+    /// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.23">JVMS
+    ///     4.7.23</a> </seealso>
+    public sealed class SymbolTable
 	{
 
 	  /// <summary>
@@ -462,19 +462,19 @@ namespace org.objectweb.asm
 	  /// <returns> a new or already existing Symbol with the given value. </returns>
 	  public Symbol addConstant(object value)
 	  {
-		if (value is int)
+		if (value is int || value is byte)
 		{
 		  return addConstantInteger(((int?) value).Value);
 		}
-		else if (value is Byte)
+		else if (value is sbyte)
 		{
 		  return addConstantInteger(((sbyte?) value).Value);
 		}
-		else if (value is Character)
+		else if (value is char)
 		{
 		  return addConstantInteger(((char?) value).Value);
 		}
-		else if (value is Short)
+		else if (value is short)
 		{
 		  return addConstantInteger(((short?) value).Value);
 		}
@@ -482,11 +482,11 @@ namespace org.objectweb.asm
 		{
 		  return addConstantInteger(((bool?) value).Value ? 1 : 0);
 		}
-		else if (value is Float)
+		else if (value is float)
 		{
 		  return addConstantFloat(((float?) value).Value);
 		}
-		else if (value is Long)
+		else if (value is long)
 		{
 		  return addConstantLong(((long?) value).Value);
 		}
@@ -498,21 +498,21 @@ namespace org.objectweb.asm
 		{
 		  return addConstantString((string) value);
 		}
-		else if (value is Type)
+		else if (value is JType)
 		{
 		  org.objectweb.asm.JType type = (org.objectweb.asm.JType) value;
-		  int typeSort = type.getSort();
+		  int typeSort = type.Sort;
 		  if (typeSort == org.objectweb.asm.JType.OBJECT)
 		  {
-			return addConstantClass(type.getInternalName());
+			return addConstantClass(type.InternalName);
 		  }
 		  else if (typeSort == org.objectweb.asm.JType.METHOD)
 		  {
-			return addConstantMethodType(type.getDescriptor());
+			return addConstantMethodType(type.Descriptor);
 		  }
 		  else
 		  { // type is a primitive or array type.
-			return addConstantClass(type.getDescriptor());
+			return addConstantClass(type.Descriptor);
 		  }
 		}
 		else if (value is Handle)
@@ -642,7 +642,7 @@ namespace org.objectweb.asm
 	  /// <returns> a new or already existing Symbol with the given value. </returns>
 	  public Symbol addConstantFloat(float value)
 	  {
-		return addConstantIntegerOrFloat(Symbol.CONSTANT_FLOAT_TAG, Float.floatToRawIntBits(value));
+		return addConstantIntegerOrFloat(Symbol.CONSTANT_FLOAT_TAG, BitConverter.SingleToInt32Bits(value));
 	  }
 
 	  /// <summary>
@@ -699,7 +699,7 @@ namespace org.objectweb.asm
 	  /// <returns> a new or already existing Symbol with the given value. </returns>
 	  public Symbol addConstantDouble(double value)
 	  {
-		return addConstantLongOrDouble(Symbol.CONSTANT_DOUBLE_TAG, Double.doubleToRawLongBits(value));
+		return addConstantLongOrDouble(Symbol.CONSTANT_DOUBLE_TAG, BitConverter.DoubleToInt64Bits(value));
 	  }
 
 	  /// <summary>

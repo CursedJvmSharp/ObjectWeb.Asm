@@ -40,7 +40,7 @@ namespace CursedJvmSharp.Asm.Java.IO
     /// <author>unascribed</author>
     /// <seealso cref="DataInputStream" />
     /// <since>JDK1.0</since>
-    public class DataOutputStream : DataOutput
+    public class DataOutputStream : DataOutput, IDisposable
     {
         private readonly MemoryStream _out;
         private readonly byte[] writeBuffer = new byte[8];
@@ -565,6 +565,11 @@ namespace CursedJvmSharp.Asm.Java.IO
         public int Size()
         {
             return written;
+        }
+
+        public void Dispose()
+        {
+            _out?.Dispose();
         }
     }
 }

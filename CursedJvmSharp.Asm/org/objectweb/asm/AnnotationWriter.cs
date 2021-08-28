@@ -190,28 +190,28 @@ namespace org.objectweb.asm
 		{
 		  annotation.put12('s', symbolTable.addConstantUtf8((string) value));
 		}
-		else if (value is Byte)
+		else if (value is byte)
 		{
 		  annotation.put12('B', symbolTable.addConstantInteger(((sbyte?) value).Value).index);
 		}
-		else if (value is Boolean)
+		else if (value is bool)
 		{
 		  int booleanValue = ((bool?) value).Value ? 1 : 0;
 		  annotation.put12('Z', symbolTable.addConstantInteger(booleanValue).index);
 		}
-		else if (value is Character)
+		else if (value is char)
 		{
 		  annotation.put12('C', symbolTable.addConstantInteger(((char?) value).Value).index);
 		}
-		else if (value is Short)
+		else if (value is sbyte)
 		{
 		  annotation.put12('S', symbolTable.addConstantInteger(((short?) value).Value).index);
 		}
-		else if (value is Type)
+		else if (value is JType)
 		{
-		  annotation.put12('c', symbolTable.addConstantUtf8(((org.objectweb.asm.JType) value).getDescriptor()));
+		  annotation.put12('c', symbolTable.addConstantUtf8(((org.objectweb.asm.JType) value).Descriptor));
 		}
-		else if (value is sbyte[])
+		else if (value is sbyte[] || value is byte[])
 		{
 		  sbyte[] byteArray = (sbyte[]) value;
 		  annotation.put12('[', byteArray.Length);

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using ClassVisitor = org.objectweb.asm.ClassVisitor;
 using FieldVisitor = org.objectweb.asm.FieldVisitor;
 using MethodVisitor = org.objectweb.asm.MethodVisitor;
@@ -327,11 +329,12 @@ namespace org.objectweb.asm.commons
 	  {
 		long svuid = 0;
 
-		using (MemoryStream byteArrayOutputStream = new MemoryStream(), DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream))
+		using (MemoryStream byteArrayOutputStream = new MemoryStream()) 
+        using(DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream))
 		{
 
 		  // 1. The class name written using UTF encoding.
-		  dataOutputStream.writeUTF(name.Replace('/', '.'));
+		  dataOutputStream.WriteUTF(name.Replace('/', '.'));
 
 		  // 2. The class modifiers written as a 32-bit integer.
 		  int mods = access;
@@ -339,13 +342,13 @@ namespace org.objectweb.asm.commons
 		  {
 			mods = svuidMethods.Count == 0 ? (mods & ~Opcodes.ACC_ABSTRACT) : (mods | Opcodes.ACC_ABSTRACT);
 		  }
-		  dataOutputStream.writeInt(mods & (Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_INTERFACE | Opcodes.ACC_ABSTRACT));
+		  dataOutputStream.WriteInt(mods & (Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_INTERFACE | Opcodes.ACC_ABSTRACT));
 
 		  // 3. The name of each interface sorted by name written using UTF encoding.
 		  Array.Sort(interfaces);
 		  foreach (string interfaceName in interfaces)
 		  {
-			dataOutputStream.writeUTF(interfaceName.Replace('/', '.'));
+			dataOutputStream.WriteUTF(interfaceName.Replace('/', '.'));
 		  }
 
 		  // 4. For each field of the class sorted by field name (except private static and private
@@ -363,9 +366,9 @@ namespace org.objectweb.asm.commons
 		  //   3. The descriptor of the method, ()V, in UTF encoding.
 		  if (hasStaticInitializer)
 		  {
-			dataOutputStream.writeUTF(CLINIT);
-			dataOutputStream.writeInt(Opcodes.ACC_STATIC);
-			dataOutputStream.writeUTF("()V");
+			dataOutputStream.WriteUTF(CLINIT);
+			dataOutputStream.WriteInt(Opcodes.ACC_STATIC);
+			dataOutputStream.WriteUTF("()V");
 		  }
 
 		  // 6. For each non-private constructor sorted by method name and signature:
@@ -380,41 +383,35 @@ namespace org.objectweb.asm.commons
 		  //   3. The descriptor of the method in UTF encoding.
 		  writeItems(svuidMethods, dataOutputStream, true);
 
-		  dataOutputStream.flush();
+		  dataOutputStream.Flush();
 
 		  // 8. The SHA-1 algorithm is executed on the stream of bytes produced by DataOutputStream and
 		  // produces five 32-bit values sha[0..4].
-		  sbyte[] hashBytes = computeSHAdigest(byteArrayOutputStream.toByteArray());
+		  byte[] hashBytes = computeSHAdigest(byteArrayOutputStream.ToArray());
 
 		  // 9. The hash value is assembled from the first and second 32-bit values of the SHA-1 message
 		  // digest. If the result of the message digest, the five 32-bit words H0 H1 H2 H3 H4, is in an
 		  // array of five int values named sha, the hash value would be computed as follows:
 		  for (int i = Math.Min(hashBytes.Length, 8) - 1; i >= 0; i--)
 		  {
-			svuid = (svuid << 8) | (hashBytes[i] & 0xFF);
+			svuid = (svuid << 8) | (uint)(hashBytes[i] & 0xFF);
 		  }
 		}
 
 		return svuid;
 	  }
 
+      private SHA1 sha1 = SHA1.Create();
 	  /// <summary>
 	  /// Returns the SHA-1 message digest of the given value.
 	  /// </summary>
 	  /// <param name="value"> the value whose SHA message digest must be computed. </param>
 	  /// <returns> the SHA-1 message digest of the given value. </returns>
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	  public virtual sbyte[] computeSHAdigest(sbyte[] value)
-	  {
-		try
-		{
-		  return MessageDigest.getInstance("SHA").digest(value);
-		}
-		catch (NoSuchAlgorithmException e)
-		{
-		  throw new System.NotSupportedException(e);
-		}
-	  }
+	  public virtual byte[] computeSHAdigest(byte[] value)
+      {
+          return sha1.ComputeHash(value);
+      }
 
 	  /// <summary>
 	  /// Sorts the items in the collection and writes it to the given output stream.
@@ -429,9 +426,9 @@ namespace org.objectweb.asm.commons
 		Array.Sort(items);
 		foreach (Item item in items)
 		{
-		  dataOutputStream.writeUTF(item.name);
-		  dataOutputStream.writeInt(item.access);
-		  dataOutputStream.writeUTF(dotted ? item.descriptor.Replace('/', '.') : item.descriptor);
+		  dataOutputStream.WriteUTF(item.name);
+		  dataOutputStream.WriteInt(item.access);
+		  dataOutputStream.WriteUTF(dotted ? item.descriptor.Replace('/', '.') : item.descriptor);
 		}
 	  }
 

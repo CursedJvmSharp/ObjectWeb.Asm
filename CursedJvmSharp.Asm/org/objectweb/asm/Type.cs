@@ -1,6 +1,7 @@
 ﻿using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System;
+using System.Linq;
 using System.Text;
 
 // ASM: a very small and fast Java bytecode manipulation framework
@@ -181,7 +182,7 @@ namespace org.objectweb.asm
 	  ///     valueBuffer. </param>
 	  /// <param name="valueEnd"> the end index, exclusive, of the value of this field or method type in
 	  ///     valueBuffer. </param>
-	  private Type(int sort, string valueBuffer, int valueBegin, int valueEnd)
+	  private JType(int sort, string valueBuffer, int valueBegin, int valueEnd)
 	  {
 		this.sort = sort;
 		this.valueBuffer = valueBuffer;
@@ -212,45 +213,45 @@ namespace org.objectweb.asm
 	  {
 		if (clazz.IsPrimitive)
 		{
-		  if (clazz == Integer.TYPE)
+		  if (clazz == typeof(int))
 		  {
 			return INT_TYPE;
 		  }
-		  else if (clazz == Void.TYPE)
+		  else if (clazz == typeof(void))
 		  {
 			return VOID_TYPE;
 		  }
-		  else if (clazz == Boolean.TYPE)
+		  else if (clazz == typeof(bool))
 		  {
 			return BOOLEAN_TYPE;
 		  }
-		  else if (clazz == Byte.TYPE)
+		  else if (clazz == typeof(byte) || clazz == typeof(sbyte))
 		  {
 			return BYTE_TYPE;
 		  }
-		  else if (clazz == Character.TYPE)
+		  else if (clazz == typeof(char))
 		  {
 			return CHAR_TYPE;
 		  }
-		  else if (clazz == Short.TYPE)
+		  else if (clazz == typeof(short))
 		  {
 			return SHORT_TYPE;
 		  }
-		  else if (clazz == Double.TYPE)
+		  else if (clazz == typeof(double))
 		  {
 			return DOUBLE_TYPE;
 		  }
-		  else if (clazz == Float.TYPE)
+		  else if (clazz == typeof(float))
 		  {
 			return FLOAT_TYPE;
 		  }
-		  else if (clazz == Long.TYPE)
+		  else if (clazz == typeof(long))
 		  {
 			return LONG_TYPE;
 		  }
 		  else
 		  {
-			throw new AssertionError();
+			throw new Exception("Unknown primitive type");
 		  }
 		}
 		else
@@ -264,7 +265,7 @@ namespace org.objectweb.asm
 	  /// </summary>
 	  /// <param name="constructor"> a <seealso cref="System.Reflection.ConstructorInfo"/> object. </param>
 	  /// <returns> the method <seealso cref="Type"/> corresponding to the given constructor. </returns>
-	  public static org.objectweb.asm.JType getType<T1>(System.Reflection.ConstructorInfo<T1> constructor)
+	  public static org.objectweb.asm.JType getType(System.Reflection.ConstructorInfo constructor)
 	  {
 		return getType(getConstructorDescriptor(constructor));
 	  }
@@ -288,7 +289,7 @@ namespace org.objectweb.asm
 	  {
 		  get
 		  {
-			int numDimensions = getDimensions();
+			int numDimensions = Dimensions;
 			return getTypeInternal(valueBuffer, valueBegin + numDimensions, valueEnd);
 		  }
 	  }
@@ -334,7 +335,7 @@ namespace org.objectweb.asm
 	  {
 		  get
 		  {
-			return getArgumentTypes(getDescriptor());
+			return getArgumentTypes(Descriptor);
 		  }
 	  }
 
@@ -398,7 +399,7 @@ namespace org.objectweb.asm
 	  /// <returns> the <seealso cref="Type"/> values corresponding to the argument types of the given method. </returns>
 	  public static org.objectweb.asm.JType[] getArgumentTypes(System.Reflection.MethodInfo method)
 	  {
-		System.Type[] classes = method.getParameterTypes();
+		System.Type[] classes = method.GetParameters().Select(p => p.ParameterType).ToArray();
 		org.objectweb.asm.JType[] types = new org.objectweb.asm.JType[classes.Length];
 		for (int i = classes.Length - 1; i >= 0; --i)
 		{
@@ -416,7 +417,7 @@ namespace org.objectweb.asm
 	  {
 		  get
 		  {
-			return getReturnType(getDescriptor());
+			return getReturnType(Descriptor);
 		  }
 	  }
 
@@ -437,7 +438,7 @@ namespace org.objectweb.asm
 	  /// <returns> the <seealso cref="Type"/> corresponding to the return type of the given method. </returns>
 	  public static org.objectweb.asm.JType getReturnType(System.Reflection.MethodInfo method)
 	  {
-		return getType(method.getReturnType());
+		return getType(method.ReturnType);
 	  }
 
 	  /// <summary>
@@ -542,8 +543,8 @@ namespace org.objectweb.asm
 			  case DOUBLE:
 				return "double";
 			  case ARRAY:
-				StringBuilder stringBuilder = new StringBuilder(getElementType().getClassName());
-				for (int i = getDimensions(); i > 0; --i)
+				StringBuilder stringBuilder = new StringBuilder(ElementType.ClassName);
+				for (int i = Dimensions; i > 0; --i)
 				{
 				  stringBuilder.Append("[]");
 				}
@@ -552,7 +553,7 @@ namespace org.objectweb.asm
 			  case INTERNAL:
 				return valueBuffer.Substring(valueBegin, valueEnd - valueBegin).Replace('/', '.');
 			  default:
-				throw new AssertionError();
+				throw new Exception("Unknown type sort");
 			}
 		  }
 	  }
@@ -622,11 +623,11 @@ namespace org.objectweb.asm
 	  /// </summary>
 	  /// <param name="constructor"> a <seealso cref="System.Reflection.ConstructorInfo"/> object. </param>
 	  /// <returns> the descriptor of the given constructor. </returns>
-	  public static string getConstructorDescriptor<T1>(System.Reflection.ConstructorInfo<T1> constructor)
+	  public static string getConstructorDescriptor(System.Reflection.ConstructorInfo constructor)
 	  {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.Append('(');
-		System.Type[] parameters = constructor.getParameterTypes();
+		System.Type[] parameters = constructor.GetParameters().Select(p => p.ParameterType).ToArray();
 		foreach (System.Type parameter in parameters)
 		{
 		  appendDescriptor(parameter, stringBuilder);
@@ -662,13 +663,13 @@ namespace org.objectweb.asm
 	  {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.Append('(');
-		System.Type[] parameters = method.getParameterTypes();
+		System.Type[] parameters = method.GetParameters().Select(p => p.ParameterType).ToArray();
 		foreach (System.Type parameter in parameters)
 		{
 		  appendDescriptor(parameter, stringBuilder);
 		}
 		stringBuilder.Append(')');
-		appendDescriptor(method.getReturnType(), stringBuilder);
+		appendDescriptor(method.ReturnType, stringBuilder);
 		return stringBuilder.ToString();
 	  }
 
@@ -708,45 +709,45 @@ namespace org.objectweb.asm
 		if (currentClass.IsPrimitive)
 		{
 		  char descriptor;
-		  if (currentClass == Integer.TYPE)
+		  if (currentClass == typeof(int) || currentClass == typeof(byte))
 		  {
 			descriptor = 'I';
 		  }
-		  else if (currentClass == Void.TYPE)
+		  else if (currentClass == typeof(void))
 		  {
 			descriptor = 'V';
 		  }
-		  else if (currentClass == Boolean.TYPE)
+		  else if (currentClass == typeof(bool))
 		  {
 			descriptor = 'Z';
 		  }
-		  else if (currentClass == Byte.TYPE)
+		  else if (currentClass == typeof(sbyte))
 		  {
 			descriptor = 'B';
 		  }
-		  else if (currentClass == Character.TYPE)
+		  else if (currentClass == typeof(char))
 		  {
 			descriptor = 'C';
 		  }
-		  else if (currentClass == Short.TYPE)
+		  else if (currentClass == typeof(short))
 		  {
 			descriptor = 'S';
 		  }
-		  else if (currentClass == Double.TYPE)
+		  else if (currentClass == typeof(double))
 		  {
 			descriptor = 'D';
 		  }
-		  else if (currentClass == Float.TYPE)
+		  else if (currentClass == typeof(float))
 		  {
 			descriptor = 'F';
 		  }
-		  else if (currentClass == Long.TYPE)
+		  else if (currentClass == typeof(long))
 		  {
 			descriptor = 'J';
 		  }
 		  else
 		  {
-			throw new AssertionError();
+			throw new Exception("Unknown primitive descriptor type");
 		  }
 		  stringBuilder.Append(descriptor);
 		}
@@ -784,7 +785,7 @@ namespace org.objectweb.asm
 		  get
 		  {
 			int numDimensions = 1;
-			while (valueBuffer.charAt(valueBegin + numDimensions) == '[')
+			while (valueBuffer[valueBegin + numDimensions] == '[')
 			{
 			  numDimensions++;
 			}
@@ -819,7 +820,7 @@ namespace org.objectweb.asm
 			  case DOUBLE:
 				return 2;
 			  default:
-				throw new AssertionError();
+				throw new ("AssertionError");
 			}
 		  }
 	  }
@@ -836,7 +837,7 @@ namespace org.objectweb.asm
 	  {
 		  get
 		  {
-			return getArgumentsAndReturnSizes(getDescriptor());
+			return getArgumentsAndReturnSizes(Descriptor);
 		  }
 	  }
 
@@ -929,7 +930,7 @@ namespace org.objectweb.asm
 			case VOID:
 			  throw new System.NotSupportedException();
 			default:
-			  throw new AssertionError();
+			  throw new ("AssertionError");
 		  }
 		}
 		else
@@ -965,7 +966,7 @@ namespace org.objectweb.asm
 			case METHOD:
 			  throw new System.NotSupportedException();
 			default:
-			  throw new AssertionError();
+			  throw new ("AssertionError");
 		  }
 		}
 	  }
@@ -1005,7 +1006,7 @@ namespace org.objectweb.asm
 		}
 		for (int i = begin, j = otherBegin; i < end; i++, j++)
 		{
-		  if (valueBuffer.charAt(i) != other.valueBuffer.charAt(j))
+		  if (valueBuffer[i] != other.valueBuffer[j])
 		  {
 			return false;
 		  }
@@ -1024,7 +1025,7 @@ namespace org.objectweb.asm
 		{
 		  for (int i = valueBegin, end = valueEnd; i < end; i++)
 		  {
-			hashCode = 17 * (hashCode + valueBuffer.charAt(i));
+			hashCode = 17 * (hashCode + valueBuffer[i]);
 		  }
 		}
 		return hashCode;
@@ -1036,7 +1037,7 @@ namespace org.objectweb.asm
 	  /// <returns> the descriptor of this type. </returns>
 	  public override string ToString()
 	  {
-		return getDescriptor();
+		return Descriptor;
 	  }
 	}
 

@@ -705,7 +705,7 @@ namespace CursedJvmSharp.Asm.Java.IO
 	    ///     <c>float</c>
 	    ///     in
 	    ///     exactly the manner of the method
-	    ///     <c>Float.intBitsToFloat</c>
+	    ///     <c>BitConverter.Int32BitsToSingle</c>
 	    ///     .
 	    ///     This method is suitable for reading
 	    ///     bytes written by the
@@ -747,7 +747,7 @@ namespace CursedJvmSharp.Asm.Java.IO
 	    ///     <c>double</c>
 	    ///     in exactly
 	    ///     the manner of the method
-	    ///     <c>Double.longBitsToDouble</c>
+	    ///     <c>BitConverter.Int64BitsToDouble</c>
 	    ///     .
 	    ///     This method is suitable for reading
 	    ///     bytes written by the

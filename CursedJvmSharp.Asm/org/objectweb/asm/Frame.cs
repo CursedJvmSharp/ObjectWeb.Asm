@@ -145,35 +145,35 @@ namespace org.objectweb.asm
 	  private const int DIM_SIZE = 6;
 	  private const int KIND_SIZE = 4;
 	  private const int FLAGS_SIZE = 2;
-	  private static readonly int VALUE_SIZE = 32 - DIM_SIZE - KIND_SIZE - FLAGS_SIZE;
+	  private const int VALUE_SIZE = 32 - DIM_SIZE - KIND_SIZE - FLAGS_SIZE;
 
-	  private static readonly int DIM_SHIFT = KIND_SIZE + FLAGS_SIZE + VALUE_SIZE;
-	  private static readonly int KIND_SHIFT = FLAGS_SIZE + VALUE_SIZE;
-	  private static readonly int FLAGS_SHIFT = VALUE_SIZE;
+	  private const int DIM_SHIFT = KIND_SIZE + FLAGS_SIZE + VALUE_SIZE;
+	  private const int KIND_SHIFT = FLAGS_SIZE + VALUE_SIZE;
+	  private const int FLAGS_SHIFT = VALUE_SIZE;
 
 	  // Bitmasks to get each field of an abstract type.
 
-	  private static readonly int DIM_MASK = ((1 << DIM_SIZE) - 1) << DIM_SHIFT;
-	  private static readonly int KIND_MASK = ((1 << KIND_SIZE) - 1) << KIND_SHIFT;
-	  private static readonly int VALUE_MASK = (1 << VALUE_SIZE) - 1;
+	  private const int DIM_MASK = ((1 << DIM_SIZE) - 1) << DIM_SHIFT;
+	  private const int KIND_MASK = ((1 << KIND_SIZE) - 1) << KIND_SHIFT;
+	  private const int VALUE_MASK = (1 << VALUE_SIZE) - 1;
 
 	  // Constants to manipulate the DIM field of an abstract type.
 
 	  /// <summary>
 	  /// The constant to be added to an abstract type to get one with one more array dimension. </summary>
-	  private static readonly int ARRAY_OF = +1 << DIM_SHIFT;
+	  private const int ARRAY_OF = +1 << DIM_SHIFT;
 
 	  /// <summary>
 	  /// The constant to be added to an abstract type to get one with one less array dimension. </summary>
-	  private static readonly int ELEMENT_OF = -1 << DIM_SHIFT;
+	  private const int ELEMENT_OF = -1 << DIM_SHIFT;
 
 	  // Possible values for the KIND field of an abstract type.
 
-	  private static readonly int CONSTANT_KIND = 1 << KIND_SHIFT;
-	  private static readonly int REFERENCE_KIND = 2 << KIND_SHIFT;
-	  private static readonly int UNINITIALIZED_KIND = 3 << KIND_SHIFT;
-	  private static readonly int LOCAL_KIND = 4 << KIND_SHIFT;
-	  private static readonly int STACK_KIND = 5 << KIND_SHIFT;
+	  private const int CONSTANT_KIND = 1 << KIND_SHIFT;
+	  private const int REFERENCE_KIND = 2 << KIND_SHIFT;
+	  private const int UNINITIALIZED_KIND = 3 << KIND_SHIFT;
+	  private const int LOCAL_KIND = 4 << KIND_SHIFT;
+	  private const int STACK_KIND = 5 << KIND_SHIFT;
 
 	  // Possible flags for the FLAGS field of an abstract type.
 
@@ -182,21 +182,21 @@ namespace org.objectweb.asm
 	  /// concrete type is LONG or DOUBLE, TOP should be used instead (because the value has been
 	  /// partially overridden with an xSTORE instruction).
 	  /// </summary>
-	  private static readonly int TOP_IF_LONG_OR_DOUBLE_FLAG = 1 << FLAGS_SHIFT;
+	  private const int TOP_IF_LONG_OR_DOUBLE_FLAG = 1 << FLAGS_SHIFT;
 
 	  // Useful predefined abstract types (all the possible CONSTANT_KIND types).
 
-	  private static readonly int TOP = CONSTANT_KIND | ITEM_TOP;
-	  private static readonly int BOOLEAN = CONSTANT_KIND | ITEM_ASM_BOOLEAN;
-	  private static readonly int BYTE = CONSTANT_KIND | ITEM_ASM_BYTE;
-	  private static readonly int CHAR = CONSTANT_KIND | ITEM_ASM_CHAR;
-	  private static readonly int SHORT = CONSTANT_KIND | ITEM_ASM_SHORT;
-	  private static readonly int INTEGER = CONSTANT_KIND | ITEM_INTEGER;
-	  private static readonly int FLOAT = CONSTANT_KIND | ITEM_FLOAT;
-	  private static readonly int LONG = CONSTANT_KIND | ITEM_LONG;
-	  private static readonly int DOUBLE = CONSTANT_KIND | ITEM_DOUBLE;
-	  private static readonly int NULL = CONSTANT_KIND | ITEM_NULL;
-	  private static readonly int UNINITIALIZED_THIS = CONSTANT_KIND | ITEM_UNINITIALIZED_THIS;
+	  private const int TOP = CONSTANT_KIND | ITEM_TOP;
+	  private const int BOOLEAN = CONSTANT_KIND | ITEM_ASM_BOOLEAN;
+	  private const int BYTE = CONSTANT_KIND | ITEM_ASM_BYTE;
+	  private const int CHAR = CONSTANT_KIND | ITEM_ASM_CHAR;
+	  private const int SHORT = CONSTANT_KIND | ITEM_ASM_SHORT;
+	  private const int INTEGER = CONSTANT_KIND | ITEM_INTEGER;
+	  private const int FLOAT = CONSTANT_KIND | ITEM_FLOAT;
+	  private const int LONG = CONSTANT_KIND | ITEM_LONG;
+	  private const int DOUBLE = CONSTANT_KIND | ITEM_DOUBLE;
+	  private const int NULL = CONSTANT_KIND | ITEM_NULL;
+	  private const int UNINITIALIZED_THIS = CONSTANT_KIND | ITEM_UNINITIALIZED_THIS;
 
 	  // -----------------------------------------------------------------------------------------------
 	  // Instance fields
@@ -306,7 +306,7 @@ namespace org.objectweb.asm
 		}
 		else if (type is string)
 		{
-		  string descriptor = org.objectweb.asm.JType.getObjectType((string) type).getDescriptor();
+		  string descriptor = org.objectweb.asm.JType.getObjectType((string) type).Descriptor;
 		  return getAbstractTypeFromDescriptor(symbolTable, descriptor, 0);
 		}
 		else
@@ -433,7 +433,7 @@ namespace org.objectweb.asm
 		}
 		foreach (org.objectweb.asm.JType argumentType in org.objectweb.asm.JType.getArgumentTypes(descriptor))
 		{
-		  int abstractType = getAbstractTypeFromDescriptor(symbolTable, argumentType.getDescriptor(), 0);
+		  int abstractType = getAbstractTypeFromDescriptor(symbolTable, argumentType.Descriptor, 0);
 		  inputLocals[inputLocalIndex++] = abstractType;
 		  if (abstractType == LONG || abstractType == DOUBLE)
 		  {
@@ -462,7 +462,7 @@ namespace org.objectweb.asm
 		for (int i = 0; i < numLocal; ++i)
 		{
 		  inputLocals[inputLocalIndex++] = getAbstractTypeFromApiFormat(symbolTable, local[i]);
-		  if (local[i] == Opcodes.LONG || local[i] == Opcodes.DOUBLE)
+		  if (Equals(local[i], Opcodes.LONG) || Equals(local[i], Opcodes.DOUBLE))
 		  {
 			inputLocals[inputLocalIndex++] = TOP;
 		  }
@@ -474,7 +474,7 @@ namespace org.objectweb.asm
 		int numStackTop = 0;
 		for (int i = 0; i < numStack; ++i)
 		{
-		  if (stack[i] == Opcodes.LONG || stack[i] == Opcodes.DOUBLE)
+		  if (Equals(stack[i], Opcodes.LONG) || Equals(stack[i], Opcodes.DOUBLE))
 		  {
 			++numStackTop;
 		  }
@@ -484,7 +484,7 @@ namespace org.objectweb.asm
 		for (int i = 0; i < numStack; ++i)
 		{
 		  inputStack[inputStackIndex++] = getAbstractTypeFromApiFormat(symbolTable, stack[i]);
-		  if (stack[i] == Opcodes.LONG || stack[i] == Opcodes.DOUBLE)
+		  if (Equals(stack[i], Opcodes.LONG) || Equals(stack[i], Opcodes.DOUBLE))
 		  {
 			inputStack[inputStackIndex++] = TOP;
 		  }
@@ -825,7 +825,7 @@ namespace org.objectweb.asm
 				push(symbolTable, argSymbol.value);
 				break;
 			  default:
-				throw new AssertionError();
+				throw new ("AssertionError");
 			}
 			break;
 		  case Opcodes.ALOAD:
@@ -1540,7 +1540,7 @@ namespace org.objectweb.asm
 			  output.putByte(ITEM_UNINITIALIZED).putShort((int) symbolTable.getType(typeValue).data);
 			  break;
 			default:
-			  throw new AssertionError();
+			  throw new ("AssertionError");
 		  }
 		}
 		else
@@ -1584,7 +1584,7 @@ namespace org.objectweb.asm
 				typeDescriptor.Append('D');
 				break;
 			  default:
-				throw new AssertionError();
+				throw new ("AssertionError");
 			}
 		  }
 		  output.putByte(ITEM_OBJECT).putShort(symbolTable.addConstantClass(typeDescriptor.ToString()).index);

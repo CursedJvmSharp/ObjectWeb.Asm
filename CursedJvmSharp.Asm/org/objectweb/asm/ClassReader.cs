@@ -2,6 +2,7 @@
 using CursedJvmSharp.Asm.Java.IO;
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -286,16 +287,6 @@ namespace org.objectweb.asm
 	  }
 
 	  /// <summary>
-	  /// Constructs a new <seealso cref="ClassReader"/> object.
-	  /// </summary>
-	  /// <param name="className"> the fully qualified name of the class to be read. The ClassFile structure is
-	  ///     retrieved with the current class loader's <seealso cref="ClassLoader.getSystemResourceAsStream"/>. </param>
-	  /// <exception cref="IOException"> if an exception occurs during reading. </exception>
-	  public ClassReader(string className) : this(readStream(ClassLoader.getSystemResourceAsStream(className.Replace('.', '/') + ".class"), true))
-	  {
-	  }
-
-	  /// <summary>
 	  /// Reads the given input stream and returns its content as a byte array.
 	  /// </summary>
 	  /// <param name="inputStream"> an input stream. </param>
@@ -313,7 +304,7 @@ namespace org.objectweb.asm
 		{
 				using (MemoryStream outputStream = new MemoryStream())
 				{
-			  sbyte[] data = new sbyte[bufferSize];
+			  byte[] data = new byte[bufferSize];
 			  int bytesRead;
 			  int readCount = 0;
 			  while ((bytesRead = inputStream.Read(data, 0, bufferSize)) != -1)
@@ -324,9 +315,9 @@ namespace org.objectweb.asm
 			  outputStream.Flush();
 			  if (readCount == 1)
 			  {
-				return data;
+				return Unsafe.As<sbyte[]>(data);
 			  }
-			  return outputStream.toByteArray();
+			  return Unsafe.As<sbyte[]>(outputStream.ToArray());
 				}
 		}
 		finally
@@ -339,8 +330,8 @@ namespace org.objectweb.asm
 	  }
 
 	  private static int calculateBufferSize(Stream inputStream)
-	  {
-		int expectedLength = inputStream.available();
+      {
+          long expectedLength = inputStream.Length;
 		/*
 		 * Some implementations can return 0 while holding available data
 		 * (e.g. new FileInputStream("/proc/a_file"))
@@ -351,7 +342,7 @@ namespace org.objectweb.asm
 		{
 		  return INPUT_STREAM_DATA_CHUNK_SIZE;
 		}
-		return Math.Min(expectedLength, MAX_BUFFER_SIZE);
+		return (int)Math.Min(expectedLength, MAX_BUFFER_SIZE);
 	  }
 
 	  // -----------------------------------------------------------------------------------------------
@@ -2523,7 +2514,7 @@ namespace org.objectweb.asm
 			  currentOffset += 4;
 			  break;
 			default:
-			  throw new AssertionError();
+			  throw new ("AssertionError");
 		  }
 
 		  // Visit the runtime visible instruction annotations, if any.
@@ -3120,7 +3111,7 @@ namespace org.objectweb.asm
 				float[] floatValues = new float[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  floatValues[i] = Float.intBitsToFloat(readInt(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]));
+				  floatValues[i] = BitConverter.Int32BitsToSingle(readInt(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]));
 				  currentOffset += 3;
 				}
 				annotationVisitor.visit(elementName, floatValues);
@@ -3129,7 +3120,7 @@ namespace org.objectweb.asm
 				double[] doubleValues = new double[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  doubleValues[i] = Double.longBitsToDouble(readLong(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]));
+				  doubleValues[i] = BitConverter.Int64BitsToDouble(readLong(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]));
 				  currentOffset += 3;
 				}
 				annotationVisitor.visit(elementName, doubleValues);
@@ -3802,11 +3793,11 @@ namespace org.objectweb.asm
 		  case Symbol.CONSTANT_INTEGER_TAG:
 			return readInt(cpInfoOffset);
 		  case Symbol.CONSTANT_FLOAT_TAG:
-			return Float.intBitsToFloat(readInt(cpInfoOffset));
+			return BitConverter.Int32BitsToSingle(readInt(cpInfoOffset));
 		  case Symbol.CONSTANT_LONG_TAG:
 			return readLong(cpInfoOffset);
 		  case Symbol.CONSTANT_DOUBLE_TAG:
-			return Double.longBitsToDouble(readLong(cpInfoOffset));
+			return BitConverter.Int64BitsToDouble(readLong(cpInfoOffset));
 		  case Symbol.CONSTANT_CLASS_TAG:
 			return org.objectweb.asm.JType.getObjectType(readUTF8(cpInfoOffset, charBuffer));
 		  case Symbol.CONSTANT_STRING_TAG:

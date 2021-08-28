@@ -662,7 +662,7 @@ namespace org.objectweb.asm
 	  /// <returns> a string representation of this label. </returns>
 	  public override string ToString()
 	  {
-		return "L" + System.identityHashCode(this);
+		return "L" + (this).GetHashCode();
 	  }
 	}
 
