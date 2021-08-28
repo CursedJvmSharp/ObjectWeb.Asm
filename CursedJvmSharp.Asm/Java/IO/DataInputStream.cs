@@ -798,7 +798,7 @@ namespace Java.IO
                         if ((char2 & 0xC0) != 0x80)
                             throw new Exception("UTFDataFormat: malformed input around byte " + count);
                         chararr[chararrCount++] = (char)(((c & 0x1F) << 6) | (char2 &
-                                                                               0x3F));
+                                                                              0x3F));
                         break;
                     }
 
@@ -813,8 +813,8 @@ namespace Java.IO
                         if ((char2 & 0xC0) != 0x80 || (char3 & 0xC0) != 0x80)
                             throw new Exception("UTFDataFormat: malformed input around byte " + (count - 1));
                         chararr[chararrCount++] = (char)(((c & 0x0F) << 12) | ((char2
-                                                              & 0x3F) << 6) |
-                                                          ((char3 & 0x3F) << 0));
+                                                             & 0x3F) << 6) |
+                                                         ((char3 & 0x3F) << 0));
                         break;
                     }
 

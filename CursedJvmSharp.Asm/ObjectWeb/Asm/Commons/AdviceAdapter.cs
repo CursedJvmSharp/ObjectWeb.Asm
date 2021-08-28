@@ -71,16 +71,6 @@ namespace ObjectWeb.Asm.Commons
         private IDictionary<Label, List<object>> _forwardJumpStackFrames;
 
         /// <summary>
-        ///     The access flags of the visited method.
-        /// </summary>
-        protected internal int methodAccess;
-
-        /// <summary>
-        ///     The descriptor of the visited method.
-        /// </summary>
-        protected internal string methodDesc;
-
-        /// <summary>
         ///     The values on the current execution stack frame (long and double are represented by two
         ///     elements). Each value is either <seealso cref="UNINITIALIZED_THIS" /> (for the uninitialized this value),
         ///     or <seealso cref="OTHER" /> (for any other value). This field is only maintained for constructors, in
@@ -99,6 +89,16 @@ namespace ObjectWeb.Asm.Commons
         private bool _superClassConstructorCalled;
 
         /// <summary>
+        ///     The access flags of the visited method.
+        /// </summary>
+        protected internal int methodAccess;
+
+        /// <summary>
+        ///     The descriptor of the visited method.
+        /// </summary>
+        protected internal string methodDesc;
+
+        /// <summary>
         ///     Constructs a new <seealso cref="AdviceAdapter" />.
         /// </summary>
         /// <param name="api">
@@ -108,7 +108,7 @@ namespace ObjectWeb.Asm.Commons
         /// <param name="methodVisitor"> the method visitor to which this adapter delegates calls. </param>
         /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes" />). </param>
         /// <param name="name"> the method's name. </param>
-        /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type Type" />). </param>
+        /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type" />). </param>
         public AdviceAdapter(int api, MethodVisitor methodVisitor, int access, string name, string descriptor) : base(
             api, methodVisitor, access, name, descriptor)
         {
@@ -660,10 +660,13 @@ namespace ObjectWeb.Asm.Commons
         ///     </pre>
         /// </summary>
         /// <param name="opcode">
-        ///     one of <seealso cref="IIOpcodes.Return />, <seealso cref="IIOpcodes.Ireturn />, <seealso cref="IIOpcodes.Freturn />,
-        ///     <seealso cref="IIOpcodes.Areturn />, <seealso cref="IIOpcodes.Lreturn />, <seealso cref="IIOpcodes.Dreturn /> or
+        ///     one of <seealso cref="IIOpcodes.Return />, <seealso cref="IIOpcodes.Ireturn />, 
+        ///     <seealso cref="IIOpcodes.Freturn />,
+        ///     <seealso cref="IIOpcodes.Areturn />, 
+        ///     <seealso cref="IIOpcodes.Lreturn />, <seealso cref="IIOpcodes.Dreturn /> or
         ///     {@link
         ///     Opcodes#ATHROW}.
+        /// 
         /// </param>
         public virtual void OnMethodExit(int opcode)
         {

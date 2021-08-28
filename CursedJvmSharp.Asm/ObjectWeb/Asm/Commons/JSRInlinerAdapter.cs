@@ -321,7 +321,7 @@ namespace ObjectWeb.Asm.Commons
             for (var i = 0; i < instructions.Count(); ++i)
             {
                 var insnNode = instructions.Get(i);
-                if (insnNode.Type == AbstractInsnNode.Label)
+                if (insnNode.Type == AbstractInsnNode.Label_Insn)
                 {
                     // Always clone all labels, while avoiding to add the same label more than once.
                     var labelNode = (LabelNode)insnNode;
@@ -458,7 +458,7 @@ namespace ObjectWeb.Asm.Commons
                 for (var insnIndex = 0; insnIndex < outerInstance.instructions.Count(); insnIndex++)
                 {
                     var insnNode = outerInstance.instructions.Get(insnIndex);
-                    if (insnNode.Type == AbstractInsnNode.Label)
+                    if (insnNode.Type == AbstractInsnNode.Label_Insn)
                     {
                         var labelNode = (LabelNode)insnNode;
                         // If we already have a label pointing at this spot, don't recreate it.

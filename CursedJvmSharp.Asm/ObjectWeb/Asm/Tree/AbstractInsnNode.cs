@@ -73,7 +73,7 @@ namespace ObjectWeb.Asm.Tree
 
 	  /// <summary>
 	  /// The type of <seealso cref="LabelNode"/> "instructions". </summary>
-	  public const int Label = 8;
+	  public const int Label_Insn = 8;
 
 	  /// <summary>
 	  /// The type of <seealso cref="LdcInsnNode"/> instructions. </summary>
