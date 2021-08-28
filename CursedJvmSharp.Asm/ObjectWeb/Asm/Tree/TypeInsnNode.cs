@@ -64,21 +64,12 @@ namespace ObjectWeb.Asm.Tree
 	  ///     INSTANCEOF. </param>
 	  public virtual int Opcode
 	  {
-		  set
-		  {
-			this.opcode = value;
-		  }
-	  }
+		  set => this.opcode = value;
+      }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Type_Insn;
-		  }
-	  }
+	  public override int Type => Type_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitTypeInsn(opcode, desc);
 		AcceptAnnotations(methodVisitor);

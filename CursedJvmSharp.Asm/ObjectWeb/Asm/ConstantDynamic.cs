@@ -76,53 +76,29 @@ namespace ObjectWeb.Asm
 	  /// Returns the name of this constant.
 	  /// </summary>
 	  /// <returns> the name of this constant. </returns>
-	  public string Name
-	  {
-		  get
-		  {
-			return _name;
-		  }
-	  }
+	  public string Name => _name;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the type of this constant.
 	  /// </summary>
 	  /// <returns> the type of this constant, as a field descriptor. </returns>
-	  public string Descriptor
-	  {
-		  get
-		  {
-			return _descriptor;
-		  }
-	  }
+	  public string Descriptor => _descriptor;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the bootstrap method used to compute the value of this constant.
 	  /// </summary>
 	  /// <returns> the bootstrap method used to compute the value of this constant. </returns>
-	  public Handle BootstrapMethod
-	  {
-		  get
-		  {
-			return _bootstrapMethod;
-		  }
-	  }
+	  public Handle BootstrapMethod => _bootstrapMethod;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the number of arguments passed to the bootstrap method, in order to compute the value
 	  /// of this constant.
 	  /// </summary>
 	  /// <returns> the number of arguments passed to the bootstrap method, in order to compute the value
 	  ///     of this constant. </returns>
-	  public int BootstrapMethodArgumentCount
-	  {
-		  get
-		  {
-			return _bootstrapMethodArguments.Length;
-		  }
-	  }
+	  public int BootstrapMethodArgumentCount => _bootstrapMethodArguments.Length;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns an argument passed to the bootstrap method, in order to compute the value of this
 	  /// constant.
 	  /// </summary>
@@ -140,15 +116,9 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <returns> the arguments to pass to the bootstrap method, in order to compute the value of this
 	  ///     constant. </returns>
-	  public object[] BootstrapMethodArgumentsUnsafe
-	  {
-		  get
-		  {
-			return _bootstrapMethodArguments;
-		  }
-	  }
+	  public object[] BootstrapMethodArgumentsUnsafe => _bootstrapMethodArguments;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the size of this constant.
 	  /// </summary>
 	  /// <returns> the size of this constant, i.e., 2 for {@code long} and {@code double}, 1 otherwise. </returns>

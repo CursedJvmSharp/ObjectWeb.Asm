@@ -77,40 +77,22 @@ namespace ObjectWeb.Asm
 	  /// method bytecode, etc. The default implementation of this method always returns {@literal true}.
 	  /// </summary>
 	  /// <returns> {@literal true} if this type of attribute is unknown. </returns>
-	  public virtual bool Unknown
-	  {
-		  get
-		  {
-			return true;
-		  }
-	  }
+	  public virtual bool Unknown => true;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns {@literal true} if this type of attribute is a Code attribute.
 	  /// </summary>
 	  /// <returns> {@literal true} if this type of attribute is a Code attribute. </returns>
-	  public virtual bool CodeAttribute
-	  {
-		  get
-		  {
-			return false;
-		  }
-	  }
+	  public virtual bool CodeAttribute => false;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the labels corresponding to this attribute.
 	  /// </summary>
 	  /// <returns> the labels corresponding to this attribute, or {@literal null} if this attribute is not
 	  ///     a Code attribute that contains labels. </returns>
-	  public virtual Label[] Labels
-	  {
-		  get
-		  {
-			return new Label[0];
-		  }
-	  }
+	  public virtual Label[] Labels => new Label[0];
 
-	  /// <summary>
+      /// <summary>
 	  /// Reads a <seealso cref="type"/> attribute. This method must return a <i>new</i> <seealso cref="Attribute"/> object,
 	  /// of type <seealso cref="type"/>, corresponding to the 'length' bytes starting at 'offset', in the given
 	  /// ClassReader.

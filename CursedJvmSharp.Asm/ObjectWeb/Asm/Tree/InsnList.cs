@@ -67,27 +67,15 @@ namespace ObjectWeb.Asm.Tree
 	  /// Returns the first instruction in this list.
 	  /// </summary>
 	  /// <returns> the first instruction in this list, or {@literal null} if the list is empty. </returns>
-	  public virtual AbstractInsnNode First
-	  {
-		  get
-		  {
-			return _firstInsn;
-		  }
-	  }
+	  public virtual AbstractInsnNode First => _firstInsn;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the last instruction in this list.
 	  /// </summary>
 	  /// <returns> the last instruction in this list, or {@literal null} if the list is empty. </returns>
-	  public virtual AbstractInsnNode Last
-	  {
-		  get
-		  {
-			return _lastInsn;
-		  }
-	  }
+	  public virtual AbstractInsnNode Last => _lastInsn;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the instruction whose index is given. This method builds a cache of the instructions in
 	  /// this list to avoid scanning the whole list each time it is called. Once the cache is built,
 	  /// this method runs in constant time. This cache is invalidated by all the methods that modify the

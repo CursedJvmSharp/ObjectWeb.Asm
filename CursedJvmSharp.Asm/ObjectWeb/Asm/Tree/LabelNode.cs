@@ -46,15 +46,9 @@ namespace ObjectWeb.Asm.Tree
 		this._value = label;
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return AbstractInsnNode.Label;
-		  }
-	  }
+	  public override int Type => AbstractInsnNode.Label;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the label encapsulated by this node. A new label is created and associated with this
 	  /// node if it was created without an encapsulated label.
 	  /// </summary>

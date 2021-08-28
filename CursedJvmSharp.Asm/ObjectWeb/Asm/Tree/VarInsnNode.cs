@@ -62,21 +62,12 @@ namespace ObjectWeb.Asm.Tree
 	  ///     ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET. </param>
 	  public virtual int Opcode
 	  {
-		  set
-		  {
-			this.opcode = value;
-		  }
-	  }
+		  set => this.opcode = value;
+      }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Var_Insn;
-		  }
-	  }
+	  public override int Type => Var_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitVarInsn(opcode, var);
 		AcceptAnnotations(methodVisitor);

@@ -59,21 +59,12 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="opcode"> the new instruction opcode. This opcode must be BIPUSH, SIPUSH or NEWARRAY. </param>
 	  public virtual int Opcode
 	  {
-		  set
-		  {
-			this.opcode = value;
-		  }
-	  }
+		  set => this.opcode = value;
+      }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Int_Insn;
-		  }
-	  }
+	  public override int Type => Int_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitIntInsn(opcode, operand);
 		AcceptAnnotations(methodVisitor);

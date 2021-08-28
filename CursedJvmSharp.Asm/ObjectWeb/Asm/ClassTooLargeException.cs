@@ -57,25 +57,13 @@ namespace ObjectWeb.Asm
 	  /// Returns the internal name of the class.
 	  /// </summary>
 	  /// <returns> the internal name of the class. </returns>
-	  public string ClassName
-	  {
-		  get
-		  {
-			return _className;
-		  }
-	  }
+	  public string ClassName => _className;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the number of constant pool items of the class.
 	  /// </summary>
 	  /// <returns> the number of constant pool items of the class. </returns>
-	  public int ConstantPoolCount
-	  {
-		  get
-		  {
-			return _constantPoolCount;
-		  }
-	  }
-	}
+	  public int ConstantPoolCount => _constantPoolCount;
+    }
 
 }

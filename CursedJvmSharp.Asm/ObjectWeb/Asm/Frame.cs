@@ -491,15 +491,9 @@ namespace ObjectWeb.Asm
 		_initializationCount = 0;
 	  }
 
-	  public int InputStackSize
-	  {
-		  get
-		  {
-			return _inputStack.Length;
-		  }
-	  }
+	  public int InputStackSize => _inputStack.Length;
 
-	  // -----------------------------------------------------------------------------------------------
+      // -----------------------------------------------------------------------------------------------
 	  // Methods related to the output frame
 	  // -----------------------------------------------------------------------------------------------
 

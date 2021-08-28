@@ -72,15 +72,9 @@ namespace ObjectWeb.Asm.Tree
 		this.bsmArgs = bootstrapMethodArguments;
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Invoke_Dynamic_Insn;
-		  }
-	  }
+	  public override int Type => Invoke_Dynamic_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
 		AcceptAnnotations(methodVisitor);

@@ -59,15 +59,9 @@ namespace ObjectWeb.Asm.Tree
 		this.start = start;
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Line;
-		  }
-	  }
+	  public override int Type => Line;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitLineNumber(line, start.Label);
 	  }

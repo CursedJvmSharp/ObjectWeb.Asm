@@ -66,21 +66,12 @@ namespace ObjectWeb.Asm.Tree
 	  ///     IF_ACMPNE, GOTO, JSR, IFNULL or IFNONNULL. </param>
 	  public virtual int Opcode
 	  {
-		  set
-		  {
-			this.opcode = value;
-		  }
-	  }
+		  set => this.opcode = value;
+      }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Jump_Insn;
-		  }
-	  }
+	  public override int Type => Jump_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitJumpInsn(opcode, label.Label);
 		AcceptAnnotations(methodVisitor);

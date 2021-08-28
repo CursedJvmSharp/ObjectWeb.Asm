@@ -57,15 +57,9 @@ namespace ObjectWeb.Asm.Tree
 		this.dims = numDimensions;
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Multianewarray_Insn;
-		  }
-	  }
+	  public override int Type => Multianewarray_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitMultiANewArrayInsn(desc, dims);
 		AcceptAnnotations(methodVisitor);

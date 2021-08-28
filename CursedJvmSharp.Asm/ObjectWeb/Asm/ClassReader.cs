@@ -353,44 +353,28 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <returns> the class access flags. </returns>
 	  /// <seealso cref= ClassVisitor#visit(int, int, String, String, String, String[]) </seealso>
-	  public virtual int Access
-	  {
-		  get
-		  {
-			return ReadUnsignedShort(header);
-		  }
-	  }
+	  public virtual int Access => ReadUnsignedShort(header);
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the internal name of the class (see <seealso cref="Type.InternalName"/>).
 	  /// </summary>
 	  /// <returns> the internal class name. </returns>
 	  /// <seealso cref= ClassVisitor#visit(int, int, String, String, String, String[]) </seealso>
-	  public virtual string ClassName
-	  {
-		  get
-		  {
-			// this_class is just after the access_flags field (using 2 bytes).
-			return ReadClass(header + 2, new char[_maxStringLength]);
-		  }
-	  }
+	  public virtual string ClassName =>
+          // this_class is just after the access_flags field (using 2 bytes).
+          ReadClass(header + 2, new char[_maxStringLength]);
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the internal of name of the super class (see <seealso cref="Type.InternalName"/>). For
 	  /// interfaces, the super class is <seealso cref="object"/>.
 	  /// </summary>
 	  /// <returns> the internal name of the super class, or {@literal null} for <seealso cref="object"/> class. </returns>
 	  /// <seealso cref= ClassVisitor#visit(int, int, String, String, String, String[]) </seealso>
-	  public virtual string SuperName
-	  {
-		  get
-		  {
-			// super_class is after the access_flags and this_class fields (2 bytes each).
-			return ReadClass(header + 4, new char[_maxStringLength]);
-		  }
-	  }
+	  public virtual string SuperName =>
+          // super_class is after the access_flags and this_class fields (2 bytes each).
+          ReadClass(header + 4, new char[_maxStringLength]);
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the internal names of the implemented interfaces (see <seealso cref="Type.InternalName"/>).
 	  /// </summary>
 	  /// <returns> the internal names of the directly implemented interfaces. Inherited implemented
@@ -3506,15 +3490,9 @@ namespace ObjectWeb.Asm
 	  /// Returns the number of entries in the class's constant pool table.
 	  /// </summary>
 	  /// <returns> the number of entries in the class's constant pool table. </returns>
-	  public virtual int ItemCount
-	  {
-		  get
-		  {
-			return _cpInfoOffsets.Length;
-		  }
-	  }
+	  public virtual int ItemCount => _cpInfoOffsets.Length;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the start offset in this <seealso cref="ClassReader"/> of a JVMS 'cp_info' structure (i.e. a
 	  /// constant pool entry), plus one. <i>This method is intended for <seealso cref="Attribute"/> sub classes,
 	  /// and is normally not needed by class generators or adapters.</i>
@@ -3534,15 +3512,9 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <returns> a conservative estimate of the maximum length of the strings contained in the class's
 	  ///     constant pool table. </returns>
-	  public virtual int MaxStringLength
-	  {
-		  get
-		  {
-			return _maxStringLength;
-		  }
-	  }
+	  public virtual int MaxStringLength => _maxStringLength;
 
-	  /// <summary>
+      /// <summary>
 	  /// Reads a byte value in this <seealso cref="ClassReader"/>. <i>This method is intended for {@link
 	  /// Attribute} sub classes, and is normally not needed by class generators or adapters.</i>
 	  /// </summary>

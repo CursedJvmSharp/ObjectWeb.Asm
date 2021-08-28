@@ -111,15 +111,9 @@ namespace ObjectWeb.Asm.Tree
 		}
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Frame;
-		  }
-	  }
+	  public override int Type => Frame;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		switch (type)
 		{

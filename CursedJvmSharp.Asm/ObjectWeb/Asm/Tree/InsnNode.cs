@@ -55,15 +55,9 @@ namespace ObjectWeb.Asm.Tree
 	  {
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Insn;
-		  }
-	  }
+	  public override int Type => Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitInsn(opcode);
 		AcceptAnnotations(methodVisitor);

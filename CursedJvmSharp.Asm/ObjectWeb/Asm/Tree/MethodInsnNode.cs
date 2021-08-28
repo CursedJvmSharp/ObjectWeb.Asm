@@ -98,21 +98,12 @@ namespace ObjectWeb.Asm.Tree
 	  ///     INVOKESTATIC or INVOKEINTERFACE. </param>
 	  public virtual int Opcode
 	  {
-		  set
-		  {
-			this.opcode = value;
-		  }
-	  }
+		  set => this.opcode = value;
+      }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Method_Insn;
-		  }
-	  }
+	  public override int Type => Method_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitMethodInsn(opcode, owner, name, desc, itf);
 		AcceptAnnotations(methodVisitor);

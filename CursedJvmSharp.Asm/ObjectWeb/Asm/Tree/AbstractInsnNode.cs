@@ -150,15 +150,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Returns the opcode of this instruction.
 	  /// </summary>
 	  /// <returns> the opcode of this instruction. </returns>
-	  public virtual int Opcode
-	  {
-		  get
-		  {
-			return opcode;
-		  }
-	  }
+	  public virtual int Opcode => opcode;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the type of this instruction.
 	  /// </summary>
 	  /// <returns> the type of this instruction, i.e. one the constants defined in this class. </returns>
@@ -169,28 +163,16 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <returns> the previous instruction in the list to which this instruction belongs, if any. May be
 	  ///     {@literal null}. </returns>
-	  public virtual AbstractInsnNode Previous
-	  {
-		  get
-		  {
-			return previousInsn;
-		  }
-	  }
+	  public virtual AbstractInsnNode Previous => previousInsn;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the next instruction in the list to which this instruction belongs, if any.
 	  /// </summary>
 	  /// <returns> the next instruction in the list to which this instruction belongs, if any. May be
 	  ///     {@literal null}. </returns>
-	  public virtual AbstractInsnNode Next
-	  {
-		  get
-		  {
-			return nextInsn;
-		  }
-	  }
+	  public virtual AbstractInsnNode Next => nextInsn;
 
-	  /// <summary>
+      /// <summary>
 	  /// Makes the given method visitor visit this instruction.
 	  /// </summary>
 	  /// <param name="methodVisitor"> a method visitor. </param>

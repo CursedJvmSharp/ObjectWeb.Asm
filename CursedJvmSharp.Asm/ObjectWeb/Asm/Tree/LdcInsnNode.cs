@@ -61,15 +61,9 @@ namespace ObjectWeb.Asm.Tree
 		this.cst = value;
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Ldc_Insn;
-		  }
-	  }
+	  public override int Type => Ldc_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitLdcInsn(cst);
 		AcceptAnnotations(methodVisitor);

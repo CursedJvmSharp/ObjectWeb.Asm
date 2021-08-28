@@ -57,15 +57,9 @@ namespace ObjectWeb.Asm.Tree
 		this.incr = incr;
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Iinc_Insn;
-		  }
-	  }
+	  public override int Type => Iinc_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitIincInsn(var, incr);
 		AcceptAnnotations(methodVisitor);

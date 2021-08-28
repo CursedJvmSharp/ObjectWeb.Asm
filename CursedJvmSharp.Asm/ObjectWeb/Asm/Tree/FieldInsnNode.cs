@@ -76,21 +76,12 @@ namespace ObjectWeb.Asm.Tree
 	  ///     PUTFIELD. </param>
 	  public virtual int Opcode
 	  {
-		  set
-		  {
-			this.opcode = value;
-		  }
-	  }
+		  set => this.opcode = value;
+      }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Field_Insn;
-		  }
-	  }
+	  public override int Type => Field_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		methodVisitor.VisitFieldInsn(opcode, owner, name, desc);
 		AcceptAnnotations(methodVisitor);

@@ -111,63 +111,33 @@ namespace ObjectWeb.Asm
 	  ///     <seealso cref="IIOpcodes.H_Putstatic/>, <seealso cref="IIOpcodes.H_Invokevirtual/>, {@link
 	  ///     Opcodes#H_INVOKESTATIC}, <seealso cref="IIOpcodes.H_Invokespecial/>, {@link
 	  ///     Opcodes#H_NEWINVOKESPECIAL} or <seealso cref="IIOpcodes.H_Invokeinterface/>. </returns>
-	  public int Tag
-	  {
-		  get
-		  {
-			return _tag;
-		  }
-	  }
+	  public int Tag => _tag;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the internal name of the class that owns the field or method designated by this handle.
 	  /// </summary>
 	  /// <returns> the internal name of the class that owns the field or method designated by this handle. </returns>
-	  public string Owner
-	  {
-		  get
-		  {
-			return _owner;
-		  }
-	  }
+	  public string Owner => _owner;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the name of the field or method designated by this handle.
 	  /// </summary>
 	  /// <returns> the name of the field or method designated by this handle. </returns>
-	  public string Name
-	  {
-		  get
-		  {
-			return _name;
-		  }
-	  }
+	  public string Name => _name;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the descriptor of the field or method designated by this handle.
 	  /// </summary>
 	  /// <returns> the descriptor of the field or method designated by this handle. </returns>
-	  public string Desc
-	  {
-		  get
-		  {
-			return _descriptor;
-		  }
-	  }
+	  public string Desc => _descriptor;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns true if the owner of the field or method designated by this handle is an interface.
 	  /// </summary>
 	  /// <returns> true if the owner of the field or method designated by this handle is an interface. </returns>
-	  public bool Interface
-	  {
-		  get
-		  {
-			return _isInterface;
-		  }
-	  }
+	  public bool Interface => _isInterface;
 
-	  public override bool Equals(object @object)
+      public override bool Equals(object @object)
 	  {
 		if (@object == this)
 		{

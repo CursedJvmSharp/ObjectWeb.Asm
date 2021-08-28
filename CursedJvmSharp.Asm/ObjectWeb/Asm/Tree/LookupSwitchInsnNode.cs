@@ -64,15 +64,9 @@ namespace ObjectWeb.Asm.Tree
 		this.labels = Util.AsArrayList(labels);
 	  }
 
-	  public override int Type
-	  {
-		  get
-		  {
-			return Lookupswitch_Insn;
-		  }
-	  }
+	  public override int Type => Lookupswitch_Insn;
 
-	  public override void Accept(MethodVisitor methodVisitor)
+      public override void Accept(MethodVisitor methodVisitor)
 	  {
 		int[] keysArray = new int[this.keys.Count];
 		for (int i = 0, n = keysArray.Length; i < n; ++i)
