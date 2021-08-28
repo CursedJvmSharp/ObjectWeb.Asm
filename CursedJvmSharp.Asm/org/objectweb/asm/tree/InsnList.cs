@@ -3,6 +3,7 @@ using System.Collections;
 using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System.Collections.Generic;
+using System.Linq;
 using MethodVisitor = org.objectweb.asm.MethodVisitor;
 
 // ASM: a very small and fast Java bytecode manipulation framework
@@ -64,12 +65,9 @@ namespace org.objectweb.asm.tree
 	  /// Returns the number of instructions in this list.
 	  /// </summary>
 	  /// <returns> the number of instructions in this list. </returns>
-	  public virtual int size()
-	  {
-		return size_Conflict;
-	  }
+	  public int Size => size_Conflict;
 
-	  /// <summary>
+      /// <summary>
 	  /// Returns the first instruction in this list.
 	  /// </summary>
 	  /// <returns> the first instruction in this list, or {@literal null} if the list is empty. </returns>
@@ -273,11 +271,11 @@ namespace org.objectweb.asm.tree
 	  ///     different from 'this'. </param>
 	  public virtual void add(InsnList insnList)
 	  {
-		if (insnList.size_Conflict == 0)
+		if (insnList.Size == 0)
 		{
 		  return;
 		}
-		size_Conflict += insnList.size_Conflict;
+		size_Conflict += insnList.Size;
 		if (lastInsn == null)
 		{
 		  firstInsn = insnList.firstInsn;
@@ -323,11 +321,11 @@ namespace org.objectweb.asm.tree
 	  ///     different from 'this'. </param>
 	  public virtual void insert(InsnList insnList)
 	  {
-		if (insnList.size_Conflict == 0)
+		if (insnList.Size == 0)
 		{
 		  return;
 		}
-		size_Conflict += insnList.size_Conflict;
+		size_Conflict += insnList.Size;
 		if (firstInsn == null)
 		{
 		  firstInsn = insnList.firstInsn;
@@ -378,11 +376,11 @@ namespace org.objectweb.asm.tree
 	  ///     list must be different from 'this'. </param>
 	  public virtual void insert(AbstractInsnNode previousInsn, InsnList insnList)
 	  {
-		if (insnList.size_Conflict == 0)
+		if (insnList.Size == 0)
 		{
 		  return;
 		}
-		size_Conflict += insnList.size_Conflict;
+		size_Conflict += insnList.Size;
 		AbstractInsnNode firstInsnListElement = insnList.firstInsn;
 		AbstractInsnNode lastInsnListElement = insnList.lastInsn;
 		AbstractInsnNode nextInsn = previousInsn.nextInsn;
@@ -435,11 +433,11 @@ namespace org.objectweb.asm.tree
 	  ///     list must be different from 'this'. </param>
 	  public virtual void insertBefore(AbstractInsnNode nextInsn, InsnList insnList)
 	  {
-		if (insnList.size_Conflict == 0)
+		if (insnList.Size == 0)
 		{
 		  return;
 		}
-		size_Conflict += insnList.size_Conflict;
+		size_Conflict += insnList.Size;
 		AbstractInsnNode firstInsnListElement = insnList.firstInsn;
 		AbstractInsnNode lastInsnListElement = insnList.lastInsn;
 		AbstractInsnNode previousInsn = nextInsn.previousInsn;
@@ -563,11 +561,12 @@ namespace org.objectweb.asm.tree
         public InsnListIterator(InsnList outerInstance, int index)
 		{
 			this.outerInstance = outerInstance;
-		  if (index < 0 || index > outerInstance.size())
+            var outerInstanceCount = outerInstance.Count();
+            if (index < 0 || index > outerInstanceCount)
 		  {
 			throw new System.IndexOutOfRangeException();
 		  }
-		  else if (index == outerInstance.size())
+		  else if (index == outerInstanceCount)
 		  {
 			nextInsn = null;
 			previousInsn = outerInstance.Last;
@@ -646,7 +645,7 @@ namespace org.objectweb.asm.tree
 		{
 		  if (nextInsn == null)
 		  {
-			return outerInstance.size();
+			return outerInstance.Count();
 		  }
 		  if (outerInstance.cache == null)
 		  {

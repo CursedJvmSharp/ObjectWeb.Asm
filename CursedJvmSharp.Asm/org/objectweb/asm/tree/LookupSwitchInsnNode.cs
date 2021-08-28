@@ -49,11 +49,11 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The values of the keys. </summary>
-	  public IList<int> keys;
+	  public List<int> keys;
 
 	  /// <summary>
 	  /// Beginnings of the handler blocks. </summary>
-	  public IList<LabelNode> labels;
+	  public List<LabelNode> labels;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="LookupSwitchInsnNode"/>.

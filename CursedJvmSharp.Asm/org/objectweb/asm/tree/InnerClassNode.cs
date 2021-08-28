@@ -41,7 +41,7 @@ namespace org.objectweb.asm.tree
 	{
 
 	  /// <summary>
-	  /// The internal name of an inner class (see <seealso cref="org.objectweb.asm.Type.getInternalName()"/>). </summary>
+	  /// The internal name of an inner class (see <seealso cref="org.objectweb.asm.Type.InternalName"/>). </summary>
 	  public string name;
 
 	  /// <summary>

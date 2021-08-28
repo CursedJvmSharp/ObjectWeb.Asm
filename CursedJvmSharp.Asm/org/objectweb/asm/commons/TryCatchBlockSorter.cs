@@ -1,4 +1,5 @@
-﻿using org.objectweb.asm;
+﻿using System;
+using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System.Collections.Generic;
 using MethodVisitor = org.objectweb.asm.MethodVisitor;
@@ -82,7 +83,7 @@ namespace org.objectweb.asm.commons
 	  public override void visitEnd()
 	  {
 		// Sort the TryCatchBlockNode elements by the length of their "try" block.
-		tryCatchBlocks.Sort(new ComparatorAnonymousInnerClass(this));
+        tryCatchBlocks.Sort(new ComparatorAnonymousInnerClass(this));
 		// Update the 'target' of each try catch block annotation.
 		for (int i = 0; i < tryCatchBlocks.Count; ++i)
 		{

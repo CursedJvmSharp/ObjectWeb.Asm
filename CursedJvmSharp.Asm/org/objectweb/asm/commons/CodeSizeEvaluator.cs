@@ -178,7 +178,7 @@ namespace org.objectweb.asm.commons
 
 	  public override void visitLdcInsn(object value)
 	  {
-		if (value is long? || value is double? || (value is ConstantDynamic && ((ConstantDynamic) value).Size == 2))
+		if (value is long? || value is double? || (value is ConstantDynamic && ((ConstantDynamic) value).Count() == 2))
 		{
 		  minSize += 3;
 		  maxSize += 3;

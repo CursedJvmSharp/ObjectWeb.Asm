@@ -54,7 +54,7 @@ namespace org.objectweb.asm.tree
 	  /// array (for enumeration values), an <seealso cref="AnnotationNode"/>, or a <seealso cref="System.Collections.IList"/> of values of one
 	  /// of the preceding types. The list may be {@literal null} if there is no name value pair.
 	  /// </summary>
-	  public IList<object> values;
+	  public List<object> values;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="AnnotationNode"/>. <i>Subclasses must not use this constructor</i>.
@@ -85,7 +85,7 @@ namespace org.objectweb.asm.tree
 	  /// Constructs a new <seealso cref="AnnotationNode"/> to visit an array value.
 	  /// </summary>
 	  /// <param name="values"> where the visited values must be stored. </param>
-	  public AnnotationNode(IList<object> values) : base(Opcodes.ASM9)
+	  public AnnotationNode(List<object> values) : base(Opcodes.ASM9)
 	  {
 		this.values = values;
 	  }
@@ -180,7 +180,7 @@ namespace org.objectweb.asm.tree
 		{
 		  values.Add(name);
 		}
-		IList<object> array = new List<object>();
+		List<object> array = new List<object>();
 		values.Add(array);
 		return new AnnotationNode(array);
 	  }
@@ -252,7 +252,7 @@ namespace org.objectweb.asm.tree
 			AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.visitArray(name);
 			if (arrayAnnotationVisitor != null)
 			{
-			  IList<object> arrayValue = (IList<object>) value;
+			  List<object> arrayValue = (List<object>) value;
 			  for (int i = 0, n = arrayValue.Count; i < n; ++i)
 			  {
 				accept(arrayAnnotationVisitor, null, arrayValue[i]);

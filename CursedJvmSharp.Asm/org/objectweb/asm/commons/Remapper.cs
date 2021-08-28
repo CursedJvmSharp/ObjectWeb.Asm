@@ -57,7 +57,7 @@ namespace org.objectweb.asm.commons
 	  ///     descriptor is returned as is). </returns>
 	  public virtual string mapDesc(string descriptor)
 	  {
-		return mapType(org.objectweb.asm.JType.getType(descriptor)).getDescriptor();
+		return mapType(org.objectweb.asm.JType.getType(descriptor)).Descriptor;
 	  }
 
 	  /// <summary>
@@ -71,21 +71,21 @@ namespace org.objectweb.asm.commons
 	  ///     #mapMethodDesc(String)}. </returns>
 	  private org.objectweb.asm.JType mapType(org.objectweb.asm.JType type)
 	  {
-		switch (type.getSort())
+		switch (type.Sort)
 		{
 		  case org.objectweb.asm.JType.ARRAY:
 			StringBuilder remappedDescriptor = new StringBuilder();
-			for (int i = 0; i < type.getDimensions(); ++i)
+			for (int i = 0; i < type.Dimensions; ++i)
 			{
 			  remappedDescriptor.Append('[');
 			}
-			remappedDescriptor.Append(mapType(type.getElementType()).getDescriptor());
+			remappedDescriptor.Append(mapType(type.ElementType).Descriptor);
 			return org.objectweb.asm.JType.getType(remappedDescriptor.ToString());
 		  case org.objectweb.asm.JType.OBJECT:
-			string remappedInternalName = map(type.getInternalName());
+			string remappedInternalName = map(type.InternalName);
 			return !string.ReferenceEquals(remappedInternalName, null) ? org.objectweb.asm.JType.getObjectType(remappedInternalName) : type;
 		  case org.objectweb.asm.JType.METHOD:
-			return org.objectweb.asm.JType.getMethodType(mapMethodDesc(type.getDescriptor()));
+			return org.objectweb.asm.JType.getMethodType(mapMethodDesc(type.Descriptor));
 		  default:
 			return type;
 		}
@@ -102,7 +102,7 @@ namespace org.objectweb.asm.commons
 		{
 		  return null;
 		}
-		return mapType(org.objectweb.asm.JType.getObjectType(internalName)).getInternalName();
+		return mapType(org.objectweb.asm.JType.getObjectType(internalName)).InternalName;
 	  }
 
 	  /// <summary>
@@ -146,7 +146,7 @@ namespace org.objectweb.asm.commons
 		StringBuilder stringBuilder = new StringBuilder("(");
 		foreach (org.objectweb.asm.JType argumentType in org.objectweb.asm.JType.getArgumentTypes(methodDescriptor))
 		{
-		  stringBuilder.Append(mapType(argumentType).getDescriptor());
+		  stringBuilder.Append(mapType(argumentType).Descriptor);
 		}
 		org.objectweb.asm.JType returnType = org.objectweb.asm.JType.getReturnType(methodDescriptor);
 		if (returnType == org.objectweb.asm.JType.VOID_TYPE)
@@ -155,7 +155,7 @@ namespace org.objectweb.asm.commons
 		}
 		else
 		{
-		  stringBuilder.Append(')').Append(mapType(returnType).getDescriptor());
+		  stringBuilder.Append(')').Append(mapType(returnType).Descriptor);
 		}
 		return stringBuilder.ToString();
 	  }

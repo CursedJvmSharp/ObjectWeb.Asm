@@ -55,7 +55,7 @@ namespace org.objectweb.asm.tree
 	  /// The fully qualified names (using dots) of the modules that can use deep reflection to the
 	  /// classes of the open package, or {@literal null}.
 	  /// </summary>
-	  public IList<string> modules;
+	  public List<string> modules;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ModuleOpenNode"/>.
@@ -65,7 +65,7 @@ namespace org.objectweb.asm.tree
 	  ///     ACC_SYNTHETIC} and {@code ACC_MANDATED}. </param>
 	  /// <param name="modules"> the fully qualified names (using dots) of the modules that can use deep
 	  ///     reflection to the classes of the open package, or {@literal null}. </param>
-	  public ModuleOpenNode(string packaze, int access, IList<string> modules)
+	  public ModuleOpenNode(string packaze, int access, List<string> modules)
 	  {
 		this.packaze = packaze;
 		this.access = access;

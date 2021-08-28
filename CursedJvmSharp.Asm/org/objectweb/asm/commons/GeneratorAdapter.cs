@@ -1,4 +1,5 @@
-﻿using org.objectweb.asm;
+﻿using System;
+using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System.Collections.Generic;
 using ClassVisitor = org.objectweb.asm.ClassVisitor;
@@ -120,75 +121,75 @@ namespace org.objectweb.asm.commons
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int ADD = Opcodes.IADD;
+	  public const int ADD = Opcodes.IADD;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int SUB = Opcodes.ISUB;
+	  public const int SUB = Opcodes.ISUB;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int MUL = Opcodes.IMUL;
+	  public const int MUL = Opcodes.IMUL;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int DIV = Opcodes.IDIV;
+	  public const int DIV = Opcodes.IDIV;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int REM = Opcodes.IREM;
+	  public const int REM = Opcodes.IREM;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int NEG = Opcodes.INEG;
+	  public const int NEG = Opcodes.INEG;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int SHL = Opcodes.ISHL;
+	  public const int SHL = Opcodes.ISHL;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int SHR = Opcodes.ISHR;
+	  public const int SHR = Opcodes.ISHR;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int USHR = Opcodes.IUSHR;
+	  public const int USHR = Opcodes.IUSHR;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int AND = Opcodes.IAND;
+	  public const int AND = Opcodes.IAND;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int OR = Opcodes.IOR;
+	  public const int OR = Opcodes.IOR;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="math"/> method. </summary>
-	  public static readonly int XOR = Opcodes.IXOR;
+	  public const int XOR = Opcodes.IXOR;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="ifCmp"/> method. </summary>
-	  public static readonly int EQ = Opcodes.IFEQ;
+	  public const int EQ = Opcodes.IFEQ;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="ifCmp"/> method. </summary>
-	  public static readonly int NE = Opcodes.IFNE;
+	  public const int NE = Opcodes.IFNE;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="ifCmp"/> method. </summary>
-	  public static readonly int LT = Opcodes.IFLT;
+	  public const int LT = Opcodes.IFLT;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="ifCmp"/> method. </summary>
-	  public static readonly int GE = Opcodes.IFGE;
+	  public const int GE = Opcodes.IFGE;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="ifCmp"/> method. </summary>
-	  public static readonly int GT = Opcodes.IFGT;
+	  public const int GT = Opcodes.IFGT;
 
 	  /// <summary>
 	  /// Constant for the <seealso cref="ifCmp"/> method. </summary>
-	  public static readonly int LE = Opcodes.IFLE;
+	  public const int LE = Opcodes.IFLE;
 
 	  /// <summary>
 	  /// The access flags of the visited method. </summary>
@@ -208,7 +209,7 @@ namespace org.objectweb.asm.commons
 
 	  /// <summary>
 	  /// The types of the local variables of the visited method. </summary>
-	  private readonly IList<org.objectweb.asm.JType> localTypes = new List<org.objectweb.asm.JType>();
+	  private readonly List<org.objectweb.asm.JType> localTypes = new List<org.objectweb.asm.JType>();
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="GeneratorAdapter"/>. <i>Subclasses must not use this constructor</i>.
@@ -281,7 +282,7 @@ namespace org.objectweb.asm.commons
 		string[] names = new string[types.Length];
 		for (int i = 0; i < names.Length; ++i)
 		{
-		  names[i] = types[i].getInternalName();
+		  names[i] = types[i].InternalName;
 		}
 		return names;
 	  }
@@ -377,7 +378,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="value"> the value to be pushed on the stack. </param>
 	  public virtual void push(float value)
 	  {
-		int bits = Float.floatToIntBits(value);
+		int bits = BitConverter.SingleToInt32Bits(value);
 		if (bits == 0L || bits == 0x3F800000 || bits == 0x40000000)
 		{ // 0..2
 		  mv.visitInsn(Opcodes.FCONST_0 + (int) value);
@@ -433,7 +434,7 @@ namespace org.objectweb.asm.commons
 		}
 		else
 		{
-		  switch (value.getSort())
+		  switch (value.Sort)
 		  {
 			case org.objectweb.asm.JType.BOOLEAN:
 			  mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/Boolean", "TYPE", CLASS_DESCRIPTOR);
@@ -512,7 +513,7 @@ namespace org.objectweb.asm.commons
 		int index = (access & Opcodes.ACC_STATIC) == 0 ? 1 : 0;
 		for (int i = 0; i < arg; i++)
 		{
-		  index += argumentTypes[i].getSize();
+		  index += argumentTypes[i].Size;
 		}
 		return index;
 	  }
@@ -569,7 +570,7 @@ namespace org.objectweb.asm.commons
 		{
 		  org.objectweb.asm.JType argumentType = argumentTypes[arg + i];
 		  loadInsn(argumentType, index);
-		  index += argumentType.getSize();
+		  index += argumentType.Size;
 		}
 	  }
 
@@ -619,17 +620,17 @@ namespace org.objectweb.asm.commons
 	  /// <returns> the type of the given local variable. </returns>
 	  public virtual org.objectweb.asm.JType getLocalType(int local)
 	  {
-		return localTypes.get(local - firstLocal);
+		return localTypes[(local - firstLocal)];
 	  }
 
 	  public override void setLocalType(int local, org.objectweb.asm.JType type)
 	  {
 		int index = local - firstLocal;
-		while (localTypes.size() < index + 1)
+		while (localTypes.Count < index + 1)
 		{
-		  localTypes.add(null);
+		  localTypes.Add(null);
 		}
-		localTypes.set(index, type);
+		localTypes[index] = type;
 	  }
 
 	  /// <summary>
@@ -768,9 +769,9 @@ namespace org.objectweb.asm.commons
 	  /// <param name="type"> type of the top stack value. </param>
 	  public virtual void swap(org.objectweb.asm.JType prev, org.objectweb.asm.JType type)
 	  {
-		if (type.getSize() == 1)
+		if (type.Size == 1)
 		{
-		  if (prev.getSize() == 1)
+		  if (prev.Size == 1)
 		  {
 			swap(); // Same as dupX1 pop.
 		  }
@@ -782,7 +783,7 @@ namespace org.objectweb.asm.commons
 		}
 		else
 		{
-		  if (prev.getSize() == 1)
+		  if (prev.Size == 1)
 		  {
 			dup2X1();
 			pop2();
@@ -837,7 +838,7 @@ namespace org.objectweb.asm.commons
 	  {
 		if (from != to)
 		{
-		  if (from.getSort() < org.objectweb.asm.JType.BOOLEAN || from.getSort() > org.objectweb.asm.JType.DOUBLE || to.getSort() < org.objectweb.asm.JType.BOOLEAN || to.getSort() > org.objectweb.asm.JType.DOUBLE)
+		  if (from.Sort < org.objectweb.asm.JType.BOOLEAN || from.Sort > org.objectweb.asm.JType.DOUBLE || to.Sort < org.objectweb.asm.JType.BOOLEAN || to.Sort > org.objectweb.asm.JType.DOUBLE)
 		  {
 			throw new System.ArgumentException("Cannot cast from " + from + " to " + to);
 		  }
@@ -851,7 +852,7 @@ namespace org.objectweb.asm.commons
 
 	  private static org.objectweb.asm.JType getBoxedType(org.objectweb.asm.JType type)
 	  {
-		switch (type.getSort())
+		switch (type.Sort)
 		{
 		  case org.objectweb.asm.JType.BYTE:
 			return BYTE_TYPE;
@@ -881,7 +882,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="type"> the type of the top stack value. </param>
 	  public virtual void box(org.objectweb.asm.JType type)
 	  {
-		if (type.getSort() == org.objectweb.asm.JType.OBJECT || type.getSort() == org.objectweb.asm.JType.ARRAY)
+		if (type.Sort == org.objectweb.asm.JType.OBJECT || type.Sort == org.objectweb.asm.JType.ARRAY)
 		{
 		  return;
 		}
@@ -893,7 +894,7 @@ namespace org.objectweb.asm.commons
 		{
 		  org.objectweb.asm.JType boxedType = getBoxedType(type);
 		  newInstance(boxedType);
-		  if (type.getSize() == 2)
+		  if (type.Size == 2)
 		  {
 			// Pp -> Ppo -> oPpo -> ooPpo -> ooPp -> o
 			dupX2();
@@ -917,7 +918,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="type"> the type of the top stack value. </param>
 	  public virtual void valueOf(org.objectweb.asm.JType type)
 	  {
-		if (type.getSort() == org.objectweb.asm.JType.OBJECT || type.getSort() == org.objectweb.asm.JType.ARRAY)
+		if (type.Sort == org.objectweb.asm.JType.OBJECT || type.Sort == org.objectweb.asm.JType.ARRAY)
 		{
 		  return;
 		}
@@ -941,7 +942,7 @@ namespace org.objectweb.asm.commons
 	  {
 		org.objectweb.asm.JType boxedType = NUMBER_TYPE;
 		Method unboxMethod;
-		switch (type.getSort())
+		switch (type.Sort)
 		{
 		  case org.objectweb.asm.JType.VOID:
 			return;
@@ -1024,7 +1025,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="label"> where to jump if the comparison result is {@literal true}. </param>
 	  public virtual void ifCmp(org.objectweb.asm.JType type, int mode, Label label)
 	  {
-		switch (type.getSort())
+		switch (type.Sort)
 		{
 		  case org.objectweb.asm.JType.LONG:
 			mv.visitInsn(Opcodes.LCMP);
@@ -1243,7 +1244,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="fieldType"> the type of the field. </param>
 	  private void fieldInsn(int opcode, org.objectweb.asm.JType ownerType, string name, org.objectweb.asm.JType fieldType)
 	  {
-		mv.visitFieldInsn(opcode, ownerType.getInternalName(), name, fieldType.getDescriptor());
+		mv.visitFieldInsn(opcode, ownerType.InternalName, name, fieldType.Descriptor);
 	  }
 
 	  /// <summary>
@@ -1303,7 +1304,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="isInterface"> whether the 'type' class is an interface or not. </param>
 	  private void invokeInsn(int opcode, org.objectweb.asm.JType type, Method method, bool isInterface)
 	  {
-		string owner = type.getSort() == org.objectweb.asm.JType.ARRAY ? type.getDescriptor() : type.getInternalName();
+		string owner = type.Sort == org.objectweb.asm.JType.ARRAY ? type.Descriptor : type.InternalName;
 		mv.visitMethodInsn(opcode, owner, method.Name, method.Descriptor, isInterface);
 	  }
 
@@ -1373,7 +1374,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="type"> the instruction's operand. </param>
 	  private void typeInsn(int opcode, org.objectweb.asm.JType type)
 	  {
-		mv.visitTypeInsn(opcode, type.getInternalName());
+		mv.visitTypeInsn(opcode, type.InternalName);
 	  }
 
 	  /// <summary>
@@ -1492,7 +1493,7 @@ namespace org.objectweb.asm.commons
 		}
 		else
 		{
-		  mv.visitTryCatchBlock(start, end, catchLabel, exception.getInternalName());
+		  mv.visitTryCatchBlock(start, end, catchLabel, exception.InternalName);
 		}
 		mark(catchLabel);
 	  }

@@ -364,7 +364,7 @@ namespace org.objectweb.asm
 	  }
 
 	  /// <summary>
-	  /// Returns the internal name of the class (see <seealso cref="Type.getInternalName()"/>).
+	  /// Returns the internal name of the class (see <seealso cref="Type.InternalName"/>).
 	  /// </summary>
 	  /// <returns> the internal class name. </returns>
 	  /// <seealso cref= ClassVisitor#visit(int, int, String, String, String, String[]) </seealso>
@@ -378,7 +378,7 @@ namespace org.objectweb.asm
 	  }
 
 	  /// <summary>
-	  /// Returns the internal of name of the super class (see <seealso cref="Type.getInternalName()"/>). For
+	  /// Returns the internal of name of the super class (see <seealso cref="Type.InternalName"/>). For
 	  /// interfaces, the super class is <seealso cref="object"/>.
 	  /// </summary>
 	  /// <returns> the internal name of the super class, or {@literal null} for <seealso cref="object"/> class. </returns>
@@ -393,7 +393,7 @@ namespace org.objectweb.asm
 	  }
 
 	  /// <summary>
-	  /// Returns the internal names of the implemented interfaces (see <seealso cref="Type.getInternalName()"/>).
+	  /// Returns the internal names of the implemented interfaces (see <seealso cref="Type.InternalName"/>).
 	  /// </summary>
 	  /// <returns> the internal names of the directly implemented interfaces. Inherited implemented
 	  ///     interfaces are not returned. </returns>

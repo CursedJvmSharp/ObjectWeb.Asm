@@ -47,7 +47,7 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The internal names of the implementations of the service (there is at least one provider). </summary>
-	  public IList<string> providers;
+	  public List<string> providers;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ModuleProvideNode"/>.
@@ -55,7 +55,7 @@ namespace org.objectweb.asm.tree
 	  /// <param name="service"> the internal name of the service. </param>
 	  /// <param name="providers"> the internal names of the implementations of the service (there is at least
 	  ///     one provider). </param>
-	  public ModuleProvideNode(string service, IList<string> providers)
+	  public ModuleProvideNode(string service, List<string> providers)
 	  {
 		this.service = service;
 		this.providers = providers;

@@ -90,10 +90,10 @@ namespace org.objectweb.asm
 	  /// <param name="access"> the class's access flags (see <seealso cref="Opcodes"/>). This parameter also indicates if
 	  ///     the class is deprecated <seealso cref="Opcodes.ACC_DEPRECATED"/> or a record {@link
 	  ///     Opcodes#ACC_RECORD}. </param>
-	  /// <param name="name"> the internal name of the class (see <seealso cref="Type.getInternalName()"/>). </param>
+	  /// <param name="name"> the internal name of the class (see <seealso cref="Type.InternalName"/>). </param>
 	  /// <param name="signature"> the signature of this class. May be {@literal null} if the class is not a
 	  ///     generic one, and does not extend or implement generic classes or interfaces. </param>
-	  /// <param name="superName"> the internal of name of the super class (see <seealso cref="Type.getInternalName()"/>).
+	  /// <param name="superName"> the internal of name of the super class (see <seealso cref="Type.InternalName"/>).
 	  ///     For interfaces, the super class is <seealso cref="object"/>. May be {@literal null}, but only for the
 	  ///     <seealso cref="object"/> class. </param>
 	  /// <param name="interfaces"> the internal names of the class's interfaces (see {@link
@@ -281,7 +281,7 @@ namespace org.objectweb.asm
 	  /// Visits information about an inner class. This inner class is not necessarily a member of the
 	  /// class being visited.
 	  /// </summary>
-	  /// <param name="name"> the internal name of an inner class (see <seealso cref="Type.getInternalName()"/>). </param>
+	  /// <param name="name"> the internal name of an inner class (see <seealso cref="Type.InternalName"/>). </param>
 	  /// <param name="outerName"> the internal name of the class to which the inner class belongs (see {@link
 	  ///     Type#getInternalName()}). May be {@literal null} for not member classes. </param>
 	  /// <param name="innerName"> the (simple) name of the inner class inside its enclosing class. May be

@@ -619,7 +619,7 @@ namespace org.objectweb.asm.commons
 
 	  public override void visitLdcInsn(object value)
 	  {
-		if (api < Opcodes.ASM5 && (value is Handle || (value is org.objectweb.asm.JType && ((org.objectweb.asm.JType) value).getSort() == org.objectweb.asm.JType.METHOD)))
+		if (api < Opcodes.ASM5 && (value is Handle || (value is org.objectweb.asm.JType && ((org.objectweb.asm.JType) value).Sort == org.objectweb.asm.JType.METHOD)))
 		{
 		  throw new System.NotSupportedException("This feature requires ASM5");
 		}
@@ -777,7 +777,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="floatValue"> the constant to be pushed on the stack. </param>
 	  public virtual void fconst(float floatValue)
 	  {
-		int bits = Float.floatToIntBits(floatValue);
+		int bits = BitConverter.SingleToInt32Bits(floatValue);
 		if (bits == 0L || bits == 0x3F800000 || bits == 0x40000000)
 		{ // 0..2
 		  mv.visitInsn(Opcodes.FCONST_0 + (int) floatValue);
@@ -1344,7 +1344,7 @@ namespace org.objectweb.asm.commons
 
 	  public virtual void anew(org.objectweb.asm.JType type)
 	  {
-		mv.visitTypeInsn(Opcodes.NEW, type.getInternalName());
+		mv.visitTypeInsn(Opcodes.NEW, type.InternalName);
 	  }
 
 	  /// <summary>
@@ -1364,7 +1364,7 @@ namespace org.objectweb.asm.commons
 	  internal static void newarray(MethodVisitor methodVisitor, org.objectweb.asm.JType type)
 	  {
 		int arrayType;
-		switch (type.getSort())
+		switch (type.Sort)
 		{
 		  case org.objectweb.asm.JType.BOOLEAN:
 			arrayType = Opcodes.T_BOOLEAN;
@@ -1391,7 +1391,7 @@ namespace org.objectweb.asm.commons
 			arrayType = Opcodes.T_DOUBLE;
 			break;
 		  default:
-			methodVisitor.visitTypeInsn(Opcodes.ANEWARRAY, type.getInternalName());
+			methodVisitor.visitTypeInsn(Opcodes.ANEWARRAY, type.InternalName);
 			return;
 		}
 		methodVisitor.visitIntInsn(Opcodes.NEWARRAY, arrayType);
@@ -1409,12 +1409,12 @@ namespace org.objectweb.asm.commons
 
 	  public virtual void checkcast(org.objectweb.asm.JType type)
 	  {
-		mv.visitTypeInsn(Opcodes.CHECKCAST, type.getInternalName());
+		mv.visitTypeInsn(Opcodes.CHECKCAST, type.InternalName);
 	  }
 
 	  public virtual void instanceOf(org.objectweb.asm.JType type)
 	  {
-		mv.visitTypeInsn(Opcodes.INSTANCEOF, type.getInternalName());
+		mv.visitTypeInsn(Opcodes.INSTANCEOF, type.InternalName);
 	  }
 
 	  public virtual void monitorenter()

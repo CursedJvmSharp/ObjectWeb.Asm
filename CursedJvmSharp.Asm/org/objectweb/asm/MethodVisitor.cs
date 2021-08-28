@@ -376,7 +376,7 @@ namespace org.objectweb.asm
 	  /// <param name="opcode"> the opcode of the type instruction to be visited. This opcode is either NEW,
 	  ///     ANEWARRAY, CHECKCAST or INSTANCEOF. </param>
 	  /// <param name="type"> the operand of the instruction to be visited. This operand must be the internal
-	  ///     name of an object or array class (see <seealso cref="Type.getInternalName()"/>). </param>
+	  ///     name of an object or array class (see <seealso cref="Type.InternalName"/>). </param>
 	  public virtual void visitTypeInsn(int opcode, string type)
 	  {
 		if (mv != null)
@@ -391,7 +391,7 @@ namespace org.objectweb.asm
 	  /// </summary>
 	  /// <param name="opcode"> the opcode of the type instruction to be visited. This opcode is either
 	  ///     GETSTATIC, PUTSTATIC, GETFIELD or PUTFIELD. </param>
-	  /// <param name="owner"> the internal name of the field's owner class (see <seealso cref="Type.getInternalName()"/>). </param>
+	  /// <param name="owner"> the internal name of the field's owner class (see <seealso cref="Type.InternalName"/>). </param>
 	  /// <param name="name"> the field's name. </param>
 	  /// <param name="descriptor"> the field's descriptor (see <seealso cref="Type"/>). </param>
 	  public virtual void visitFieldInsn(int opcode, string owner, string name, string descriptor)
@@ -518,7 +518,7 @@ namespace org.objectweb.asm
 	  /// } else if (cst instanceof String) {
 	  ///     // ...
 	  /// } else if (cst instanceof Type) {
-	  ///     int sort = ((Type) cst).getSort();
+	  ///     int sort = ((Type) cst).Sort;
 	  ///     if (sort == Type.OBJECT) {
 	  ///         // ...
 	  ///     } else if (sort == Type.ARRAY) {
@@ -545,7 +545,7 @@ namespace org.objectweb.asm
 	  ///     dynamic for classes whose version is 55. </param>
 	  public virtual void visitLdcInsn(object value)
 	  {
-		if (api < Opcodes.ASM5 && (value is Handle || (value is org.objectweb.asm.JType && ((org.objectweb.asm.JType) value).getSort() == org.objectweb.asm.JType.METHOD)))
+		if (api < Opcodes.ASM5 && (value is Handle || (value is org.objectweb.asm.JType && ((org.objectweb.asm.JType) value).Sort == org.objectweb.asm.JType.METHOD)))
 		{
 		  throw new System.NotSupportedException(REQUIRES_ASM5);
 		}

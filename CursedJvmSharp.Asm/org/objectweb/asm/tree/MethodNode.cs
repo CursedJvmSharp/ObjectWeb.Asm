@@ -1,6 +1,8 @@
-﻿using org.objectweb.asm;
+﻿using System;
+using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System.Collections.Generic;
+using System.Linq;
 using AnnotationVisitor = org.objectweb.asm.AnnotationVisitor;
 using Attribute = org.objectweb.asm.Attribute;
 using ClassVisitor = org.objectweb.asm.ClassVisitor;
@@ -68,32 +70,32 @@ namespace org.objectweb.asm.tree
 	  public string signature;
 
 	  /// <summary>
-	  /// The internal names of the method's exception classes (see <seealso cref="Type.getInternalName()"/>). </summary>
-	  public IList<string> exceptions;
+	  /// The internal names of the method's exception classes (see <seealso cref="Type.InternalName"/>). </summary>
+	  public List<string> exceptions;
 
 	  /// <summary>
 	  /// The method parameter info (access flags and name). </summary>
-	  public IList<ParameterNode> parameters;
+	  public List<ParameterNode> parameters;
 
 	  /// <summary>
 	  /// The runtime visible annotations of this method. May be {@literal null}. </summary>
-	  public IList<AnnotationNode> visibleAnnotations;
+	  public List<AnnotationNode> visibleAnnotations;
 
 	  /// <summary>
 	  /// The runtime invisible annotations of this method. May be {@literal null}. </summary>
-	  public IList<AnnotationNode> invisibleAnnotations;
+	  public List<AnnotationNode> invisibleAnnotations;
 
 	  /// <summary>
 	  /// The runtime visible type annotations of this method. May be {@literal null}. </summary>
-	  public IList<TypeAnnotationNode> visibleTypeAnnotations;
+	  public List<TypeAnnotationNode> visibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The runtime invisible type annotations of this method. May be {@literal null}. </summary>
-	  public IList<TypeAnnotationNode> invisibleTypeAnnotations;
+	  public List<TypeAnnotationNode> invisibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The non standard attributes of this method. May be {@literal null}. </summary>
-	  public IList<Attribute> attrs;
+	  public List<Attribute> attrs;
 
 	  /// <summary>
 	  /// The default value of this annotation interface method. This field must be a <seealso cref="Byte"/>,
@@ -118,7 +120,7 @@ namespace org.objectweb.asm.tree
 	  /// The runtime visible parameter annotations of this method. These lists are lists of {@link
 	  /// AnnotationNode} objects. May be {@literal null}.
 	  /// </summary>
-	  public IList<AnnotationNode>[] visibleParameterAnnotations;
+	  public List<AnnotationNode>[] visibleParameterAnnotations;
 
 	  /// <summary>
 	  /// The number of method parameters than can have runtime invisible annotations. This number must
@@ -134,7 +136,7 @@ namespace org.objectweb.asm.tree
 	  /// The runtime invisible parameter annotations of this method. These lists are lists of {@link
 	  /// AnnotationNode} objects. May be {@literal null}.
 	  /// </summary>
-	  public IList<AnnotationNode>[] invisibleParameterAnnotations;
+	  public List<AnnotationNode>[] invisibleParameterAnnotations;
 
 	  /// <summary>
 	  /// The instructions of this method. </summary>
@@ -142,7 +144,7 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The try catch blocks of this method. </summary>
-	  public IList<TryCatchBlockNode> tryCatchBlocks;
+	  public List<TryCatchBlockNode> tryCatchBlocks;
 
 	  /// <summary>
 	  /// The maximum stack size of this method. </summary>
@@ -154,15 +156,15 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The local variables of this method. May be {@literal null} </summary>
-	  public IList<LocalVariableNode> localVariables;
+	  public List<LocalVariableNode> localVariables;
 
 	  /// <summary>
 	  /// The visible local variable annotations of this method. May be {@literal null} </summary>
-	  public IList<LocalVariableAnnotationNode> visibleLocalVariableAnnotations;
+	  public List<LocalVariableAnnotationNode> visibleLocalVariableAnnotations;
 
 	  /// <summary>
 	  /// The invisible local variable annotations of this method. May be {@literal null} </summary>
-	  public IList<LocalVariableAnnotationNode> invisibleLocalVariableAnnotations;
+	  public List<LocalVariableAnnotationNode> invisibleLocalVariableAnnotations;
 
 	  /// <summary>
 	  /// Whether the accept method has been called on this object. </summary>
@@ -321,7 +323,7 @@ namespace org.objectweb.asm.tree
 		  if (visibleParameterAnnotations == null)
 		  {
 			int @params = org.objectweb.asm.JType.getArgumentTypes(desc).Length;
-			visibleParameterAnnotations = (IList<AnnotationNode>[]) new IList<object>[@params];
+			visibleParameterAnnotations = (List<AnnotationNode>[]) new List<object>[@params];
 		  }
 		  visibleParameterAnnotations[parameter] = Util.add(visibleParameterAnnotations[parameter], annotation);
 		}
@@ -330,7 +332,7 @@ namespace org.objectweb.asm.tree
 		  if (invisibleParameterAnnotations == null)
 		  {
 			int @params = org.objectweb.asm.JType.getArgumentTypes(desc).Length;
-			invisibleParameterAnnotations = (IList<AnnotationNode>[]) new IList<object>[@params];
+			invisibleParameterAnnotations = (List<AnnotationNode>[]) new List<object>[@params];
 		  }
 		  invisibleParameterAnnotations[parameter] = Util.add(invisibleParameterAnnotations[parameter], annotation);
 		}
@@ -591,7 +593,7 @@ namespace org.objectweb.asm.tree
 			  }
 			}
 		  }
-		  for (int i = instructions.size() - 1; i >= 0; --i)
+		  for (int i = instructions.Count() - 1; i >= 0; --i)
 		  {
 			AbstractInsnNode insn = instructions.get(i);
 			if (insn.visibleTypeAnnotations != null && insn.visibleTypeAnnotations.Count > 0)
@@ -630,7 +632,7 @@ namespace org.objectweb.asm.tree
 		}
 		if (api < Opcodes.ASM7)
 		{
-		  for (int i = instructions.size() - 1; i >= 0; --i)
+		  for (int i = instructions.Count() - 1; i >= 0; --i)
 		  {
 			AbstractInsnNode insn = instructions.get(i);
 			if (insn is LdcInsnNode)
@@ -723,7 +725,7 @@ namespace org.objectweb.asm.tree
 		{
 		  for (int i = 0, n = visibleParameterAnnotations.Length; i < n; ++i)
 		  {
-			IList<AnnotationNode> parameterAnnotations = visibleParameterAnnotations[i];
+			List<AnnotationNode> parameterAnnotations = visibleParameterAnnotations[i];
 			if (parameterAnnotations == null)
 			{
 			  continue;
@@ -743,7 +745,7 @@ namespace org.objectweb.asm.tree
 		{
 		  for (int i = 0, n = invisibleParameterAnnotations.Length; i < n; ++i)
 		  {
-			IList<AnnotationNode> parameterAnnotations = invisibleParameterAnnotations[i];
+			List<AnnotationNode> parameterAnnotations = invisibleParameterAnnotations[i];
 			if (parameterAnnotations == null)
 			{
 			  continue;
@@ -768,7 +770,7 @@ namespace org.objectweb.asm.tree
 		  }
 		}
 		// Visit the code.
-		if (instructions.size() > 0)
+		if (instructions.Count() > 0)
 		{
 		  methodVisitor.visitCode();
 		  // Visits the try catch blocks.

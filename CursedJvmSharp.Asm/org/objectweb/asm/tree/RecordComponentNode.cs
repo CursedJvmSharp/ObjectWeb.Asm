@@ -60,23 +60,23 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The runtime visible annotations of this record component. May be {@literal null}. </summary>
-	  public IList<AnnotationNode> visibleAnnotations;
+	  public List<AnnotationNode> visibleAnnotations;
 
 	  /// <summary>
 	  /// The runtime invisible annotations of this record component. May be {@literal null}. </summary>
-	  public IList<AnnotationNode> invisibleAnnotations;
+	  public List<AnnotationNode> invisibleAnnotations;
 
 	  /// <summary>
 	  /// The runtime visible type annotations of this record component. May be {@literal null}. </summary>
-	  public IList<TypeAnnotationNode> visibleTypeAnnotations;
+	  public List<TypeAnnotationNode> visibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The runtime invisible type annotations of this record component. May be {@literal null}. </summary>
-	  public IList<TypeAnnotationNode> invisibleTypeAnnotations;
+	  public List<TypeAnnotationNode> invisibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The non standard attributes of this record component. * May be {@literal null}. </summary>
-	  public IList<Attribute> attrs;
+	  public List<Attribute> attrs;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="RecordComponentNode"/>. <i>Subclasses must not use this constructor</i>.

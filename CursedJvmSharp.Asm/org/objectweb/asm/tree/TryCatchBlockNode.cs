@@ -61,12 +61,12 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The runtime visible type annotations on the exception handler type. May be {@literal null}. </summary>
-	  public IList<TypeAnnotationNode> visibleTypeAnnotations;
+	  public List<TypeAnnotationNode> visibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The runtime invisible type annotations on the exception handler type. May be {@literal null}.
 	  /// </summary>
-	  public IList<TypeAnnotationNode> invisibleTypeAnnotations;
+	  public List<TypeAnnotationNode> invisibleTypeAnnotations;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="TryCatchBlockNode"/>.

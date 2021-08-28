@@ -55,7 +55,7 @@ namespace org.objectweb.asm.tree
 	  /// The list of modules that can access this exported package, specified with fully qualified names
 	  /// (using dots). May be {@literal null}.
 	  /// </summary>
-	  public IList<string> modules;
+	  public List<string> modules;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ModuleExportNode"/>.
@@ -65,7 +65,7 @@ namespace org.objectweb.asm.tree
 	  ///     ACC_MANDATED}. </param>
 	  /// <param name="modules"> a list of modules that can access this exported package, specified with fully
 	  ///     qualified names (using dots). </param>
-	  public ModuleExportNode(string packaze, int access, IList<string> modules)
+	  public ModuleExportNode(string packaze, int access, List<string> modules)
 	  {
 		this.packaze = packaze;
 		this.access = access;

@@ -49,20 +49,20 @@ namespace org.objectweb.asm.tree
 	  /// The fist instructions corresponding to the continuous ranges that make the scope of this local
 	  /// variable (inclusive). Must not be {@literal null}.
 	  /// </summary>
-	  public IList<LabelNode> start;
+	  public List<LabelNode> start;
 
 	  /// <summary>
 	  /// The last instructions corresponding to the continuous ranges that make the scope of this local
 	  /// variable (exclusive). This list must have the same size as the 'start' list. Must not be
 	  /// {@literal null}.
 	  /// </summary>
-	  public IList<LabelNode> end;
+	  public List<LabelNode> end;
 
 	  /// <summary>
 	  /// The local variable's index in each range. This list must have the same size as the 'start'
 	  /// list. Must not be {@literal null}.
 	  /// </summary>
-	  public IList<int> index;
+	  public List<int> index;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="LocalVariableAnnotationNode"/>. <i>Subclasses must not use this

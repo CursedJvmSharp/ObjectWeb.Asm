@@ -90,7 +90,7 @@ namespace org.objectweb.asm.commons
 	  /// or <seealso cref="OTHER"/> (for any other value). This field is only maintained for constructors, in
 	  /// branches where the super class constructor has not been called yet.
 	  /// </summary>
-	  private IList<object> stackFrame;
+	  private List<object> stackFrame;
 
 	  /// <summary>
 	  /// The stack map frames corresponding to the labels of the forward jumps made *before* the super
@@ -99,7 +99,7 @@ namespace org.objectweb.asm.commons
 	  /// we reach a label from this map, <seealso cref="superClassConstructorCalled"/> must be reset to false.
 	  /// This field is only maintained for constructors.
 	  /// </summary>
-	  private IDictionary<Label, IList<object>> forwardJumpStackFrames;
+	  private IDictionary<Label, List<object>> forwardJumpStackFrames;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="AdviceAdapter"/>.
@@ -123,7 +123,7 @@ namespace org.objectweb.asm.commons
 		if (isConstructor)
 		{
 		  stackFrame = new List<object>();
-		  forwardJumpStackFrames = new Dictionary<Label, IList<object>>();
+		  forwardJumpStackFrames = new Dictionary<Label, List<object>>();
 		}
 		else
 		{
@@ -136,7 +136,7 @@ namespace org.objectweb.asm.commons
 		base.visitLabel(label);
 		if (isConstructor && forwardJumpStackFrames != null)
 		{
-		  IList<object> labelStackFrame = forwardJumpStackFrames.GetValueOrNull(label);
+		  List<object> labelStackFrame = forwardJumpStackFrames.GetValueOrNull(label);
 		  if (labelStackFrame != null)
 		  {
 			stackFrame = labelStackFrame;
@@ -600,7 +600,7 @@ namespace org.objectweb.asm.commons
 		// 'onMethodEnter').
 		if (isConstructor && !forwardJumpStackFrames.ContainsKey(handler))
 		{
-		  IList<object> handlerStackFrame = new List<object>();
+		  List<object> handlerStackFrame = new List<object>();
 		  handlerStackFrame.Add(OTHER);
 		  forwardJumpStackFrames[handler] = handlerStackFrame;
 		}

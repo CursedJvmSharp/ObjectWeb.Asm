@@ -52,11 +52,11 @@ namespace org.objectweb.asm.commons
 
 	  /// <summary>
 	  /// A list of module names. </summary>
-	  public IList<string> modules;
+	  public List<string> modules;
 
 	  /// <summary>
 	  /// The hash of the modules in <seealso cref="modules"/>. The two lists must have the same size. </summary>
-	  public IList<sbyte[]> hashes;
+	  public List<sbyte[]> hashes;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ModuleHashesAttribute"/>.
@@ -64,7 +64,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="algorithm"> the name of the hashing algorithm. </param>
 	  /// <param name="modules"> a list of module names. </param>
 	  /// <param name="hashes"> the hash of the modules in 'modules'. The two lists must have the same size. </param>
-	  public ModuleHashesAttribute(string algorithm, IList<string> modules, IList<sbyte[]> hashes) : base("ModuleHashes")
+	  public ModuleHashesAttribute(string algorithm, List<string> modules, List<sbyte[]> hashes) : base("ModuleHashes")
 	  {
 		this.algorithm = algorithm;
 		this.modules = modules;

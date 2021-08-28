@@ -276,7 +276,7 @@ namespace CursedJvmSharp.Asm.Java.IO
 	    ///     which is comprised of four bytes, to the output stream.
 	    ///     It does this as if it first converts this
 	    ///     <code>float</code> value to an <code>int</code>
-	    ///     in exactly the manner of the <code>Float.floatToIntBits</code>
+	    ///     in exactly the manner of the <code>BitConverter.SingleToInt32Bits</code>
 	    ///     method  and then writes the <code>int</code>
 	    ///     value in exactly the manner of the  <code>writeInt</code>
 	    ///     method.  The bytes written by this method

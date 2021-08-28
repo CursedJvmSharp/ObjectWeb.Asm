@@ -222,7 +222,7 @@ namespace org.objectweb.asm.commons
 		// unreachable and can be anything. In particular, it can seem to fall off the end of the
 		// method, so we must handle this case Opcodes.here (we could instead detect whether execution can
 		// return or not from a JSR, but this is more complicated).
-		while (currentInsnIndex < instructions.size())
+		while (currentInsnIndex < instructions.Count()())
 		{
 		  // Visit each instruction at most once.
 		  if (subroutineInsns.Get(currentInsnIndex))
@@ -300,8 +300,8 @@ namespace org.objectweb.asm.commons
 
 		// Emit instantiations of each subroutine we encounter, including the main subroutine.
 		InsnList newInstructions = new InsnList();
-		IList<TryCatchBlockNode> newTryCatchBlocks = new List<TryCatchBlockNode>();
-		IList<LocalVariableNode> newLocalVariables = new List<LocalVariableNode>();
+		List<TryCatchBlockNode> newTryCatchBlocks = new List<TryCatchBlockNode>();
+		List<LocalVariableNode> newLocalVariables = new List<LocalVariableNode>();
 		while (worklist.Count > 0)
         {
 
@@ -326,10 +326,10 @@ namespace org.objectweb.asm.commons
 	  ///     appended. </param>
 	  /// <param name="newLocalVariables"> the local variables list to which the instantiated local variables
 	  ///     must be appended. </param>
-	  private void emitInstantiation(Instantiation instantiation, LinkedList<Instantiation> worklist, InsnList newInstructions, IList<TryCatchBlockNode> newTryCatchBlocks, IList<LocalVariableNode> newLocalVariables)
+	  private void emitInstantiation(Instantiation instantiation, LinkedList<Instantiation> worklist, InsnList newInstructions, List<TryCatchBlockNode> newTryCatchBlocks, List<LocalVariableNode> newLocalVariables)
 	  {
 		LabelNode previousLabelNode = null;
-		for (int i = 0; i < instructions.size(); ++i)
+		for (int i = 0; i < instructions.Count()(); ++i)
 		{
 		  AbstractInsnNode insnNode = instructions.get(i);
 		  if (insnNode.Type == AbstractInsnNode.LABEL)
@@ -475,7 +475,7 @@ namespace org.objectweb.asm.commons
 		  // Create a clone of each label in the original code of the subroutine. Note that we collapse
 		  // labels which point at the same instruction into one.
 		  LabelNode clonedLabelNode = null;
-		  for (int insnIndex = 0; insnIndex < outerInstance.instructions.size(); insnIndex++)
+		  for (int insnIndex = 0; insnIndex < outerInstance.instructions.Count()(); insnIndex++)
 		  {
 			AbstractInsnNode insnNode = outerInstance.instructions.get(insnIndex);
 			if (insnNode.Type == AbstractInsnNode.LABEL)

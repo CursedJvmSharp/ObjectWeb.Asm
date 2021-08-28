@@ -1,6 +1,7 @@
 ﻿using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System.Collections.Generic;
+using System.Linq;
 using AnnotationVisitor = org.objectweb.asm.AnnotationVisitor;
 using Attribute = org.objectweb.asm.Attribute;
 using ClassVisitor = org.objectweb.asm.ClassVisitor;
@@ -80,7 +81,7 @@ namespace org.objectweb.asm.tree
 	  /// The internal names of the interfaces directly implemented by this class (see {@link
 	  /// org.objectweb.asm.Type#getInternalName}).
 	  /// </summary>
-	  public IList<string> interfaces;
+	  public List<string> interfaces;
 
 	  /// <summary>
 	  /// The name of the source file from which this class was compiled. May be {@literal null}. </summary>
@@ -113,27 +114,27 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The runtime visible annotations of this class. May be {@literal null}. </summary>
-	  public IList<AnnotationNode> visibleAnnotations;
+	  public List<AnnotationNode> visibleAnnotations;
 
 	  /// <summary>
 	  /// The runtime invisible annotations of this class. May be {@literal null}. </summary>
-	  public IList<AnnotationNode> invisibleAnnotations;
+	  public List<AnnotationNode> invisibleAnnotations;
 
 	  /// <summary>
 	  /// The runtime visible type annotations of this class. May be {@literal null}. </summary>
-	  public IList<TypeAnnotationNode> visibleTypeAnnotations;
+	  public List<TypeAnnotationNode> visibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The runtime invisible type annotations of this class. May be {@literal null}. </summary>
-	  public IList<TypeAnnotationNode> invisibleTypeAnnotations;
+	  public List<TypeAnnotationNode> invisibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The non standard attributes of this class. May be {@literal null}. </summary>
-	  public IList<Attribute> attrs;
+	  public List<Attribute> attrs;
 
 	  /// <summary>
 	  /// The inner classes of this class. </summary>
-	  public IList<InnerClassNode> innerClasses;
+	  public List<InnerClassNode> innerClasses;
 
 	  /// <summary>
 	  /// The internal name of the nest host class of this class. May be {@literal null}. </summary>
@@ -141,23 +142,23 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The internal names of the nest members of this class. May be {@literal null}. </summary>
-	  public IList<string> nestMembers;
+	  public List<string> nestMembers;
 
 	  /// <summary>
 	  /// The internal names of the permitted subclasses of this class. May be {@literal null}. </summary>
-	  public IList<string> permittedSubclasses;
+	  public List<string> permittedSubclasses;
 
 	  /// <summary>
 	  /// The record components of this class. May be {@literal null}. </summary>
-	  public IList<RecordComponentNode> recordComponents;
+	  public List<RecordComponentNode> recordComponents;
 
 	  /// <summary>
 	  /// The fields of this class. </summary>
-	  public IList<FieldNode> fields;
+	  public List<FieldNode> fields;
 
 	  /// <summary>
 	  /// The methods of this class. </summary>
-	  public IList<MethodNode> methods;
+	  public List<MethodNode> methods;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ClassNode"/>. <i>Subclasses must not use this constructor</i>. Instead,
@@ -391,8 +392,7 @@ namespace org.objectweb.asm.tree
 	  public virtual void accept(ClassVisitor classVisitor)
 	  {
 		// Visit the header.
-		string[] interfacesArray = new string[this.interfaces.Count];
-		this.interfaces.toArray(interfacesArray);
+		string[] interfacesArray = this.interfaces.ToArray();
 		classVisitor.visit(version, access, name, signature, superName, interfacesArray);
 		// Visit the source.
 		if (!string.ReferenceEquals(sourceFile, null) || !string.ReferenceEquals(sourceDebug, null))

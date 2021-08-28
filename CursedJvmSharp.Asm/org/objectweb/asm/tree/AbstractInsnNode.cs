@@ -115,14 +115,14 @@ namespace org.objectweb.asm.tree
 	  /// instructions (i.e. not for labels, frames, or line number nodes). This list is a list of {@link
 	  /// TypeAnnotationNode} objects. May be {@literal null}.
 	  /// </summary>
-	  public IList<TypeAnnotationNode> visibleTypeAnnotations;
+	  public List<TypeAnnotationNode> visibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The runtime invisible type annotations of this instruction. This field is only used for real
 	  /// instructions (i.e. not for labels, frames, or line number nodes). This list is a list of {@link
 	  /// TypeAnnotationNode} objects. May be {@literal null}.
 	  /// </summary>
-	  public IList<TypeAnnotationNode> invisibleTypeAnnotations;
+	  public List<TypeAnnotationNode> invisibleTypeAnnotations;
 
 	  /// <summary>
 	  /// The previous instruction in the list to which this instruction belongs. </summary>
@@ -248,7 +248,7 @@ namespace org.objectweb.asm.tree
 	  /// <param name="labels"> a list of labels. </param>
 	  /// <param name="clonedLabels"> a map from LabelNodes to cloned LabelNodes. </param>
 	  /// <returns> the clones of the given labels. </returns>
-	  internal static LabelNode[] clone(IList<LabelNode> labels, IDictionary<LabelNode, LabelNode> clonedLabels)
+	  internal static LabelNode[] clone(List<LabelNode> labels, IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
 		LabelNode[] clones = new LabelNode[labels.Count];
 		for (int i = 0, n = clones.Length; i < n; ++i)

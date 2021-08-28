@@ -106,7 +106,7 @@ namespace org.objectweb.asm.commons
 		nextLocal = (Opcodes.ACC_STATIC & access) == 0 ? 1 : 0;
 		foreach (org.objectweb.asm.JType argumentType in org.objectweb.asm.JType.getArgumentTypes(descriptor))
 		{
-		  nextLocal += argumentType.getSize();
+		  nextLocal += argumenttype.Size;
 		}
 		firstLocal = nextLocal;
 	  }
@@ -253,7 +253,7 @@ namespace org.objectweb.asm.commons
 	  public virtual int newLocal(org.objectweb.asm.JType type)
 	  {
 		object localType;
-		switch (type.getSort())
+		switch (type.Sort)
 		{
 		  case org.objectweb.asm.JType.BOOLEAN:
 		  case org.objectweb.asm.JType.CHAR:
@@ -272,10 +272,10 @@ namespace org.objectweb.asm.commons
 			localType = Opcodes.DOUBLE;
 			break;
 		  case org.objectweb.asm.JType.ARRAY:
-			localType = type.getDescriptor();
+			localType = type.Descriptor;
 			break;
 		  case org.objectweb.asm.JType.OBJECT:
-			localType = type.getInternalName();
+			localType = type.InternalName;
 			break;
 		  default:
 			throw new AssertionError();
@@ -329,11 +329,11 @@ namespace org.objectweb.asm.commons
 
 	  private int remap(int var, org.objectweb.asm.JType type)
 	  {
-		if (var + type.getSize() <= firstLocal)
+		if (var + type.Size <= firstLocal)
 		{
 		  return var;
 		}
-		int key = 2 * var + type.getSize() - 1;
+		int key = 2 * var + type.Size - 1;
 		int size = remappedVariableIndices.Length;
 		if (key >= size)
 		{
@@ -358,7 +358,7 @@ namespace org.objectweb.asm.commons
 	  public virtual int newLocalMapping(org.objectweb.asm.JType type)
 	  {
 		int local = nextLocal;
-		nextLocal += type.getSize();
+		nextLocal += type.Size;
 		return local;
 	  }
 	}

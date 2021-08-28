@@ -57,7 +57,7 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// Beginnings of the handler blocks. This list is a list of <seealso cref="LabelNode"/> objects. </summary>
-	  public IList<LabelNode> labels;
+	  public List<LabelNode> labels;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="TableSwitchInsnNode"/>.

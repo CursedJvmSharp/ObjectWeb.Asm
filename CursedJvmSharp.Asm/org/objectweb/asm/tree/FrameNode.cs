@@ -62,14 +62,14 @@ namespace org.objectweb.asm.tree
 	  /// String or LabelNode objects (for primitive, reference and uninitialized types respectively -
 	  /// see <seealso cref="MethodVisitor"/>).
 	  /// </summary>
-	  public IList<object> local;
+	  public List<object> local;
 
 	  /// <summary>
 	  /// The types of the operand stack elements of this stack map frame. Elements of this list can be
 	  /// Integer, String or LabelNode objects (for primitive, reference and uninitialized types
 	  /// respectively - see <seealso cref="MethodVisitor"/>).
 	  /// </summary>
-	  public IList<object> stack;
+	  public List<object> stack;
 
 	  private FrameNode() : base(-1)
 	  {
@@ -103,7 +103,7 @@ namespace org.objectweb.asm.tree
 			this.local = Util.asArrayList(numLocal, local);
 			break;
 		  case Opcodes.F_CHOP:
-			this.local = Util.asArrayList(numLocal);
+			this.local = Util.asArrayList(numLocal, new object[0]);
 			break;
 		  case Opcodes.F_SAME:
 			break;
@@ -160,7 +160,7 @@ namespace org.objectweb.asm.tree
 			object localElement = local[i];
 			if (localElement is LabelNode)
 			{
-			  localElement = clonedLabels.GetValueOrNull(localElement);
+			  localElement = clonedLabels.GetValueOrNull((LabelNode)localElement);
 			}
 			clone.local.Add(localElement);
 		  }
@@ -173,7 +173,7 @@ namespace org.objectweb.asm.tree
 			object stackElement = stack[i];
 			if (stackElement is LabelNode)
 			{
-			  stackElement = clonedLabels.GetValueOrNull(stackElement);
+			  stackElement = clonedLabels.GetValueOrNull((LabelNode)stackElement);
 			}
 			clone.stack.Add(stackElement);
 		  }
@@ -181,7 +181,7 @@ namespace org.objectweb.asm.tree
 		return clone;
 	  }
 
-	  private static object[] asArray(IList<object> list)
+	  private static object[] asArray(List<object> list)
 	  {
 		object[] array = new object[list.Count];
 		for (int i = 0, n = array.Length; i < n; ++i)

@@ -125,7 +125,7 @@ namespace org.objectweb.asm.commons
 		if (attribute is ModuleHashesAttribute)
 		{
 		  ModuleHashesAttribute moduleHashesAttribute = (ModuleHashesAttribute) attribute;
-		  IList<string> modules = moduleHashesAttribute.modules;
+		  List<string> modules = moduleHashesAttribute.modules;
 		  for (int i = 0; i < modules.Count; ++i)
 		  {
 			modules[i] = remapper.mapModuleName(modules[i]);

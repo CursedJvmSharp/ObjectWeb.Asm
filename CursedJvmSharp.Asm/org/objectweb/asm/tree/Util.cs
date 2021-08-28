@@ -45,16 +45,16 @@ namespace org.objectweb.asm.tree
 	  {
 	  }
 
-	  internal static IList<T> add<T>(IList<T> list, T element)
+	  internal static List<T> add<T>(List<T> list, T element)
 	  {
-		IList<T> newList = list == null ? new List<T>(1) : list;
+		List<T> newList = list == null ? new List<T>(1) : list;
 		newList.Add(element);
 		return newList;
 	  }
 
-	  internal static IList<T> asArrayList<T>(int length)
+	  internal static List<T> asArrayList<T>(int length)
 	  {
-		IList<T> list = new List<T>(length);
+		List<T> list = new List<T>(length);
 		for (int i = 0; i < length; ++i)
 		{
 		  list.Add(default(T));
@@ -62,7 +62,7 @@ namespace org.objectweb.asm.tree
 		return list;
 	  }
 
-	  internal static IList<T> asArrayList<T>(T[] array)
+	  internal static List<T> asArrayList<T>(T[] array)
 	  {
 		if (array == null)
 		{
@@ -76,7 +76,7 @@ namespace org.objectweb.asm.tree
 		return list;
 	  }
 
-	  internal static IList<sbyte> asArrayList(sbyte[] byteArray)
+	  internal static List<sbyte> asArrayList(sbyte[] byteArray)
 	  {
 		if (byteArray == null)
 		{
@@ -90,7 +90,7 @@ namespace org.objectweb.asm.tree
 		return byteList;
 	  }
 
-	  internal static IList<bool> asArrayList(bool[] booleanArray)
+	  internal static List<bool> asArrayList(bool[] booleanArray)
 	  {
 		if (booleanArray == null)
 		{
@@ -104,7 +104,7 @@ namespace org.objectweb.asm.tree
 		return booleanList;
 	  }
 
-	  internal static IList<short> asArrayList(short[] shortArray)
+	  internal static List<short> asArrayList(short[] shortArray)
 	  {
 		if (shortArray == null)
 		{
@@ -118,7 +118,7 @@ namespace org.objectweb.asm.tree
 		return shortList;
 	  }
 
-	  internal static IList<char> asArrayList(char[] charArray)
+	  internal static List<char> asArrayList(char[] charArray)
 	  {
 		if (charArray == null)
 		{
@@ -132,7 +132,7 @@ namespace org.objectweb.asm.tree
 		return charList;
 	  }
 
-	  internal static IList<int> asArrayList(int[] intArray)
+	  internal static List<int> asArrayList(int[] intArray)
 	  {
 		if (intArray == null)
 		{
@@ -146,7 +146,7 @@ namespace org.objectweb.asm.tree
 		return intList;
 	  }
 
-	  internal static IList<float> asArrayList(float[] floatArray)
+	  internal static List<float> asArrayList(float[] floatArray)
 	  {
 		if (floatArray == null)
 		{
@@ -160,7 +160,7 @@ namespace org.objectweb.asm.tree
 		return floatList;
 	  }
 
-	  internal static IList<long> asArrayList(long[] longArray)
+	  internal static List<long> asArrayList(long[] longArray)
 	  {
 		if (longArray == null)
 		{
@@ -174,7 +174,7 @@ namespace org.objectweb.asm.tree
 		return longList;
 	  }
 
-	  internal static IList<double> asArrayList(double[] doubleArray)
+	  internal static List<double> asArrayList(double[] doubleArray)
 	  {
 		if (doubleArray == null)
 		{
@@ -188,9 +188,9 @@ namespace org.objectweb.asm.tree
 		return doubleList;
 	  }
 
-	  internal static IList<T> asArrayList<T>(int length, T[] array)
+	  internal static List<T> asArrayList<T>(int length, T[] array)
 	  {
-		IList<T> list = new List<T>(length);
+		List<T> list = new List<T>(length);
 		for (int i = 0; i < length; ++i)
 		{
 		  list.Add(array[i]); // NOPMD(UseArraysAsList): we convert a part of the array.

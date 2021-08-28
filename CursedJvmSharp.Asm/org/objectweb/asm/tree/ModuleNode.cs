@@ -63,27 +63,27 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The internal name of the packages declared by this module. May be {@literal null}. </summary>
-	  public IList<string> packages;
+	  public List<string> packages;
 
 	  /// <summary>
 	  /// The dependencies of this module. May be {@literal null}. </summary>
-	  public IList<ModuleRequireNode> requires;
+	  public List<ModuleRequireNode> requires;
 
 	  /// <summary>
 	  /// The packages exported by this module. May be {@literal null}. </summary>
-	  public IList<ModuleExportNode> exports;
+	  public List<ModuleExportNode> exports;
 
 	  /// <summary>
 	  /// The packages opened by this module. May be {@literal null}. </summary>
-	  public IList<ModuleOpenNode> opens;
+	  public List<ModuleOpenNode> opens;
 
 	  /// <summary>
 	  /// The internal names of the services used by this module. May be {@literal null}. </summary>
-	  public IList<string> uses;
+	  public List<string> uses;
 
 	  /// <summary>
 	  /// The services provided by this module. May be {@literal null}. </summary>
-	  public IList<ModuleProvideNode> provides;
+	  public List<ModuleProvideNode> provides;
 
 	  /// <summary>
 	  /// Constructs a <seealso cref="ModuleNode"/>. <i>Subclasses must not use this constructor</i>. Instead, they
@@ -120,7 +120,7 @@ namespace org.objectweb.asm.tree
 	  /// <param name="opens"> The packages opened by this module. May be {@literal null}. </param>
 	  /// <param name="uses"> The internal names of the services used by this module. May be {@literal null}. </param>
 	  /// <param name="provides"> The services provided by this module. May be {@literal null}. </param>
-	  public ModuleNode(int api, string name, int access, string version, IList<ModuleRequireNode> requires, IList<ModuleExportNode> exports, IList<ModuleOpenNode> opens, IList<string> uses, IList<ModuleProvideNode> provides) : base(api)
+	  public ModuleNode(int api, string name, int access, string version, List<ModuleRequireNode> requires, List<ModuleExportNode> exports, List<ModuleOpenNode> opens, List<string> uses, List<ModuleProvideNode> provides) : base(api)
 	  {
 		this.name = name;
 		this.access = access;

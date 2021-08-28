@@ -525,7 +525,7 @@ namespace org.objectweb.asm
 		{
 		  if (lastRuntimeVisibleParameterAnnotations == null)
 		  {
-			lastRuntimeVisibleParameterAnnotations = new AnnotationWriter[org.objectweb.asm.JType.getArgumentTypes(descriptor).length];
+			lastRuntimeVisibleParameterAnnotations = new AnnotationWriter[org.objectweb.asm.JType.getArgumentTypes(descriptor).Length];
 		  }
 		  return lastRuntimeVisibleParameterAnnotations[parameter] = AnnotationWriter.create(symbolTable, annotationDescriptor, lastRuntimeVisibleParameterAnnotations[parameter]);
 		}
@@ -533,7 +533,7 @@ namespace org.objectweb.asm
 		{
 		  if (lastRuntimeInvisibleParameterAnnotations == null)
 		  {
-			lastRuntimeInvisibleParameterAnnotations = new AnnotationWriter[org.objectweb.asm.JType.getArgumentTypes(descriptor).length];
+			lastRuntimeInvisibleParameterAnnotations = new AnnotationWriter[org.objectweb.asm.JType.getArgumentTypes(descriptor).Length];
 		  }
 		  return lastRuntimeInvisibleParameterAnnotations[parameter] = AnnotationWriter.create(symbolTable, annotationDescriptor, lastRuntimeInvisibleParameterAnnotations[parameter]);
 		}
@@ -699,7 +699,7 @@ namespace org.objectweb.asm
 		  relativeStackSize = numStack;
 		  for (int i = 0; i < numStack; ++i)
 		  {
-			if (stack[i] == Opcodes.LONG || stack[i] == Opcodes.DOUBLE)
+			if (Equals(stack[i], Opcodes.LONG) || Equals(stack[i], Opcodes.DOUBLE))
 			{
 			  relativeStackSize++;
 			}
@@ -1527,10 +1527,11 @@ namespace org.objectweb.asm
 		Label listOfBlocksToProcess = firstBasicBlock;
 		listOfBlocksToProcess.nextListElement = Label.EMPTY_LIST;
 		int maxStackSize = 0;
-		while (listOfBlocksToProcess != Label.EMPTY_LIST)
+        Label basicBlock;
+        while (listOfBlocksToProcess != Label.EMPTY_LIST)
 		{
 		  // Remove a basic block from the list of blocks to process.
-		  Label basicBlock = listOfBlocksToProcess;
+		  basicBlock = listOfBlocksToProcess;
 		  listOfBlocksToProcess = listOfBlocksToProcess.nextListElement;
 		  basicBlock.nextListElement = null;
 		  // By definition, basicBlock is reachable.
@@ -1561,7 +1562,7 @@ namespace org.objectweb.asm
 		// Loop over all the basic blocks and visit the stack map frames that must be stored in the
 		// StackMapTable attribute. Also replace unreachable code with NOP* ATHROW, and remove it from
 		// exception handler ranges.
-		Label basicBlock = firstBasicBlock;
+		basicBlock = firstBasicBlock;
 		while (basicBlock != null)
 		{
 		  if ((basicBlock.flags & (Label.FLAG_JUMP_TARGET | Label.FLAG_REACHABLE)) == (Label.FLAG_JUMP_TARGET | Label.FLAG_REACHABLE))
@@ -1581,7 +1582,7 @@ namespace org.objectweb.asm
 			  {
 				code.data[i] = Opcodes.NOP;
 			  }
-			  code.data[endOffset] = (sbyte) Opcodes.ATHROW;
+			  code.data[endOffset] = unchecked((sbyte) Opcodes.ATHROW);
 			  // Emit a frame for this unreachable block, with no local and a Throwable on the stack
 			  // (so that the ATHROW could consume this Throwable if it were reachable).
 			  int frameIndex = visitFrameStart(startOffset, 0, 1);
@@ -1638,10 +1639,11 @@ namespace org.objectweb.asm
 		  firstBasicBlock.markSubroutine(numSubroutines);
 		  // Then, mark the subroutines called by the main subroutine, then the subroutines called by
 		  // those called by the main subroutine, etc.
-		  for (short currentSubroutine = 1; currentSubroutine <= numSubroutines; ++currentSubroutine)
-		  {
-			Label basicBlock = firstBasicBlock;
-			while (basicBlock != null)
+          Label basicBlock;
+          for (short currentSubroutine = 1; currentSubroutine <= numSubroutines; ++currentSubroutine)
+          {
+              basicBlock = firstBasicBlock;
+              while (basicBlock != null)
 			{
 			  if ((basicBlock.flags & Label.FLAG_SUBROUTINE_CALLER) != 0 && basicBlock.subroutineId == currentSubroutine)
 			  {
@@ -1654,11 +1656,11 @@ namespace org.objectweb.asm
 			  }
 			  basicBlock = basicBlock.nextBasicBlock;
 			}
-		  }
+          }
 		  // Second step: find the successors in the control flow graph of each subroutine basic block
 		  // 'r' ending with a RET instruction. These successors are the virtual successors of the basic
 		  // blocks ending with JSR instructions (see {@link #visitJumpInsn)} that can reach 'r'.
-		  Label basicBlock = firstBasicBlock;
+		  basicBlock = firstBasicBlock;
 		  while (basicBlock != null)
 		  {
 			if ((basicBlock.flags & Label.FLAG_SUBROUTINE_CALLER) != 0)

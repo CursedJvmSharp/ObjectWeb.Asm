@@ -65,7 +65,7 @@ namespace org.objectweb.asm.commons
 	  /// objects (this label designates the NEW instruction that created this uninitialized value). This
 	  /// field is {@literal null} for unreachable instructions.
 	  /// </summary>
-	  public IList<object> locals;
+	  public List<object> locals;
 
 	  /// <summary>
 	  /// The operand stack slots for the current execution frame. Primitive types are represented by
@@ -76,11 +76,11 @@ namespace org.objectweb.asm.commons
 	  /// objects (this label designates the NEW instruction that created this uninitialized value). This
 	  /// field is {@literal null} for unreachable instructions.
 	  /// </summary>
-	  public IList<object> stack;
+	  public List<object> stack;
 
 	  /// <summary>
 	  /// The labels that designate the next instruction to be visited. May be {@literal null}. </summary>
-	  private IList<Label> labels;
+	  private List<Label> labels;
 
 	  /// <summary>
 	  /// The uninitialized types in the current execution frame. This map associates internal names to
@@ -153,7 +153,7 @@ namespace org.objectweb.asm.commons
 		}
 		foreach (org.objectweb.asm.JType argumentType in org.objectweb.asm.JType.getArgumentTypes(descriptor))
 		{
-		  switch (argumentType.getSort())
+		  switch (argumentType.Sort)
 		  {
 			case org.objectweb.asm.JType.BOOLEAN:
 			case org.objectweb.asm.JType.CHAR:
@@ -174,10 +174,10 @@ namespace org.objectweb.asm.commons
 			  locals.Add(Opcodes.TOP);
 			  break;
 			case org.objectweb.asm.JType.ARRAY:
-			  locals.Add(argumentType.getDescriptor());
+			  locals.Add(argumentType.Descriptor);
 			  break;
 			case org.objectweb.asm.JType.OBJECT:
-			  locals.Add(argumentType.getInternalName());
+			  locals.Add(argumentType.InternalName);
 			  break;
 			default:
 			  throw new AssertionError();
@@ -211,7 +211,7 @@ namespace org.objectweb.asm.commons
 		maxStack = Math.Max(maxStack, this.stack.Count);
 	  }
 
-	  private static void visitFrameTypes(int numTypes, object[] frameTypes, IList<object> result)
+	  private static void visitFrameTypes(int numTypes, object[] frameTypes, List<object> result)
 	  {
 		for (int i = 0; i < numTypes; ++i)
 		{
@@ -395,7 +395,7 @@ namespace org.objectweb.asm.commons
 		}
 		else if (value is Type)
 		{
-		  int sort = ((org.objectweb.asm.JType) value).getSort();
+		  int sort = ((org.objectweb.asm.JType) value).Sort;
 		  if (sort == org.objectweb.asm.JType.OBJECT || sort == org.objectweb.asm.JType.ARRAY)
 		  {
 			push("java/lang/Class");
@@ -496,7 +496,7 @@ namespace org.objectweb.asm.commons
 
 	  private void pushDescriptor(string fieldOrMethodDescriptor)
 	  {
-		string descriptor = fieldOrMethodDescriptor[0] == '(' ? org.objectweb.asm.JType.getReturnType(fieldOrMethodDescriptor).getDescriptor() : fieldOrMethodDescriptor;
+		string descriptor = fieldOrMethodDescriptor[0] == '(' ? org.objectweb.asm.JType.getReturnType(fieldOrMethodDescriptor).Descriptor : fieldOrMethodDescriptor;
 		switch (descriptor[0])
 		{
 		  case 'V':
@@ -554,7 +554,7 @@ namespace org.objectweb.asm.commons
 		  org.objectweb.asm.JType[] types = org.objectweb.asm.JType.getArgumentTypes(descriptor);
 		  foreach (org.objectweb.asm.JType type in types)
 		  {
-			numSlots += type.getSize();
+			numSlots += type.Size;
 		  }
 		  pop(numSlots);
 		}
@@ -940,7 +940,7 @@ namespace org.objectweb.asm.commons
 			break;
 		  case Opcodes.CHECKCAST:
 			pop();
-			pushDescriptor(org.objectweb.asm.JType.getObjectType(stringArg).getDescriptor());
+			pushDescriptor(org.objectweb.asm.JType.getObjectType(stringArg).Descriptor);
 			break;
 		  case Opcodes.MULTIANEWARRAY:
 			pop(intArg);

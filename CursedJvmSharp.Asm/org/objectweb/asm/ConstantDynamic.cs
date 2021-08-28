@@ -163,6 +163,16 @@ namespace org.objectweb.asm
 		  }
 	  }
 
+      public static int rotateLeft(int i, int distance)
+      {
+          return (i << distance) | ((int)((uint)i >> -distance));
+      }
+      public static int rotateRight(int i, int distance)
+      {
+          return ((int)((uint)i >> distance)) | (i << -distance);
+      }
+
+
 	  public override bool Equals(object @object)
 	  {
 		if (@object == this)
@@ -179,12 +189,12 @@ namespace org.objectweb.asm
 
 	  public override int GetHashCode()
 	  {
-		return name.GetHashCode() ^ Integer.rotateLeft(descriptor.GetHashCode(), 8) ^ Integer.rotateLeft(bootstrapMethod.GetHashCode(), 16) ^ Integer.rotateLeft(Arrays.hashCode(bootstrapMethodArguments), 24);
+		return name.GetHashCode() ^ rotateLeft(descriptor.GetHashCode(), 8) ^ rotateLeft(bootstrapMethod.GetHashCode(), 16) ^ rotateLeft((bootstrapMethodArguments).GetHashCode(), 24);
 	  }
 
 	  public override string ToString()
 	  {
-		return name + " : " + descriptor + ' ' + bootstrapMethod + ' ' + Arrays.toString(bootstrapMethodArguments);
+		return name + " : " + descriptor + ' ' + bootstrapMethod + ' ' + $"[{string.Join(", ", bootstrapMethodArguments)}]";
 	  }
 	}
 
