@@ -211,9 +211,9 @@ namespace ObjectWeb.Asm
 		{
 		  _annotation.Put12('c', _symbolTable.AddConstantUtf8(((JType) value).Descriptor));
 		}
-		else if (value is sbyte[] || value is byte[])
+		else if (value is byte[] || value is byte[])
 		{
-		  sbyte[] byteArray = (sbyte[]) value;
+		  byte[] byteArray = (byte[]) value;
 		  _annotation.Put12('[', byteArray.Length);
 		  foreach (sbyte byteValue in byteArray)
 		  {
@@ -340,9 +340,9 @@ namespace ObjectWeb.Asm
 	  {
 		if (_numElementValuePairsOffset != -1)
 		{
-		  sbyte[] data = _annotation.data;
-		  data[_numElementValuePairsOffset] = (sbyte)((int)((uint)_numElementValuePairs >> 8));
-		  data[_numElementValuePairsOffset + 1] = (sbyte) _numElementValuePairs;
+		  byte[] data = _annotation.data;
+		  data[_numElementValuePairsOffset] = (byte)((int)((uint)_numElementValuePairs >> 8));
+		  data[_numElementValuePairsOffset + 1] = (byte) _numElementValuePairs;
 		}
 	  }
 

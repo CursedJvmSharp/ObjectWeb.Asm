@@ -419,7 +419,7 @@ namespace ObjectWeb.Asm
                     return VoidType;
                 if (clazz == typeof(bool))
                     return BooleanType;
-                if (clazz == typeof(byte) || clazz == typeof(sbyte))
+                if (clazz == typeof(byte) || clazz == typeof(byte))
                     return ByteType;
                 if (clazz == typeof(char))
                     return CharType;
@@ -753,7 +753,7 @@ namespace ObjectWeb.Asm
                     descriptor = 'V';
                 else if (currentClass == typeof(bool))
                     descriptor = 'Z';
-                else if (currentClass == typeof(sbyte))
+                else if (currentClass == typeof(byte))
                     descriptor = 'B';
                 else if (currentClass == typeof(char))
                     descriptor = 'C';

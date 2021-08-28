@@ -1489,7 +1489,7 @@ namespace ObjectWeb.Asm
                     {
                         // Replace its instructions with NOP ... NOP ATHROW.
                         for (var i = startOffset; i < endOffset; ++i) _code.data[i] = IOpcodes.Nop;
-                        _code.data[endOffset] = unchecked((sbyte)IOpcodes.Athrow);
+                        _code.data[endOffset] = unchecked((byte)IOpcodes.Athrow);
                         // Emit a frame for this unreachable block, with no local and a Throwable on the stack
                         // (so that the ATHROW could consume this Throwable if it were reachable).
                         var frameIndex = VisitFrameStart(startOffset, 0, 1);

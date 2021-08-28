@@ -74,7 +74,7 @@ namespace ObjectWeb.Asm.Tree
 		return list;
 	  }
 
-	  internal static List<sbyte> AsArrayList(sbyte[] byteArray)
+	  internal static List<sbyte> AsArrayList(byte[] byteArray)
 	  {
 		if (byteArray == null)
 		{

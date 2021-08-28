@@ -469,7 +469,7 @@ namespace ObjectWeb.Asm
         ///     instructions are later replaced with standard bytecode instructions with wider offsets (4
         ///     bytes instead of 2), in ClassReader.
         /// </returns>
-        public bool Resolve(sbyte[] code, int bytecodeOffset)
+        public bool Resolve(byte[] code, int bytecodeOffset)
         {
             flags |= Flag_Resolved;
             this.bytecodeOffset = bytecodeOffset;
@@ -492,22 +492,22 @@ namespace ObjectWeb.Asm
                         var opcode = code[sourceInsnBytecodeOffset] & 0xFF;
                         if (opcode < IOpcodes.Ifnull)
                             // Change IFEQ ... JSR to ASM_IFEQ ... ASM_JSR.
-                            code[sourceInsnBytecodeOffset] = (sbyte)(opcode + Constants.Asm_Opcode_Delta);
+                            code[sourceInsnBytecodeOffset] = (byte)(opcode + Constants.Asm_Opcode_Delta);
                         else
                             // Change IFNULL and IFNONNULL to ASM_IFNULL and ASM_IFNONNULL.
-                            code[sourceInsnBytecodeOffset] = (sbyte)(opcode + Constants.Asm_Ifnull_Opcode_Delta);
+                            code[sourceInsnBytecodeOffset] = (byte)(opcode + Constants.Asm_Ifnull_Opcode_Delta);
                         hasAsmInstructions = true;
                     }
 
-                    code[handle++] = (sbyte)(int)((uint)relativeOffset >> 8);
-                    code[handle] = (sbyte)relativeOffset;
+                    code[handle++] = (byte)(int)((uint)relativeOffset >> 8);
+                    code[handle] = (byte)relativeOffset;
                 }
                 else
                 {
-                    code[handle++] = (sbyte)(int)((uint)relativeOffset >> 24);
-                    code[handle++] = (sbyte)(int)((uint)relativeOffset >> 16);
-                    code[handle++] = (sbyte)(int)((uint)relativeOffset >> 8);
-                    code[handle] = (sbyte)relativeOffset;
+                    code[handle++] = (byte)(int)((uint)relativeOffset >> 24);
+                    code[handle++] = (byte)(int)((uint)relativeOffset >> 16);
+                    code[handle++] = (byte)(int)((uint)relativeOffset >> 8);
+                    code[handle] = (byte)relativeOffset;
                 }
             }
 

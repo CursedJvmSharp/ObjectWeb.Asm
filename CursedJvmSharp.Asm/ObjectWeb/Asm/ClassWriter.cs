@@ -483,7 +483,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the binary content of the JVMS ClassFile structure that was built by this ClassWriter. </returns>
 	  /// <exception cref="ClassTooLargeException"> if the constant pool of the class is too large. </exception>
 	  /// <exception cref="MethodTooLargeException"> if the Code attribute of a method is too large. </exception>
-	  public virtual sbyte[] ToByteArray()
+	  public virtual byte[] ToByteArray()
 	  {
 		// First step: compute the size in bytes of the ClassFile structure.
 		// The magic field uses 4 bytes, 10 mandatory fields (minor_version, major_version,
@@ -742,7 +742,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="hasFrames"> whether there is at least one stack map frames in 'classFile'. </param>
 	  /// <returns> an equivalent of 'classFile', with the ASM specific instructions replaced with standard
 	  ///     ones. </returns>
-	  private sbyte[] ReplaceAsmInstructions(sbyte[] classFile, bool hasFrames)
+	  private byte[] ReplaceAsmInstructions(byte[] classFile, bool hasFrames)
 	  {
 		Attribute[] attributes = AttributePrototypes;
 		_firstField = null;

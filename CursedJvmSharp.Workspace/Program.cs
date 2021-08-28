@@ -7,7 +7,7 @@ using ObjectWeb.Asm.Tree;
 
 var node = new ClassNode();
 
-new ClassReader(Unsafe.As<sbyte[]>(File.ReadAllBytes(@"D:\Downloads\Swapchain.class"))).Accept(node, 0);
+new ClassReader(Unsafe.As<byte[]>(File.ReadAllBytes(@"D:\Downloads\Swapchain.class"))).Accept(node, 0);
 
 Console.WriteLine(node);
 //Debugger.Break();

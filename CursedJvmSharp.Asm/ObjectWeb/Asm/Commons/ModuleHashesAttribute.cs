@@ -49,7 +49,7 @@ namespace ObjectWeb.Asm.Commons
 
 	  /// <summary>
 	  /// The hash of the modules in <seealso cref="modules"/>. The two lists must have the same size. </summary>
-	  public List<sbyte[]> hashes;
+	  public List<byte[]> hashes;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ModuleHashesAttribute"/>.
@@ -57,7 +57,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="algorithm"> the name of the hashing algorithm. </param>
 	  /// <param name="modules"> a list of module names. </param>
 	  /// <param name="hashes"> the hash of the modules in 'modules'. The two lists must have the same size. </param>
-	  public ModuleHashesAttribute(string algorithm, List<string> modules, List<sbyte[]> hashes) : base("ModuleHashes")
+	  public ModuleHashesAttribute(string algorithm, List<string> modules, List<byte[]> hashes) : base("ModuleHashes")
 	  {
 		this.algorithm = algorithm;
 		this.modules = modules;
@@ -83,7 +83,7 @@ namespace ObjectWeb.Asm.Commons
 		currentOffset += 2;
 
 		List<string> moduleList = new List<string>(numModules);
-		List<sbyte[]> hashList = new List<sbyte[]>(numModules);
+		List<byte[]> hashList = new List<byte[]>(numModules);
 
 		for (int i = 0; i < numModules; ++i)
 		{
@@ -93,10 +93,10 @@ namespace ObjectWeb.Asm.Commons
 
 		  int hashLength = classReader.ReadUnsignedShort(currentOffset);
 		  currentOffset += 2;
-		  sbyte[] hash = new sbyte[hashLength];
+		  byte[] hash = new byte[hashLength];
 		  for (int j = 0; j < hashLength; ++j)
 		  {
-			hash[j] = (sbyte) classReader.ReadByte(currentOffset);
+			hash[j] = (byte) classReader.ReadByte(currentOffset);
 			currentOffset += 1;
 		  }
 		  hashList.Add(hash);
@@ -104,7 +104,7 @@ namespace ObjectWeb.Asm.Commons
 		return new ModuleHashesAttribute(hashAlgorithm, moduleList, hashList);
 	  }
 
-	  public override ByteVector Write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
+	  public override ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
 		ByteVector byteVector = new ByteVector();
 		byteVector.PutShort(classWriter.NewUtf8(algorithm));
@@ -119,7 +119,7 @@ namespace ObjectWeb.Asm.Commons
 		  for (int i = 0; i < numModules; ++i)
 		  {
 			string module = modules[i];
-			sbyte[] hash = hashes[i];
+			byte[] hash = hashes[i];
 			byteVector.PutShort(classWriter.NewModule(module)).PutShort(hash.Length).PutByteArray(hash, 0, hash.Length);
 		  }
 		}

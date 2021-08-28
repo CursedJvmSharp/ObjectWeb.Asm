@@ -102,9 +102,9 @@ namespace ObjectWeb.Asm.Tree
 		{
 		  values.Add(name);
 		}
-		if (value is sbyte[])
+		if (value is byte[])
 		{
-		  values.Add(Util.AsArrayList((sbyte[]) value));
+		  values.Add(Util.AsArrayList((byte[]) value));
 		}
 		else if (value is bool[])
 		{

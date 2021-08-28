@@ -51,7 +51,7 @@ namespace ObjectWeb.Asm
 	  /// The 6 header bytes of the attribute (attribute_name_index and attribute_length) are <i>not</i>
 	  /// included.
 	  /// </summary>
-	  private sbyte[] _content;
+	  private byte[] _content;
 
 	  /// <summary>
 	  /// The next attribute in this attribute list (Attribute instances can be linked via this field to
@@ -132,7 +132,7 @@ namespace ObjectWeb.Asm
 	  public virtual Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
 	  {
 		Attribute attribute = new Attribute(type);
-		attribute._content = new sbyte[length];
+		attribute._content = new byte[length];
 		Array.Copy(classReader.classFileBuffer, offset, attribute._content, 0, length);
 		return attribute;
 	  }
@@ -155,7 +155,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="maxLocals"> the maximum number of local variables of the method corresponding to this code
 	  ///     attribute, or -1 if this attribute is not a Code attribute. </param>
 	  /// <returns> the byte array form of this attribute. </returns>
-	  public virtual ByteVector Write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
+	  public virtual ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
 		return new ByteVector(_content);
 	  }
@@ -189,7 +189,7 @@ namespace ObjectWeb.Asm
 	  ///     the attribute headers. </returns>
 	  public int ComputeAttributesSize(SymbolTable symbolTable)
 	  {
-		const sbyte[] code = null;
+		const byte[] code = null;
 		const int codeLength = 0;
 		const int maxStack = -1;
 		const int maxLocals = -1;
@@ -214,7 +214,7 @@ namespace ObjectWeb.Asm
 	  ///     Code attributes, or -1 if they are not Code attribute. </param>
 	  /// <returns> the size of all the attributes in this attribute list. This size includes the size of
 	  ///     the attribute headers. </returns>
-	  public int ComputeAttributesSize(SymbolTable symbolTable, sbyte[] code, int codeLength, int maxStack, int maxLocals)
+	  public int ComputeAttributesSize(SymbolTable symbolTable, byte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
 		ClassWriter classWriter = symbolTable.classWriter;
 		int size = 0;
@@ -274,7 +274,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="output"> where the attributes must be written. </param>
 	  public void PutAttributes(SymbolTable symbolTable, ByteVector output)
 	  {
-		const sbyte[] code = null;
+		const byte[] code = null;
 		const int codeLength = 0;
 		const int maxStack = -1;
 		const int maxLocals = -1;
@@ -298,7 +298,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="maxLocals"> the maximum number of local variables of the method corresponding to these
 	  ///     Code attributes, or -1 if they are not Code attribute. </param>
 	  /// <param name="output"> where the attributes must be written. </param>
-	  public void PutAttributes(SymbolTable symbolTable, sbyte[] code, int codeLength, int maxStack, int maxLocals, ByteVector output)
+	  public void PutAttributes(SymbolTable symbolTable, byte[] code, int codeLength, int maxStack, int maxLocals, ByteVector output)
 	  {
 		ClassWriter classWriter = symbolTable.classWriter;
 		Attribute attribute = this;

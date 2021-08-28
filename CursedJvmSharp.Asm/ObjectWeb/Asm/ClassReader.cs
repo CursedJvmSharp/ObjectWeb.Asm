@@ -103,7 +103,7 @@ namespace ObjectWeb.Asm
 	  /// @deprecated Use <seealso cref="ReadByte"/> and the other read methods instead. This field will
 	  ///     eventually be deleted. 
 	  [Obsolete("Use <seealso cref=\"readByte(int)\"/> and the other read methods instead. This field will")]
-	  public readonly sbyte[] b;
+	  public readonly byte[] b;
 
 	  /// <summary>
 	  /// The offset in bytes of the ClassFile's access_flags field. </summary>
@@ -119,7 +119,7 @@ namespace ObjectWeb.Asm
 	  /// ClassFile element offsets within this byte array.
 	  /// </para>
 	  /// </summary>
-	  internal readonly sbyte[] classFileBuffer;
+	  internal readonly byte[] classFileBuffer;
 
 	  /// <summary>
 	  /// The offset in bytes, in <seealso cref="classFileBuffer"/>, of each cp_info entry of the ClassFile's
@@ -163,7 +163,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="ClassReader"/> object.
 	  /// </summary>
 	  /// <param name="classFile"> the JVMS ClassFile structure to be read. </param>
-	  public ClassReader(sbyte[] classFile) : this(classFile, 0, classFile.Length)
+	  public ClassReader(byte[] classFile) : this(classFile, 0, classFile.Length)
 	  {
 	  }
 
@@ -173,7 +173,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="classFileBuffer"> a byte array containing the JVMS ClassFile structure to be read. </param>
 	  /// <param name="classFileOffset"> the offset in byteBuffer of the first byte of the ClassFile to be read. </param>
 	  /// <param name="classFileLength"> the length in bytes of the ClassFile to be read. </param>
-	  public ClassReader(sbyte[] classFileBuffer, int classFileOffset, int classFileLength) : this(classFileBuffer, classFileOffset, true)
+	  public ClassReader(byte[] classFileBuffer, int classFileOffset, int classFileLength) : this(classFileBuffer, classFileOffset, true)
 	  { // NOPMD(UnusedFormalParameter) used for backward compatibility.
 	  }
 
@@ -184,7 +184,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="classFileBuffer"> a byte array containing the JVMS ClassFile structure to be read. </param>
 	  /// <param name="classFileOffset"> the offset in byteBuffer of the first byte of the ClassFile to be read. </param>
 	  /// <param name="checkClassVersion"> whether to check the class version or not. </param>
-	  public ClassReader(sbyte[] classFileBuffer, int classFileOffset, bool checkClassVersion)
+	  public ClassReader(byte[] classFileBuffer, int classFileOffset, bool checkClassVersion)
 	  {
 		this.classFileBuffer = classFileBuffer;
 		this.b = classFileBuffer;
@@ -291,7 +291,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="close"> true to close the input stream after reading. </param>
 	  /// <returns> the content of the given input stream. </returns>
 	  /// <exception cref="IOException"> if a problem occurs during reading. </exception>
-	  private static sbyte[] ReadStream(Stream inputStream, bool close)
+	  private static byte[] ReadStream(Stream inputStream, bool close)
 	  {
 		if (inputStream == null)
 		{
@@ -313,9 +313,9 @@ namespace ObjectWeb.Asm
 			  outputStream.Flush();
 			  if (readCount == 1)
 			  {
-				return Unsafe.As<sbyte[]>(data);
+				return Unsafe.As<byte[]>(data);
 			  }
-			  return Unsafe.As<sbyte[]>(outputStream.ToArray());
+			  return Unsafe.As<byte[]>(outputStream.ToArray());
 				}
 		}
 		finally
@@ -1535,7 +1535,7 @@ namespace ObjectWeb.Asm
 		int currentOffset = codeOffset;
 
 		// Read the max_stack, max_locals and code_length fields.
-		sbyte[] classBuffer = classFileBuffer;
+		byte[] classBuffer = classFileBuffer;
 		char[] charBuffer = context.charBuffer;
 		int maxStack = ReadUnsignedShort(currentOffset);
 		int maxLocals = ReadUnsignedShort(currentOffset + 2);
@@ -3004,7 +3004,7 @@ namespace ObjectWeb.Asm
 		switch (classFileBuffer[currentOffset++] & 0xFF)
 		{
 		  case 'B': // const_value_index, CONSTANT_Integer
-			annotationVisitor.Visit(elementName, (sbyte) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset)]));
+			annotationVisitor.Visit(elementName, (byte) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset)]));
 			currentOffset += 2;
 			break;
 		  case 'C': // const_value_index, CONSTANT_Integer
@@ -3052,10 +3052,10 @@ namespace ObjectWeb.Asm
 			switch (classFileBuffer[currentOffset] & 0xFF)
 			{
 			  case 'B':
-				sbyte[] byteValues = new sbyte[numValues];
+				byte[] byteValues = new byte[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  byteValues[i] = (sbyte) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
+				  byteValues[i] = (byte) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
 				}
 				annotationVisitor.Visit(elementName, byteValues);
@@ -3561,7 +3561,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the read value. </returns>
 	  public virtual int ReadUnsignedShort(int offset)
 	  {
-		sbyte[] classBuffer = classFileBuffer;
+		byte[] classBuffer = classFileBuffer;
 		return ((classBuffer[offset] & 0xFF) << 8) | (classBuffer[offset + 1] & 0xFF);
 	  }
 
@@ -3573,7 +3573,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the read value. </returns>
 	  public virtual short ReadShort(int offset)
 	  {
-		sbyte[] classBuffer = classFileBuffer;
+		byte[] classBuffer = classFileBuffer;
 		return (short)(((classBuffer[offset] & 0xFF) << 8) | (classBuffer[offset + 1] & 0xFF));
 	  }
 
@@ -3585,7 +3585,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the read value. </returns>
 	  public virtual int ReadInt(int offset)
 	  {
-		sbyte[] classBuffer = classFileBuffer;
+		byte[] classBuffer = classFileBuffer;
 		return ((classBuffer[offset] & 0xFF) << 24) | ((classBuffer[offset + 1] & 0xFF) << 16) | ((classBuffer[offset + 2] & 0xFF) << 8) | (classBuffer[offset + 3] & 0xFF);
 	  }
 
@@ -3655,7 +3655,7 @@ namespace ObjectWeb.Asm
 		int currentOffset = utfOffset;
 		int endOffset = currentOffset + utfLength;
 		int strLength = 0;
-		sbyte[] classBuffer = classFileBuffer;
+		byte[] classBuffer = classFileBuffer;
 		while (currentOffset < endOffset)
 		{
 		  int currentByte = classBuffer[currentOffset++];

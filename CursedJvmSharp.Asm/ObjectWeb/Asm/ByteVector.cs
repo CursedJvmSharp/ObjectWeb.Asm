@@ -40,7 +40,7 @@ namespace ObjectWeb.Asm
 
 	  /// <summary>
 	  /// The content of this vector. Only the first <seealso cref="length"/> bytes contain real data. </summary>
-	  internal sbyte[] data;
+	  internal byte[] data;
 
 	  /// <summary>
 	  /// The actual number of bytes in this vector. </summary>
@@ -50,7 +50,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="ByteVector"/> with a default initial capacity. </summary>
 	  public ByteVector()
 	  {
-		data = new sbyte[64];
+		data = new byte[64];
 	  }
 
 	  /// <summary>
@@ -59,14 +59,14 @@ namespace ObjectWeb.Asm
 	  /// <param name="initialCapacity"> the initial capacity of the byte vector to be constructed. </param>
 	  public ByteVector(int initialCapacity)
 	  {
-		data = new sbyte[initialCapacity];
+		data = new byte[initialCapacity];
 	  }
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ByteVector"/> from the given initial data.
 	  /// </summary>
 	  /// <param name="data"> the initial data of the new byte vector. </param>
-	  public ByteVector(sbyte[] data)
+	  public ByteVector(byte[] data)
 	  {
 		this.data = data;
 		this.length = data.Length;
@@ -84,7 +84,7 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(1);
 		}
-		data[currentLength++] = (sbyte) byteValue;
+		data[currentLength++] = (byte) byteValue;
 		length = currentLength;
 		return this;
 	  }
@@ -102,9 +102,9 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(2);
 		}
-		sbyte[] currentData = data;
-		currentData[currentLength++] = (sbyte) byteValue1;
-		currentData[currentLength++] = (sbyte) byteValue2;
+		byte[] currentData = data;
+		currentData[currentLength++] = (byte) byteValue1;
+		currentData[currentLength++] = (byte) byteValue2;
 		length = currentLength;
 		return this;
 	  }
@@ -121,9 +121,9 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(2);
 		}
-		sbyte[] currentData = data;
-		currentData[currentLength++] = (sbyte)((int)((uint)shortValue >> 8));
-		currentData[currentLength++] = (sbyte) shortValue;
+		byte[] currentData = data;
+		currentData[currentLength++] = (byte)((int)((uint)shortValue >> 8));
+		currentData[currentLength++] = (byte) shortValue;
 		length = currentLength;
 		return this;
 	  }
@@ -142,10 +142,10 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(3);
 		}
-		sbyte[] currentData = data;
-		currentData[currentLength++] = (sbyte) byteValue;
-		currentData[currentLength++] = (sbyte)((int)((uint)shortValue >> 8));
-		currentData[currentLength++] = (sbyte) shortValue;
+		byte[] currentData = data;
+		currentData[currentLength++] = (byte) byteValue;
+		currentData[currentLength++] = (byte)((int)((uint)shortValue >> 8));
+		currentData[currentLength++] = (byte) shortValue;
 		length = currentLength;
 		return this;
 	  }
@@ -165,11 +165,11 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(4);
 		}
-		sbyte[] currentData = data;
-		currentData[currentLength++] = (sbyte) byteValue1;
-		currentData[currentLength++] = (sbyte) byteValue2;
-		currentData[currentLength++] = (sbyte)((int)((uint)shortValue >> 8));
-		currentData[currentLength++] = (sbyte) shortValue;
+		byte[] currentData = data;
+		currentData[currentLength++] = (byte) byteValue1;
+		currentData[currentLength++] = (byte) byteValue2;
+		currentData[currentLength++] = (byte)((int)((uint)shortValue >> 8));
+		currentData[currentLength++] = (byte) shortValue;
 		length = currentLength;
 		return this;
 	  }
@@ -186,11 +186,11 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(4);
 		}
-		sbyte[] currentData = data;
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 24));
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 16));
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 8));
-		currentData[currentLength++] = (sbyte) intValue;
+		byte[] currentData = data;
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 24));
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 16));
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 8));
+		currentData[currentLength++] = (byte) intValue;
 		length = currentLength;
 		return this;
 	  }
@@ -210,12 +210,12 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(5);
 		}
-		sbyte[] currentData = data;
-		currentData[currentLength++] = (sbyte) byteValue;
-		currentData[currentLength++] = (sbyte)((int)((uint)shortValue1 >> 8));
-		currentData[currentLength++] = (sbyte) shortValue1;
-		currentData[currentLength++] = (sbyte)((int)((uint)shortValue2 >> 8));
-		currentData[currentLength++] = (sbyte) shortValue2;
+		byte[] currentData = data;
+		currentData[currentLength++] = (byte) byteValue;
+		currentData[currentLength++] = (byte)((int)((uint)shortValue1 >> 8));
+		currentData[currentLength++] = (byte) shortValue1;
+		currentData[currentLength++] = (byte)((int)((uint)shortValue2 >> 8));
+		currentData[currentLength++] = (byte) shortValue2;
 		length = currentLength;
 		return this;
 	  }
@@ -232,17 +232,17 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(8);
 		}
-		sbyte[] currentData = data;
+		byte[] currentData = data;
 		int intValue = (int)((long)((ulong)longValue >> 32));
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 24));
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 16));
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 8));
-		currentData[currentLength++] = (sbyte) intValue;
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 24));
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 16));
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 8));
+		currentData[currentLength++] = (byte) intValue;
 		intValue = (int) longValue;
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 24));
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 16));
-		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 8));
-		currentData[currentLength++] = (sbyte) intValue;
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 24));
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 16));
+		currentData[currentLength++] = (byte)((int)((uint)intValue >> 8));
+		currentData[currentLength++] = (byte) intValue;
 		length = currentLength;
 		return this;
 	  }
@@ -266,19 +266,19 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(2 + charLength);
 		}
-		sbyte[] currentData = data;
+		byte[] currentData = data;
 		// Optimistic algorithm: instead of computing the byte length and then serializing the string
 		// (which requires two loops), we assume the byte length is equal to char length (which is the
 		// most frequent case), and we start serializing the string right away. During the
 		// serialization, if we find that this assumption is wrong, we continue with the general method.
-		currentData[currentLength++] = (sbyte)((int)((uint)charLength >> 8));
-		currentData[currentLength++] = (sbyte) charLength;
+		currentData[currentLength++] = (byte)((int)((uint)charLength >> 8));
+		currentData[currentLength++] = (byte) charLength;
 		for (int i = 0; i < charLength; ++i)
 		{
 		  char charValue = stringValue[i];
 		  if (charValue >= '\u0001' && charValue <= '\u007F')
 		  {
-			currentData[currentLength++] = (sbyte) charValue;
+			currentData[currentLength++] = (byte) charValue;
 		  }
 		  else
 		  {
@@ -329,8 +329,8 @@ namespace ObjectWeb.Asm
 		int byteLengthOffset = length - offset - 2;
 		if (byteLengthOffset >= 0)
 		{
-		  data[byteLengthOffset] = (sbyte)((int)((uint)byteLength >> 8));
-		  data[byteLengthOffset + 1] = (sbyte) byteLength;
+		  data[byteLengthOffset] = (byte)((int)((uint)byteLength >> 8));
+		  data[byteLengthOffset + 1] = (byte) byteLength;
 		}
 		if (length + byteLength - offset > data.Length)
 		{
@@ -342,18 +342,18 @@ namespace ObjectWeb.Asm
 		  char charValue = stringValue[i];
 		  if (charValue >= (char)0x0001 && charValue <= (char)0x007F)
 		  {
-			data[currentLength++] = (sbyte) charValue;
+			data[currentLength++] = (byte) charValue;
 		  }
 		  else if (charValue <= (char)0x07FF)
 		  {
-			data[currentLength++] = unchecked((sbyte)(0xC0 | charValue >> 6 & 0x1F));
-			data[currentLength++] = unchecked((sbyte)(0x80 | charValue & 0x3F));
+			data[currentLength++] = unchecked((byte)(0xC0 | charValue >> 6 & 0x1F));
+			data[currentLength++] = unchecked((byte)(0x80 | charValue & 0x3F));
 		  }
 		  else
 		  {
-			data[currentLength++] = unchecked((sbyte)(0xE0 | charValue >> 12 & 0xF));
-			data[currentLength++] = unchecked((sbyte)(0x80 | charValue >> 6 & 0x3F));
-			data[currentLength++] = unchecked((sbyte)(0x80 | charValue & 0x3F));
+			data[currentLength++] = unchecked((byte)(0xE0 | charValue >> 12 & 0xF));
+			data[currentLength++] = unchecked((byte)(0x80 | charValue >> 6 & 0x3F));
+			data[currentLength++] = unchecked((byte)(0x80 | charValue & 0x3F));
 		  }
 		}
 		length = currentLength;
@@ -369,7 +369,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="byteOffset"> index of the first byte of byteArrayValue that must be copied. </param>
 	  /// <param name="byteLength"> number of bytes of byteArrayValue that must be copied. </param>
 	  /// <returns> this byte vector. </returns>
-	  public virtual ByteVector PutByteArray(sbyte[] byteArrayValue, int byteOffset, int byteLength)
+	  public virtual ByteVector PutByteArray(byte[] byteArrayValue, int byteOffset, int byteLength)
 	  {
 		if (length + byteLength > data.Length)
 		{
@@ -391,7 +391,7 @@ namespace ObjectWeb.Asm
 	  {
 		int doubleCapacity = 2 * data.Length;
 		int minimalCapacity = length + size;
-		sbyte[] newData = new sbyte[doubleCapacity > minimalCapacity ? doubleCapacity : minimalCapacity];
+		byte[] newData = new byte[doubleCapacity > minimalCapacity ? doubleCapacity : minimalCapacity];
 		Array.Copy(data, 0, newData, 0, length);
 		data = newData;
 	  }

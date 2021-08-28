@@ -70,7 +70,7 @@ namespace ObjectWeb.Asm
         ///     4.7.20.2
         /// </a>
         /// </seealso>
-        private readonly sbyte[] _typePathContainer;
+        private readonly byte[] _typePathContainer;
 
         /// <summary>
         ///     The offset of the first byte of the type_path JVMS structure in <seealso cref="_typePathContainer" />.
@@ -85,7 +85,7 @@ namespace ObjectWeb.Asm
         ///     the offset of the first byte of the type_path structure in
         ///     typePathContainer.
         /// </param>
-        public TypePath(sbyte[] typePathContainer, int typePathOffset)
+        public TypePath(byte[] typePathContainer, int typePathOffset)
         {
             this._typePathContainer = typePathContainer;
             this._typePathOffset = typePathOffset;
@@ -179,7 +179,7 @@ namespace ObjectWeb.Asm
                 }
             }
 
-            output.data[0] = (sbyte)(output.length / 2);
+            output.data[0] = (byte)(output.length / 2);
             return new TypePath(output.data, 0);
         }
 
