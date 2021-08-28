@@ -561,7 +561,7 @@ namespace org.objectweb.asm.tree
         public InsnListIterator(InsnList outerInstance, int index)
 		{
 			this.outerInstance = outerInstance;
-            var outerInstanceCount = outerInstance.Count();
+            var outerInstanceCount = outerInstance.size_Conflict;
             if (index < 0 || index > outerInstanceCount)
 		  {
 			throw new System.IndexOutOfRangeException();
@@ -645,7 +645,7 @@ namespace org.objectweb.asm.tree
 		{
 		  if (nextInsn == null)
 		  {
-			return outerInstance.Count();
+			return outerInstance.Size;
 		  }
 		  if (outerInstance.cache == null)
 		  {
@@ -708,6 +708,7 @@ namespace org.objectweb.asm.tree
 		
         public bool MoveNext()
         {
+            if (!hasNext()) return false;
             Current = next();
             return true;
         }

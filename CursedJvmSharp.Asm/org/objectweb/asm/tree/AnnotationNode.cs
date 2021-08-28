@@ -1,4 +1,6 @@
-﻿using org.objectweb.asm;
+﻿using System;
+using System.Collections;
+using org.objectweb.asm;
 using CursedJvmSharp.Asm.Java.IO;
 using System.Collections.Generic;
 using AnnotationVisitor = org.objectweb.asm.AnnotationVisitor;
@@ -48,9 +50,9 @@ namespace org.objectweb.asm.tree
 
 	  /// <summary>
 	  /// The name value pairs of this annotation. Each name value pair is stored as two consecutive
-	  /// elements in the list. The name is a <seealso cref="string"/>, and the value may be a <seealso cref="Byte"/>, {@link
+	  /// elements in the list. The name is a <seealso cref="string"/>, and the value may be a <seealso cref="byte"/>, {@link
 	  /// Boolean}, <seealso cref="Character"/>, <seealso cref="Short"/>, <seealso cref="Integer"/>, <seealso cref="Long"/>, <seealso cref="Float"/>,
-	  /// <seealso cref="Double"/>, <seealso cref="string"/> or <seealso cref="org.objectweb.asm.Type"/>, or a two elements String
+	  /// <seealso cref="double"/>, <seealso cref="string"/> or <seealso cref="Type"/>, or a two elements String
 	  /// array (for enumeration values), an <seealso cref="AnnotationNode"/>, or a <seealso cref="System.Collections.IList"/> of values of one
 	  /// of the preceding types. The list may be {@literal null} if there is no name value pair.
 	  /// </summary>
@@ -252,7 +254,7 @@ namespace org.objectweb.asm.tree
 			AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.visitArray(name);
 			if (arrayAnnotationVisitor != null)
 			{
-			  List<object> arrayValue = (List<object>) value;
+			  var arrayValue = (IList) value;
 			  for (int i = 0, n = arrayValue.Count; i < n; ++i)
 			  {
 				accept(arrayAnnotationVisitor, null, arrayValue[i]);
