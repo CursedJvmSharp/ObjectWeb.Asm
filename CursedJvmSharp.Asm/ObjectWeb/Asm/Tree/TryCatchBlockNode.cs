@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,107 +29,106 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a try catch block.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class TryCatchBlockNode
+    {
+        /// <summary>
+        /// The beginning of the exception handler's scope (inclusive). </summary>
+        public LabelNode Start { get; set; }
 
-	/// <summary>
-	/// A node that represents a try catch block.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class TryCatchBlockNode
-	{
+        /// <summary>
+        /// The end of the exception handler's scope (exclusive). </summary>
+        public LabelNode End { get; set; }
 
-	  /// <summary>
-	  /// The beginning of the exception handler's scope (inclusive). </summary>
-	  public LabelNode start;
+        /// <summary>
+        /// The beginning of the exception handler's code. </summary>
+        public LabelNode Handler { get; set; }
 
-	  /// <summary>
-	  /// The end of the exception handler's scope (exclusive). </summary>
-	  public LabelNode end;
+        /// <summary>
+        /// The internal name of the type of exceptions handled by the handler. May be {@literal null} to
+        /// catch any exceptions (for "finally" blocks).
+        /// </summary>
+        public string Type { get; set; }
 
-	  /// <summary>
-	  /// The beginning of the exception handler's code. </summary>
-	  public LabelNode handler;
+        /// <summary>
+        /// The runtime visible type annotations on the exception handler type. May be {@literal null}. </summary>
+        public List<TypeAnnotationNode> VisibleTypeAnnotations { get; set; }
 
-	  /// <summary>
-	  /// The internal name of the type of exceptions handled by the handler. May be {@literal null} to
-	  /// catch any exceptions (for "finally" blocks).
-	  /// </summary>
-	  public string type;
+        /// <summary>
+        /// The runtime invisible type annotations on the exception handler type. May be {@literal null}.
+        /// </summary>
+        public List<TypeAnnotationNode> InvisibleTypeAnnotations { get; set; }
 
-	  /// <summary>
-	  /// The runtime visible type annotations on the exception handler type. May be {@literal null}. </summary>
-	  public List<TypeAnnotationNode> visibleTypeAnnotations;
+        /// <summary>
+        /// Constructs a new <seealso cref = "TryCatchBlockNode"/>.
+        /// </summary>
+        /// <param name = "start"> the beginning of the exception handler's scope (inclusive). </param>
+        /// <param name = "end"> the end of the exception handler's scope (exclusive). </param>
+        /// <param name = "handler"> the beginning of the exception handler's code. </param>
+        /// <param name = "type"> the internal name of the type of exceptions handled by the handler, or {@literal
+        ///     null} to catch any exceptions (for "finally" blocks). </param>
+        public TryCatchBlockNode(LabelNode start, LabelNode end, LabelNode handler, string type)
+        {
+            this.Start = start;
+            this.End = end;
+            this.Handler = handler;
+            this.Type = type;
+        }
 
-	  /// <summary>
-	  /// The runtime invisible type annotations on the exception handler type. May be {@literal null}.
-	  /// </summary>
-	  public List<TypeAnnotationNode> invisibleTypeAnnotations;
+        /// <summary>
+        /// Updates the index of this try catch block in the method's list of try catch block nodes. This
+        /// index maybe stored in the 'target' field of the type annotations of this block.
+        /// </summary>
+        /// <param name = "index"> the new index of this try catch block in the method's list of try catch block
+        ///     nodes. </param>
+        public virtual void UpdateIndex(int index)
+        {
+            var newTypeRef = 0x42000000 | (index << 8);
+            if (visibleTypeAnnotations != null)
+            {
+                for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
+                {
+                    visibleTypeAnnotations[i].TypeRef = newTypeRef;
+                }
+            }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="TryCatchBlockNode"/>.
-	  /// </summary>
-	  /// <param name="start"> the beginning of the exception handler's scope (inclusive). </param>
-	  /// <param name="end"> the end of the exception handler's scope (exclusive). </param>
-	  /// <param name="handler"> the beginning of the exception handler's code. </param>
-	  /// <param name="type"> the internal name of the type of exceptions handled by the handler, or {@literal
-	  ///     null} to catch any exceptions (for "finally" blocks). </param>
-	  public TryCatchBlockNode(LabelNode start, LabelNode end, LabelNode handler, string type)
-	  {
-		this.start = start;
-		this.end = end;
-		this.handler = handler;
-		this.type = type;
-	  }
+            if (invisibleTypeAnnotations != null)
+            {
+                for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
+                {
+                    invisibleTypeAnnotations[i].TypeRef = newTypeRef;
+                }
+            }
+        }
 
-	  /// <summary>
-	  /// Updates the index of this try catch block in the method's list of try catch block nodes. This
-	  /// index maybe stored in the 'target' field of the type annotations of this block.
-	  /// </summary>
-	  /// <param name="index"> the new index of this try catch block in the method's list of try catch block
-	  ///     nodes. </param>
-	  public virtual void UpdateIndex(int index)
-	  {
-		var newTypeRef = 0x42000000 | (index << 8);
-		if (visibleTypeAnnotations != null)
-		{
-		  for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
-		  {
-			visibleTypeAnnotations[i].typeRef = newTypeRef;
-		  }
-		}
-		if (invisibleTypeAnnotations != null)
-		{
-		  for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
-		  {
-			invisibleTypeAnnotations[i].typeRef = newTypeRef;
-		  }
-		}
-	  }
+        /// <summary>
+        /// Makes the given visitor visit this try catch block.
+        /// </summary>
+        /// <param name = "methodVisitor"> a method visitor. </param>
+        public virtual void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitTryCatchBlock(start.Label, end.Label, handler == null ? null : handler.Label, type);
+            if (visibleTypeAnnotations != null)
+            {
+                for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
+                {
+                    var typeAnnotation = visibleTypeAnnotations[i];
+                    typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
+                }
+            }
 
-	  /// <summary>
-	  /// Makes the given visitor visit this try catch block.
-	  /// </summary>
-	  /// <param name="methodVisitor"> a method visitor. </param>
-	  public virtual void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitTryCatchBlock(start.Label, end.Label, handler == null ? null : handler.Label, type);
-		if (visibleTypeAnnotations != null)
-		{
-		  for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
-		  {
-			var typeAnnotation = visibleTypeAnnotations[i];
-			typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
-		  }
-		}
-		if (invisibleTypeAnnotations != null)
-		{
-		  for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
-		  {
-			var typeAnnotation = invisibleTypeAnnotations[i];
-			typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
-		  }
-		}
-	  }
-	}
-
+            if (invisibleTypeAnnotations != null)
+            {
+                for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
+                {
+                    var typeAnnotation = invisibleTypeAnnotations[i];
+                    typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
+                }
+            }
+        }
+    }
 }

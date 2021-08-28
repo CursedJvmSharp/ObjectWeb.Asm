@@ -1,5 +1,3 @@
-﻿
-
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
 // All rights reserved.
@@ -29,67 +27,64 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a local variable declaration.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class LocalVariableNode
+    {
+        /// <summary>
+        /// The name of a local variable. </summary>
+        public string Name { get; set; }
 
-	/// <summary>
-	/// A node that represents a local variable declaration.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class LocalVariableNode
-	{
+        /// <summary>
+        /// The type descriptor of this local variable. </summary>
+        public string Desc { get; set; }
 
-	  /// <summary>
-	  /// The name of a local variable. </summary>
-	  public string name;
+        /// <summary>
+        /// The signature of this local variable. May be {@literal null}. </summary>
+        public string Signature { get; set; }
 
-	  /// <summary>
-	  /// The type descriptor of this local variable. </summary>
-	  public string desc;
+        /// <summary>
+        /// The first instruction corresponding to the scope of this local variable (inclusive). </summary>
+        public LabelNode Start { get; set; }
 
-	  /// <summary>
-	  /// The signature of this local variable. May be {@literal null}. </summary>
-	  public string signature;
+        /// <summary>
+        /// The last instruction corresponding to the scope of this local variable (exclusive). </summary>
+        public LabelNode End { get; set; }
 
-	  /// <summary>
-	  /// The first instruction corresponding to the scope of this local variable (inclusive). </summary>
-	  public LabelNode start;
+        /// <summary>
+        /// The local variable's index. </summary>
+        public int Index { get; set; }
 
-	  /// <summary>
-	  /// The last instruction corresponding to the scope of this local variable (exclusive). </summary>
-	  public LabelNode end;
+        /// <summary>
+        /// Constructs a new <seealso cref = "LocalVariableNode"/>.
+        /// </summary>
+        /// <param name = "name"> the name of a local variable. </param>
+        /// <param name = "descriptor"> the type descriptor of this local variable. </param>
+        /// <param name = "signature"> the signature of this local variable. May be {@literal null}. </param>
+        /// <param name = "start"> the first instruction corresponding to the scope of this local variable
+        ///     (inclusive). </param>
+        /// <param name = "end"> the last instruction corresponding to the scope of this local variable (exclusive). </param>
+        /// <param name = "index"> the local variable's index. </param>
+        public LocalVariableNode(string name, string descriptor, string signature, LabelNode start, LabelNode end, int index)
+        {
+            this.Name = name;
+            this.Desc = descriptor;
+            this.Signature = signature;
+            this.Start = start;
+            this.End = end;
+            this.Index = index;
+        }
 
-	  /// <summary>
-	  /// The local variable's index. </summary>
-	  public int index;
-
-	  /// <summary>
-	  /// Constructs a new <seealso cref="LocalVariableNode"/>.
-	  /// </summary>
-	  /// <param name="name"> the name of a local variable. </param>
-	  /// <param name="descriptor"> the type descriptor of this local variable. </param>
-	  /// <param name="signature"> the signature of this local variable. May be {@literal null}. </param>
-	  /// <param name="start"> the first instruction corresponding to the scope of this local variable
-	  ///     (inclusive). </param>
-	  /// <param name="end"> the last instruction corresponding to the scope of this local variable (exclusive). </param>
-	  /// <param name="index"> the local variable's index. </param>
-	  public LocalVariableNode(string name, string descriptor, string signature, LabelNode start, LabelNode end, int index)
-	  {
-		this.name = name;
-		this.desc = descriptor;
-		this.signature = signature;
-		this.start = start;
-		this.end = end;
-		this.index = index;
-	  }
-
-	  /// <summary>
-	  /// Makes the given visitor visit this local variable declaration.
-	  /// </summary>
-	  /// <param name="methodVisitor"> a method visitor. </param>
-	  public virtual void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitLocalVariable(name, desc, signature, start.Label, end.Label, index);
-	  }
-	}
-
+        /// <summary>
+        /// Makes the given visitor visit this local variable declaration.
+        /// </summary>
+        /// <param name = "methodVisitor"> a method visitor. </param>
+        public virtual void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitLocalVariable(name, desc, signature, start.Label, end.Label, index);
+        }
+    }
 }

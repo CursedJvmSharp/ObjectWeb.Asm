@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,46 +29,42 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents an IINC instruction.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class IincInsnNode : AbstractInsnNode
+    {
+        /// <summary>
+        /// Index of the local variable to be incremented. </summary>
+        public int Var { get; set; }
 
-	/// <summary>
-	/// A node that represents an IINC instruction.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class IincInsnNode : AbstractInsnNode
-	{
+        /// <summary>
+        /// Amount to increment the local variable by. </summary>
+        public int Incr { get; set; }
 
-	  /// <summary>
-	  /// Index of the local variable to be incremented. </summary>
-	  public int var;
+        /// <summary>
+        /// Constructs a new <seealso cref = "IincInsnNode"/>.
+        /// </summary>
+        /// <param name = "var"> index of the local variable to be incremented. </param>
+        /// <param name = "incr"> increment amount to increment the local variable by. </param>
+        public IincInsnNode(int var, int incr): base(IOpcodes.Iinc)
+        {
+            this.Var = var;
+            this.Incr = incr;
+        }
 
-	  /// <summary>
-	  /// Amount to increment the local variable by. </summary>
-	  public int incr;
+        public override int Type => Iinc_Insn;
+        public override void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitIincInsn(var, incr);
+            AcceptAnnotations(methodVisitor);
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="IincInsnNode"/>.
-	  /// </summary>
-	  /// <param name="var"> index of the local variable to be incremented. </param>
-	  /// <param name="incr"> increment amount to increment the local variable by. </param>
-	  public IincInsnNode(int var, int incr) : base(IOpcodes.Iinc)
-	  {
-		this.var = var;
-		this.incr = incr;
-	  }
-
-	  public override int Type => Iinc_Insn;
-
-      public override void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitIincInsn(var, incr);
-		AcceptAnnotations(methodVisitor);
-	  }
-
-	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
-	  {
-		return (new IincInsnNode(var, incr)).CloneAnnotations(this);
-	  }
-	}
-
+        public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+        {
+            return (new IincInsnNode(var, incr)).CloneAnnotations(this);
+        }
+    }
 }

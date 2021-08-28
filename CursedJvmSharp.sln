@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31320.298
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CursedJvmSharp.Asm", "CursedJvmSharp.Asm\CursedJvmSharp.Asm.csproj", "{71C03358-BC17-40BE-B1D6-4D9F7371CB9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CursedJvmSharp.Workspace", "CursedJvmSharp.Workspace\CursedJvmSharp.Workspace.csproj", "{5D46FEF4-A4E8-46EA-A31B-A45B01AA3EF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CursedJvmSharp.Workspace", "CursedJvmSharp.Workspace\CursedJvmSharp.Workspace.csproj", "{5D46FEF4-A4E8-46EA-A31B-A45B01AA3EF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CursedJvmSharp.FielsToProps", "CursedJvmSharp.FielsToProps\CursedJvmSharp.FielsToProps.csproj", "{2D49C08A-7D0A-4EB8-993F-47D00FAA1283}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5D46FEF4-A4E8-46EA-A31B-A45B01AA3EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D46FEF4-A4E8-46EA-A31B-A45B01AA3EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D46FEF4-A4E8-46EA-A31B-A45B01AA3EF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D49C08A-7D0A-4EB8-993F-47D00FAA1283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D49C08A-7D0A-4EB8-993F-47D00FAA1283}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D49C08A-7D0A-4EB8-993F-47D00FAA1283}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D49C08A-7D0A-4EB8-993F-47D00FAA1283}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

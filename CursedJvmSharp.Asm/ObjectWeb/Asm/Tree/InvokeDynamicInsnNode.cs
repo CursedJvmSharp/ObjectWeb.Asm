@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,61 +29,57 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents an invokedynamic instruction.
+    /// 
+    /// @author Remi Forax
+    /// </summary>
+    public class InvokeDynamicInsnNode : AbstractInsnNode
+    {
+        /// <summary>
+        /// The method's name. </summary>
+        public string Name { get; set; }
 
-	/// <summary>
-	/// A node that represents an invokedynamic instruction.
-	/// 
-	/// @author Remi Forax
-	/// </summary>
-	public class InvokeDynamicInsnNode : AbstractInsnNode
-	{
+        /// <summary>
+        /// The method's descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </summary>
+        public string Desc { get; set; }
 
-	  /// <summary>
-	  /// The method's name. </summary>
-	  public string name;
+        /// <summary>
+        /// The bootstrap method. </summary>
+        public Handle Bsm { get; set; }
 
-	  /// <summary>
-	  /// The method's descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </summary>
-	  public string desc;
+        /// <summary>
+        /// The bootstrap method constant arguments. </summary>
+        public object[] BsmArgs { get; set; }
 
-	  /// <summary>
-	  /// The bootstrap method. </summary>
-	  public Handle bsm;
+        /// <summary>
+        /// Constructs a new <seealso cref = "InvokeDynamicInsnNode"/>.
+        /// </summary>
+        /// <param name = "name"> the method's name. </param>
+        /// <param name = "descriptor"> the method's descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </param>
+        /// <param name = "bootstrapMethodHandle"> the bootstrap method. </param>
+        /// <param name = "bootstrapMethodArguments"> the bootstrap method constant arguments. Each argument must be
+        ///     an <seealso cref = "Integer"/>, <seealso cref = "Float"/>, <seealso cref = "Long"/>, <seealso cref = "Double"/>, <seealso cref = "string "/>, {@link
+        ///     org.objectweb.asm.Type} or <seealso cref = "Handle"/> value. This method is allowed to modify the
+        ///     content of the array so a caller should expect that this array may change. </param>
+        public InvokeDynamicInsnNode(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments): base(IOpcodes.Invokedynamic)
+        { // NOPMD(ArrayIsStoredDirectly): public field.
+            this.Name = name;
+            this.Desc = descriptor;
+            this.Bsm = bootstrapMethodHandle;
+            this.BsmArgs = bootstrapMethodArguments;
+        }
 
-	  /// <summary>
-	  /// The bootstrap method constant arguments. </summary>
-	  public object[] bsmArgs;
+        public override int Type => Invoke_Dynamic_Insn;
+        public override void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
+            AcceptAnnotations(methodVisitor);
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="InvokeDynamicInsnNode"/>.
-	  /// </summary>
-	  /// <param name="name"> the method's name. </param>
-	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </param>
-	  /// <param name="bootstrapMethodHandle"> the bootstrap method. </param>
-	  /// <param name="bootstrapMethodArguments"> the bootstrap method constant arguments. Each argument must be
-	  ///     an <seealso cref="Integer"/>, <seealso cref="Float"/>, <seealso cref="Long"/>, <seealso cref="Double"/>, <seealso cref="string"/>, {@link
-	  ///     org.objectweb.asm.Type} or <seealso cref="Handle"/> value. This method is allowed to modify the
-	  ///     content of the array so a caller should expect that this array may change. </param>
-	  public InvokeDynamicInsnNode(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments) : base(IOpcodes.Invokedynamic)
-	  { // NOPMD(ArrayIsStoredDirectly): public field.
-		this.name = name;
-		this.desc = descriptor;
-		this.bsm = bootstrapMethodHandle;
-		this.bsmArgs = bootstrapMethodArguments;
-	  }
-
-	  public override int Type => Invoke_Dynamic_Insn;
-
-      public override void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
-		AcceptAnnotations(methodVisitor);
-	  }
-
-	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
-	  {
-		return (new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs)).CloneAnnotations(this);
-	  }
-	}
-
+        public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+        {
+            return (new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs)).CloneAnnotations(this);
+        }
+    }
 }

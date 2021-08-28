@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,65 +29,63 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a LOOKUPSWITCH instruction.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class LookupSwitchInsnNode : AbstractInsnNode
+    {
+        /// <summary>
+        /// Beginning of the default handler block. </summary>
+        public LabelNode Dflt { get; set; }
 
-	/// <summary>
-	/// A node that represents a LOOKUPSWITCH instruction.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class LookupSwitchInsnNode : AbstractInsnNode
-	{
+        /// <summary>
+        /// The values of the keys. </summary>
+        public List<int> Keys { get; set; }
 
-	  /// <summary>
-	  /// Beginning of the default handler block. </summary>
-	  public LabelNode dflt;
+        /// <summary>
+        /// Beginnings of the handler blocks. </summary>
+        public List<LabelNode> Labels { get; set; }
 
-	  /// <summary>
-	  /// The values of the keys. </summary>
-	  public List<int> keys;
+        /// <summary>
+        /// Constructs a new <seealso cref = "LookupSwitchInsnNode"/>.
+        /// </summary>
+        /// <param name = "dflt"> beginning of the default handler block. </param>
+        /// <param name = "keys"> the values of the keys. </param>
+        /// <param name = "labels"> beginnings of the handler blocks. {@code labels[i]} is the beginning of the
+        ///     handler block for the {@code keys[i]} key. </param>
+        public LookupSwitchInsnNode(LabelNode dflt, int[] keys, LabelNode[] labels): base(IOpcodes.Lookupswitch)
+        {
+            this.Dflt = dflt;
+            this.Keys = Util.AsArrayList(keys);
+            this.Labels = Util.AsArrayList(labels);
+        }
 
-	  /// <summary>
-	  /// Beginnings of the handler blocks. </summary>
-	  public List<LabelNode> labels;
+        public override int Type => Lookupswitch_Insn;
+        public override void Accept(MethodVisitor methodVisitor)
+        {
+            var keysArray = new int[this.Keys.Count];
+            for (int i = 0, n = keysArray.Length; i < n; ++i)
+            {
+                keysArray[i] = this.Keys[i];
+            }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="LookupSwitchInsnNode"/>.
-	  /// </summary>
-	  /// <param name="dflt"> beginning of the default handler block. </param>
-	  /// <param name="keys"> the values of the keys. </param>
-	  /// <param name="labels"> beginnings of the handler blocks. {@code labels[i]} is the beginning of the
-	  ///     handler block for the {@code keys[i]} key. </param>
-	  public LookupSwitchInsnNode(LabelNode dflt, int[] keys, LabelNode[] labels) : base(IOpcodes.Lookupswitch)
-	  {
-		this.dflt = dflt;
-		this.keys = Util.AsArrayList(keys);
-		this.labels = Util.AsArrayList(labels);
-	  }
+            var labelsArray = new Label[this.Labels.Count];
+            for (int i = 0, n = labelsArray.Length; i < n; ++i)
+            {
+                labelsArray[i] = this.Labels[i].Label;
+            }
 
-	  public override int Type => Lookupswitch_Insn;
+            methodVisitor.VisitLookupSwitchInsn(dflt.Label, keysArray, labelsArray);
+            AcceptAnnotations(methodVisitor);
+        }
 
-      public override void Accept(MethodVisitor methodVisitor)
-	  {
-		var keysArray = new int[this.keys.Count];
-		for (int i = 0, n = keysArray.Length; i < n; ++i)
-		{
-		  keysArray[i] = this.keys[i];
-		}
-		var labelsArray = new Label[this.labels.Count];
-		for (int i = 0, n = labelsArray.Length; i < n; ++i)
-		{
-		  labelsArray[i] = this.labels[i].Label;
-		}
-		methodVisitor.VisitLookupSwitchInsn(dflt.Label, keysArray, labelsArray);
-		AcceptAnnotations(methodVisitor);
-	  }
-
-	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
-	  {
-		var clone = new LookupSwitchInsnNode(LookupSwitchInsnNode.Clone(dflt, clonedLabels), null, LookupSwitchInsnNode.Clone(labels, clonedLabels));
-		((List<int>)clone.keys).AddRange(keys);
-		return clone.CloneAnnotations(this);
-	  }
-	}
-
+        public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+        {
+            var clone = new LookupSwitchInsnNode(LookupSwitchInsnNode.Clone(dflt, clonedLabels), null, LookupSwitchInsnNode.Clone(labels, clonedLabels));
+            ((List<int>)clone.Keys).AddRange(keys);
+            return clone.CloneAnnotations(this);
+        }
+    }
 }

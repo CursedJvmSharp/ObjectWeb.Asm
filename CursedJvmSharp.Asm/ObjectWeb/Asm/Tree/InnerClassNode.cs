@@ -1,5 +1,3 @@
-﻿
-
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
 // All rights reserved.
@@ -29,62 +27,59 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents an inner class.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class InnerClassNode
+    {
+        /// <summary>
+        /// The internal name of an inner class (see <seealso cref = "org.objectweb.asm.Type.InternalName"/>). </summary>
+        public string Name { get; set; }
 
-	/// <summary>
-	/// A node that represents an inner class.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class InnerClassNode
-	{
+        /// <summary>
+        /// The internal name of the class to which the inner class belongs (see {@link
+        /// org.objectweb.asm.Type#getInternalName()}). May be {@literal null}.
+        /// </summary>
+        public string OuterName { get; set; }
 
-	  /// <summary>
-	  /// The internal name of an inner class (see <seealso cref="org.objectweb.asm.Type.InternalName"/>). </summary>
-	  public string name;
+        /// <summary>
+        /// The (simple) name of the inner class inside its enclosing class. May be {@literal null} for
+        /// anonymous inner classes.
+        /// </summary>
+        public string InnerName { get; set; }
 
-	  /// <summary>
-	  /// The internal name of the class to which the inner class belongs (see {@link
-	  /// org.objectweb.asm.Type#getInternalName()}). May be {@literal null}.
-	  /// </summary>
-	  public string outerName;
+        /// <summary>
+        /// The access flags of the inner class as originally declared in the enclosing class. </summary>
+        public int Access { get; set; }
 
-	  /// <summary>
-	  /// The (simple) name of the inner class inside its enclosing class. May be {@literal null} for
-	  /// anonymous inner classes.
-	  /// </summary>
-	  public string innerName;
+        /// <summary>
+        /// Constructs a new <seealso cref = "InnerClassNode"/>.
+        /// </summary>
+        /// <param name = "name"> the internal name of an inner class (see {@link
+        ///     org.objectweb.asm.Type#getInternalName()}). </param>
+        /// <param name = "outerName"> the internal name of the class to which the inner class belongs (see {@link
+        ///     org.objectweb.asm.Type#getInternalName()}). May be {@literal null}. </param>
+        /// <param name = "innerName"> the (simple) name of the inner class inside its enclosing class. May be
+        ///     {@literal null} for anonymous inner classes. </param>
+        /// <param name = "access"> the access flags of the inner class as originally declared in the enclosing
+        ///     class. </param>
+        public InnerClassNode(string name, string outerName, string innerName, int access)
+        {
+            this.Name = name;
+            this.OuterName = outerName;
+            this.InnerName = innerName;
+            this.Access = access;
+        }
 
-	  /// <summary>
-	  /// The access flags of the inner class as originally declared in the enclosing class. </summary>
-	  public int access;
-
-	  /// <summary>
-	  /// Constructs a new <seealso cref="InnerClassNode"/>.
-	  /// </summary>
-	  /// <param name="name"> the internal name of an inner class (see {@link
-	  ///     org.objectweb.asm.Type#getInternalName()}). </param>
-	  /// <param name="outerName"> the internal name of the class to which the inner class belongs (see {@link
-	  ///     org.objectweb.asm.Type#getInternalName()}). May be {@literal null}. </param>
-	  /// <param name="innerName"> the (simple) name of the inner class inside its enclosing class. May be
-	  ///     {@literal null} for anonymous inner classes. </param>
-	  /// <param name="access"> the access flags of the inner class as originally declared in the enclosing
-	  ///     class. </param>
-	  public InnerClassNode(string name, string outerName, string innerName, int access)
-	  {
-		this.name = name;
-		this.outerName = outerName;
-		this.innerName = innerName;
-		this.access = access;
-	  }
-
-	  /// <summary>
-	  /// Makes the given class visitor visit this inner class.
-	  /// </summary>
-	  /// <param name="classVisitor"> a class visitor. </param>
-	  public virtual void Accept(ClassVisitor classVisitor)
-	  {
-		classVisitor.VisitInnerClass(name, outerName, innerName, access);
-	  }
-	}
-
+        /// <summary>
+        /// Makes the given class visitor visit this inner class.
+        /// </summary>
+        /// <param name = "classVisitor"> a class visitor. </param>
+        public virtual void Accept(ClassVisitor classVisitor)
+        {
+            classVisitor.VisitInnerClass(name, outerName, innerName, access);
+        }
+    }
 }

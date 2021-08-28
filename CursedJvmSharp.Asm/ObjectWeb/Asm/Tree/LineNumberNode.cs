@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,47 +29,43 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a line number declaration. These nodes are pseudo instruction nodes in
+    /// order to be inserted in an instruction list.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class LineNumberNode : AbstractInsnNode
+    {
+        /// <summary>
+        /// A line number. This number refers to the source file from which the class was compiled. </summary>
+        public int Line { get; set; }
 
-	/// <summary>
-	/// A node that represents a line number declaration. These nodes are pseudo instruction nodes in
-	/// order to be inserted in an instruction list.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class LineNumberNode : AbstractInsnNode
-	{
+        /// <summary>
+        /// The first instruction corresponding to this line number. </summary>
+        public LabelNode Start { get; set; }
 
-	  /// <summary>
-	  /// A line number. This number refers to the source file from which the class was compiled. </summary>
-	  public int line;
+        /// <summary>
+        /// Constructs a new <seealso cref = "LineNumberNode"/>.
+        /// </summary>
+        /// <param name = "line"> a line number. This number refers to the source file from which the class was
+        ///     compiled. </param>
+        /// <param name = "start"> the first instruction corresponding to this line number. </param>
+        public LineNumberNode(int line, LabelNode start): base(-1)
+        {
+            this.Line = line;
+            this.Start = start;
+        }
 
-	  /// <summary>
-	  /// The first instruction corresponding to this line number. </summary>
-	  public LabelNode start;
+        public override int Type => Line;
+        public override void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitLineNumber(line, start.Label);
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="LineNumberNode"/>.
-	  /// </summary>
-	  /// <param name="line"> a line number. This number refers to the source file from which the class was
-	  ///     compiled. </param>
-	  /// <param name="start"> the first instruction corresponding to this line number. </param>
-	  public LineNumberNode(int line, LabelNode start) : base(-1)
-	  {
-		this.line = line;
-		this.start = start;
-	  }
-
-	  public override int Type => Line;
-
-      public override void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitLineNumber(line, start.Label);
-	  }
-
-	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
-	  {
-		return new LineNumberNode(line, Clone(start, clonedLabels));
-	  }
-	}
-
+        public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+        {
+            return new LineNumberNode(line, Clone(start, clonedLabels));
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,46 +29,42 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a MULTIANEWARRAY instruction.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class MultiANewArrayInsnNode : AbstractInsnNode
+    {
+        /// <summary>
+        /// An array type descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </summary>
+        public string Desc { get; set; }
 
-	/// <summary>
-	/// A node that represents a MULTIANEWARRAY instruction.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class MultiANewArrayInsnNode : AbstractInsnNode
-	{
+        /// <summary>
+        /// Number of dimensions of the array to allocate. </summary>
+        public int Dims { get; set; }
 
-	  /// <summary>
-	  /// An array type descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </summary>
-	  public string desc;
+        /// <summary>
+        /// Constructs a new <seealso cref = "MultiANewArrayInsnNode"/>.
+        /// </summary>
+        /// <param name = "descriptor"> an array type descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </param>
+        /// <param name = "numDimensions"> the number of dimensions of the array to allocate. </param>
+        public MultiANewArrayInsnNode(string descriptor, int numDimensions): base(IOpcodes.Multianewarray)
+        {
+            this.Desc = descriptor;
+            this.Dims = numDimensions;
+        }
 
-	  /// <summary>
-	  /// Number of dimensions of the array to allocate. </summary>
-	  public int dims;
+        public override int Type => Multianewarray_Insn;
+        public override void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitMultiANewArrayInsn(desc, dims);
+            AcceptAnnotations(methodVisitor);
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="MultiANewArrayInsnNode"/>.
-	  /// </summary>
-	  /// <param name="descriptor"> an array type descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </param>
-	  /// <param name="numDimensions"> the number of dimensions of the array to allocate. </param>
-	  public MultiANewArrayInsnNode(string descriptor, int numDimensions) : base(IOpcodes.Multianewarray)
-	  {
-		this.desc = descriptor;
-		this.dims = numDimensions;
-	  }
-
-	  public override int Type => Multianewarray_Insn;
-
-      public override void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitMultiANewArrayInsn(desc, dims);
-		AcceptAnnotations(methodVisitor);
-	  }
-
-	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
-	  {
-		return (new MultiANewArrayInsnNode(desc, dims)).CloneAnnotations(this);
-	  }
-	}
-
+        public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+        {
+            return (new MultiANewArrayInsnNode(desc, dims)).CloneAnnotations(this);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
@@ -31,18 +31,18 @@ using System.Collections.Generic;
 namespace ObjectWeb.Asm.Commons
 {
     /// <summary>
-    ///     A <seealso cref="MethodVisitor" /> that keeps track of stack map frame changes between {@link
+    ///     A <seealso cref = "MethodVisitor"/> that keeps track of stack map frame changes between {@link
     ///     #visitFrame(int, int, Object[], int, Object[])} calls. This adapter must be used with the {@link
     ///     org.objectweb.asm.ClassReader#EXPAND_FRAMES} option. Each visit<i>X</i> instruction delegates to
     ///     the next visitor in the chain, if any, and then simulates the effect of this instruction on the
-    ///     stack map frame, represented by <seealso cref="locals" /> and <seealso cref="stack" />. The next visitor in the
+    ///     stack map frame, represented by <seealso cref = "locals"/> and <seealso cref = "stack"/>. The next visitor in the
     ///     chain
     ///     can get the state of the stack map frame <i>before</i> each instruction by reading the value of
     ///     these fields in its visit<i>X</i> methods (this requires a reference to the AnalyzerAdapter that
     ///     is before it in the chain). If this adapter is used with a class that does not contain stack map
     ///     table attributes (i.e., pre Java 6 classes) then this adapter may not be able to compute the
-    ///     stack map frame for each instruction. In this case no exception is thrown but the <seealso cref="locals" />
-    ///     and <seealso cref="stack" /> fields will be null for these instructions.
+    ///     stack map frame for each instruction. In this case no exception is thrown but the <seealso cref = "locals"/>
+    ///     and <seealso cref = "stack"/> fields will be null for these instructions.
     ///     @author Eric Bruneton
     /// </summary>
     public class AnalyzerAdapter : MethodVisitor
@@ -51,47 +51,33 @@ namespace ObjectWeb.Asm.Commons
         ///     The labels that designate the next instruction to be visited. May be {@literal null}.
         /// </summary>
         private List<Label> _labels;
-
         /// <summary>
         ///     The local variable slots for the current execution frame. Primitive types are represented by
-        ///     <seealso cref="IIOpcodes.top />, <seealso cref="IIOpcodes.integer />, <seealso cref="IIOpcodes.float />,
-        ///     <seealso cref="IIOpcodes.long />,
-        ///     <seealso cref="IIOpcodes.double />,<seealso cref="IIOpcodes.null /> or <seealso cref="IIOpcodes.uninitializedThis />
-        ///     (long and
-        ///     double are represented by two elements, the second one being TOP). Reference types are
-        ///     represented by String objects (representing internal names), and uninitialized types by Label
-        ///     objects (this label designates the NEW instruction that created this uninitialized value). This
-        ///     field is {@literal null} for unreachable instructions.
+        ///     <seealso cref = "IIOpcodes.top / > , <seealso cref = "IIOpcodes.integer / > , <seealso cref = "IIOpcodes. float  / > , 
+        ///     <seealso cref = "IIOpcodes. long  / > , 
+        ///     <seealso cref = "IIOpcodes. double  / > ,  <seealso cref = "IIOpcodes. null  / > or  <seealso cref = "IIOpcodes.uninitializedThis / > ///( long  and  ///double  are  represented  by  two  elements ,  the  second  one  being  TOP ) . Reference  types  are  ///represented  by  String  objects ( representing  internal  names ) ,  and  uninitialized  types  by  Label  ///objects ( this  label  designates  the  NEW  instruction  that  created  this  uninitialized  value ) . This  ///field  is  { @literal  null } for  unreachable  instructions .
         /// </summary>
-        public List<object> locals;
+        public List<object> Locals { get; set; }
 
         /// <summary>
         ///     The maximum number of local variables of this method.
         /// </summary>
         private int _maxLocals;
-
         /// <summary>
         ///     The maximum stack size of this method.
         /// </summary>
         private int _maxStack;
-
         /// <summary>
         ///     The owner's class name.
         /// </summary>
         private readonly string _owner;
-
         /// <summary>
         ///     The operand stack slots for the current execution frame. Primitive types are represented by
-        ///     <seealso cref="IIOpcodes.top />, <seealso cref="IIOpcodes.integer />, <seealso cref="IIOpcodes.float />,
-        ///     <seealso cref="IIOpcodes.long />,
-        ///     <seealso cref="IIOpcodes.double />,<seealso cref="IIOpcodes.null /> or <seealso cref="IIOpcodes.uninitializedThis />
-        ///     (long and
-        ///     double are represented by two elements, the second one being TOP). Reference types are
-        ///     represented by String objects (representing internal names), and uninitialized types by Label
-        ///     objects (this label designates the NEW instruction that created this uninitialized value). This
-        ///     field is {@literal null} for unreachable instructions.
+        ///     <seealso cref = "IIOpcodes.top / > , <seealso cref = "IIOpcodes.integer / > , <seealso cref = "IIOpcodes. float  / > , 
+        ///     <seealso cref = "IIOpcodes. long  / > , 
+        ///     <seealso cref = "IIOpcodes. double  / > ,  <seealso cref = "IIOpcodes. null  / > or  <seealso cref = "IIOpcodes.uninitializedThis / > ///( long  and  ///double  are  represented  by  two  elements ,  the  second  one  being  TOP ) . Reference  types  are  ///represented  by  String  objects ( representing  internal  names ) ,  and  uninitialized  types  by  Label  ///objects ( this  label  designates  the  NEW  instruction  that  created  this  uninitialized  value ) . This  ///field  is  { @literal  null } for  unreachable  instructions .
         /// </summary>
-        public List<object> stack;
+        public List<object> Stack { get; set; }
 
         /// <summary>
         ///     The uninitialized types in the current execution frame. This map associates internal names to
@@ -99,51 +85,49 @@ namespace ObjectWeb.Asm.Commons
         ///     types, and the associated internal name represents the NEW operand, i.e. the final, initialized
         ///     type value.
         /// </summary>
-        public IDictionary<object, object> uninitializedTypes;
+        public IDictionary<object, object> UninitializedTypes { get; set; }
 
         /// <summary>
-        ///     Constructs a new <seealso cref="AnalyzerAdapter" />. <i>Subclasses must not use this constructor</i>.
+        ///     Constructs a new <seealso cref = "AnalyzerAdapter"/>. <i>Subclasses must not use this constructor</i>.
         ///     Instead, they must use the {@link #AnalyzerAdapter(int, String, int, String, String,
         ///     MethodVisitor)} version.
         /// </summary>
-        /// <param name="owner"> the owner's class name. </param>
-        /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes" />). </param>
-        /// <param name="name"> the method's name. </param>
-        /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type" />). </param>
-        /// <param name="methodVisitor">
+        /// <param name = "owner"> the owner's class name. </param>
+        /// <param name = "access"> the method's access flags (see <seealso cref = "IOpcodes"/>). </param>
+        /// <param name = "name"> the method's name. </param>
+        /// <param name = "descriptor"> the method's descriptor (see <seealso cref = "Type"/>). </param>
+        /// <param name = "methodVisitor">
         ///     the method visitor to which this adapter delegates calls. May be {@literal
         ///     null}.
         /// </param>
-        /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-        public AnalyzerAdapter(string owner, int access, string name, string descriptor, MethodVisitor methodVisitor) :
-            this(IOpcodes.Asm9, owner, access, name, descriptor, methodVisitor)
+        /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
+        public AnalyzerAdapter(string owner, int access, string name, string descriptor, MethodVisitor methodVisitor): this(IOpcodes.Asm9, owner, access, name, descriptor, methodVisitor)
         {
-            if (GetType() != typeof(AnalyzerAdapter)) throw new InvalidOperationException();
+            if (GetType() != typeof(AnalyzerAdapter))
+                throw new InvalidOperationException();
         }
 
         /// <summary>
-        ///     Constructs a new <seealso cref="AnalyzerAdapter" />.
+        ///     Constructs a new <seealso cref = "AnalyzerAdapter"/>.
         /// </summary>
-        /// <param name="api">
+        /// <param name = "api">
         ///     the ASM API version implemented by this visitor. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
+        ///     ASM}<i>x</i> values in <seealso cref = "IOpcodes"/>.
         /// </param>
-        /// <param name="owner"> the owner's class name. </param>
-        /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes" />). </param>
-        /// <param name="name"> the method's name. </param>
-        /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type" />). </param>
-        /// <param name="methodVisitor">
+        /// <param name = "owner"> the owner's class name. </param>
+        /// <param name = "access"> the method's access flags (see <seealso cref = "IOpcodes"/>). </param>
+        /// <param name = "name"> the method's name. </param>
+        /// <param name = "descriptor"> the method's descriptor (see <seealso cref = "Type"/>). </param>
+        /// <param name = "methodVisitor">
         ///     the method visitor to which this adapter delegates calls. May be {@literal
         ///     null}.
         /// </param>
-        public AnalyzerAdapter(int api, string owner, int access, string name, string descriptor,
-            MethodVisitor methodVisitor) : base(api, methodVisitor)
+        public AnalyzerAdapter(int api, string owner, int access, string name, string descriptor, MethodVisitor methodVisitor): base(api, methodVisitor)
         {
             this._owner = owner;
             locals = new List<object>();
             stack = new List<object>();
             uninitializedTypes = new Dictionary<object, object>();
-
             if ((access & IOpcodes.Acc_Static) == 0)
             {
                 if ("<init>".Equals(name))
@@ -190,26 +174,23 @@ namespace ObjectWeb.Asm.Commons
         {
             if (type != IOpcodes.F_New)
                 // Uncompressed frame.
-                throw new ArgumentException(
-                    "AnalyzerAdapter only accepts expanded frames (see ClassReader.EXPAND_FRAMES)");
-
+                throw new ArgumentException("AnalyzerAdapter only accepts expanded frames (see ClassReader.EXPAND_FRAMES)");
             base.VisitFrame(type, numLocal, local, numStack, stack);
-
             if (locals != null)
             {
                 locals.Clear();
-                this.stack.Clear();
+                this.Stack.Clear();
             }
             else
             {
                 locals = new List<object>();
-                this.stack = new List<object>();
+                this.Stack = new List<object>();
             }
 
             VisitFrameTypes(numLocal, local, locals);
-            VisitFrameTypes(numStack, stack, this.stack);
+            VisitFrameTypes(numStack, stack, this.Stack);
             _maxLocals = Math.Max(_maxLocals, locals.Count);
-            _maxStack = Math.Max(_maxStack, this.stack.Count);
+            _maxStack = Math.Max(_maxStack, this.Stack.Count);
         }
 
         private static void VisitFrameTypes(int numTypes, object[] frameTypes, List<object> result)
@@ -218,7 +199,8 @@ namespace ObjectWeb.Asm.Commons
             {
                 var frameType = frameTypes[i];
                 result.Add(frameType);
-                if (Equals(frameType, IOpcodes.@long) || Equals(frameType, IOpcodes.@double)) result.Add(IOpcodes.top);
+                if (Equals(frameType, IOpcodes.@long) || Equals(frameType, IOpcodes.@double))
+                    result.Add(IOpcodes.top);
             }
         }
 
@@ -242,8 +224,7 @@ namespace ObjectWeb.Asm.Commons
         public override void VisitVarInsn(int opcode, int var)
         {
             base.VisitVarInsn(opcode, var);
-            var isLongOrDouble = opcode == IOpcodes.Lload || opcode == IOpcodes.Dload || opcode == IOpcodes.Lstore ||
-                                 opcode == IOpcodes.Dstore;
+            var isLongOrDouble = opcode == IOpcodes.Lload || opcode == IOpcodes.Dload || opcode == IOpcodes.Lstore || opcode == IOpcodes.Dstore;
             _maxLocals = Math.Max(_maxLocals, var + (isLongOrDouble ? 2 : 1));
             Execute(opcode, var, null);
         }
@@ -257,10 +238,12 @@ namespace ObjectWeb.Asm.Commons
                     var label = new Label();
                     _labels = new List<Label>(3);
                     _labels.Add(label);
-                    if (mv != null) mv.VisitLabel(label);
+                    if (mv != null)
+                        mv.VisitLabel(label);
                 }
 
-                foreach (var label in _labels) uninitializedTypes[label] = type;
+                foreach (var label in _labels)
+                    uninitializedTypes[label] = type;
             }
 
             base.VisitTypeInsn(opcode, type);
@@ -273,8 +256,7 @@ namespace ObjectWeb.Asm.Commons
             Execute(opcode, 0, descriptor);
         }
 
-        public override void VisitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor,
-            bool isInterface)
+        public override void VisitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor, bool isInterface)
         {
             if (api < IOpcodes.Asm5 && (opcodeAndSource & IOpcodes.Source_Deprecated) == 0)
             {
@@ -285,7 +267,6 @@ namespace ObjectWeb.Asm.Commons
 
             base.VisitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
             var opcode = opcodeAndSource & ~IOpcodes.Source_Mask;
-
             if (locals == null)
             {
                 _labels = null;
@@ -316,8 +297,7 @@ namespace ObjectWeb.Asm.Commons
             _labels = null;
         }
 
-        public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle,
-            params object[] bootstrapMethodArguments)
+        public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
         {
             base.VisitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
             if (locals == null)
@@ -345,7 +325,8 @@ namespace ObjectWeb.Asm.Commons
         public override void VisitLabel(Label label)
         {
             base.VisitLabel(label);
-            if (_labels == null) _labels = new List<Label>(3);
+            if (_labels == null)
+                _labels = new List<Label>(3);
             _labels.Add(label);
         }
 
@@ -435,8 +416,7 @@ namespace ObjectWeb.Asm.Commons
             Execute(IOpcodes.Multianewarray, numDimensions, descriptor);
         }
 
-        public override void VisitLocalVariable(string name, string descriptor, string signature, Label start,
-            Label end, int index)
+        public override void VisitLocalVariable(string name, string descriptor, string signature, Label start, Label end, int index)
         {
             var firstDescriptorChar = descriptor[0];
             _maxLocals = Math.Max(_maxLocals, index + (firstDescriptorChar == 'J' || firstDescriptorChar == 'D' ? 2 : 1));
@@ -454,7 +434,6 @@ namespace ObjectWeb.Asm.Commons
         }
 
         // -----------------------------------------------------------------------------------------------
-
         private object Get(int local)
         {
             _maxLocals = Math.Max(_maxLocals, local + 1);
@@ -464,7 +443,8 @@ namespace ObjectWeb.Asm.Commons
         private void Set(int local, object type)
         {
             _maxLocals = Math.Max(_maxLocals, local + 1);
-            while (local >= locals.Count) locals.Add(IOpcodes.top);
+            while (local >= locals.Count)
+                locals.Add(IOpcodes.top);
             locals[local] = type;
         }
 
@@ -476,9 +456,7 @@ namespace ObjectWeb.Asm.Commons
 
         private void PushDescriptor(string fieldOrMethodDescriptor)
         {
-            var descriptor = fieldOrMethodDescriptor[0] == '('
-                ? JType.GetReturnType(fieldOrMethodDescriptor).Descriptor
-                : fieldOrMethodDescriptor;
+            var descriptor = fieldOrMethodDescriptor[0] == '(' ? JType.GetReturnType(fieldOrMethodDescriptor).Descriptor : fieldOrMethodDescriptor;
             switch (descriptor[0])
             {
                 case 'V':
@@ -524,7 +502,8 @@ namespace ObjectWeb.Asm.Commons
         {
             var size = stack.Count;
             var end = size - numSlots;
-            for (var i = size - 1; i >= end; --i) stack.RemoveAt(i);
+            for (var i = size - 1; i >= end; --i)
+                stack.RemoveAt(i);
         }
 
         private void Pop(string descriptor)
@@ -534,7 +513,8 @@ namespace ObjectWeb.Asm.Commons
             {
                 var numSlots = 0;
                 var types = JType.GetArgumentTypes(descriptor);
-                foreach (var type in types) numSlots += type.Size;
+                foreach (var type in types)
+                    numSlots += type.Size;
                 Pop(numSlots);
             }
             else if (firstDescriptorChar == 'J' || firstDescriptorChar == 'D')

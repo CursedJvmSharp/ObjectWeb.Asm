@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,54 +29,47 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a local variable instruction. A local variable instruction is an
+    /// instruction that loads or stores the value of a local variable.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class VarInsnNode : AbstractInsnNode
+    {
+        /// <summary>
+        /// The operand of this instruction. This operand is the index of a local variable. </summary>
+        public int Var { get; set; }
 
-	/// <summary>
-	/// A node that represents a local variable instruction. A local variable instruction is an
-	/// instruction that loads or stores the value of a local variable.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class VarInsnNode : AbstractInsnNode
-	{
+        /// <summary>
+        /// Constructs a new <seealso cref = "VarInsnNode"/>.
+        /// </summary>
+        /// <param name = "opcode"> the opcode of the local variable instruction to be constructed. This opcode must
+        ///     be ILOAD, LLOAD, FLOAD, DLOAD, ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET. </param>
+        /// <param name = "var"> the operand of the instruction to be constructed. This operand is the index of a
+        ///     local variable. </param>
+        public VarInsnNode(int opcode, int var): base(opcode)
+        {
+            this.Var = var;
+        }
 
-	  /// <summary>
-	  /// The operand of this instruction. This operand is the index of a local variable. </summary>
-	  public int var;
+        /// <summary>
+        /// Sets the opcode of this instruction.
+        /// </summary>
+        /// <param name = "opcode"> the new instruction opcode. This opcode must be ILOAD, LLOAD, FLOAD, DLOAD,
+        ///     ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET. </param>
+        public virtual int Opcode { set => this.opcode = value; }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="VarInsnNode"/>.
-	  /// </summary>
-	  /// <param name="opcode"> the opcode of the local variable instruction to be constructed. This opcode must
-	  ///     be ILOAD, LLOAD, FLOAD, DLOAD, ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET. </param>
-	  /// <param name="var"> the operand of the instruction to be constructed. This operand is the index of a
-	  ///     local variable. </param>
-	  public VarInsnNode(int opcode, int var) : base(opcode)
-	  {
-		this.var = var;
-	  }
+        public override int Type => Var_Insn;
+        public override void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitVarInsn(opcode, var);
+            AcceptAnnotations(methodVisitor);
+        }
 
-	  /// <summary>
-	  /// Sets the opcode of this instruction.
-	  /// </summary>
-	  /// <param name="opcode"> the new instruction opcode. This opcode must be ILOAD, LLOAD, FLOAD, DLOAD,
-	  ///     ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET. </param>
-	  public virtual int Opcode
-	  {
-		  set => this.opcode = value;
-      }
-
-	  public override int Type => Var_Insn;
-
-      public override void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitVarInsn(opcode, var);
-		AcceptAnnotations(methodVisitor);
-	  }
-
-	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
-	  {
-		return (new VarInsnNode(opcode, var)).CloneAnnotations(this);
-	  }
-	}
-
+        public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+        {
+            return (new VarInsnNode(opcode, var)).CloneAnnotations(this);
+        }
+    }
 }

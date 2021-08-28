@@ -1,5 +1,3 @@
-﻿
-
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
 // All rights reserved.
@@ -29,51 +27,48 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a required module with its name and access of a module descriptor.
+    /// 
+    /// @author Remi Forax
+    /// </summary>
+    public class ModuleRequireNode
+    {
+        /// <summary>
+        /// The fully qualified name (using dots) of the dependence. </summary>
+        public string Module { get; set; }
 
-	/// <summary>
-	/// A node that represents a required module with its name and access of a module descriptor.
-	/// 
-	/// @author Remi Forax
-	/// </summary>
-	public class ModuleRequireNode
-	{
+        /// <summary>
+        /// The access flag of the dependence among {@code ACC_TRANSITIVE}, {@code ACC_STATIC_PHASE},
+        /// {@code ACC_SYNTHETIC} and {@code ACC_MANDATED}.
+        /// </summary>
+        public int Access { get; set; }
 
-	  /// <summary>
-	  /// The fully qualified name (using dots) of the dependence. </summary>
-	  public string module;
+        /// <summary>
+        /// The module version at compile time, or {@literal null}. </summary>
+        public string Version { get; set; }
 
-	  /// <summary>
-	  /// The access flag of the dependence among {@code ACC_TRANSITIVE}, {@code ACC_STATIC_PHASE},
-	  /// {@code ACC_SYNTHETIC} and {@code ACC_MANDATED}.
-	  /// </summary>
-	  public int access;
+        /// <summary>
+        /// Constructs a new <seealso cref = "ModuleRequireNode"/>.
+        /// </summary>
+        /// <param name = "module"> the fully qualified name (using dots) of the dependence. </param>
+        /// <param name = "access"> the access flag of the dependence among {@code ACC_TRANSITIVE}, {@code
+        ///     ACC_STATIC_PHASE}, {@code ACC_SYNTHETIC} and {@code ACC_MANDATED}. </param>
+        /// <param name = "version"> the module version at compile time, or {@literal null}. </param>
+        public ModuleRequireNode(string module, int access, string version)
+        {
+            this.Module = module;
+            this.Access = access;
+            this.Version = version;
+        }
 
-	  /// <summary>
-	  /// The module version at compile time, or {@literal null}. </summary>
-	  public string version;
-
-	  /// <summary>
-	  /// Constructs a new <seealso cref="ModuleRequireNode"/>.
-	  /// </summary>
-	  /// <param name="module"> the fully qualified name (using dots) of the dependence. </param>
-	  /// <param name="access"> the access flag of the dependence among {@code ACC_TRANSITIVE}, {@code
-	  ///     ACC_STATIC_PHASE}, {@code ACC_SYNTHETIC} and {@code ACC_MANDATED}. </param>
-	  /// <param name="version"> the module version at compile time, or {@literal null}. </param>
-	  public ModuleRequireNode(string module, int access, string version)
-	  {
-		this.module = module;
-		this.access = access;
-		this.version = version;
-	  }
-
-	  /// <summary>
-	  /// Makes the given module visitor visit this require directive.
-	  /// </summary>
-	  /// <param name="moduleVisitor"> a module visitor. </param>
-	  public virtual void Accept(ModuleVisitor moduleVisitor)
-	  {
-		moduleVisitor.VisitRequire(module, access, version);
-	  }
-	}
-
+        /// <summary>
+        /// Makes the given module visitor visit this require directive.
+        /// </summary>
+        /// <param name = "moduleVisitor"> a module visitor. </param>
+        public virtual void Accept(ModuleVisitor moduleVisitor)
+        {
+            moduleVisitor.VisitRequire(module, access, version);
+        }
+    }
 }

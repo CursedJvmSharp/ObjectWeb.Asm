@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,43 +29,40 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a service and its implementation provided by the current module.
+    /// 
+    /// @author Remi Forax
+    /// </summary>
+    public class ModuleProvideNode
+    {
+        /// <summary>
+        /// The internal name of the service. </summary>
+        public string Service { get; set; }
 
-	/// <summary>
-	/// A node that represents a service and its implementation provided by the current module.
-	/// 
-	/// @author Remi Forax
-	/// </summary>
-	public class ModuleProvideNode
-	{
+        /// <summary>
+        /// The internal names of the implementations of the service (there is at least one provider). </summary>
+        public List<string> Providers { get; set; }
 
-	  /// <summary>
-	  /// The internal name of the service. </summary>
-	  public string service;
+        /// <summary>
+        /// Constructs a new <seealso cref = "ModuleProvideNode"/>.
+        /// </summary>
+        /// <param name = "service"> the internal name of the service. </param>
+        /// <param name = "providers"> the internal names of the implementations of the service (there is at least
+        ///     one provider). </param>
+        public ModuleProvideNode(string service, List<string> providers)
+        {
+            this.Service = service;
+            this.Providers = providers;
+        }
 
-	  /// <summary>
-	  /// The internal names of the implementations of the service (there is at least one provider). </summary>
-	  public List<string> providers;
-
-	  /// <summary>
-	  /// Constructs a new <seealso cref="ModuleProvideNode"/>.
-	  /// </summary>
-	  /// <param name="service"> the internal name of the service. </param>
-	  /// <param name="providers"> the internal names of the implementations of the service (there is at least
-	  ///     one provider). </param>
-	  public ModuleProvideNode(string service, List<string> providers)
-	  {
-		this.service = service;
-		this.providers = providers;
-	  }
-
-	  /// <summary>
-	  /// Makes the given module visitor visit this require declaration.
-	  /// </summary>
-	  /// <param name="moduleVisitor"> a module visitor. </param>
-	  public virtual void Accept(ModuleVisitor moduleVisitor)
-	  {
-		moduleVisitor.VisitProvide(service, ((List<string>)providers).ToArray());
-	  }
-	}
-
+        /// <summary>
+        /// Makes the given module visitor visit this require declaration.
+        /// </summary>
+        /// <param name = "moduleVisitor"> a module visitor. </param>
+        public virtual void Accept(ModuleVisitor moduleVisitor)
+        {
+            moduleVisitor.VisitProvide(service, ((List<string>)providers).ToArray());
+        }
+    }
 }

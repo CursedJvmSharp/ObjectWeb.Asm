@@ -1,5 +1,3 @@
-﻿
-
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
 // All rights reserved.
@@ -29,59 +27,56 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents a type annotation.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class TypeAnnotationNode : AnnotationNode
+    {
+        /// <summary>
+        /// A reference to the annotated type. See <seealso cref = "TypeReference"/>. </summary>
+        public int TypeRef { get; set; }
 
-	/// <summary>
-	/// A node that represents a type annotation.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class TypeAnnotationNode : AnnotationNode
-	{
+        /// <summary>
+        /// The path to the annotated type argument, wildcard bound, array element type, or static outer
+        /// type within the referenced type. May be {@literal null} if the annotation targets 'typeRef' as
+        /// a whole.
+        /// </summary>
+        public TypePath TypePath { get; set; }
 
-	  /// <summary>
-	  /// A reference to the annotated type. See <seealso cref="TypeReference"/>. </summary>
-	  public int typeRef;
+        /// <summary>
+        /// Constructs a new <seealso cref = "AnnotationNode"/>. <i>Subclasses must not use this constructor</i>.
+        /// Instead, they must use the <seealso cref = "TypeAnnotationNode(int, int, TypePath, String)"/> version.
+        /// </summary>
+        /// <param name = "typeRef"> a reference to the annotated type. See <seealso cref = "org.objectweb.asm.TypeReference"/>. </param>
+        /// <param name = "typePath"> the path to the annotated type argument, wildcard bound, array element type, or
+        ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets
+        ///     'typeRef' as a whole. </param>
+        /// <param name = "descriptor"> the class descriptor of the annotation class. </param>
+        /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
+        public TypeAnnotationNode(int typeRef, TypePath typePath, string descriptor): this(IOpcodes.Asm9, typeRef, typePath, descriptor)
+        {
+            if (this.GetType() != typeof(TypeAnnotationNode))
+            {
+                throw new System.InvalidOperationException();
+            }
+        }
 
-	  /// <summary>
-	  /// The path to the annotated type argument, wildcard bound, array element type, or static outer
-	  /// type within the referenced type. May be {@literal null} if the annotation targets 'typeRef' as
-	  /// a whole.
-	  /// </summary>
-	  public TypePath typePath;
-
-	  /// <summary>
-	  /// Constructs a new <seealso cref="AnnotationNode"/>. <i>Subclasses must not use this constructor</i>.
-	  /// Instead, they must use the <seealso cref="TypeAnnotationNode(int, int, TypePath, String)"/> version.
-	  /// </summary>
-	  /// <param name="typeRef"> a reference to the annotated type. See <seealso cref="org.objectweb.asm.TypeReference"/>. </param>
-	  /// <param name="typePath"> the path to the annotated type argument, wildcard bound, array element type, or
-	  ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets
-	  ///     'typeRef' as a whole. </param>
-	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
-	  /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-	  public TypeAnnotationNode(int typeRef, TypePath typePath, string descriptor) : this(IOpcodes.Asm9, typeRef, typePath, descriptor)
-	  {
-		if (this.GetType() != typeof(TypeAnnotationNode))
-		{
-		  throw new System.InvalidOperationException();
-		}
-	  }
-
-	  /// <summary>
-	  /// Constructs a new <seealso cref="AnnotationNode"/>.
-	  /// </summary>
-	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
-	  /// <param name="typeRef"> a reference to the annotated type. See <seealso cref="TypeReference"/>. </param>
-	  /// <param name="typePath"> the path to the annotated type argument, wildcard bound, array element type, or
-	  ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets
-	  ///     'typeRef' as a whole. </param>
-	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
-	  public TypeAnnotationNode(int api, int typeRef, TypePath typePath, string descriptor) : base(api, descriptor)
-	  {
-		this.typeRef = typeRef;
-		this.typePath = typePath;
-	  }
-	}
-
+        /// <summary>
+        /// Constructs a new <seealso cref = "AnnotationNode"/>.
+        /// </summary>
+        /// <param name = "api"> the ASM API version implemented by this visitor. Must be one of the {@code
+        ///     ASM}<i>x</i> values in <seealso cref = "IOpcodes"/>. </param>
+        /// <param name = "typeRef"> a reference to the annotated type. See <seealso cref = "TypeReference"/>. </param>
+        /// <param name = "typePath"> the path to the annotated type argument, wildcard bound, array element type, or
+        ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets
+        ///     'typeRef' as a whole. </param>
+        /// <param name = "descriptor"> the class descriptor of the annotation class. </param>
+        public TypeAnnotationNode(int api, int typeRef, TypePath typePath, string descriptor): base(api, descriptor)
+        {
+            this.TypeRef = typeRef;
+            this.TypePath = typePath;
+        }
+    }
 }

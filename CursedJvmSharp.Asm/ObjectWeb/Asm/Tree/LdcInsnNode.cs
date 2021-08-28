@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,50 +29,46 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents an LDC instruction.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class LdcInsnNode : AbstractInsnNode
+    {
+        /// <summary>
+        /// The constant to be loaded on the stack. This field must be a non null <seealso cref = "Integer"/>, a {@link
+        /// Float}, a <seealso cref = "Long"/>, a <seealso cref = "Double"/>, a <seealso cref = "string "/>, a <seealso cref = "Type"/> of OBJECT or ARRAY
+        /// sort for {@code .class} constants, for classes whose version is 49, a <seealso cref = "Type"/> of METHOD
+        /// sort for MethodType, a <seealso cref = "Handle"/> for MethodHandle constants, for classes whose version is
+        /// 51 or a <seealso cref = "ConstantDynamic"/> for a constant dynamic for classes whose version is 55.
+        /// </summary>
+        public object Cst { get; set; }
 
-	/// <summary>
-	/// A node that represents an LDC instruction.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class LdcInsnNode : AbstractInsnNode
-	{
+        /// <summary>
+        /// Constructs a new <seealso cref = "LdcInsnNode"/>.
+        /// </summary>
+        /// <param name = "value"> the constant to be loaded on the stack. This parameter mist be a non null {@link
+        ///     Integer}, a <seealso cref = "Float"/>, a <seealso cref = "Long"/>, a <seealso cref = "Double"/>, a <seealso cref = "string "/>, a {@link
+        ///     Type} of OBJECT or ARRAY sort for {@code .class} constants, for classes whose version is
+        ///     49, a <seealso cref = "Type"/> of METHOD sort for MethodType, a <seealso cref = "Handle"/> for MethodHandle
+        ///     constants, for classes whose version is 51 or a <seealso cref = "ConstantDynamic"/> for a constant
+        ///     dynamic for classes whose version is 55. </param>
+        public LdcInsnNode(object value): base(IOpcodes.Ldc)
+        {
+            this.Cst = value;
+        }
 
-	  /// <summary>
-	  /// The constant to be loaded on the stack. This field must be a non null <seealso cref="Integer"/>, a {@link
-	  /// Float}, a <seealso cref="Long"/>, a <seealso cref="Double"/>, a <seealso cref="string"/>, a <seealso cref="Type"/> of OBJECT or ARRAY
-	  /// sort for {@code .class} constants, for classes whose version is 49, a <seealso cref="Type"/> of METHOD
-	  /// sort for MethodType, a <seealso cref="Handle"/> for MethodHandle constants, for classes whose version is
-	  /// 51 or a <seealso cref="ConstantDynamic"/> for a constant dynamic for classes whose version is 55.
-	  /// </summary>
-	  public object cst;
+        public override int Type => Ldc_Insn;
+        public override void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitLdcInsn(cst);
+            AcceptAnnotations(methodVisitor);
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="LdcInsnNode"/>.
-	  /// </summary>
-	  /// <param name="value"> the constant to be loaded on the stack. This parameter mist be a non null {@link
-	  ///     Integer}, a <seealso cref="Float"/>, a <seealso cref="Long"/>, a <seealso cref="Double"/>, a <seealso cref="string"/>, a {@link
-	  ///     Type} of OBJECT or ARRAY sort for {@code .class} constants, for classes whose version is
-	  ///     49, a <seealso cref="Type"/> of METHOD sort for MethodType, a <seealso cref="Handle"/> for MethodHandle
-	  ///     constants, for classes whose version is 51 or a <seealso cref="ConstantDynamic"/> for a constant
-	  ///     dynamic for classes whose version is 55. </param>
-	  public LdcInsnNode(object value) : base(IOpcodes.Ldc)
-	  {
-		this.cst = value;
-	  }
-
-	  public override int Type => Ldc_Insn;
-
-      public override void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitLdcInsn(cst);
-		AcceptAnnotations(methodVisitor);
-	  }
-
-	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
-	  {
-		return (new LdcInsnNode(cst)).CloneAnnotations(this);
-	  }
-	}
-
+        public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+        {
+            return (new LdcInsnNode(cst)).CloneAnnotations(this);
+        }
+    }
 }

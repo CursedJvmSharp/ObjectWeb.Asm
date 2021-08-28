@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,54 +29,51 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents an exported package with its name and the module that can access to it.
+    /// 
+    /// @author Remi Forax
+    /// </summary>
+    public class ModuleExportNode
+    {
+        /// <summary>
+        /// The internal name of the exported package. </summary>
+        public string Packaze { get; set; }
 
-	/// <summary>
-	/// A node that represents an exported package with its name and the module that can access to it.
-	/// 
-	/// @author Remi Forax
-	/// </summary>
-	public class ModuleExportNode
-	{
+        /// <summary>
+        /// The access flags (see <seealso cref = "IOpcodes"/>). Valid values are {@code
+        /// ACC_SYNTHETIC} and {@code ACC_MANDATED}.
+        /// </summary>
+        public int Access { get; set; }
 
-	  /// <summary>
-	  /// The internal name of the exported package. </summary>
-	  public string packaze;
+        /// <summary>
+        /// The list of modules that can access this exported package, specified with fully qualified names
+        /// (using dots). May be {@literal null}.
+        /// </summary>
+        public List<string> Modules { get; set; }
 
-	  /// <summary>
-	  /// The access flags (see <seealso cref="IOpcodes"/>). Valid values are {@code
-	  /// ACC_SYNTHETIC} and {@code ACC_MANDATED}.
-	  /// </summary>
-	  public int access;
+        /// <summary>
+        /// Constructs a new <seealso cref = "ModuleExportNode"/>.
+        /// </summary>
+        /// <param name = "packaze"> the internal name of the exported package. </param>
+        /// <param name = "access"> the package access flags, one or more of {@code ACC_SYNTHETIC} and {@code
+        ///     ACC_MANDATED}. </param>
+        /// <param name = "modules"> a list of modules that can access this exported package, specified with fully
+        ///     qualified names (using dots). </param>
+        public ModuleExportNode(string packaze, int access, List<string> modules)
+        {
+            this.Packaze = packaze;
+            this.Access = access;
+            this.Modules = modules;
+        }
 
-	  /// <summary>
-	  /// The list of modules that can access this exported package, specified with fully qualified names
-	  /// (using dots). May be {@literal null}.
-	  /// </summary>
-	  public List<string> modules;
-
-	  /// <summary>
-	  /// Constructs a new <seealso cref="ModuleExportNode"/>.
-	  /// </summary>
-	  /// <param name="packaze"> the internal name of the exported package. </param>
-	  /// <param name="access"> the package access flags, one or more of {@code ACC_SYNTHETIC} and {@code
-	  ///     ACC_MANDATED}. </param>
-	  /// <param name="modules"> a list of modules that can access this exported package, specified with fully
-	  ///     qualified names (using dots). </param>
-	  public ModuleExportNode(string packaze, int access, List<string> modules)
-	  {
-		this.packaze = packaze;
-		this.access = access;
-		this.modules = modules;
-	  }
-
-	  /// <summary>
-	  /// Makes the given module visitor visit this export declaration.
-	  /// </summary>
-	  /// <param name="moduleVisitor"> a module visitor. </param>
-	  public virtual void Accept(ModuleVisitor moduleVisitor)
-	  {
-		moduleVisitor.VisitExport(packaze, access, modules == null ? null : ((List<string>)modules).ToArray());
-	  }
-	}
-
+        /// <summary>
+        /// Makes the given module visitor visit this export declaration.
+        /// </summary>
+        /// <param name = "moduleVisitor"> a module visitor. </param>
+        public virtual void Accept(ModuleVisitor moduleVisitor)
+        {
+            moduleVisitor.VisitExport(packaze, access, modules == null ? null : ((List<string>)modules).ToArray());
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -29,51 +29,44 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 namespace ObjectWeb.Asm.Tree
 {
+    /// <summary>
+    /// A node that represents an instruction with a single int operand.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    public class IntInsnNode : AbstractInsnNode
+    {
+        /// <summary>
+        /// The operand of this instruction. </summary>
+        public int Operand { get; set; }
 
-	/// <summary>
-	/// A node that represents an instruction with a single int operand.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	public class IntInsnNode : AbstractInsnNode
-	{
+        /// <summary>
+        /// Constructs a new <seealso cref = "IntInsnNode"/>.
+        /// </summary>
+        /// <param name = "opcode"> the opcode of the instruction to be constructed. This opcode must be BIPUSH,
+        ///     SIPUSH or NEWARRAY. </param>
+        /// <param name = "operand"> the operand of the instruction to be constructed. </param>
+        public IntInsnNode(int opcode, int operand): base(opcode)
+        {
+            this.Operand = operand;
+        }
 
-	  /// <summary>
-	  /// The operand of this instruction. </summary>
-	  public int operand;
+        /// <summary>
+        /// Sets the opcode of this instruction.
+        /// </summary>
+        /// <param name = "opcode"> the new instruction opcode. This opcode must be BIPUSH, SIPUSH or NEWARRAY. </param>
+        public virtual int Opcode { set => this.opcode = value; }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="IntInsnNode"/>.
-	  /// </summary>
-	  /// <param name="opcode"> the opcode of the instruction to be constructed. This opcode must be BIPUSH,
-	  ///     SIPUSH or NEWARRAY. </param>
-	  /// <param name="operand"> the operand of the instruction to be constructed. </param>
-	  public IntInsnNode(int opcode, int operand) : base(opcode)
-	  {
-		this.operand = operand;
-	  }
+        public override int Type => Int_Insn;
+        public override void Accept(MethodVisitor methodVisitor)
+        {
+            methodVisitor.VisitIntInsn(opcode, operand);
+            AcceptAnnotations(methodVisitor);
+        }
 
-	  /// <summary>
-	  /// Sets the opcode of this instruction.
-	  /// </summary>
-	  /// <param name="opcode"> the new instruction opcode. This opcode must be BIPUSH, SIPUSH or NEWARRAY. </param>
-	  public virtual int Opcode
-	  {
-		  set => this.opcode = value;
-      }
-
-	  public override int Type => Int_Insn;
-
-      public override void Accept(MethodVisitor methodVisitor)
-	  {
-		methodVisitor.VisitIntInsn(opcode, operand);
-		AcceptAnnotations(methodVisitor);
-	  }
-
-	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
-	  {
-		return (new IntInsnNode(opcode, operand)).CloneAnnotations(this);
-	  }
-	}
-
+        public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+        {
+            return (new IntInsnNode(opcode, operand)).CloneAnnotations(this);
+        }
+    }
 }
