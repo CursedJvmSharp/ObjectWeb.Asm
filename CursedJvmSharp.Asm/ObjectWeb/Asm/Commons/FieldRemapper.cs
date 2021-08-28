@@ -30,77 +30,81 @@
 
 namespace ObjectWeb.Asm.Commons
 {
+    /// <summary>
+    ///     A <seealso cref="FieldVisitor" /> that remaps types with a <seealso cref="Remapper" />.
+    ///     @author Eugene Kuleshov
+    /// </summary>
+    public class FieldRemapper : FieldVisitor
+    {
+        /// <summary>
+        ///     The remapper used to remap the types in the visited field.
+        /// </summary>
+        protected internal readonly Remapper remapper;
 
-	/// <summary>
-	/// A <seealso cref="FieldVisitor"/> that remaps types with a <seealso cref="Remapper"/>.
-	/// 
-	/// @author Eugene Kuleshov
-	/// </summary>
-	public class FieldRemapper : FieldVisitor
-	{
+        /// <summary>
+        ///     Constructs a new <seealso cref="FieldRemapper" />. <i>Subclasses must not use this constructor</i>.
+        ///     Instead, they must use the <seealso cref="FieldRemapper(int,FieldVisitor,Remapper)" /> version.
+        /// </summary>
+        /// <param name="fieldVisitor"> the field visitor this remapper must delegate to. </param>
+        /// <param name="remapper"> the remapper to use to remap the types in the visited field. </param>
+        public FieldRemapper(FieldVisitor fieldVisitor, Remapper remapper) : this(Opcodes.ASM9, fieldVisitor, remapper)
+        {
+        }
 
-	  /// <summary>
-	  /// The remapper used to remap the types in the visited field. </summary>
-	  protected internal readonly Remapper remapper;
+        /// <summary>
+        ///     Constructs a new <seealso cref="FieldRemapper" />.
+        /// </summary>
+        /// <param name="api">
+        ///     the ASM API version supported by this remapper. Must be one of the {@code
+        ///     ASM}<i>x</i> values in <seealso cref="Opcodes" />.
+        /// </param>
+        /// <param name="fieldVisitor"> the field visitor this remapper must delegate to. </param>
+        /// <param name="remapper"> the remapper to use to remap the types in the visited field. </param>
+        public FieldRemapper(int api, FieldVisitor fieldVisitor, Remapper remapper) : base(api, fieldVisitor)
+        {
+            this.remapper = remapper;
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="FieldRemapper"/>. <i>Subclasses must not use this constructor</i>.
-	  /// Instead, they must use the <seealso cref="FieldRemapper(int,FieldVisitor,Remapper)"/> version.
-	  /// </summary>
-	  /// <param name="fieldVisitor"> the field visitor this remapper must delegate to. </param>
-	  /// <param name="remapper"> the remapper to use to remap the types in the visited field. </param>
-	  public FieldRemapper(FieldVisitor fieldVisitor, Remapper remapper) : this(Opcodes.ASM9, fieldVisitor, remapper)
-	  {
-	  }
+        public override AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+        {
+            var annotationVisitor = base.visitAnnotation(remapper.mapDesc(descriptor), visible);
+            return annotationVisitor == null ? null : createAnnotationRemapper(descriptor, annotationVisitor);
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="FieldRemapper"/>.
-	  /// </summary>
-	  /// <param name="api"> the ASM API version supported by this remapper. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
-	  /// <param name="fieldVisitor"> the field visitor this remapper must delegate to. </param>
-	  /// <param name="remapper"> the remapper to use to remap the types in the visited field. </param>
-	  public FieldRemapper(int api, FieldVisitor fieldVisitor, Remapper remapper) : base(api, fieldVisitor)
-	  {
-		this.remapper = remapper;
-	  }
+        public override AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+            bool visible)
+        {
+            var annotationVisitor = base.visitTypeAnnotation(typeRef, typePath, remapper.mapDesc(descriptor), visible);
+            return annotationVisitor == null ? null : createAnnotationRemapper(descriptor, annotationVisitor);
+        }
 
-	  public override AnnotationVisitor visitAnnotation(string descriptor, bool visible)
-	  {
-		AnnotationVisitor annotationVisitor = base.visitAnnotation(remapper.mapDesc(descriptor), visible);
-		return annotationVisitor == null ? null : createAnnotationRemapper(descriptor, annotationVisitor);
-	  }
+        /// <summary>
+        ///     Constructs a new remapper for annotations. The default implementation of this method returns a
+        ///     new <seealso cref="AnnotationRemapper" />.
+        /// </summary>
+        /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
+        /// <returns> the newly created remapper. </returns>
+        /// @deprecated use
+        /// <seealso cref="createAnnotationRemapper(string, AnnotationVisitor)" />
+        /// instead.
+        [Obsolete("use <seealso cref=\"createAnnotationRemapper(String, AnnotationVisitor)\"/> instead.")]
+        public virtual AnnotationVisitor createAnnotationRemapper(AnnotationVisitor annotationVisitor)
+        {
+            return new AnnotationRemapper(api, null, annotationVisitor, remapper);
+        }
 
-	  public override AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
-	  {
-		AnnotationVisitor annotationVisitor = base.visitTypeAnnotation(typeRef, typePath, remapper.mapDesc(descriptor), visible);
-		return annotationVisitor == null ? null : createAnnotationRemapper(descriptor, annotationVisitor);
-	  }
-
-	  /// <summary>
-	  /// Constructs a new remapper for annotations. The default implementation of this method returns a
-	  /// new <seealso cref="AnnotationRemapper"/>.
-	  /// </summary>
-	  /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
-	  /// <returns> the newly created remapper. </returns>
-	  /// @deprecated use <seealso cref="createAnnotationRemapper(String, AnnotationVisitor)"/> instead. 
-	  [Obsolete("use <seealso cref=\"createAnnotationRemapper(String, AnnotationVisitor)\"/> instead.")]
-	  public virtual AnnotationVisitor createAnnotationRemapper(AnnotationVisitor annotationVisitor)
-	  {
-		return new AnnotationRemapper(api, null, annotationVisitor, remapper);
-	  }
-
-	  /// <summary>
-	  /// Constructs a new remapper for annotations. The default implementation of this method returns a
-	  /// new <seealso cref="AnnotationRemapper"/>.
-	  /// </summary>
-	  /// <param name="descriptor"> the descriptor of the visited annotation. </param>
-	  /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
-	  /// <returns> the newly created remapper. </returns>
-	  public virtual AnnotationVisitor createAnnotationRemapper(string descriptor, AnnotationVisitor annotationVisitor)
-	  {
-		return (new AnnotationRemapper(api, descriptor, annotationVisitor, remapper)).orDeprecatedValue(createAnnotationRemapper(annotationVisitor));
-	  }
-	}
-
+        /// <summary>
+        ///     Constructs a new remapper for annotations. The default implementation of this method returns a
+        ///     new <seealso cref="AnnotationRemapper" />.
+        /// </summary>
+        /// <param name="descriptor"> the descriptor of the visited annotation. </param>
+        /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
+        /// <returns> the newly created remapper. </returns>
+        public virtual AnnotationVisitor createAnnotationRemapper(string descriptor,
+            AnnotationVisitor annotationVisitor)
+        {
+            return new AnnotationRemapper(api, descriptor, annotationVisitor, remapper).orDeprecatedValue(
+                createAnnotationRemapper(annotationVisitor));
+        }
+    }
 }

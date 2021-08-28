@@ -201,8 +201,8 @@ namespace Java.IO
         /// <exception cref="IOException" />
         public void WriteShort(int v)
         {
-            Write((byte)((byte) ((uint) v >> 8) & 0xFF));
-            Write((byte)((byte) ((uint) v >> 0) & 0xFF));
+            Write((byte)((byte)((uint)v >> 8) & 0xFF));
+            Write((byte)((byte)((uint)v >> 0) & 0xFF));
             IncCount(2);
         }
 
@@ -224,8 +224,8 @@ namespace Java.IO
         /// <exception cref="IOException" />
         public void WriteChar(int v)
         {
-            Write((byte)((int) ((uint) v >> 8) & 0xFF));
-            Write((byte)((int) ((uint) v >> 0) & 0xFF));
+            Write((byte)((int)((uint)v >> 8) & 0xFF));
+            Write((byte)((int)((uint)v >> 0) & 0xFF));
             IncCount(2);
         }
 
@@ -247,10 +247,10 @@ namespace Java.IO
         /// <exception cref="IOException" />
         public void WriteInt(int v)
         {
-            Write((byte)((int) ((uint) v >> 24) & 0xFF));
-            Write((byte)((int) ((uint) v >> 16) & 0xFF));
-            Write((byte)((int) ((uint) v >> 8) & 0xFF));
-            Write((byte)((int) ((uint) v >> 0) & 0xFF));
+            Write((byte)((int)((uint)v >> 24) & 0xFF));
+            Write((byte)((int)((uint)v >> 16) & 0xFF));
+            Write((byte)((int)((uint)v >> 8) & 0xFF));
+            Write((byte)((int)((uint)v >> 0) & 0xFF));
             IncCount(4);
         }
 
@@ -272,14 +272,14 @@ namespace Java.IO
         /// <exception cref="IOException" />
         public void WriteLong(long v)
         {
-            writeBuffer[0] = unchecked((byte) (long) ((ulong) v >> 56));
-            writeBuffer[1] = unchecked((byte) (long) ((ulong) v >> 48));
-            writeBuffer[2] = unchecked((byte) (long) ((ulong) v >> 40));
-            writeBuffer[3] = unchecked((byte) (long) ((ulong) v >> 32));
-            writeBuffer[4] = unchecked((byte) (long) ((ulong) v >> 24));
-            writeBuffer[5] = unchecked((byte) (long) ((ulong) v >> 16));
-            writeBuffer[6] = unchecked((byte) (long) ((ulong) v >> 8));
-            writeBuffer[7] = unchecked((byte) (long) ((ulong) v >> 0));
+            writeBuffer[0] = unchecked((byte)(long)((ulong)v >> 56));
+            writeBuffer[1] = unchecked((byte)(long)((ulong)v >> 48));
+            writeBuffer[2] = unchecked((byte)(long)((ulong)v >> 40));
+            writeBuffer[3] = unchecked((byte)(long)((ulong)v >> 32));
+            writeBuffer[4] = unchecked((byte)(long)((ulong)v >> 24));
+            writeBuffer[5] = unchecked((byte)(long)((ulong)v >> 16));
+            writeBuffer[6] = unchecked((byte)(long)((ulong)v >> 8));
+            writeBuffer[7] = unchecked((byte)(long)((ulong)v >> 0));
             _out.Write(writeBuffer, 0, 8);
             IncCount(8);
         }
@@ -359,7 +359,7 @@ namespace Java.IO
         public void WriteBytes(string s)
         {
             var len = s.Length;
-            for (var i = 0; i < len; i++) Write(unchecked((byte) s[i]));
+            for (var i = 0; i < len; i++) Write(unchecked((byte)s[i]));
             IncCount(len);
         }
 
@@ -388,8 +388,8 @@ namespace Java.IO
             for (var i = 0; i < len; i++)
             {
                 int v = s[i];
-                Write((byte)((int) ((uint) v >> 8) & 0xFF));
-                Write((byte)((int) ((uint) v >> 0) & 0xFF));
+                Write((byte)((int)((uint)v >> 8) & 0xFF));
+                Write((byte)((int)((uint)v >> 0) & 0xFF));
             }
 
             IncCount(len * 2);
@@ -425,6 +425,11 @@ namespace Java.IO
         public void WriteUTF(string str)
         {
             WriteUTF(str, this);
+        }
+
+        public void Dispose()
+        {
+            _out?.Dispose();
         }
 
         /// <summary>
@@ -508,7 +513,7 @@ namespace Java.IO
             byte[] bytearr = null;
             if (@out is DataOutputStream)
             {
-                var dos = (DataOutputStream) @out;
+                var dos = (DataOutputStream)@out;
                 if (dos.bytearr == null || dos.bytearr.Length < utflen + 2) dos.bytearr = new byte[utflen * 2 + 2];
                 bytearr = dos.bytearr;
             }
@@ -517,14 +522,14 @@ namespace Java.IO
                 bytearr = new byte[utflen + 2];
             }
 
-            bytearr[count++] = unchecked((byte) ((int) ((uint) utflen >> 8) & 0xFF));
-            bytearr[count++] = unchecked((byte) ((int) ((uint) utflen >> 0) & 0xFF));
+            bytearr[count++] = unchecked((byte)((int)((uint)utflen >> 8) & 0xFF));
+            bytearr[count++] = unchecked((byte)((int)((uint)utflen >> 0) & 0xFF));
             var i_1 = 0;
             for (i_1 = 0; i_1 < strlen; i_1++)
             {
                 c = str[i_1];
                 if (!(c >= 0x0001 && c <= 0x007F)) break;
-                bytearr[count++] = unchecked((byte) c);
+                bytearr[count++] = unchecked((byte)c);
             }
 
             for (; i_1 < strlen; i_1++)
@@ -532,18 +537,18 @@ namespace Java.IO
                 c = str[i_1];
                 if (c >= 0x0001 && c <= 0x007F)
                 {
-                    bytearr[count++] = unchecked((byte) c);
+                    bytearr[count++] = unchecked((byte)c);
                 }
                 else if (c > 0x07FF)
                 {
-                    bytearr[count++] = unchecked((byte) (0xE0 | ((c >> 12) & 0x0F)));
-                    bytearr[count++] = unchecked((byte) (0x80 | ((c >> 6) & 0x3F)));
-                    bytearr[count++] = unchecked((byte) (0x80 | ((c >> 0) & 0x3F)));
+                    bytearr[count++] = unchecked((byte)(0xE0 | ((c >> 12) & 0x0F)));
+                    bytearr[count++] = unchecked((byte)(0x80 | ((c >> 6) & 0x3F)));
+                    bytearr[count++] = unchecked((byte)(0x80 | ((c >> 0) & 0x3F)));
                 }
                 else
                 {
-                    bytearr[count++] = unchecked((byte) (0xC0 | ((c >> 6) & 0x1F)));
-                    bytearr[count++] = unchecked((byte) (0x80 | ((c >> 0) & 0x3F)));
+                    bytearr[count++] = unchecked((byte)(0xC0 | ((c >> 6) & 0x1F)));
+                    bytearr[count++] = unchecked((byte)(0x80 | ((c >> 0) & 0x3F)));
                 }
             }
 
@@ -565,11 +570,6 @@ namespace Java.IO
         public int Size()
         {
             return written;
-        }
-
-        public void Dispose()
-        {
-            _out?.Dispose();
         }
     }
 }

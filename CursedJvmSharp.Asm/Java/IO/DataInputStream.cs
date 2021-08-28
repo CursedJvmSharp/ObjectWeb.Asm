@@ -25,6 +25,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Java.IO
 {
@@ -46,7 +47,7 @@ namespace Java.IO
     /// <author>Arthur van Hoff</author>
     /// <seealso cref="DataOutputStream" />
     /// <since>JDK1.0</since>
-    [System.Runtime.InteropServices.Guid("61B42867-2D34-4F4D-8853-2DA855000EED")]
+    [Guid("61B42867-2D34-4F4D-8853-2DA855000EED")]
     public class DataInputStream : DataInput, IDisposable
     {
         private readonly MemoryStream _in;
@@ -568,6 +569,11 @@ namespace Java.IO
             return ReadUTF(this);
         }
 
+        public void Dispose()
+        {
+            _in?.Dispose();
+        }
+
         /// <summary>
         ///     Reads some number of bytes from the contained input stream and
         ///     stores them into the buffer array <code>b</code>.
@@ -682,7 +688,7 @@ namespace Java.IO
         /// <seealso cref="FilterInputStream.@in" />
         /// <seealso cref="InputStream.Read(byte[], int, int)" />
         /// <exception cref="IOException" />
-        public  int Read(byte[] b, int off, int len)
+        public int Read(byte[] b, int off, int len)
         {
             return _in.Read(b, off, len);
         }
@@ -822,11 +828,6 @@ namespace Java.IO
 
             // The number of chars produced may be less than utflen
             return new string(chararr, 0, chararr_count);
-        }
-
-        public void Dispose()
-        {
-            _in?.Dispose();
         }
     }
 }

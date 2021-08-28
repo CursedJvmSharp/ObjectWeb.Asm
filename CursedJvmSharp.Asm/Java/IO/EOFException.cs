@@ -28,23 +28,23 @@ using System.IO;
 
 namespace Java.IO
 {
-	/// <summary>
-	///     Signals that an end of file or end of stream has been reached
-	///     unexpectedly during input.
-	/// </summary>
-	/// <remarks>
-	///     Signals that an end of file or end of stream has been reached
-	///     unexpectedly during input.
-	///     <p>
-	///         This exception is mainly used by data input streams to signal end of
-	///         stream. Note that many other input operations return a special value on
-	///         end of stream rather than throwing an exception.
-	/// </remarks>
-	/// <author>Frank Yellin</author>
-	/// <seealso cref="DataInputStream" />
-	/// <seealso cref="IOException" />
-	/// <since>JDK1.0</since>
-	[Serializable]
+    /// <summary>
+    ///     Signals that an end of file or end of stream has been reached
+    ///     unexpectedly during input.
+    /// </summary>
+    /// <remarks>
+    ///     Signals that an end of file or end of stream has been reached
+    ///     unexpectedly during input.
+    ///     <p>
+    ///         This exception is mainly used by data input streams to signal end of
+    ///         stream. Note that many other input operations return a special value on
+    ///         end of stream rather than throwing an exception.
+    /// </remarks>
+    /// <author>Frank Yellin</author>
+    /// <seealso cref="DataInputStream" />
+    /// <seealso cref="IOException" />
+    /// <since>JDK1.0</since>
+    [Serializable]
     public class EOFException : IOException
     {
         private const long serialVersionUID = 6433858223774886977L;

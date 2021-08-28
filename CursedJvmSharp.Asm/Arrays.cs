@@ -11,32 +11,26 @@ internal static class Arrays
 {
     public static T[] CopyOf<T>(T[] original, int newLength)
     {
-        T[] dest = new T[newLength];
+        var dest = new T[newLength];
         Array.Copy(original, dest, newLength);
         return dest;
     }
 
     public static T[] CopyOfRange<T>(T[] original, int fromIndex, int toIndex)
     {
-        int length = toIndex - fromIndex;
-        T[] dest = new T[length];
+        var length = toIndex - fromIndex;
+        var dest = new T[length];
         Array.Copy(original, fromIndex, dest, 0, length);
         return dest;
     }
 
     public static void Fill<T>(T[] array, T value)
     {
-        for (int i = 0; i < array.Length; i++)
-        {
-            array[i] = value;
-        }
+        for (var i = 0; i < array.Length; i++) array[i] = value;
     }
 
     public static void Fill<T>(T[] array, int fromIndex, int toIndex, T value)
     {
-        for (int i = fromIndex; i < toIndex; i++)
-        {
-            array[i] = value;
-        }
+        for (var i = fromIndex; i < toIndex; i++) array[i] = value;
     }
 }
