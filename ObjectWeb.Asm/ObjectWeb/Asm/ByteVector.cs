@@ -389,6 +389,10 @@ namespace ObjectWeb.Asm
 	  /// <param name="size"> number of additional bytes that this byte vector should be able to receive. </param>
 	  private void Enlarge(int size)
 	  {
+        if (length > data.Length) {
+            throw new ("AssertionError: Internal error");
+        }
+
 		var doubleCapacity = 2 * data.Length;
 		var minimalCapacity = length + size;
 		var newData = new byte[doubleCapacity > minimalCapacity ? doubleCapacity : minimalCapacity];
