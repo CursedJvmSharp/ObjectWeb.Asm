@@ -26,7 +26,7 @@
 using System;
 using System.IO;
 
-namespace CursedJvmSharp.Asm.Java.IO
+namespace Java.IO
 {
 	/// <summary>
 	///     Signals that an end of file or end of stream has been reached

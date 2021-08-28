@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
-using org.objectweb.asm;
-using org.objectweb.asm.tree;
+using ObjectWeb.Asm;
+using ObjectWeb.Asm.Tree;
 
 var node = new ClassNode();
 

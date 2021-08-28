@@ -24,9 +24,9 @@
 */
 
 using System;
-using CursedJvmSharp.Asm.Java.IO;
+using Java.IO;
 
-namespace CursedJvmSharp.Asm.Java.Lang
+namespace Java.Lang
 {
 	/// <summary>
 	///     An object that may hold resources (such as file or socket handles)

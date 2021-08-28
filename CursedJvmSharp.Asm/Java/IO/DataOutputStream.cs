@@ -26,7 +26,7 @@
 using System;
 using System.IO;
 
-namespace CursedJvmSharp.Asm.Java.IO
+namespace Java.IO
 {
     /// <summary>
     ///     A data output stream lets an application write primitive Java data

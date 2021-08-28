@@ -23,9 +23,9 @@
 *
 */
 
-using CursedJvmSharp.Asm.Java.Lang;
+using Java.Lang;
 
-namespace CursedJvmSharp.Asm.Java.IO
+namespace Java.IO
 {
 	/// <summary>
 	///     A

@@ -23,7 +23,7 @@
 *
 */
 
-namespace CursedJvmSharp.Asm.Java.IO
+namespace Java.IO
 {
 	/// <summary>
 	///     The <code>DataOutput</code> interface provides

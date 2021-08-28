@@ -25,7 +25,7 @@
 
 using System.IO;
 
-namespace CursedJvmSharp.Asm.Java.IO
+namespace Java.IO
 {
 	/// <summary>
 	///     The
