@@ -42,16 +42,16 @@ namespace ObjectWeb.Asm
     /// @author Eugene Kuleshov
     /// </seealso>
     // DontCheck(InterfaceIsType): can't be fixed (for backward binary compatibility).
-    public interface Opcodes
+    public interface IOpcodes
     {
         // ASM API versions.
 
-        public const int ASM4 = (4 << 16) | (0 << 8);
-        public const int ASM5 = (5 << 16) | (0 << 8);
-        public const int ASM6 = (6 << 16) | (0 << 8);
-        public const int ASM7 = (7 << 16) | (0 << 8);
-        public const int ASM8 = (8 << 16) | (0 << 8);
-        public const int ASM9 = (9 << 16) | (0 << 8);
+        public const int Asm4 = (4 << 16) | (0 << 8);
+        public const int Asm5 = (5 << 16) | (0 << 8);
+        public const int Asm6 = (6 << 16) | (0 << 8);
+        public const int Asm7 = (7 << 16) | (0 << 8);
+        public const int Asm8 = (8 << 16) | (0 << 8);
+        public const int Asm9 = (9 << 16) | (0 << 8);
 
         /// <summary>
         ///     <i>
@@ -61,7 +61,7 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// @deprecated This API is experimental.
         [Obsolete("This API is experimental.")]
-        public const int ASM10_EXPERIMENTAL = (1 << 24) | (10 << 16) | (0 << 8);
+        public const int Asm10_Experimental = (1 << 24) | (10 << 16) | (0 << 8);
 
         /*
          * Internal flags used to redirect calls to deprecated methods. For instance, if a visitOldStuff
@@ -265,8 +265,8 @@ namespace ObjectWeb.Asm
          * </ul>
          */
 
-        public const int SOURCE_DEPRECATED = 0x100;
-        public const int SOURCE_MASK = SOURCE_DEPRECATED;
+        public const int Source_Deprecated = 0x100;
+        public const int Source_Mask = Source_Deprecated;
 
         // Java ClassFile versions (the minor version is stored in the 16 most significant bits, and the
         // major version in the 16 least significant bits).
@@ -297,7 +297,7 @@ namespace ObjectWeb.Asm
         ///         V_PREVIEW}.
         ///     </para>
         /// </summary>
-        public const uint V_PREVIEW = 0xFFFF0000;
+        public const uint V_Preview = 0xFFFF0000;
 
         // Access flags values, defined in
         // - https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.1-200-E.1
@@ -305,193 +305,193 @@ namespace ObjectWeb.Asm
         // - https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.6-200-A.1
         // - https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.25
 
-        public const int ACC_PUBLIC = 0x0001; // class, field, method
-        public const int ACC_PRIVATE = 0x0002; // class, field, method
-        public const int ACC_PROTECTED = 0x0004; // class, field, method
-        public const int ACC_STATIC = 0x0008; // field, method
-        public const int ACC_FINAL = 0x0010; // class, field, method, parameter
-        public const int ACC_SUPER = 0x0020; // class
-        public const int ACC_SYNCHRONIZED = 0x0020; // method
-        public const int ACC_OPEN = 0x0020; // module
-        public const int ACC_TRANSITIVE = 0x0020; // module requires
-        public const int ACC_VOLATILE = 0x0040; // field
-        public const int ACC_BRIDGE = 0x0040; // method
-        public const int ACC_STATIC_PHASE = 0x0040; // module requires
-        public const int ACC_VARARGS = 0x0080; // method
-        public const int ACC_TRANSIENT = 0x0080; // field
-        public const int ACC_NATIVE = 0x0100; // method
-        public const int ACC_INTERFACE = 0x0200; // class
-        public const int ACC_ABSTRACT = 0x0400; // class, method
-        public const int ACC_STRICT = 0x0800; // method
-        public const int ACC_SYNTHETIC = 0x1000; // class, field, method, parameter, module *
-        public const int ACC_ANNOTATION = 0x2000; // class
-        public const int ACC_ENUM = 0x4000; // class(?) field inner
-        public const int ACC_MANDATED = 0x8000; // field, method, parameter, module, module *
-        public const int ACC_MODULE = 0x8000; // class
+        public const int Acc_Public = 0x0001; // class, field, method
+        public const int Acc_Private = 0x0002; // class, field, method
+        public const int Acc_Protected = 0x0004; // class, field, method
+        public const int Acc_Static = 0x0008; // field, method
+        public const int Acc_Final = 0x0010; // class, field, method, parameter
+        public const int Acc_Super = 0x0020; // class
+        public const int Acc_Synchronized = 0x0020; // method
+        public const int Acc_Open = 0x0020; // module
+        public const int Acc_Transitive = 0x0020; // module requires
+        public const int Acc_Volatile = 0x0040; // field
+        public const int Acc_Bridge = 0x0040; // method
+        public const int Acc_Static_Phase = 0x0040; // module requires
+        public const int Acc_Varargs = 0x0080; // method
+        public const int Acc_Transient = 0x0080; // field
+        public const int Acc_Native = 0x0100; // method
+        public const int Acc_Interface = 0x0200; // class
+        public const int Acc_Abstract = 0x0400; // class, method
+        public const int Acc_Strict = 0x0800; // method
+        public const int Acc_Synthetic = 0x1000; // class, field, method, parameter, module *
+        public const int Acc_Annotation = 0x2000; // class
+        public const int Acc_Enum = 0x4000; // class(?) field inner
+        public const int Acc_Mandated = 0x8000; // field, method, parameter, module, module *
+        public const int Acc_Module = 0x8000; // class
 
         // ASM specific access flags.
         // WARNING: the 16 least significant bits must NOT be used, to avoid conflicts with standard
         // access flags, and also to make sure that these flags are automatically filtered out when
         // written in class files (because access flags are stored using 16 bits only).
 
-        public const int ACC_RECORD = 0x10000; // class
-        public const int ACC_DEPRECATED = 0x20000; // class, field, method
+        public const int Acc_Record = 0x10000; // class
+        public const int Acc_Deprecated = 0x20000; // class, field, method
 
         // Possible values for the type operand of the NEWARRAY instruction.
         // See https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-6.html#jvms-6.5.newarray.
 
-        public const int T_BOOLEAN = 4;
-        public const int T_CHAR = 5;
-        public const int T_FLOAT = 6;
-        public const int T_DOUBLE = 7;
-        public const int T_BYTE = 8;
-        public const int T_SHORT = 9;
-        public const int T_INT = 10;
-        public const int T_LONG = 11;
+        public const int Boolean = 4;
+        public const int Char = 5;
+        public const int Float = 6;
+        public const int Double = 7;
+        public const int Byte = 8;
+        public const int Short = 9;
+        public const int Int = 10;
+        public const int Long = 11;
 
         // Possible values for the reference_kind field of CONSTANT_MethodHandle_info structures.
         // See https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.4.8.
 
-        public const int H_GETFIELD = 1;
-        public const int H_GETSTATIC = 2;
-        public const int H_PUTFIELD = 3;
-        public const int H_PUTSTATIC = 4;
-        public const int H_INVOKEVIRTUAL = 5;
-        public const int H_INVOKESTATIC = 6;
-        public const int H_INVOKESPECIAL = 7;
-        public const int H_NEWINVOKESPECIAL = 8;
-        public const int H_INVOKEINTERFACE = 9;
+        public const int H_Getfield = 1;
+        public const int H_Getstatic = 2;
+        public const int H_Putfield = 3;
+        public const int H_Putstatic = 4;
+        public const int H_Invokevirtual = 5;
+        public const int H_Invokestatic = 6;
+        public const int H_Invokespecial = 7;
+        public const int H_Newinvokespecial = 8;
+        public const int H_Invokeinterface = 9;
 
         // ASM specific stack map frame types, used in {@link ClassVisitor#visitFrame}.
 
         /// <summary>
-        ///     An expanded frame. See <seealso cref="ClassReader.EXPAND_FRAMES" />.
+        ///     An expanded frame. See <seealso cref="ClassReader.Expand_Frames" />.
         /// </summary>
-        public const int F_NEW = -1;
+        public const int F_New = -1;
 
         /// <summary>
         ///     A compressed frame with complete frame data.
         /// </summary>
-        public const int F_FULL = 0;
+        public const int F_Full = 0;
 
         /// <summary>
         ///     A compressed frame where locals are the same as the locals in the previous frame, except that
         ///     additional 1-3 locals are defined, and with an empty stack.
         /// </summary>
-        public const int F_APPEND = 1;
+        public const int F_Append = 1;
 
         /// <summary>
         ///     A compressed frame where locals are the same as the locals in the previous frame, except that
         ///     the last 1-3 locals are absent and with an empty stack.
         /// </summary>
-        public const int F_CHOP = 2;
+        public const int F_Chop = 2;
 
         /// <summary>
         ///     A compressed frame with exactly the same locals as the previous frame and with an empty stack.
         /// </summary>
-        public const int F_SAME = 3;
+        public const int F_Same = 3;
 
         /// <summary>
         ///     A compressed frame with exactly the same locals as the previous frame and with a single value
         ///     on the stack.
         /// </summary>
-        public const int F_SAME1 = 4;
+        public const int F_Same1 = 4;
 
         // The JVM opcode values (with the MethodVisitor method name used to visit them in comment, and
         // where '-' means 'same method name as on the previous line').
         // See https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-6.html.
 
-        public const int NOP = 0; // visitInsn
-        public const int ACONST_NULL = 1; // -
-        public const int ICONST_M1 = 2; // -
-        public const int ICONST_0 = 3; // -
-        public const int ICONST_1 = 4; // -
-        public const int ICONST_2 = 5; // -
-        public const int ICONST_3 = 6; // -
-        public const int ICONST_4 = 7; // -
-        public const int ICONST_5 = 8; // -
-        public const int LCONST_0 = 9; // -
-        public const int LCONST_1 = 10; // -
-        public const int FCONST_0 = 11; // -
-        public const int FCONST_1 = 12; // -
-        public const int FCONST_2 = 13; // -
-        public const int DCONST_0 = 14; // -
-        public const int DCONST_1 = 15; // -
-        public const int BIPUSH = 16; // visitIntInsn
-        public const int SIPUSH = 17; // -
-        public const int LDC = 18; // visitLdcInsn
-        public const int ILOAD = 21; // visitVarInsn
-        public const int LLOAD = 22; // -
-        public const int FLOAD = 23; // -
-        public const int DLOAD = 24; // -
-        public const int ALOAD = 25; // -
-        public const int IALOAD = 46; // visitInsn
-        public const int LALOAD = 47; // -
-        public const int FALOAD = 48; // -
-        public const int DALOAD = 49; // -
-        public const int AALOAD = 50; // -
-        public const int BALOAD = 51; // -
-        public const int CALOAD = 52; // -
-        public const int SALOAD = 53; // -
-        public const int ISTORE = 54; // visitVarInsn
-        public const int LSTORE = 55; // -
-        public const int FSTORE = 56; // -
-        public const int DSTORE = 57; // -
-        public const int ASTORE = 58; // -
-        public const int IASTORE = 79; // visitInsn
-        public const int LASTORE = 80; // -
-        public const int FASTORE = 81; // -
-        public const int DASTORE = 82; // -
-        public const int AASTORE = 83; // -
-        public const int BASTORE = 84; // -
-        public const int CASTORE = 85; // -
-        public const int SASTORE = 86; // -
-        public const int POP = 87; // -
-        public const int POP2 = 88; // -
-        public const int DUP = 89; // -
-        public const int DUP_X1 = 90; // -
-        public const int DUP_X2 = 91; // -
-        public const int DUP2 = 92; // -
-        public const int DUP2_X1 = 93; // -
-        public const int DUP2_X2 = 94; // -
-        public const int SWAP = 95; // -
-        public const int IADD = 96; // -
-        public const int LADD = 97; // -
-        public const int FADD = 98; // -
-        public const int DADD = 99; // -
-        public const int ISUB = 100; // -
-        public const int LSUB = 101; // -
-        public const int FSUB = 102; // -
-        public const int DSUB = 103; // -
-        public const int IMUL = 104; // -
-        public const int LMUL = 105; // -
-        public const int FMUL = 106; // -
-        public const int DMUL = 107; // -
-        public const int IDIV = 108; // -
-        public const int LDIV = 109; // -
-        public const int FDIV = 110; // -
-        public const int DDIV = 111; // -
-        public const int IREM = 112; // -
-        public const int LREM = 113; // -
-        public const int FREM = 114; // -
-        public const int DREM = 115; // -
-        public const int INEG = 116; // -
-        public const int LNEG = 117; // -
-        public const int FNEG = 118; // -
-        public const int DNEG = 119; // -
-        public const int ISHL = 120; // -
-        public const int LSHL = 121; // -
-        public const int ISHR = 122; // -
-        public const int LSHR = 123; // -
-        public const int IUSHR = 124; // -
-        public const int LUSHR = 125; // -
-        public const int IAND = 126; // -
-        public const int LAND = 127; // -
-        public const int IOR = 128; // -
-        public const int LOR = 129; // -
-        public const int IXOR = 130; // -
-        public const int LXOR = 131; // -
-        public const int IINC = 132; // visitIincInsn
+        public const int Nop = 0; // visitInsn
+        public const int Aconst_Null = 1; // -
+        public const int Iconst_M1 = 2; // -
+        public const int Iconst_0 = 3; // -
+        public const int Iconst_1 = 4; // -
+        public const int Iconst_2 = 5; // -
+        public const int Iconst_3 = 6; // -
+        public const int Iconst_4 = 7; // -
+        public const int Iconst_5 = 8; // -
+        public const int Lconst_0 = 9; // -
+        public const int Lconst_1 = 10; // -
+        public const int Fconst_0 = 11; // -
+        public const int Fconst_1 = 12; // -
+        public const int Fconst_2 = 13; // -
+        public const int Dconst_0 = 14; // -
+        public const int Dconst_1 = 15; // -
+        public const int Bipush = 16; // visitIntInsn
+        public const int Sipush = 17; // -
+        public const int Ldc = 18; // visitLdcInsn
+        public const int Iload = 21; // visitVarInsn
+        public const int Lload = 22; // -
+        public const int Fload = 23; // -
+        public const int Dload = 24; // -
+        public const int Aload = 25; // -
+        public const int Iaload = 46; // visitInsn
+        public const int Laload = 47; // -
+        public const int Faload = 48; // -
+        public const int Daload = 49; // -
+        public const int Aaload = 50; // -
+        public const int Baload = 51; // -
+        public const int Caload = 52; // -
+        public const int Saload = 53; // -
+        public const int Istore = 54; // visitVarInsn
+        public const int Lstore = 55; // -
+        public const int Fstore = 56; // -
+        public const int Dstore = 57; // -
+        public const int Astore = 58; // -
+        public const int Iastore = 79; // visitInsn
+        public const int Lastore = 80; // -
+        public const int Fastore = 81; // -
+        public const int Dastore = 82; // -
+        public const int Aastore = 83; // -
+        public const int Bastore = 84; // -
+        public const int Castore = 85; // -
+        public const int Sastore = 86; // -
+        public const int Pop = 87; // -
+        public const int Pop2 = 88; // -
+        public const int Dup = 89; // -
+        public const int Dup_X1 = 90; // -
+        public const int Dup_X2 = 91; // -
+        public const int Dup2 = 92; // -
+        public const int Dup2_X1 = 93; // -
+        public const int Dup2_X2 = 94; // -
+        public const int Swap = 95; // -
+        public const int Iadd = 96; // -
+        public const int Ladd = 97; // -
+        public const int Fadd = 98; // -
+        public const int Dadd = 99; // -
+        public const int Isub = 100; // -
+        public const int Lsub = 101; // -
+        public const int Fsub = 102; // -
+        public const int Dsub = 103; // -
+        public const int Imul = 104; // -
+        public const int Lmul = 105; // -
+        public const int Fmul = 106; // -
+        public const int Dmul = 107; // -
+        public const int Idiv = 108; // -
+        public const int Ldiv = 109; // -
+        public const int Fdiv = 110; // -
+        public const int Ddiv = 111; // -
+        public const int Irem = 112; // -
+        public const int Lrem = 113; // -
+        public const int Frem = 114; // -
+        public const int Drem = 115; // -
+        public const int Ineg = 116; // -
+        public const int Lneg = 117; // -
+        public const int Fneg = 118; // -
+        public const int Dneg = 119; // -
+        public const int Ishl = 120; // -
+        public const int Lshl = 121; // -
+        public const int Ishr = 122; // -
+        public const int Lshr = 123; // -
+        public const int Iushr = 124; // -
+        public const int Lushr = 125; // -
+        public const int Iand = 126; // -
+        public const int Land = 127; // -
+        public const int Ior = 128; // -
+        public const int Lor = 129; // -
+        public const int Ixor = 130; // -
+        public const int Lxor = 131; // -
+        public const int Iinc = 132; // visitIincInsn
         public const int I2L = 133; // visitInsn
         public const int I2F = 134; // -
         public const int I2D = 135; // -
@@ -507,66 +507,66 @@ namespace ObjectWeb.Asm
         public const int I2B = 145; // -
         public const int I2C = 146; // -
         public const int I2S = 147; // -
-        public const int LCMP = 148; // -
-        public const int FCMPL = 149; // -
-        public const int FCMPG = 150; // -
-        public const int DCMPL = 151; // -
-        public const int DCMPG = 152; // -
-        public const int IFEQ = 153; // visitJumpInsn
-        public const int IFNE = 154; // -
-        public const int IFLT = 155; // -
-        public const int IFGE = 156; // -
-        public const int IFGT = 157; // -
-        public const int IFLE = 158; // -
-        public const int IF_ICMPEQ = 159; // -
-        public const int IF_ICMPNE = 160; // -
-        public const int IF_ICMPLT = 161; // -
-        public const int IF_ICMPGE = 162; // -
-        public const int IF_ICMPGT = 163; // -
-        public const int IF_ICMPLE = 164; // -
-        public const int IF_ACMPEQ = 165; // -
-        public const int IF_ACMPNE = 166; // -
-        public const int GOTO = 167; // -
-        public const int JSR = 168; // -
-        public const int RET = 169; // visitVarInsn
-        public const int TABLESWITCH = 170; // visiTableSwitchInsn
-        public const int LOOKUPSWITCH = 171; // visitLookupSwitch
-        public const int IRETURN = 172; // visitInsn
-        public const int LRETURN = 173; // -
-        public const int FRETURN = 174; // -
-        public const int DRETURN = 175; // -
-        public const int ARETURN = 176; // -
-        public const int RETURN = 177; // -
-        public const int GETSTATIC = 178; // visitFieldInsn
-        public const int PUTSTATIC = 179; // -
-        public const int GETFIELD = 180; // -
-        public const int PUTFIELD = 181; // -
-        public const int INVOKEVIRTUAL = 182; // visitMethodInsn
-        public const int INVOKESPECIAL = 183; // -
-        public const int INVOKESTATIC = 184; // -
-        public const int INVOKEINTERFACE = 185; // -
-        public const int INVOKEDYNAMIC = 186; // visitInvokeDynamicInsn
-        public const int NEW = 187; // visitTypeInsn
-        public const int NEWARRAY = 188; // visitIntInsn
-        public const int ANEWARRAY = 189; // visitTypeInsn
-        public const int ARRAYLENGTH = 190; // visitInsn
-        public const int ATHROW = 191; // -
-        public const int CHECKCAST = 192; // visitTypeInsn
-        public const int INSTANCEOF = 193; // -
-        public const int MONITORENTER = 194; // visitInsn
-        public const int MONITOREXIT = 195; // -
-        public const int MULTIANEWARRAY = 197; // visitMultiANewArrayInsn
-        public const int IFNULL = 198; // visitJumpInsn
-        public const int IFNONNULL = 199; // -
+        public const int Lcmp = 148; // -
+        public const int Fcmpl = 149; // -
+        public const int Fcmpg = 150; // -
+        public const int Dcmpl = 151; // -
+        public const int Dcmpg = 152; // -
+        public const int Ifeq = 153; // visitJumpInsn
+        public const int Ifne = 154; // -
+        public const int Iflt = 155; // -
+        public const int Ifge = 156; // -
+        public const int Ifgt = 157; // -
+        public const int Ifle = 158; // -
+        public const int If_Icmpeq = 159; // -
+        public const int If_Icmpne = 160; // -
+        public const int If_Icmplt = 161; // -
+        public const int If_Icmpge = 162; // -
+        public const int If_Icmpgt = 163; // -
+        public const int If_Icmple = 164; // -
+        public const int If_Acmpeq = 165; // -
+        public const int If_Acmpne = 166; // -
+        public const int Goto = 167; // -
+        public const int Jsr = 168; // -
+        public const int Ret = 169; // visitVarInsn
+        public const int Tableswitch = 170; // visiTableSwitchInsn
+        public const int Lookupswitch = 171; // visitLookupSwitch
+        public const int Ireturn = 172; // visitInsn
+        public const int Lreturn = 173; // -
+        public const int Freturn = 174; // -
+        public const int Dreturn = 175; // -
+        public const int Areturn = 176; // -
+        public const int Return = 177; // -
+        public const int Getstatic = 178; // visitFieldInsn
+        public const int Putstatic = 179; // -
+        public const int Getfield = 180; // -
+        public const int Putfield = 181; // -
+        public const int Invokevirtual = 182; // visitMethodInsn
+        public const int Invokespecial = 183; // -
+        public const int Invokestatic = 184; // -
+        public const int Invokeinterface = 185; // -
+        public const int Invokedynamic = 186; // visitInvokeDynamicInsn
+        public const int New = 187; // visitTypeInsn
+        public const int Newarray = 188; // visitIntInsn
+        public const int Anewarray = 189; // visitTypeInsn
+        public const int Arraylength = 190; // visitInsn
+        public const int Athrow = 191; // -
+        public const int Checkcast = 192; // visitTypeInsn
+        public const int Instanceof = 193; // -
+        public const int Monitorenter = 194; // visitInsn
+        public const int Monitorexit = 195; // -
+        public const int Multianewarray = 197; // visitMultiANewArrayInsn
+        public const int Ifnull = 198; // visitJumpInsn
+        public const int Ifnonnull = 199; // -
 
         // Standard stack map frame element types, used in {@link ClassVisitor#visitFrame}.
 
-        public static int TOP = Frame.ITEM_TOP;
-        public static int INTEGER = Frame.ITEM_INTEGER;
-        public static int FLOAT = Frame.ITEM_FLOAT;
-        public static int DOUBLE = Frame.ITEM_DOUBLE;
-        public static int LONG = Frame.ITEM_LONG;
-        public static int NULL = Frame.ITEM_NULL;
-        public static int UNINITIALIZED_THIS = Frame.ITEM_UNINITIALIZED_THIS;
+        public static int top = Frame.Item_Top;
+        public static int integer = Frame.Item_Integer;
+        public static int @float = Frame.Item_Float;
+        public static int @double = Frame.Item_Double;
+        public static int @long = Frame.Item_Long;
+        public static int @null = Frame.Item_Null;
+        public static int uninitializedThis = Frame.Item_Uninitialized_This;
     }
 }

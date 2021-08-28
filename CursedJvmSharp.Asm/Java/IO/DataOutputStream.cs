@@ -40,13 +40,13 @@ namespace Java.IO
     /// <author>unascribed</author>
     /// <seealso cref="DataInputStream" />
     /// <since>JDK1.0</since>
-    public class DataOutputStream : DataOutput, IDisposable
+    public class DataOutputStream : IDataOutput, IDisposable
     {
         private readonly MemoryStream _out;
-        private readonly byte[] writeBuffer = new byte[8];
+        private readonly byte[] _writeBuffer = new byte[8];
 
         /// <summary>bytearr is initialized on demand by writeUTF</summary>
-        private byte[] bytearr;
+        private byte[] _bytearr;
 
         /// <summary>The number of bytes written to the data output stream so far.</summary>
         /// <remarks>
@@ -272,15 +272,15 @@ namespace Java.IO
         /// <exception cref="IOException" />
         public void WriteLong(long v)
         {
-            writeBuffer[0] = unchecked((byte)(long)((ulong)v >> 56));
-            writeBuffer[1] = unchecked((byte)(long)((ulong)v >> 48));
-            writeBuffer[2] = unchecked((byte)(long)((ulong)v >> 40));
-            writeBuffer[3] = unchecked((byte)(long)((ulong)v >> 32));
-            writeBuffer[4] = unchecked((byte)(long)((ulong)v >> 24));
-            writeBuffer[5] = unchecked((byte)(long)((ulong)v >> 16));
-            writeBuffer[6] = unchecked((byte)(long)((ulong)v >> 8));
-            writeBuffer[7] = unchecked((byte)(long)((ulong)v >> 0));
-            _out.Write(writeBuffer, 0, 8);
+            _writeBuffer[0] = unchecked((byte)(long)((ulong)v >> 56));
+            _writeBuffer[1] = unchecked((byte)(long)((ulong)v >> 48));
+            _writeBuffer[2] = unchecked((byte)(long)((ulong)v >> 40));
+            _writeBuffer[3] = unchecked((byte)(long)((ulong)v >> 32));
+            _writeBuffer[4] = unchecked((byte)(long)((ulong)v >> 24));
+            _writeBuffer[5] = unchecked((byte)(long)((ulong)v >> 16));
+            _writeBuffer[6] = unchecked((byte)(long)((ulong)v >> 8));
+            _writeBuffer[7] = unchecked((byte)(long)((ulong)v >> 0));
+            _out.Write(_writeBuffer, 0, 8);
             IncCount(8);
         }
 
@@ -422,9 +422,9 @@ namespace Java.IO
         ///     if an I/O error occurs.
         /// </exception>
         /// <exception cref="IOException" />
-        public void WriteUTF(string str)
+        public void WriteUtf(string str)
         {
-            WriteUTF(str, this);
+            WriteUtf(str, this);
         }
 
         public void Dispose()
@@ -491,7 +491,7 @@ namespace Java.IO
         ///     if an I/O error occurs.
         /// </exception>
         /// <exception cref="IOException" />
-        internal static int WriteUTF(string str, DataOutput @out)
+        internal static int WriteUtf(string str, IDataOutput @out)
         {
             var strlen = str.Length;
             var utflen = 0;
@@ -514,8 +514,8 @@ namespace Java.IO
             if (@out is DataOutputStream)
             {
                 var dos = (DataOutputStream)@out;
-                if (dos.bytearr == null || dos.bytearr.Length < utflen + 2) dos.bytearr = new byte[utflen * 2 + 2];
-                bytearr = dos.bytearr;
+                if (dos._bytearr == null || dos._bytearr.Length < utflen + 2) dos._bytearr = new byte[utflen * 2 + 2];
+                bytearr = dos._bytearr;
             }
             else
             {
@@ -524,17 +524,17 @@ namespace Java.IO
 
             bytearr[count++] = unchecked((byte)((int)((uint)utflen >> 8) & 0xFF));
             bytearr[count++] = unchecked((byte)((int)((uint)utflen >> 0) & 0xFF));
-            var i_1 = 0;
-            for (i_1 = 0; i_1 < strlen; i_1++)
+            var i1 = 0;
+            for (i1 = 0; i1 < strlen; i1++)
             {
-                c = str[i_1];
+                c = str[i1];
                 if (!(c >= 0x0001 && c <= 0x007F)) break;
                 bytearr[count++] = unchecked((byte)c);
             }
 
-            for (; i_1 < strlen; i_1++)
+            for (; i1 < strlen; i1++)
             {
-                c = str[i_1];
+                c = str[i1];
                 if (c >= 0x0001 && c <= 0x007F)
                 {
                     bytearr[count++] = unchecked((byte)c);

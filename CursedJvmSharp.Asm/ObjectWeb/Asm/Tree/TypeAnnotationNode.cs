@@ -59,7 +59,7 @@ namespace ObjectWeb.Asm.Tree
 	  ///     'typeRef' as a whole. </param>
 	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
 	  /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-	  public TypeAnnotationNode(int typeRef, TypePath typePath, string descriptor) : this(Opcodes.ASM9, typeRef, typePath, descriptor)
+	  public TypeAnnotationNode(int typeRef, TypePath typePath, string descriptor) : this(IOpcodes.Asm9, typeRef, typePath, descriptor)
 	  {
 		if (this.GetType() != typeof(TypeAnnotationNode))
 		{
@@ -71,7 +71,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Constructs a new <seealso cref="AnnotationNode"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="typeRef"> a reference to the annotated type. See <seealso cref="TypeReference"/>. </param>
 	  /// <param name="typePath"> the path to the annotated type argument, wildcard bound, array element type, or
 	  ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets

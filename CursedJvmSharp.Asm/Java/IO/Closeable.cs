@@ -35,7 +35,7 @@ namespace Java.IO
     ///     holding (such as open files).
     /// </summary>
     /// <since>1.5</since>
-    public interface Closeable : AutoCloseable
+    public interface ICloseable : IAutoCloseable
     {
         /// <summary>
         ///     Closes this stream and releases any system resources associated
@@ -47,7 +47,7 @@ namespace Java.IO
         ///     method has no effect.
         ///     <p>
         ///         As noted in
-        ///         <see cref="Java.Lang.AutoCloseable.Close()" />
+        ///         <see cref="IAutoCloseable.Close()" />
         ///         , cases where the
         ///         close may fail require careful attention. It is strongly advised
         ///         to relinquish the underlying resources and to internally

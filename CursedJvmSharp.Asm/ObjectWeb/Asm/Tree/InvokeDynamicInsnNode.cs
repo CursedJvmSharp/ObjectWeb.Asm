@@ -64,7 +64,7 @@ namespace ObjectWeb.Asm.Tree
 	  ///     an <seealso cref="Integer"/>, <seealso cref="Float"/>, <seealso cref="Long"/>, <seealso cref="Double"/>, <seealso cref="string"/>, {@link
 	  ///     org.objectweb.asm.Type} or <seealso cref="Handle"/> value. This method is allowed to modify the
 	  ///     content of the array so a caller should expect that this array may change. </param>
-	  public InvokeDynamicInsnNode(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments) : base(Opcodes.INVOKEDYNAMIC)
+	  public InvokeDynamicInsnNode(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments) : base(IOpcodes.Invokedynamic)
 	  { // NOPMD(ArrayIsStoredDirectly): public field.
 		this.name = name;
 		this.desc = descriptor;
@@ -76,19 +76,19 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return INVOKE_DYNAMIC_INSN;
+			return Invoke_Dynamic_Insn;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
-		acceptAnnotations(methodVisitor);
+		methodVisitor.VisitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
+		AcceptAnnotations(methodVisitor);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return (new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs)).cloneAnnotations(this);
+		return (new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs)).CloneAnnotations(this);
 	  }
 	}
 

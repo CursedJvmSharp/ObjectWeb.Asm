@@ -70,7 +70,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="classVisitor"> the class visitor this remapper must delegate to. </param>
         /// <param name="remapper"> the remapper to use to remap the types in the visited class. </param>
-        public ClassRemapper(ClassVisitor classVisitor, Remapper remapper) : this(Opcodes.ASM9, classVisitor, remapper)
+        public ClassRemapper(ClassVisitor classVisitor, Remapper remapper) : this(IOpcodes.Asm9, classVisitor, remapper)
         {
         }
 
@@ -79,7 +79,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="api">
         ///     the ASM API version supported by this remapper. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="Opcodes" />.
+        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
         /// </param>
         /// <param name="classVisitor"> the class visitor this remapper must delegate to. </param>
         /// <param name="remapper"> the remapper to use to remap the types in the visited class. </param>
@@ -88,100 +88,100 @@ namespace ObjectWeb.Asm.Commons
             this.remapper = remapper;
         }
 
-        public override void visit(int version, int access, string name, string signature, string superName,
+        public override void Visit(int version, int access, string name, string signature, string superName,
             string[] interfaces)
         {
             className = name;
-            base.visit(version, access, remapper.mapType(name), remapper.mapSignature(signature, false),
-                remapper.mapType(superName), interfaces == null ? null : remapper.mapTypes(interfaces));
+            base.Visit(version, access, remapper.MapType(name), remapper.MapSignature(signature, false),
+                remapper.MapType(superName), interfaces == null ? null : remapper.MapTypes(interfaces));
         }
 
-        public override ModuleVisitor visitModule(string name, int flags, string version)
+        public override ModuleVisitor VisitModule(string name, int flags, string version)
         {
-            var moduleVisitor = base.visitModule(remapper.mapModuleName(name), flags, version);
-            return moduleVisitor == null ? null : createModuleRemapper(moduleVisitor);
+            var moduleVisitor = base.VisitModule(remapper.MapModuleName(name), flags, version);
+            return moduleVisitor == null ? null : CreateModuleRemapper(moduleVisitor);
         }
 
-        public override AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+        public override AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
         {
-            var annotationVisitor = base.visitAnnotation(remapper.mapDesc(descriptor), visible);
-            return annotationVisitor == null ? null : createAnnotationRemapper(descriptor, annotationVisitor);
+            var annotationVisitor = base.VisitAnnotation(remapper.MapDesc(descriptor), visible);
+            return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
         }
 
-        public override AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
             bool visible)
         {
-            var annotationVisitor = base.visitTypeAnnotation(typeRef, typePath, remapper.mapDesc(descriptor), visible);
-            return annotationVisitor == null ? null : createAnnotationRemapper(descriptor, annotationVisitor);
+            var annotationVisitor = base.VisitTypeAnnotation(typeRef, typePath, remapper.MapDesc(descriptor), visible);
+            return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
         }
 
-        public override void visitAttribute(Attribute attribute)
+        public override void VisitAttribute(Attribute attribute)
         {
             if (attribute is ModuleHashesAttribute)
             {
                 var moduleHashesAttribute = (ModuleHashesAttribute)attribute;
                 var modules = moduleHashesAttribute.modules;
-                for (var i = 0; i < modules.Count; ++i) modules[i] = remapper.mapModuleName(modules[i]);
+                for (var i = 0; i < modules.Count; ++i) modules[i] = remapper.MapModuleName(modules[i]);
             }
 
-            base.visitAttribute(attribute);
+            base.VisitAttribute(attribute);
         }
 
-        public override RecordComponentVisitor visitRecordComponent(string name, string descriptor, string signature)
+        public override RecordComponentVisitor VisitRecordComponent(string name, string descriptor, string signature)
         {
-            var recordComponentVisitor = base.visitRecordComponent(
-                remapper.mapRecordComponentName(className, name, descriptor), remapper.mapDesc(descriptor),
-                remapper.mapSignature(signature, true));
-            return recordComponentVisitor == null ? null : createRecordComponentRemapper(recordComponentVisitor);
+            var recordComponentVisitor = base.VisitRecordComponent(
+                remapper.MapRecordComponentName(className, name, descriptor), remapper.MapDesc(descriptor),
+                remapper.MapSignature(signature, true));
+            return recordComponentVisitor == null ? null : CreateRecordComponentRemapper(recordComponentVisitor);
         }
 
-        public override FieldVisitor visitField(int access, string name, string descriptor, string signature,
+        public override FieldVisitor VisitField(int access, string name, string descriptor, string signature,
             object value)
         {
-            var fieldVisitor = base.visitField(access, remapper.mapFieldName(className, name, descriptor),
-                remapper.mapDesc(descriptor), remapper.mapSignature(signature, true),
-                value == null ? null : remapper.mapValue(value));
-            return fieldVisitor == null ? null : createFieldRemapper(fieldVisitor);
+            var fieldVisitor = base.VisitField(access, remapper.MapFieldName(className, name, descriptor),
+                remapper.MapDesc(descriptor), remapper.MapSignature(signature, true),
+                value == null ? null : remapper.MapValue(value));
+            return fieldVisitor == null ? null : CreateFieldRemapper(fieldVisitor);
         }
 
-        public override MethodVisitor visitMethod(int access, string name, string descriptor, string signature,
+        public override MethodVisitor VisitMethod(int access, string name, string descriptor, string signature,
             string[] exceptions)
         {
-            var remappedDescriptor = remapper.mapMethodDesc(descriptor);
-            var methodVisitor = base.visitMethod(access, remapper.mapMethodName(className, name, descriptor),
-                remappedDescriptor, remapper.mapSignature(signature, false),
-                exceptions == null ? null : remapper.mapTypes(exceptions));
-            return methodVisitor == null ? null : createMethodRemapper(methodVisitor);
+            var remappedDescriptor = remapper.MapMethodDesc(descriptor);
+            var methodVisitor = base.VisitMethod(access, remapper.MapMethodName(className, name, descriptor),
+                remappedDescriptor, remapper.MapSignature(signature, false),
+                exceptions == null ? null : remapper.MapTypes(exceptions));
+            return methodVisitor == null ? null : CreateMethodRemapper(methodVisitor);
         }
 
-        public override void visitInnerClass(string name, string outerName, string innerName, int access)
+        public override void VisitInnerClass(string name, string outerName, string innerName, int access)
         {
-            base.visitInnerClass(remapper.mapType(name),
-                ReferenceEquals(outerName, null) ? null : remapper.mapType(outerName),
-                ReferenceEquals(innerName, null) ? null : remapper.mapInnerClassName(name, outerName, innerName),
+            base.VisitInnerClass(remapper.MapType(name),
+                ReferenceEquals(outerName, null) ? null : remapper.MapType(outerName),
+                ReferenceEquals(innerName, null) ? null : remapper.MapInnerClassName(name, outerName, innerName),
                 access);
         }
 
-        public override void visitOuterClass(string owner, string name, string descriptor)
+        public override void VisitOuterClass(string owner, string name, string descriptor)
         {
-            base.visitOuterClass(remapper.mapType(owner),
-                ReferenceEquals(name, null) ? null : remapper.mapMethodName(owner, name, descriptor),
-                ReferenceEquals(descriptor, null) ? null : remapper.mapMethodDesc(descriptor));
+            base.VisitOuterClass(remapper.MapType(owner),
+                ReferenceEquals(name, null) ? null : remapper.MapMethodName(owner, name, descriptor),
+                ReferenceEquals(descriptor, null) ? null : remapper.MapMethodDesc(descriptor));
         }
 
-        public override void visitNestHost(string nestHost)
+        public override void VisitNestHost(string nestHost)
         {
-            base.visitNestHost(remapper.mapType(nestHost));
+            base.VisitNestHost(remapper.MapType(nestHost));
         }
 
-        public override void visitNestMember(string nestMember)
+        public override void VisitNestMember(string nestMember)
         {
-            base.visitNestMember(remapper.mapType(nestMember));
+            base.VisitNestMember(remapper.MapType(nestMember));
         }
 
-        public override void visitPermittedSubclass(string permittedSubclass)
+        public override void VisitPermittedSubclass(string permittedSubclass)
         {
-            base.visitPermittedSubclass(remapper.mapType(permittedSubclass));
+            base.VisitPermittedSubclass(remapper.MapType(permittedSubclass));
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="fieldVisitor"> the FieldVisitor the remapper must delegate to. </param>
         /// <returns> the newly created remapper. </returns>
-        public virtual FieldVisitor createFieldRemapper(FieldVisitor fieldVisitor)
+        public virtual FieldVisitor CreateFieldRemapper(FieldVisitor fieldVisitor)
         {
             return new FieldRemapper(api, fieldVisitor, remapper);
         }
@@ -201,7 +201,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="methodVisitor"> the MethodVisitor the remapper must delegate to. </param>
         /// <returns> the newly created remapper. </returns>
-        public virtual MethodVisitor createMethodRemapper(MethodVisitor methodVisitor)
+        public virtual MethodVisitor CreateMethodRemapper(MethodVisitor methodVisitor)
         {
             return new MethodRemapper(api, methodVisitor, remapper);
         }
@@ -213,10 +213,10 @@ namespace ObjectWeb.Asm.Commons
         /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
         /// <returns> the newly created remapper. </returns>
         /// @deprecated use
-        /// <seealso cref="createAnnotationRemapper(string, AnnotationVisitor)" />
+        /// <seealso cref="CreateAnnotationRemapper(string,ObjectWeb.Asm.AnnotationVisitor)" />
         /// instead.
         [Obsolete("use <seealso cref=\"createAnnotationRemapper(String, AnnotationVisitor)\"/> instead.")]
-        public virtual AnnotationVisitor createAnnotationRemapper(AnnotationVisitor annotationVisitor)
+        public virtual AnnotationVisitor CreateAnnotationRemapper(AnnotationVisitor annotationVisitor)
         {
             return new AnnotationRemapper(api, null, annotationVisitor, remapper);
         }
@@ -228,11 +228,11 @@ namespace ObjectWeb.Asm.Commons
         /// <param name="descriptor"> the descriptor of the visited annotation. </param>
         /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
         /// <returns> the newly created remapper. </returns>
-        public virtual AnnotationVisitor createAnnotationRemapper(string descriptor,
+        public virtual AnnotationVisitor CreateAnnotationRemapper(string descriptor,
             AnnotationVisitor annotationVisitor)
         {
-            return new AnnotationRemapper(api, descriptor, annotationVisitor, remapper).orDeprecatedValue(
-                createAnnotationRemapper(annotationVisitor));
+            return new AnnotationRemapper(api, descriptor, annotationVisitor, remapper).OrDeprecatedValue(
+                CreateAnnotationRemapper(annotationVisitor));
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="moduleVisitor"> the ModuleVisitor the remapper must delegate to. </param>
         /// <returns> the newly created remapper. </returns>
-        public virtual ModuleVisitor createModuleRemapper(ModuleVisitor moduleVisitor)
+        public virtual ModuleVisitor CreateModuleRemapper(ModuleVisitor moduleVisitor)
         {
             return new ModuleRemapper(api, moduleVisitor, remapper);
         }
@@ -252,7 +252,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="recordComponentVisitor"> the RecordComponentVisitor the remapper must delegate to. </param>
         /// <returns> the newly created remapper. </returns>
-        public virtual RecordComponentVisitor createRecordComponentRemapper(
+        public virtual RecordComponentVisitor CreateRecordComponentRemapper(
             RecordComponentVisitor recordComponentVisitor)
         {
             return new RecordComponentRemapper(api, recordComponentVisitor, remapper);

@@ -41,7 +41,7 @@ namespace ObjectWeb.Asm.Commons
 
 	  /// <summary>
 	  /// The type of the java.lang.Object class. </summary>
-	  public static readonly JType OBJECT_TYPE = JType.getType("Ljava/lang/Object;");
+	  public static readonly JType ObjectType = JType.GetType("Ljava/lang/Object;");
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="InstructionAdapter"/>. <i>Subclasses must not use this constructor</i>.
@@ -49,7 +49,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="methodVisitor"> the method visitor to which this adapter delegates calls. </param>
 	  /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-	  public InstructionAdapter(MethodVisitor methodVisitor) : this(Opcodes.ASM9, methodVisitor)
+	  public InstructionAdapter(MethodVisitor methodVisitor) : this(IOpcodes.Asm9, methodVisitor)
 	  {
 		if (this.GetType() != typeof(InstructionAdapter))
 		{
@@ -61,358 +61,358 @@ namespace ObjectWeb.Asm.Commons
 	  /// Constructs a new <seealso cref="InstructionAdapter"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="methodVisitor"> the method visitor to which this adapter delegates calls. </param>
 	  public InstructionAdapter(int api, MethodVisitor methodVisitor) : base(api, methodVisitor)
 	  {
 	  }
 
-	  public override void visitInsn(int opcode)
+	  public override void VisitInsn(int opcode)
 	  {
 		switch (opcode)
 		{
-		  case Opcodes.NOP:
-			nop();
+		  case IOpcodes.Nop:
+			Nop();
 			break;
-		  case Opcodes.ACONST_NULL:
-			aconst(null);
+		  case IOpcodes.Aconst_Null:
+			Aconst(null);
 			break;
-		  case Opcodes.ICONST_M1:
-		  case Opcodes.ICONST_0:
-		  case Opcodes.ICONST_1:
-		  case Opcodes.ICONST_2:
-		  case Opcodes.ICONST_3:
-		  case Opcodes.ICONST_4:
-		  case Opcodes.ICONST_5:
-			iconst(opcode - Opcodes.ICONST_0);
+		  case IOpcodes.Iconst_M1:
+		  case IOpcodes.Iconst_0:
+		  case IOpcodes.Iconst_1:
+		  case IOpcodes.Iconst_2:
+		  case IOpcodes.Iconst_3:
+		  case IOpcodes.Iconst_4:
+		  case IOpcodes.Iconst_5:
+			Iconst(opcode - IOpcodes.Iconst_0);
 			break;
-		  case Opcodes.LCONST_0:
-		  case Opcodes.LCONST_1:
-			lconst((long)(opcode - Opcodes.LCONST_0));
+		  case IOpcodes.Lconst_0:
+		  case IOpcodes.Lconst_1:
+			Lconst((long)(opcode - IOpcodes.Lconst_0));
 			break;
-		  case Opcodes.FCONST_0:
-		  case Opcodes.FCONST_1:
-		  case Opcodes.FCONST_2:
-			fconst((float)(opcode - Opcodes.FCONST_0));
+		  case IOpcodes.Fconst_0:
+		  case IOpcodes.Fconst_1:
+		  case IOpcodes.Fconst_2:
+			Fconst((float)(opcode - IOpcodes.Fconst_0));
 			break;
-		  case Opcodes.DCONST_0:
-		  case Opcodes.DCONST_1:
-			dconst((double)(opcode - Opcodes.DCONST_0));
+		  case IOpcodes.Dconst_0:
+		  case IOpcodes.Dconst_1:
+			Dconst((double)(opcode - IOpcodes.Dconst_0));
 			break;
-		  case Opcodes.IALOAD:
-			aload(JType.INT_TYPE);
+		  case IOpcodes.Iaload:
+			Aload(JType.IntType);
 			break;
-		  case Opcodes.LALOAD:
-			aload(JType.LONG_TYPE);
+		  case IOpcodes.Laload:
+			Aload(JType.LongType);
 			break;
-		  case Opcodes.FALOAD:
-			aload(JType.FLOAT_TYPE);
+		  case IOpcodes.Faload:
+			Aload(JType.FloatType);
 			break;
-		  case Opcodes.DALOAD:
-			aload(JType.DOUBLE_TYPE);
+		  case IOpcodes.Daload:
+			Aload(JType.DoubleType);
 			break;
-		  case Opcodes.AALOAD:
-			aload(OBJECT_TYPE);
+		  case IOpcodes.Aaload:
+			Aload(ObjectType);
 			break;
-		  case Opcodes.BALOAD:
-			aload(JType.BYTE_TYPE);
+		  case IOpcodes.Baload:
+			Aload(JType.ByteType);
 			break;
-		  case Opcodes.CALOAD:
-			aload(JType.CHAR_TYPE);
+		  case IOpcodes.Caload:
+			Aload(JType.CharType);
 			break;
-		  case Opcodes.SALOAD:
-			aload(JType.SHORT_TYPE);
+		  case IOpcodes.Saload:
+			Aload(JType.ShortType);
 			break;
-		  case Opcodes.IASTORE:
-			astore(JType.INT_TYPE);
+		  case IOpcodes.Iastore:
+			Astore(JType.IntType);
 			break;
-		  case Opcodes.LASTORE:
-			astore(JType.LONG_TYPE);
+		  case IOpcodes.Lastore:
+			Astore(JType.LongType);
 			break;
-		  case Opcodes.FASTORE:
-			astore(JType.FLOAT_TYPE);
+		  case IOpcodes.Fastore:
+			Astore(JType.FloatType);
 			break;
-		  case Opcodes.DASTORE:
-			astore(JType.DOUBLE_TYPE);
+		  case IOpcodes.Dastore:
+			Astore(JType.DoubleType);
 			break;
-		  case Opcodes.AASTORE:
-			astore(OBJECT_TYPE);
+		  case IOpcodes.Aastore:
+			Astore(ObjectType);
 			break;
-		  case Opcodes.BASTORE:
-			astore(JType.BYTE_TYPE);
+		  case IOpcodes.Bastore:
+			Astore(JType.ByteType);
 			break;
-		  case Opcodes.CASTORE:
-			astore(JType.CHAR_TYPE);
+		  case IOpcodes.Castore:
+			Astore(JType.CharType);
 			break;
-		  case Opcodes.SASTORE:
-			astore(JType.SHORT_TYPE);
+		  case IOpcodes.Sastore:
+			Astore(JType.ShortType);
 			break;
-		  case Opcodes.POP:
-			pop();
+		  case IOpcodes.Pop:
+			Pop();
 			break;
-		  case Opcodes.POP2:
-			pop2();
+		  case IOpcodes.Pop2:
+			Pop2();
 			break;
-		  case Opcodes.DUP:
-			dup();
+		  case IOpcodes.Dup:
+			Dup();
 			break;
-		  case Opcodes.DUP_X1:
-			dupX1();
+		  case IOpcodes.Dup_X1:
+			DupX1();
 			break;
-		  case Opcodes.DUP_X2:
-			dupX2();
+		  case IOpcodes.Dup_X2:
+			DupX2();
 			break;
-		  case Opcodes.DUP2:
-			dup2();
+		  case IOpcodes.Dup2:
+			Dup2();
 			break;
-		  case Opcodes.DUP2_X1:
-			dup2X1();
+		  case IOpcodes.Dup2_X1:
+			Dup2X1();
 			break;
-		  case Opcodes.DUP2_X2:
-			dup2X2();
+		  case IOpcodes.Dup2_X2:
+			Dup2X2();
 			break;
-		  case Opcodes.SWAP:
-			swap();
+		  case IOpcodes.Swap:
+			Swap();
 			break;
-		  case Opcodes.IADD:
-			add(JType.INT_TYPE);
+		  case IOpcodes.Iadd:
+			Add(JType.IntType);
 			break;
-		  case Opcodes.LADD:
-			add(JType.LONG_TYPE);
+		  case IOpcodes.Ladd:
+			Add(JType.LongType);
 			break;
-		  case Opcodes.FADD:
-			add(JType.FLOAT_TYPE);
+		  case IOpcodes.Fadd:
+			Add(JType.FloatType);
 			break;
-		  case Opcodes.DADD:
-			add(JType.DOUBLE_TYPE);
+		  case IOpcodes.Dadd:
+			Add(JType.DoubleType);
 			break;
-		  case Opcodes.ISUB:
-			sub(JType.INT_TYPE);
+		  case IOpcodes.Isub:
+			Sub(JType.IntType);
 			break;
-		  case Opcodes.LSUB:
-			sub(JType.LONG_TYPE);
+		  case IOpcodes.Lsub:
+			Sub(JType.LongType);
 			break;
-		  case Opcodes.FSUB:
-			sub(JType.FLOAT_TYPE);
+		  case IOpcodes.Fsub:
+			Sub(JType.FloatType);
 			break;
-		  case Opcodes.DSUB:
-			sub(JType.DOUBLE_TYPE);
+		  case IOpcodes.Dsub:
+			Sub(JType.DoubleType);
 			break;
-		  case Opcodes.IMUL:
-			mul(JType.INT_TYPE);
+		  case IOpcodes.Imul:
+			Mul(JType.IntType);
 			break;
-		  case Opcodes.LMUL:
-			mul(JType.LONG_TYPE);
+		  case IOpcodes.Lmul:
+			Mul(JType.LongType);
 			break;
-		  case Opcodes.FMUL:
-			mul(JType.FLOAT_TYPE);
+		  case IOpcodes.Fmul:
+			Mul(JType.FloatType);
 			break;
-		  case Opcodes.DMUL:
-			mul(JType.DOUBLE_TYPE);
+		  case IOpcodes.Dmul:
+			Mul(JType.DoubleType);
 			break;
-		  case Opcodes.IDIV:
-			div(JType.INT_TYPE);
+		  case IOpcodes.Idiv:
+			Div(JType.IntType);
 			break;
-		  case Opcodes.LDIV:
-			div(JType.LONG_TYPE);
+		  case IOpcodes.Ldiv:
+			Div(JType.LongType);
 			break;
-		  case Opcodes.FDIV:
-			div(JType.FLOAT_TYPE);
+		  case IOpcodes.Fdiv:
+			Div(JType.FloatType);
 			break;
-		  case Opcodes.DDIV:
-			div(JType.DOUBLE_TYPE);
+		  case IOpcodes.Ddiv:
+			Div(JType.DoubleType);
 			break;
-		  case Opcodes.IREM:
-			rem(JType.INT_TYPE);
+		  case IOpcodes.Irem:
+			Rem(JType.IntType);
 			break;
-		  case Opcodes.LREM:
-			rem(JType.LONG_TYPE);
+		  case IOpcodes.Lrem:
+			Rem(JType.LongType);
 			break;
-		  case Opcodes.FREM:
-			rem(JType.FLOAT_TYPE);
+		  case IOpcodes.Frem:
+			Rem(JType.FloatType);
 			break;
-		  case Opcodes.DREM:
-			rem(JType.DOUBLE_TYPE);
+		  case IOpcodes.Drem:
+			Rem(JType.DoubleType);
 			break;
-		  case Opcodes.INEG:
-			neg(JType.INT_TYPE);
+		  case IOpcodes.Ineg:
+			Neg(JType.IntType);
 			break;
-		  case Opcodes.LNEG:
-			neg(JType.LONG_TYPE);
+		  case IOpcodes.Lneg:
+			Neg(JType.LongType);
 			break;
-		  case Opcodes.FNEG:
-			neg(JType.FLOAT_TYPE);
+		  case IOpcodes.Fneg:
+			Neg(JType.FloatType);
 			break;
-		  case Opcodes.DNEG:
-			neg(JType.DOUBLE_TYPE);
+		  case IOpcodes.Dneg:
+			Neg(JType.DoubleType);
 			break;
-		  case Opcodes.ISHL:
-			shl(JType.INT_TYPE);
+		  case IOpcodes.Ishl:
+			Shl(JType.IntType);
 			break;
-		  case Opcodes.LSHL:
-			shl(JType.LONG_TYPE);
+		  case IOpcodes.Lshl:
+			Shl(JType.LongType);
 			break;
-		  case Opcodes.ISHR:
-			shr(JType.INT_TYPE);
+		  case IOpcodes.Ishr:
+			Shr(JType.IntType);
 			break;
-		  case Opcodes.LSHR:
-			shr(JType.LONG_TYPE);
+		  case IOpcodes.Lshr:
+			Shr(JType.LongType);
 			break;
-		  case Opcodes.IUSHR:
-			ushr(JType.INT_TYPE);
+		  case IOpcodes.Iushr:
+			Ushr(JType.IntType);
 			break;
-		  case Opcodes.LUSHR:
-			ushr(JType.LONG_TYPE);
+		  case IOpcodes.Lushr:
+			Ushr(JType.LongType);
 			break;
-		  case Opcodes.IAND:
-			and(JType.INT_TYPE);
+		  case IOpcodes.Iand:
+			And(JType.IntType);
 			break;
-		  case Opcodes.LAND:
-			and(JType.LONG_TYPE);
+		  case IOpcodes.Land:
+			And(JType.LongType);
 			break;
-		  case Opcodes.IOR:
-			or(JType.INT_TYPE);
+		  case IOpcodes.Ior:
+			Or(JType.IntType);
 			break;
-		  case Opcodes.LOR:
-			or(JType.LONG_TYPE);
+		  case IOpcodes.Lor:
+			Or(JType.LongType);
 			break;
-		  case Opcodes.IXOR:
-			xor(JType.INT_TYPE);
+		  case IOpcodes.Ixor:
+			Xor(JType.IntType);
 			break;
-		  case Opcodes.LXOR:
-			xor(JType.LONG_TYPE);
+		  case IOpcodes.Lxor:
+			Xor(JType.LongType);
 			break;
-		  case Opcodes.I2L:
-			cast(JType.INT_TYPE, JType.LONG_TYPE);
+		  case IOpcodes.I2L:
+			Cast(JType.IntType, JType.LongType);
 			break;
-		  case Opcodes.I2F:
-			cast(JType.INT_TYPE, JType.FLOAT_TYPE);
+		  case IOpcodes.I2F:
+			Cast(JType.IntType, JType.FloatType);
 			break;
-		  case Opcodes.I2D:
-			cast(JType.INT_TYPE, JType.DOUBLE_TYPE);
+		  case IOpcodes.I2D:
+			Cast(JType.IntType, JType.DoubleType);
 			break;
-		  case Opcodes.L2I:
-			cast(JType.LONG_TYPE, JType.INT_TYPE);
+		  case IOpcodes.L2I:
+			Cast(JType.LongType, JType.IntType);
 			break;
-		  case Opcodes.L2F:
-			cast(JType.LONG_TYPE, JType.FLOAT_TYPE);
+		  case IOpcodes.L2F:
+			Cast(JType.LongType, JType.FloatType);
 			break;
-		  case Opcodes.L2D:
-			cast(JType.LONG_TYPE, JType.DOUBLE_TYPE);
+		  case IOpcodes.L2D:
+			Cast(JType.LongType, JType.DoubleType);
 			break;
-		  case Opcodes.F2I:
-			cast(JType.FLOAT_TYPE, JType.INT_TYPE);
+		  case IOpcodes.F2I:
+			Cast(JType.FloatType, JType.IntType);
 			break;
-		  case Opcodes.F2L:
-			cast(JType.FLOAT_TYPE, JType.LONG_TYPE);
+		  case IOpcodes.F2L:
+			Cast(JType.FloatType, JType.LongType);
 			break;
-		  case Opcodes.F2D:
-			cast(JType.FLOAT_TYPE, JType.DOUBLE_TYPE);
+		  case IOpcodes.F2D:
+			Cast(JType.FloatType, JType.DoubleType);
 			break;
-		  case Opcodes.D2I:
-			cast(JType.DOUBLE_TYPE, JType.INT_TYPE);
+		  case IOpcodes.D2I:
+			Cast(JType.DoubleType, JType.IntType);
 			break;
-		  case Opcodes.D2L:
-			cast(JType.DOUBLE_TYPE, JType.LONG_TYPE);
+		  case IOpcodes.D2L:
+			Cast(JType.DoubleType, JType.LongType);
 			break;
-		  case Opcodes.D2F:
-			cast(JType.DOUBLE_TYPE, JType.FLOAT_TYPE);
+		  case IOpcodes.D2F:
+			Cast(JType.DoubleType, JType.FloatType);
 			break;
-		  case Opcodes.I2B:
-			cast(JType.INT_TYPE, JType.BYTE_TYPE);
+		  case IOpcodes.I2B:
+			Cast(JType.IntType, JType.ByteType);
 			break;
-		  case Opcodes.I2C:
-			cast(JType.INT_TYPE, JType.CHAR_TYPE);
+		  case IOpcodes.I2C:
+			Cast(JType.IntType, JType.CharType);
 			break;
-		  case Opcodes.I2S:
-			cast(JType.INT_TYPE, JType.SHORT_TYPE);
+		  case IOpcodes.I2S:
+			Cast(JType.IntType, JType.ShortType);
 			break;
-		  case Opcodes.LCMP:
-			lcmp();
+		  case IOpcodes.Lcmp:
+			Lcmp();
 			break;
-		  case Opcodes.FCMPL:
-			cmpl(JType.FLOAT_TYPE);
+		  case IOpcodes.Fcmpl:
+			Cmpl(JType.FloatType);
 			break;
-		  case Opcodes.FCMPG:
-			cmpg(JType.FLOAT_TYPE);
+		  case IOpcodes.Fcmpg:
+			Cmpg(JType.FloatType);
 			break;
-		  case Opcodes.DCMPL:
-			cmpl(JType.DOUBLE_TYPE);
+		  case IOpcodes.Dcmpl:
+			Cmpl(JType.DoubleType);
 			break;
-		  case Opcodes.DCMPG:
-			cmpg(JType.DOUBLE_TYPE);
+		  case IOpcodes.Dcmpg:
+			Cmpg(JType.DoubleType);
 			break;
-		  case Opcodes.IRETURN:
-			areturn(JType.INT_TYPE);
+		  case IOpcodes.Ireturn:
+			Areturn(JType.IntType);
 			break;
-		  case Opcodes.LRETURN:
-			areturn(JType.LONG_TYPE);
+		  case IOpcodes.Lreturn:
+			Areturn(JType.LongType);
 			break;
-		  case Opcodes.FRETURN:
-			areturn(JType.FLOAT_TYPE);
+		  case IOpcodes.Freturn:
+			Areturn(JType.FloatType);
 			break;
-		  case Opcodes.DRETURN:
-			areturn(JType.DOUBLE_TYPE);
+		  case IOpcodes.Dreturn:
+			Areturn(JType.DoubleType);
 			break;
-		  case Opcodes.ARETURN:
-			areturn(OBJECT_TYPE);
+		  case IOpcodes.Areturn:
+			Areturn(ObjectType);
 			break;
-		  case Opcodes.RETURN:
-			areturn(JType.VOID_TYPE);
+		  case IOpcodes.Return:
+			Areturn(JType.VoidType);
 			break;
-		  case Opcodes.ARRAYLENGTH:
-			arraylength();
+		  case IOpcodes.Arraylength:
+			Arraylength();
 			break;
-		  case Opcodes.ATHROW:
-			athrow();
+		  case IOpcodes.Athrow:
+			Athrow();
 			break;
-		  case Opcodes.MONITORENTER:
-			monitorenter();
+		  case IOpcodes.Monitorenter:
+			Monitorenter();
 			break;
-		  case Opcodes.MONITOREXIT:
-			monitorexit();
+		  case IOpcodes.Monitorexit:
+			Monitorexit();
 			break;
 		  default:
 			throw new System.ArgumentException();
 		}
 	  }
 
-	  public override void visitIntInsn(int opcode, int operand)
+	  public override void VisitIntInsn(int opcode, int operand)
 	  {
 		switch (opcode)
 		{
-		  case Opcodes.BIPUSH:
-			iconst(operand);
+		  case IOpcodes.Bipush:
+			Iconst(operand);
 			break;
-		  case Opcodes.SIPUSH:
-			iconst(operand);
+		  case IOpcodes.Sipush:
+			Iconst(operand);
 			break;
-		  case Opcodes.NEWARRAY:
+		  case IOpcodes.Newarray:
 			switch (operand)
 			{
-			  case Opcodes.T_BOOLEAN:
-				newarray(JType.BOOLEAN_TYPE);
+			  case IOpcodes.Boolean:
+				Newarray(JType.BooleanType);
 				break;
-			  case Opcodes.T_CHAR:
-				newarray(JType.CHAR_TYPE);
+			  case IOpcodes.Char:
+				Newarray(JType.CharType);
 				break;
-			  case Opcodes.T_BYTE:
-				newarray(JType.BYTE_TYPE);
+			  case IOpcodes.Byte:
+				Newarray(JType.ByteType);
 				break;
-			  case Opcodes.T_SHORT:
-				newarray(JType.SHORT_TYPE);
+			  case IOpcodes.Short:
+				Newarray(JType.ShortType);
 				break;
-			  case Opcodes.T_INT:
-				newarray(JType.INT_TYPE);
+			  case IOpcodes.Int:
+				Newarray(JType.IntType);
 				break;
-			  case Opcodes.T_FLOAT:
-				newarray(JType.FLOAT_TYPE);
+			  case IOpcodes.Float:
+				Newarray(JType.FloatType);
 				break;
-			  case Opcodes.T_LONG:
-				newarray(JType.LONG_TYPE);
+			  case IOpcodes.Long:
+				Newarray(JType.LongType);
 				break;
-			  case Opcodes.T_DOUBLE:
-				newarray(JType.DOUBLE_TYPE);
+			  case IOpcodes.Double:
+				Newarray(JType.DoubleType);
 				break;
 			  default:
 				throw new System.ArgumentException();
@@ -423,250 +423,250 @@ namespace ObjectWeb.Asm.Commons
 		}
 	  }
 
-	  public override void visitVarInsn(int opcode, int var)
+	  public override void VisitVarInsn(int opcode, int var)
 	  {
 		switch (opcode)
 		{
-		  case Opcodes.ILOAD:
-			load(var, JType.INT_TYPE);
+		  case IOpcodes.Iload:
+			Load(var, JType.IntType);
 			break;
-		  case Opcodes.LLOAD:
-			load(var, JType.LONG_TYPE);
+		  case IOpcodes.Lload:
+			Load(var, JType.LongType);
 			break;
-		  case Opcodes.FLOAD:
-			load(var, JType.FLOAT_TYPE);
+		  case IOpcodes.Fload:
+			Load(var, JType.FloatType);
 			break;
-		  case Opcodes.DLOAD:
-			load(var, JType.DOUBLE_TYPE);
+		  case IOpcodes.Dload:
+			Load(var, JType.DoubleType);
 			break;
-		  case Opcodes.ALOAD:
-			load(var, OBJECT_TYPE);
+		  case IOpcodes.Aload:
+			Load(var, ObjectType);
 			break;
-		  case Opcodes.ISTORE:
-			store(var, JType.INT_TYPE);
+		  case IOpcodes.Istore:
+			Store(var, JType.IntType);
 			break;
-		  case Opcodes.LSTORE:
-			store(var, JType.LONG_TYPE);
+		  case IOpcodes.Lstore:
+			Store(var, JType.LongType);
 			break;
-		  case Opcodes.FSTORE:
-			store(var, JType.FLOAT_TYPE);
+		  case IOpcodes.Fstore:
+			Store(var, JType.FloatType);
 			break;
-		  case Opcodes.DSTORE:
-			store(var, JType.DOUBLE_TYPE);
+		  case IOpcodes.Dstore:
+			Store(var, JType.DoubleType);
 			break;
-		  case Opcodes.ASTORE:
-			store(var, OBJECT_TYPE);
+		  case IOpcodes.Astore:
+			Store(var, ObjectType);
 			break;
-		  case Opcodes.RET:
-			ret(var);
+		  case IOpcodes.Ret:
+			Ret(var);
 			break;
 		  default:
 			throw new System.ArgumentException();
 		}
 	  }
 
-	  public override void visitTypeInsn(int opcode, string type)
+	  public override void VisitTypeInsn(int opcode, string type)
 	  {
-		JType objectType = JType.getObjectType(type);
+		JType objectType = JType.GetObjectType(type);
 		switch (opcode)
 		{
-		  case Opcodes.NEW:
-			anew(objectType);
+		  case IOpcodes.New:
+			Anew(objectType);
 			break;
-		  case Opcodes.ANEWARRAY:
-			newarray(objectType);
+		  case IOpcodes.Anewarray:
+			Newarray(objectType);
 			break;
-		  case Opcodes.CHECKCAST:
-			checkcast(objectType);
+		  case IOpcodes.Checkcast:
+			Checkcast(objectType);
 			break;
-		  case Opcodes.INSTANCEOF:
-			instanceOf(objectType);
+		  case IOpcodes.Instanceof:
+			InstanceOf(objectType);
 			break;
 		  default:
 			throw new System.ArgumentException();
 		}
 	  }
 
-	  public override void visitFieldInsn(int opcode, string owner, string name, string descriptor)
+	  public override void VisitFieldInsn(int opcode, string owner, string name, string descriptor)
 	  {
 		switch (opcode)
 		{
-		  case Opcodes.GETSTATIC:
-			getstatic(owner, name, descriptor);
+		  case IOpcodes.Getstatic:
+			Getstatic(owner, name, descriptor);
 			break;
-		  case Opcodes.PUTSTATIC:
-			putstatic(owner, name, descriptor);
+		  case IOpcodes.Putstatic:
+			Putstatic(owner, name, descriptor);
 			break;
-		  case Opcodes.GETFIELD:
-			getfield(owner, name, descriptor);
+		  case IOpcodes.Getfield:
+			Getfield(owner, name, descriptor);
 			break;
-		  case Opcodes.PUTFIELD:
-			putfield(owner, name, descriptor);
+		  case IOpcodes.Putfield:
+			Putfield(owner, name, descriptor);
 			break;
 		  default:
 			throw new System.ArgumentException();
 		}
 	  }
 
-	  public override void visitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor, bool isInterface)
+	  public override void VisitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor, bool isInterface)
 	  {
-		if (api < Opcodes.ASM5 && (opcodeAndSource & Opcodes.SOURCE_DEPRECATED) == 0)
+		if (api < IOpcodes.Asm5 && (opcodeAndSource & IOpcodes.Source_Deprecated) == 0)
 		{
 		  // Redirect the call to the deprecated version of this method.
-		  base.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
+		  base.VisitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
 		  return;
 		}
-		int opcode = opcodeAndSource & ~Opcodes.SOURCE_MASK;
+		int opcode = opcodeAndSource & ~IOpcodes.Source_Mask;
 
 		switch (opcode)
 		{
-		  case Opcodes.INVOKESPECIAL:
-			invokespecial(owner, name, descriptor, isInterface);
+		  case IOpcodes.Invokespecial:
+			Invokespecial(owner, name, descriptor, isInterface);
 			break;
-		  case Opcodes.INVOKEVIRTUAL:
-			invokevirtual(owner, name, descriptor, isInterface);
+		  case IOpcodes.Invokevirtual:
+			Invokevirtual(owner, name, descriptor, isInterface);
 			break;
-		  case Opcodes.INVOKESTATIC:
-			invokestatic(owner, name, descriptor, isInterface);
+		  case IOpcodes.Invokestatic:
+			Invokestatic(owner, name, descriptor, isInterface);
 			break;
-		  case Opcodes.INVOKEINTERFACE:
-			invokeinterface(owner, name, descriptor);
+		  case IOpcodes.Invokeinterface:
+			Invokeinterface(owner, name, descriptor);
 			break;
 		  default:
 			throw new System.ArgumentException();
 		}
 	  }
 
-	  public override void visitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
+	  public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
 	  {
-		invokedynamic(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
+		Invokedynamic(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
 	  }
 
-	  public override void visitJumpInsn(int opcode, Label label)
+	  public override void VisitJumpInsn(int opcode, Label label)
 	  {
 		switch (opcode)
 		{
-		  case Opcodes.IFEQ:
-			ifeq(label);
+		  case IOpcodes.Ifeq:
+			Ifeq(label);
 			break;
-		  case Opcodes.IFNE:
-			ifne(label);
+		  case IOpcodes.Ifne:
+			Ifne(label);
 			break;
-		  case Opcodes.IFLT:
-			iflt(label);
+		  case IOpcodes.Iflt:
+			Iflt(label);
 			break;
-		  case Opcodes.IFGE:
-			ifge(label);
+		  case IOpcodes.Ifge:
+			Ifge(label);
 			break;
-		  case Opcodes.IFGT:
-			ifgt(label);
+		  case IOpcodes.Ifgt:
+			Ifgt(label);
 			break;
-		  case Opcodes.IFLE:
-			ifle(label);
+		  case IOpcodes.Ifle:
+			Ifle(label);
 			break;
-		  case Opcodes.IF_ICMPEQ:
-			ificmpeq(label);
+		  case IOpcodes.If_Icmpeq:
+			Ificmpeq(label);
 			break;
-		  case Opcodes.IF_ICMPNE:
-			ificmpne(label);
+		  case IOpcodes.If_Icmpne:
+			Ificmpne(label);
 			break;
-		  case Opcodes.IF_ICMPLT:
-			ificmplt(label);
+		  case IOpcodes.If_Icmplt:
+			Ificmplt(label);
 			break;
-		  case Opcodes.IF_ICMPGE:
-			ificmpge(label);
+		  case IOpcodes.If_Icmpge:
+			Ificmpge(label);
 			break;
-		  case Opcodes.IF_ICMPGT:
-			ificmpgt(label);
+		  case IOpcodes.If_Icmpgt:
+			Ificmpgt(label);
 			break;
-		  case Opcodes.IF_ICMPLE:
-			ificmple(label);
+		  case IOpcodes.If_Icmple:
+			Ificmple(label);
 			break;
-		  case Opcodes.IF_ACMPEQ:
-			ifacmpeq(label);
+		  case IOpcodes.If_Acmpeq:
+			Ifacmpeq(label);
 			break;
-		  case Opcodes.IF_ACMPNE:
-			ifacmpne(label);
+		  case IOpcodes.If_Acmpne:
+			Ifacmpne(label);
 			break;
-		  case Opcodes.GOTO:
-			goTo(label);
+		  case IOpcodes.Goto:
+			GoTo(label);
 			break;
-		  case Opcodes.JSR:
-			jsr(label);
+		  case IOpcodes.Jsr:
+			Jsr(label);
 			break;
-		  case Opcodes.IFNULL:
-			ifnull(label);
+		  case IOpcodes.Ifnull:
+			Ifnull(label);
 			break;
-		  case Opcodes.IFNONNULL:
-			ifnonnull(label);
+		  case IOpcodes.Ifnonnull:
+			Ifnonnull(label);
 			break;
 		  default:
 			throw new System.ArgumentException();
 		}
 	  }
 
-	  public override void visitLabel(Label label)
+	  public override void VisitLabel(Label label)
 	  {
-		mark(label);
+		Mark(label);
 	  }
 
-	  public override void visitLdcInsn(object value)
+	  public override void VisitLdcInsn(object value)
 	  {
-		if (api < Opcodes.ASM5 && (value is Handle || (value is JType && ((JType) value).Sort == JType.METHOD)))
+		if (api < IOpcodes.Asm5 && (value is Handle || (value is JType && ((JType) value).Sort == JType.Method)))
 		{
 		  throw new System.NotSupportedException("This feature requires ASM5");
 		}
-		if (api < Opcodes.ASM7 && value is ConstantDynamic)
+		if (api < IOpcodes.Asm7 && value is ConstantDynamic)
 		{
 		  throw new System.NotSupportedException("This feature requires ASM7");
 		}
 		if (value is int)
 		{
-		  iconst(((int?) value).Value);
+		  Iconst(((int?) value).Value);
 		}
 		else if (value is Byte)
 		{
-		  iconst(((sbyte?) value).Value);
+		  Iconst(((sbyte?) value).Value);
 		}
 		else if (value is char)
 		{
-		  iconst(((char?) value).Value);
+		  Iconst(((char?) value).Value);
 		}
 		else if (value is short)
 		{
-		  iconst(((short?) value).Value);
+		  Iconst(((short?) value).Value);
 		}
 		else if (value is Boolean)
 		{
-		  iconst(((bool?) value).Value ? 1 : 0);
+		  Iconst(((bool?) value).Value ? 1 : 0);
 		}
 		else if (value is float)
 		{
-		  fconst(((float?) value).Value);
+		  Fconst(((float?) value).Value);
 		}
 		else if (value is long)
 		{
-		  lconst(((long?) value).Value);
+		  Lconst(((long?) value).Value);
 		}
 		else if (value is Double)
 		{
-		  dconst(((double?) value).Value);
+		  Dconst(((double?) value).Value);
 		}
 		else if (value is string)
 		{
-		  aconst(value);
+		  Aconst(value);
 		}
 		else if (value is Type)
 		{
-		  tconst((JType) value);
+		  Tconst((JType) value);
 		}
 		else if (value is Handle)
 		{
-		  hconst((Handle) value);
+		  Hconst((Handle) value);
 		}
 		else if (value is ConstantDynamic)
 		{
-		  cconst((ConstantDynamic) value);
+		  Cconst((ConstantDynamic) value);
 		}
 		else
 		{
@@ -674,33 +674,33 @@ namespace ObjectWeb.Asm.Commons
 		}
 	  }
 
-	  public override void visitIincInsn(int var, int increment)
+	  public override void VisitIincInsn(int var, int increment)
 	  {
-		iinc(var, increment);
+		Iinc(var, increment);
 	  }
 
-	  public override void visitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)
+	  public override void VisitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)
 	  {
-		tableswitch(min, max, dflt, labels);
+		Tableswitch(min, max, dflt, labels);
 	  }
 
-	  public override void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
+	  public override void VisitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
 	  {
-		lookupswitch(dflt, keys, labels);
+		Lookupswitch(dflt, keys, labels);
 	  }
 
-	  public override void visitMultiANewArrayInsn(string descriptor, int numDimensions)
+	  public override void VisitMultiANewArrayInsn(string descriptor, int numDimensions)
 	  {
-		multianewarray(descriptor, numDimensions);
+		Multianewarray(descriptor, numDimensions);
 	  }
 
 	  // -----------------------------------------------------------------------------------------------
 
 	  /// <summary>
 	  /// Generates a nop instruction. </summary>
-	  public virtual void nop()
+	  public virtual void Nop()
 	  {
-		mv.visitInsn(Opcodes.NOP);
+		mv.VisitInsn(IOpcodes.Nop);
 	  }
 
 	  /// <summary>
@@ -712,15 +712,15 @@ namespace ObjectWeb.Asm.Commons
 	  ///     <seealso cref="Type"/> of METHOD sort for MethodType, a <seealso cref="Handle"/> for MethodHandle constants,
 	  ///     for classes whose version is 51 or a <seealso cref="ConstantDynamic"/> for a constant dynamic for
 	  ///     classes whose version is 55. </param>
-	  public virtual void aconst(object value)
+	  public virtual void Aconst(object value)
 	  {
 		if (value == null)
 		{
-		  mv.visitInsn(Opcodes.ACONST_NULL);
+		  mv.VisitInsn(IOpcodes.Aconst_Null);
 		}
 		else
 		{
-		  mv.visitLdcInsn(value);
+		  mv.VisitLdcInsn(value);
 		}
 	  }
 
@@ -728,23 +728,23 @@ namespace ObjectWeb.Asm.Commons
 	  /// Generates the instruction to push the given value on the stack.
 	  /// </summary>
 	  /// <param name="intValue"> the constant to be pushed on the stack. </param>
-	  public virtual void iconst(int intValue)
+	  public virtual void Iconst(int intValue)
 	  {
 		if (intValue >= -1 && intValue <= 5)
 		{
-		  mv.visitInsn(Opcodes.ICONST_0 + intValue);
+		  mv.VisitInsn(IOpcodes.Iconst_0 + intValue);
 		}
 		else if (intValue >= sbyte.MinValue && intValue <= sbyte.MaxValue)
 		{
-		  mv.visitIntInsn(Opcodes.BIPUSH, intValue);
+		  mv.VisitIntInsn(IOpcodes.Bipush, intValue);
 		}
 		else if (intValue >= short.MinValue && intValue <= short.MaxValue)
 		{
-		  mv.visitIntInsn(Opcodes.SIPUSH, intValue);
+		  mv.VisitIntInsn(IOpcodes.Sipush, intValue);
 		}
 		else
 		{
-		  mv.visitLdcInsn(intValue);
+		  mv.VisitLdcInsn(intValue);
 		}
 	  }
 
@@ -752,15 +752,15 @@ namespace ObjectWeb.Asm.Commons
 	  /// Generates the instruction to push the given value on the stack.
 	  /// </summary>
 	  /// <param name="longValue"> the constant to be pushed on the stack. </param>
-	  public virtual void lconst(long longValue)
+	  public virtual void Lconst(long longValue)
 	  {
 		if (longValue == 0L || longValue == 1L)
 		{
-		  mv.visitInsn(Opcodes.LCONST_0 + (int) longValue);
+		  mv.VisitInsn(IOpcodes.Lconst_0 + (int) longValue);
 		}
 		else
 		{
-		  mv.visitLdcInsn(longValue);
+		  mv.VisitLdcInsn(longValue);
 		}
 	  }
 
@@ -768,16 +768,16 @@ namespace ObjectWeb.Asm.Commons
 	  /// Generates the instruction to push the given value on the stack.
 	  /// </summary>
 	  /// <param name="floatValue"> the constant to be pushed on the stack. </param>
-	  public virtual void fconst(float floatValue)
+	  public virtual void Fconst(float floatValue)
 	  {
 		int bits = BitConverter.SingleToInt32Bits(floatValue);
 		if (bits == 0L || bits == 0x3F800000 || bits == 0x40000000)
 		{ // 0..2
-		  mv.visitInsn(Opcodes.FCONST_0 + (int) floatValue);
+		  mv.VisitInsn(IOpcodes.Fconst_0 + (int) floatValue);
 		}
 		else
 		{
-		  mv.visitLdcInsn(floatValue);
+		  mv.VisitLdcInsn(floatValue);
 		}
 	  }
 
@@ -785,16 +785,16 @@ namespace ObjectWeb.Asm.Commons
 	  /// Generates the instruction to push the given value on the stack.
 	  /// </summary>
 	  /// <param name="doubleValue"> the constant to be pushed on the stack. </param>
-	  public virtual void dconst(double doubleValue)
+	  public virtual void Dconst(double doubleValue)
 	  {
 		long bits = System.BitConverter.DoubleToInt64Bits(doubleValue);
 		if (bits == 0L || bits == 0x3FF0000000000000L)
 		{ // +0.0d and 1.0d
-		  mv.visitInsn(Opcodes.DCONST_0 + (int) doubleValue);
+		  mv.VisitInsn(IOpcodes.Dconst_0 + (int) doubleValue);
 		}
 		else
 		{
-		  mv.visitLdcInsn(doubleValue);
+		  mv.VisitLdcInsn(doubleValue);
 		}
 	  }
 
@@ -802,157 +802,157 @@ namespace ObjectWeb.Asm.Commons
 	  /// Generates the instruction to push the given type on the stack.
 	  /// </summary>
 	  /// <param name="type"> the type to be pushed on the stack. </param>
-	  public virtual void tconst(JType type)
+	  public virtual void Tconst(JType type)
 	  {
-		mv.visitLdcInsn(type);
+		mv.VisitLdcInsn(type);
 	  }
 
 	  /// <summary>
 	  /// Generates the instruction to push the given handle on the stack.
 	  /// </summary>
 	  /// <param name="handle"> the handle to be pushed on the stack. </param>
-	  public virtual void hconst(Handle handle)
+	  public virtual void Hconst(Handle handle)
 	  {
-		mv.visitLdcInsn(handle);
+		mv.VisitLdcInsn(handle);
 	  }
 
 	  /// <summary>
 	  /// Generates the instruction to push the given constant dynamic on the stack.
 	  /// </summary>
 	  /// <param name="constantDynamic"> the constant dynamic to be pushed on the stack. </param>
-	  public virtual void cconst(ConstantDynamic constantDynamic)
+	  public virtual void Cconst(ConstantDynamic constantDynamic)
 	  {
-		mv.visitLdcInsn(constantDynamic);
+		mv.VisitLdcInsn(constantDynamic);
 	  }
 
-	  public virtual void load(int var, JType type)
+	  public virtual void Load(int var, JType type)
 	  {
-		mv.visitVarInsn(type.getOpcode(Opcodes.ILOAD), var);
+		mv.VisitVarInsn(type.GetOpcode(IOpcodes.Iload), var);
 	  }
 
-	  public virtual void aload(JType type)
+	  public virtual void Aload(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IALOAD));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Iaload));
 	  }
 
-	  public virtual void store(int var, JType type)
+	  public virtual void Store(int var, JType type)
 	  {
-		mv.visitVarInsn(type.getOpcode(Opcodes.ISTORE), var);
+		mv.VisitVarInsn(type.GetOpcode(IOpcodes.Istore), var);
 	  }
 
-	  public virtual void astore(JType type)
+	  public virtual void Astore(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IASTORE));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Iastore));
 	  }
 
-	  public virtual void pop()
+	  public virtual void Pop()
 	  {
-		mv.visitInsn(Opcodes.POP);
+		mv.VisitInsn(IOpcodes.Pop);
 	  }
 
-	  public virtual void pop2()
+	  public virtual void Pop2()
 	  {
-		mv.visitInsn(Opcodes.POP2);
+		mv.VisitInsn(IOpcodes.Pop2);
 	  }
 
-	  public virtual void dup()
+	  public virtual void Dup()
 	  {
-		mv.visitInsn(Opcodes.DUP);
+		mv.VisitInsn(IOpcodes.Dup);
 	  }
 
-	  public virtual void dup2()
+	  public virtual void Dup2()
 	  {
-		mv.visitInsn(Opcodes.DUP2);
+		mv.VisitInsn(IOpcodes.Dup2);
 	  }
 
-	  public virtual void dupX1()
+	  public virtual void DupX1()
 	  {
-		mv.visitInsn(Opcodes.DUP_X1);
+		mv.VisitInsn(IOpcodes.Dup_X1);
 	  }
 
-	  public virtual void dupX2()
+	  public virtual void DupX2()
 	  {
-		mv.visitInsn(Opcodes.DUP_X2);
+		mv.VisitInsn(IOpcodes.Dup_X2);
 	  }
 
-	  public virtual void dup2X1()
+	  public virtual void Dup2X1()
 	  {
-		mv.visitInsn(Opcodes.DUP2_X1);
+		mv.VisitInsn(IOpcodes.Dup2_X1);
 	  }
 
-	  public virtual void dup2X2()
+	  public virtual void Dup2X2()
 	  {
-		mv.visitInsn(Opcodes.DUP2_X2);
+		mv.VisitInsn(IOpcodes.Dup2_X2);
 	  }
 
-	  public virtual void swap()
+	  public virtual void Swap()
 	  {
-		mv.visitInsn(Opcodes.SWAP);
+		mv.VisitInsn(IOpcodes.Swap);
 	  }
 
-	  public virtual void add(JType type)
+	  public virtual void Add(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IADD));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Iadd));
 	  }
 
-	  public virtual void sub(JType type)
+	  public virtual void Sub(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.ISUB));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Isub));
 	  }
 
-	  public virtual void mul(JType type)
+	  public virtual void Mul(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IMUL));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Imul));
 	  }
 
-	  public virtual void div(JType type)
+	  public virtual void Div(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IDIV));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Idiv));
 	  }
 
-	  public virtual void rem(JType type)
+	  public virtual void Rem(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IREM));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Irem));
 	  }
 
-	  public virtual void neg(JType type)
+	  public virtual void Neg(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.INEG));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Ineg));
 	  }
 
-	  public virtual void shl(JType type)
+	  public virtual void Shl(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.ISHL));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Ishl));
 	  }
 
-	  public virtual void shr(JType type)
+	  public virtual void Shr(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.ISHR));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Ishr));
 	  }
 
-	  public virtual void ushr(JType type)
+	  public virtual void Ushr(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IUSHR));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Iushr));
 	  }
 
-	  public virtual void and(JType type)
+	  public virtual void And(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IAND));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Iand));
 	  }
 
-	  public virtual void or(JType type)
+	  public virtual void Or(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IOR));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Ior));
 	  }
 
-	  public virtual void xor(JType type)
+	  public virtual void Xor(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IXOR));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Ixor));
 	  }
 
-	  public virtual void iinc(int var, int increment)
+	  public virtual void Iinc(int var, int increment)
 	  {
-		mv.visitIincInsn(var, increment);
+		mv.VisitIincInsn(var, increment);
 	  }
 
 	  /// <summary>
@@ -960,9 +960,9 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="from"> a Type. </param>
 	  /// <param name="to"> a Type. </param>
-	  public virtual void cast(JType from, JType to)
+	  public virtual void Cast(JType from, JType to)
 	  {
-		cast(mv, from, to);
+		Cast(mv, from, to);
 	  }
 
 	  /// <summary>
@@ -971,221 +971,221 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="methodVisitor"> the method visitor to use to generate the instruction. </param>
 	  /// <param name="from"> a Type. </param>
 	  /// <param name="to"> a Type. </param>
-	  internal static void cast(MethodVisitor methodVisitor, JType from, JType to)
+	  internal static void Cast(MethodVisitor methodVisitor, JType from, JType to)
 	  {
 		if (from != to)
 		{
-		  if (from == JType.DOUBLE_TYPE)
+		  if (from == JType.DoubleType)
 		  {
-			if (to == JType.FLOAT_TYPE)
+			if (to == JType.FloatType)
 			{
-			  methodVisitor.visitInsn(Opcodes.D2F);
+			  methodVisitor.VisitInsn(IOpcodes.D2F);
 			}
-			else if (to == JType.LONG_TYPE)
+			else if (to == JType.LongType)
 			{
-			  methodVisitor.visitInsn(Opcodes.D2L);
+			  methodVisitor.VisitInsn(IOpcodes.D2L);
 			}
 			else
 			{
-			  methodVisitor.visitInsn(Opcodes.D2I);
-			  cast(methodVisitor, JType.INT_TYPE, to);
+			  methodVisitor.VisitInsn(IOpcodes.D2I);
+			  Cast(methodVisitor, JType.IntType, to);
 			}
 		  }
-		  else if (from == JType.FLOAT_TYPE)
+		  else if (from == JType.FloatType)
 		  {
-			if (to == JType.DOUBLE_TYPE)
+			if (to == JType.DoubleType)
 			{
-			  methodVisitor.visitInsn(Opcodes.F2D);
+			  methodVisitor.VisitInsn(IOpcodes.F2D);
 			}
-			else if (to == JType.LONG_TYPE)
+			else if (to == JType.LongType)
 			{
-			  methodVisitor.visitInsn(Opcodes.F2L);
+			  methodVisitor.VisitInsn(IOpcodes.F2L);
 			}
 			else
 			{
-			  methodVisitor.visitInsn(Opcodes.F2I);
-			  cast(methodVisitor, JType.INT_TYPE, to);
+			  methodVisitor.VisitInsn(IOpcodes.F2I);
+			  Cast(methodVisitor, JType.IntType, to);
 			}
 		  }
-		  else if (from == JType.LONG_TYPE)
+		  else if (from == JType.LongType)
 		  {
-			if (to == JType.DOUBLE_TYPE)
+			if (to == JType.DoubleType)
 			{
-			  methodVisitor.visitInsn(Opcodes.L2D);
+			  methodVisitor.VisitInsn(IOpcodes.L2D);
 			}
-			else if (to == JType.FLOAT_TYPE)
+			else if (to == JType.FloatType)
 			{
-			  methodVisitor.visitInsn(Opcodes.L2F);
+			  methodVisitor.VisitInsn(IOpcodes.L2F);
 			}
 			else
 			{
-			  methodVisitor.visitInsn(Opcodes.L2I);
-			  cast(methodVisitor, JType.INT_TYPE, to);
+			  methodVisitor.VisitInsn(IOpcodes.L2I);
+			  Cast(methodVisitor, JType.IntType, to);
 			}
 		  }
 		  else
 		  {
-			if (to == JType.BYTE_TYPE)
+			if (to == JType.ByteType)
 			{
-			  methodVisitor.visitInsn(Opcodes.I2B);
+			  methodVisitor.VisitInsn(IOpcodes.I2B);
 			}
-			else if (to == JType.CHAR_TYPE)
+			else if (to == JType.CharType)
 			{
-			  methodVisitor.visitInsn(Opcodes.I2C);
+			  methodVisitor.VisitInsn(IOpcodes.I2C);
 			}
-			else if (to == JType.DOUBLE_TYPE)
+			else if (to == JType.DoubleType)
 			{
-			  methodVisitor.visitInsn(Opcodes.I2D);
+			  methodVisitor.VisitInsn(IOpcodes.I2D);
 			}
-			else if (to == JType.FLOAT_TYPE)
+			else if (to == JType.FloatType)
 			{
-			  methodVisitor.visitInsn(Opcodes.I2F);
+			  methodVisitor.VisitInsn(IOpcodes.I2F);
 			}
-			else if (to == JType.LONG_TYPE)
+			else if (to == JType.LongType)
 			{
-			  methodVisitor.visitInsn(Opcodes.I2L);
+			  methodVisitor.VisitInsn(IOpcodes.I2L);
 			}
-			else if (to == JType.SHORT_TYPE)
+			else if (to == JType.ShortType)
 			{
-			  methodVisitor.visitInsn(Opcodes.I2S);
+			  methodVisitor.VisitInsn(IOpcodes.I2S);
 			}
 		  }
 		}
 	  }
 
-	  public virtual void lcmp()
+	  public virtual void Lcmp()
 	  {
-		mv.visitInsn(Opcodes.LCMP);
+		mv.VisitInsn(IOpcodes.Lcmp);
 	  }
 
-	  public virtual void cmpl(JType type)
+	  public virtual void Cmpl(JType type)
 	  {
-		mv.visitInsn(type == JType.FLOAT_TYPE ? Opcodes.FCMPL : Opcodes.DCMPL);
+		mv.VisitInsn(type == JType.FloatType ? IOpcodes.Fcmpl : IOpcodes.Dcmpl);
 	  }
 
-	  public virtual void cmpg(JType type)
+	  public virtual void Cmpg(JType type)
 	  {
-		mv.visitInsn(type == JType.FLOAT_TYPE ? Opcodes.FCMPG : Opcodes.DCMPG);
+		mv.VisitInsn(type == JType.FloatType ? IOpcodes.Fcmpg : IOpcodes.Dcmpg);
 	  }
 
-	  public virtual void ifeq(Label label)
+	  public virtual void Ifeq(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IFEQ, label);
+		mv.VisitJumpInsn(IOpcodes.Ifeq, label);
 	  }
 
-	  public virtual void ifne(Label label)
+	  public virtual void Ifne(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IFNE, label);
+		mv.VisitJumpInsn(IOpcodes.Ifne, label);
 	  }
 
-	  public virtual void iflt(Label label)
+	  public virtual void Iflt(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IFLT, label);
+		mv.VisitJumpInsn(IOpcodes.Iflt, label);
 	  }
 
-	  public virtual void ifge(Label label)
+	  public virtual void Ifge(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IFGE, label);
+		mv.VisitJumpInsn(IOpcodes.Ifge, label);
 	  }
 
-	  public virtual void ifgt(Label label)
+	  public virtual void Ifgt(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IFGT, label);
+		mv.VisitJumpInsn(IOpcodes.Ifgt, label);
 	  }
 
-	  public virtual void ifle(Label label)
+	  public virtual void Ifle(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IFLE, label);
+		mv.VisitJumpInsn(IOpcodes.Ifle, label);
 	  }
 
-	  public virtual void ificmpeq(Label label)
+	  public virtual void Ificmpeq(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IF_ICMPEQ, label);
+		mv.VisitJumpInsn(IOpcodes.If_Icmpeq, label);
 	  }
 
-	  public virtual void ificmpne(Label label)
+	  public virtual void Ificmpne(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IF_ICMPNE, label);
+		mv.VisitJumpInsn(IOpcodes.If_Icmpne, label);
 	  }
 
-	  public virtual void ificmplt(Label label)
+	  public virtual void Ificmplt(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IF_ICMPLT, label);
+		mv.VisitJumpInsn(IOpcodes.If_Icmplt, label);
 	  }
 
-	  public virtual void ificmpge(Label label)
+	  public virtual void Ificmpge(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IF_ICMPGE, label);
+		mv.VisitJumpInsn(IOpcodes.If_Icmpge, label);
 	  }
 
-	  public virtual void ificmpgt(Label label)
+	  public virtual void Ificmpgt(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IF_ICMPGT, label);
+		mv.VisitJumpInsn(IOpcodes.If_Icmpgt, label);
 	  }
 
-	  public virtual void ificmple(Label label)
+	  public virtual void Ificmple(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IF_ICMPLE, label);
+		mv.VisitJumpInsn(IOpcodes.If_Icmple, label);
 	  }
 
-	  public virtual void ifacmpeq(Label label)
+	  public virtual void Ifacmpeq(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IF_ACMPEQ, label);
+		mv.VisitJumpInsn(IOpcodes.If_Acmpeq, label);
 	  }
 
-	  public virtual void ifacmpne(Label label)
+	  public virtual void Ifacmpne(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IF_ACMPNE, label);
+		mv.VisitJumpInsn(IOpcodes.If_Acmpne, label);
 	  }
 
-	  public virtual void goTo(Label label)
+	  public virtual void GoTo(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.GOTO, label);
+		mv.VisitJumpInsn(IOpcodes.Goto, label);
 	  }
 
-	  public virtual void jsr(Label label)
+	  public virtual void Jsr(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.JSR, label);
+		mv.VisitJumpInsn(IOpcodes.Jsr, label);
 	  }
 
-	  public virtual void ret(int var)
+	  public virtual void Ret(int var)
 	  {
-		mv.visitVarInsn(Opcodes.RET, var);
+		mv.VisitVarInsn(IOpcodes.Ret, var);
 	  }
 
-	  public virtual void tableswitch(int min, int max, Label dflt, params Label[] labels)
+	  public virtual void Tableswitch(int min, int max, Label dflt, params Label[] labels)
 	  {
-		mv.visitTableSwitchInsn(min, max, dflt, labels);
+		mv.VisitTableSwitchInsn(min, max, dflt, labels);
 	  }
 
-	  public virtual void lookupswitch(Label dflt, int[] keys, Label[] labels)
+	  public virtual void Lookupswitch(Label dflt, int[] keys, Label[] labels)
 	  {
-		mv.visitLookupSwitchInsn(dflt, keys, labels);
+		mv.VisitLookupSwitchInsn(dflt, keys, labels);
 	  }
 
-	  public virtual void areturn(JType type)
+	  public virtual void Areturn(JType type)
 	  {
-		mv.visitInsn(type.getOpcode(Opcodes.IRETURN));
+		mv.VisitInsn(type.GetOpcode(IOpcodes.Ireturn));
 	  }
 
-	  public virtual void getstatic(string owner, string name, string descriptor)
+	  public virtual void Getstatic(string owner, string name, string descriptor)
 	  {
-		mv.visitFieldInsn(Opcodes.GETSTATIC, owner, name, descriptor);
+		mv.VisitFieldInsn(IOpcodes.Getstatic, owner, name, descriptor);
 	  }
 
-	  public virtual void putstatic(string owner, string name, string descriptor)
+	  public virtual void Putstatic(string owner, string name, string descriptor)
 	  {
-		mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, name, descriptor);
+		mv.VisitFieldInsn(IOpcodes.Putstatic, owner, name, descriptor);
 	  }
 
-	  public virtual void getfield(string owner, string name, string descriptor)
+	  public virtual void Getfield(string owner, string name, string descriptor)
 	  {
-		mv.visitFieldInsn(Opcodes.GETFIELD, owner, name, descriptor);
+		mv.VisitFieldInsn(IOpcodes.Getfield, owner, name, descriptor);
 	  }
 
-	  public virtual void putfield(string owner, string name, string descriptor)
+	  public virtual void Putfield(string owner, string name, string descriptor)
 	  {
-		mv.visitFieldInsn(Opcodes.PUTFIELD, owner, name, descriptor);
+		mv.VisitFieldInsn(IOpcodes.Putfield, owner, name, descriptor);
 	  }
 
 	  /// <summary>
@@ -1194,16 +1194,16 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="owner"> the internal name of the method's owner class. </param>
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type"/>). </param>
-	  /// @deprecated use <seealso cref="invokevirtual(String, String, String, bool)"/> instead. 
+	  /// @deprecated use <seealso cref="Invokevirtual(string,string,string,bool)"/> instead. 
 	  [Obsolete("use <seealso cref=\"invokevirtual(String, String, String, bool)\"/> instead.")]
-	  public virtual void invokevirtual(string owner, string name, string descriptor)
+	  public virtual void Invokevirtual(string owner, string name, string descriptor)
 	  {
-		if (api >= Opcodes.ASM5)
+		if (api >= IOpcodes.Asm5)
 		{
-		  invokevirtual(owner, name, descriptor, false);
+		  Invokevirtual(owner, name, descriptor, false);
 		  return;
 		}
-		mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, descriptor);
+		mv.VisitMethodInsn(IOpcodes.Invokevirtual, owner, name, descriptor);
 	  }
 
 	  /// <summary>
@@ -1214,18 +1214,18 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type"/>). </param>
 	  /// <param name="isInterface"> if the method's owner class is an interface. </param>
-	  public virtual void invokevirtual(string owner, string name, string descriptor, bool isInterface)
+	  public virtual void Invokevirtual(string owner, string name, string descriptor, bool isInterface)
 	  {
-		if (api < Opcodes.ASM5)
+		if (api < IOpcodes.Asm5)
 		{
 		  if (isInterface)
 		  {
 			throw new System.NotSupportedException("INVOKEVIRTUAL on interfaces require ASM 5");
 		  }
-		  invokevirtual(owner, name, descriptor);
+		  Invokevirtual(owner, name, descriptor);
 		  return;
 		}
-		mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, owner, name, descriptor, isInterface);
+		mv.VisitMethodInsn(IOpcodes.Invokevirtual, owner, name, descriptor, isInterface);
 	  }
 
 	  /// <summary>
@@ -1234,16 +1234,16 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="owner"> the internal name of the method's owner class. </param>
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type"/>). </param>
-	  /// @deprecated use <seealso cref="invokespecial(String, String, String, bool)"/> instead. 
+	  /// @deprecated use <seealso cref="Invokespecial(string,string,string,bool)"/> instead. 
 	  [Obsolete("use <seealso cref=\"invokespecial(String, String, String, bool)\"/> instead.")]
-	  public virtual void invokespecial(string owner, string name, string descriptor)
+	  public virtual void Invokespecial(string owner, string name, string descriptor)
 	  {
-		if (api >= Opcodes.ASM5)
+		if (api >= IOpcodes.Asm5)
 		{
-		  invokespecial(owner, name, descriptor, false);
+		  Invokespecial(owner, name, descriptor, false);
 		  return;
 		}
-		mv.visitMethodInsn(Opcodes.INVOKESPECIAL, owner, name, descriptor, false);
+		mv.VisitMethodInsn(IOpcodes.Invokespecial, owner, name, descriptor, false);
 	  }
 
 	  /// <summary>
@@ -1254,18 +1254,18 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type"/>). </param>
 	  /// <param name="isInterface"> if the method's owner class is an interface. </param>
-	  public virtual void invokespecial(string owner, string name, string descriptor, bool isInterface)
+	  public virtual void Invokespecial(string owner, string name, string descriptor, bool isInterface)
 	  {
-		if (api < Opcodes.ASM5)
+		if (api < IOpcodes.Asm5)
 		{
 		  if (isInterface)
 		  {
 			throw new System.NotSupportedException("INVOKESPECIAL on interfaces require ASM 5");
 		  }
-		  invokespecial(owner, name, descriptor);
+		  Invokespecial(owner, name, descriptor);
 		  return;
 		}
-		mv.visitMethodInsn(Opcodes.INVOKESPECIAL, owner, name, descriptor, isInterface);
+		mv.VisitMethodInsn(IOpcodes.Invokespecial, owner, name, descriptor, isInterface);
 	  }
 
 	  /// <summary>
@@ -1274,16 +1274,16 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="owner"> the internal name of the method's owner class. </param>
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type"/>). </param>
-	  /// @deprecated use <seealso cref="invokestatic(String, String, String, bool)"/> instead. 
+	  /// @deprecated use <seealso cref="Invokestatic(string,string,string,bool)"/> instead. 
 	  [Obsolete("use <seealso cref=\"invokestatic(String, String, String, bool)\"/> instead.")]
-	  public virtual void invokestatic(string owner, string name, string descriptor)
+	  public virtual void Invokestatic(string owner, string name, string descriptor)
 	  {
-		if (api >= Opcodes.ASM5)
+		if (api >= IOpcodes.Asm5)
 		{
-		  invokestatic(owner, name, descriptor, false);
+		  Invokestatic(owner, name, descriptor, false);
 		  return;
 		}
-		mv.visitMethodInsn(Opcodes.INVOKESTATIC, owner, name, descriptor, false);
+		mv.VisitMethodInsn(IOpcodes.Invokestatic, owner, name, descriptor, false);
 	  }
 
 	  /// <summary>
@@ -1294,18 +1294,18 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type"/>). </param>
 	  /// <param name="isInterface"> if the method's owner class is an interface. </param>
-	  public virtual void invokestatic(string owner, string name, string descriptor, bool isInterface)
+	  public virtual void Invokestatic(string owner, string name, string descriptor, bool isInterface)
 	  {
-		if (api < Opcodes.ASM5)
+		if (api < IOpcodes.Asm5)
 		{
 		  if (isInterface)
 		  {
 			throw new System.NotSupportedException("INVOKESTATIC on interfaces require ASM 5");
 		  }
-		  invokestatic(owner, name, descriptor);
+		  Invokestatic(owner, name, descriptor);
 		  return;
 		}
-		mv.visitMethodInsn(Opcodes.INVOKESTATIC, owner, name, descriptor, isInterface);
+		mv.VisitMethodInsn(IOpcodes.Invokestatic, owner, name, descriptor, isInterface);
 	  }
 
 	  /// <summary>
@@ -1315,9 +1315,9 @@ namespace ObjectWeb.Asm.Commons
 	  ///     Type#getInternalName()}). </param>
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type"/>). </param>
-	  public virtual void invokeinterface(string owner, string name, string descriptor)
+	  public virtual void Invokeinterface(string owner, string name, string descriptor)
 	  {
-		mv.visitMethodInsn(Opcodes.INVOKEINTERFACE, owner, name, descriptor, true);
+		mv.VisitMethodInsn(IOpcodes.Invokeinterface, owner, name, descriptor, true);
 	  }
 
 	  /// <summary>
@@ -1330,23 +1330,23 @@ namespace ObjectWeb.Asm.Commons
 	  ///     an <seealso cref="Integer"/>, <seealso cref="Float"/>, <seealso cref="Long"/>, <seealso cref="Double"/>, <seealso cref="string"/>, {@link
 	  ///     Type}, <seealso cref="Handle"/> or <seealso cref="ConstantDynamic"/> value. This method is allowed to modify
 	  ///     the content of the array so a caller should expect that this array may change. </param>
-	  public virtual void invokedynamic(string name, string descriptor, Handle bootstrapMethodHandle, object[] bootstrapMethodArguments)
+	  public virtual void Invokedynamic(string name, string descriptor, Handle bootstrapMethodHandle, object[] bootstrapMethodArguments)
 	  {
-		mv.visitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
+		mv.VisitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
 	  }
 
-	  public virtual void anew(JType type)
+	  public virtual void Anew(JType type)
 	  {
-		mv.visitTypeInsn(Opcodes.NEW, type.InternalName);
+		mv.VisitTypeInsn(IOpcodes.New, type.InternalName);
 	  }
 
 	  /// <summary>
 	  /// Generates the instruction to create and push on the stack an array of the given type.
 	  /// </summary>
 	  /// <param name="type"> an array Type. </param>
-	  public virtual void newarray(JType type)
+	  public virtual void Newarray(JType type)
 	  {
-		newarray(mv, type);
+		Newarray(mv, type);
 	  }
 
 	  /// <summary>
@@ -1354,90 +1354,90 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="methodVisitor"> the method visitor to use to generate the instruction. </param>
 	  /// <param name="type"> an array Type. </param>
-	  internal static void newarray(MethodVisitor methodVisitor, JType type)
+	  internal static void Newarray(MethodVisitor methodVisitor, JType type)
 	  {
 		int arrayType;
 		switch (type.Sort)
 		{
-		  case JType.BOOLEAN:
-			arrayType = Opcodes.T_BOOLEAN;
+		  case JType.Boolean:
+			arrayType = IOpcodes.Boolean;
 			break;
-		  case JType.CHAR:
-			arrayType = Opcodes.T_CHAR;
+		  case JType.Char:
+			arrayType = IOpcodes.Char;
 			break;
-		  case JType.BYTE:
-			arrayType = Opcodes.T_BYTE;
+		  case JType.Byte:
+			arrayType = IOpcodes.Byte;
 			break;
-		  case JType.SHORT:
-			arrayType = Opcodes.T_SHORT;
+		  case JType.Short:
+			arrayType = IOpcodes.Short;
 			break;
-		  case JType.INT:
-			arrayType = Opcodes.T_INT;
+		  case JType.Int:
+			arrayType = IOpcodes.Int;
 			break;
-		  case JType.FLOAT:
-			arrayType = Opcodes.T_FLOAT;
+		  case JType.Float:
+			arrayType = IOpcodes.Float;
 			break;
-		  case JType.LONG:
-			arrayType = Opcodes.T_LONG;
+		  case JType.Long:
+			arrayType = IOpcodes.Long;
 			break;
-		  case JType.DOUBLE:
-			arrayType = Opcodes.T_DOUBLE;
+		  case JType.Double:
+			arrayType = IOpcodes.Double;
 			break;
 		  default:
-			methodVisitor.visitTypeInsn(Opcodes.ANEWARRAY, type.InternalName);
+			methodVisitor.VisitTypeInsn(IOpcodes.Anewarray, type.InternalName);
 			return;
 		}
-		methodVisitor.visitIntInsn(Opcodes.NEWARRAY, arrayType);
+		methodVisitor.VisitIntInsn(IOpcodes.Newarray, arrayType);
 	  }
 
-	  public virtual void arraylength()
+	  public virtual void Arraylength()
 	  {
-		mv.visitInsn(Opcodes.ARRAYLENGTH);
+		mv.VisitInsn(IOpcodes.Arraylength);
 	  }
 
-	  public virtual void athrow()
+	  public virtual void Athrow()
 	  {
-		mv.visitInsn(Opcodes.ATHROW);
+		mv.VisitInsn(IOpcodes.Athrow);
 	  }
 
-	  public virtual void checkcast(JType type)
+	  public virtual void Checkcast(JType type)
 	  {
-		mv.visitTypeInsn(Opcodes.CHECKCAST, type.InternalName);
+		mv.VisitTypeInsn(IOpcodes.Checkcast, type.InternalName);
 	  }
 
-	  public virtual void instanceOf(JType type)
+	  public virtual void InstanceOf(JType type)
 	  {
-		mv.visitTypeInsn(Opcodes.INSTANCEOF, type.InternalName);
+		mv.VisitTypeInsn(IOpcodes.Instanceof, type.InternalName);
 	  }
 
-	  public virtual void monitorenter()
+	  public virtual void Monitorenter()
 	  {
-		mv.visitInsn(Opcodes.MONITORENTER);
+		mv.VisitInsn(IOpcodes.Monitorenter);
 	  }
 
-	  public virtual void monitorexit()
+	  public virtual void Monitorexit()
 	  {
-		mv.visitInsn(Opcodes.MONITOREXIT);
+		mv.VisitInsn(IOpcodes.Monitorexit);
 	  }
 
-	  public virtual void multianewarray(string descriptor, int numDimensions)
+	  public virtual void Multianewarray(string descriptor, int numDimensions)
 	  {
-		mv.visitMultiANewArrayInsn(descriptor, numDimensions);
+		mv.VisitMultiANewArrayInsn(descriptor, numDimensions);
 	  }
 
-	  public virtual void ifnull(Label label)
+	  public virtual void Ifnull(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IFNULL, label);
+		mv.VisitJumpInsn(IOpcodes.Ifnull, label);
 	  }
 
-	  public virtual void ifnonnull(Label label)
+	  public virtual void Ifnonnull(Label label)
 	  {
-		mv.visitJumpInsn(Opcodes.IFNONNULL, label);
+		mv.VisitJumpInsn(IOpcodes.Ifnonnull, label);
 	  }
 
-	  public virtual void mark(Label label)
+	  public virtual void Mark(Label label)
 	  {
-		mv.visitLabel(label);
+		mv.VisitLabel(label);
 	  }
 	}
 

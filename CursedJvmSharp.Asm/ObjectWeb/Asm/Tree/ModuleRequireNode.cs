@@ -70,9 +70,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given module visitor visit this require directive.
 	  /// </summary>
 	  /// <param name="moduleVisitor"> a module visitor. </param>
-	  public virtual void accept(ModuleVisitor moduleVisitor)
+	  public virtual void Accept(ModuleVisitor moduleVisitor)
 	  {
-		moduleVisitor.visitRequire(module, access, version);
+		moduleVisitor.VisitRequire(module, access, version);
 	  }
 	}
 

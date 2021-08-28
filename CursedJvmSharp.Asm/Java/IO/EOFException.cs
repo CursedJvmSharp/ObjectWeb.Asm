@@ -45,15 +45,15 @@ namespace Java.IO
     /// <seealso cref="IOException" />
     /// <since>JDK1.0</since>
     [Serializable]
-    public class EOFException : IOException
+    public class EofException : IOException
     {
-        private const long serialVersionUID = 6433858223774886977L;
+        private const long SerialVersionUid = 6433858223774886977L;
 
         /// <summary>
         ///     Constructs an <code>EOFException</code> with <code>null</code>
         ///     as its error detail message.
         /// </summary>
-        public EOFException()
+        public EofException()
         {
         }
 
@@ -71,7 +71,7 @@ namespace Java.IO
         ///     <code>java.lang.Throwable</code>.
         /// </remarks>
         /// <param name="s">the detail message.</param>
-        public EOFException(string s)
+        public EofException(string s)
             : base(s)
         {
         }

@@ -66,20 +66,20 @@ namespace ObjectWeb.Asm.Commons
 
 	  /// <summary>
 	  /// Constructs an empty <seealso cref="ModuleHashesAttribute"/>. This object can be passed as a prototype to
-	  /// the <seealso cref="ClassReader.accept(ObjectWeb.Asm.ClassVisitor,ObjectWeb.Asm.Attribute[],int)"/> method.
+	  /// the <seealso cref="ClassReader.Accept(ObjectWeb.Asm.ClassVisitor,ObjectWeb.Asm.Attribute[],int)"/> method.
 	  /// </summary>
 	  public ModuleHashesAttribute() : this(null, null, null)
 	  {
 	  }
 
-	  public override Attribute read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
+	  public override Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
 	  {
 		int currentOffset = offset;
 
-		string hashAlgorithm = classReader.readUTF8(currentOffset, charBuffer);
+		string hashAlgorithm = classReader.ReadUtf8(currentOffset, charBuffer);
 		currentOffset += 2;
 
-		int numModules = classReader.readUnsignedShort(currentOffset);
+		int numModules = classReader.ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 
 		List<string> moduleList = new List<string>(numModules);
@@ -87,16 +87,16 @@ namespace ObjectWeb.Asm.Commons
 
 		for (int i = 0; i < numModules; ++i)
 		{
-		  string module = classReader.readModule(currentOffset, charBuffer);
+		  string module = classReader.ReadModule(currentOffset, charBuffer);
 		  currentOffset += 2;
 		  moduleList.Add(module);
 
-		  int hashLength = classReader.readUnsignedShort(currentOffset);
+		  int hashLength = classReader.ReadUnsignedShort(currentOffset);
 		  currentOffset += 2;
 		  sbyte[] hash = new sbyte[hashLength];
 		  for (int j = 0; j < hashLength; ++j)
 		  {
-			hash[j] = (sbyte) classReader.readByte(currentOffset);
+			hash[j] = (sbyte) classReader.ReadByte(currentOffset);
 			currentOffset += 1;
 		  }
 		  hashList.Add(hash);
@@ -104,23 +104,23 @@ namespace ObjectWeb.Asm.Commons
 		return new ModuleHashesAttribute(hashAlgorithm, moduleList, hashList);
 	  }
 
-	  public override ByteVector write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
+	  public override ByteVector Write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
 		ByteVector byteVector = new ByteVector();
-		byteVector.putShort(classWriter.newUTF8(algorithm));
+		byteVector.PutShort(classWriter.NewUtf8(algorithm));
 		if (modules == null)
 		{
-		  byteVector.putShort(0);
+		  byteVector.PutShort(0);
 		}
 		else
 		{
 		  int numModules = modules.Count;
-		  byteVector.putShort(numModules);
+		  byteVector.PutShort(numModules);
 		  for (int i = 0; i < numModules; ++i)
 		  {
 			string module = modules[i];
 			sbyte[] hash = hashes[i];
-			byteVector.putShort(classWriter.newModule(module)).putShort(hash.Length).putByteArray(hash, 0, hash.Length);
+			byteVector.PutShort(classWriter.NewModule(module)).PutShort(hash.Length).PutByteArray(hash, 0, hash.Length);
 		  }
 		}
 		return byteVector;

@@ -41,7 +41,7 @@ namespace ObjectWeb.Asm
 
 	  /// <summary>
 	  /// The ASM API version implemented by this visitor. The value of this field must be one of the
-	  /// {@code ASM}<i>x</i> values in <seealso cref="Opcodes"/>.
+	  /// {@code ASM}<i>x</i> values in <seealso cref="IOpcodes"/>.
 	  /// </summary>
 	  protected internal readonly int api;
 
@@ -53,7 +53,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="FieldVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  public FieldVisitor(int api) : this(api, null)
 	  {
 	  }
@@ -62,18 +62,18 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="FieldVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="fieldVisitor"> the field visitor to which this visitor must delegate method calls. May be
 	  ///     null. </param>
 	  public FieldVisitor(int api, FieldVisitor fieldVisitor)
 	  {
-		if (api != Opcodes.ASM9 && api != Opcodes.ASM8 && api != Opcodes.ASM7 && api != Opcodes.ASM6 && api != Opcodes.ASM5 && api != Opcodes.ASM4 && api != Opcodes.ASM10_EXPERIMENTAL)
+		if (api != IOpcodes.Asm9 && api != IOpcodes.Asm8 && api != IOpcodes.Asm7 && api != IOpcodes.Asm6 && api != IOpcodes.Asm5 && api != IOpcodes.Asm4 && api != IOpcodes.Asm10_Experimental)
 		{
 		  throw new System.ArgumentException("Unsupported api " + api);
 		}
-		if (api == Opcodes.ASM10_EXPERIMENTAL)
+		if (api == IOpcodes.Asm10_Experimental)
 		{
-		  Constants.checkAsmExperimental(this);
+		  Constants.CheckAsmExperimental(this);
 		}
 		this.api = api;
 		this.fv = fieldVisitor;
@@ -86,11 +86,11 @@ namespace ObjectWeb.Asm
 	  /// <param name="visible"> {@literal true} if the annotation is visible at runtime. </param>
 	  /// <returns> a visitor to visit the annotation values, or {@literal null} if this visitor is not
 	  ///     interested in visiting this annotation. </returns>
-	  public virtual AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+	  public virtual AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
 	  {
 		if (fv != null)
 		{
-		  return fv.visitAnnotation(descriptor, visible);
+		  return fv.VisitAnnotation(descriptor, visible);
 		}
 		return null;
 	  }
@@ -99,7 +99,7 @@ namespace ObjectWeb.Asm
 	  /// Visits an annotation on the type of the field.
 	  /// </summary>
 	  /// <param name="typeRef"> a reference to the annotated type. The sort of this type reference must be
-	  ///     <seealso cref="TypeReference.FIELD"/>. See <seealso cref="TypeReference"/>. </param>
+	  ///     <seealso cref="TypeReference.Field"/>. See <seealso cref="TypeReference"/>. </param>
 	  /// <param name="typePath"> the path to the annotated type argument, wildcard bound, array element type, or
 	  ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets
 	  ///     'typeRef' as a whole. </param>
@@ -107,15 +107,15 @@ namespace ObjectWeb.Asm
 	  /// <param name="visible"> {@literal true} if the annotation is visible at runtime. </param>
 	  /// <returns> a visitor to visit the annotation values, or {@literal null} if this visitor is not
 	  ///     interested in visiting this annotation. </returns>
-	  public virtual AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+	  public virtual AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
 	  {
-		if (api < Opcodes.ASM5)
+		if (api < IOpcodes.Asm5)
 		{
 		  throw new System.NotSupportedException("This feature requires ASM5");
 		}
 		if (fv != null)
 		{
-		  return fv.visitTypeAnnotation(typeRef, typePath, descriptor, visible);
+		  return fv.VisitTypeAnnotation(typeRef, typePath, descriptor, visible);
 		}
 		return null;
 	  }
@@ -124,11 +124,11 @@ namespace ObjectWeb.Asm
 	  /// Visits a non standard attribute of the field.
 	  /// </summary>
 	  /// <param name="attribute"> an attribute. </param>
-	  public virtual void visitAttribute(Attribute attribute)
+	  public virtual void VisitAttribute(Attribute attribute)
 	  {
 		if (fv != null)
 		{
-		  fv.visitAttribute(attribute);
+		  fv.VisitAttribute(attribute);
 		}
 	  }
 
@@ -136,11 +136,11 @@ namespace ObjectWeb.Asm
 	  /// Visits the end of the field. This method, which is the last one to be called, is used to inform
 	  /// the visitor that all the annotations and attributes of the field have been visited.
 	  /// </summary>
-	  public virtual void visitEnd()
+	  public virtual void VisitEnd()
 	  {
 		if (fv != null)
 		{
-		  fv.visitEnd();
+		  fv.VisitEnd();
 		}
 	  }
 	}

@@ -39,7 +39,7 @@ namespace ObjectWeb.Asm.Commons
 	public class SimpleRemapper : Remapper
 	{
 
-	  private readonly IDictionary<string, string> mapping;
+	  private readonly IDictionary<string, string> _mapping;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="SimpleRemapper"/> with the given mapping.
@@ -59,7 +59,7 @@ namespace ObjectWeb.Asm.Commons
 	  ///     </ul> </param>
 	  public SimpleRemapper(IDictionary<string, string> mapping)
 	  {
-		this.mapping = mapping;
+		this._mapping = mapping;
 	  }
 
 	  /// <summary>
@@ -70,36 +70,36 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="newName"> the new method, field or internal name. </param>
 	  public SimpleRemapper(string oldName, string newName)
 	  {
-          this.mapping = new Dictionary<string, string> { { oldName, newName } };
+          this._mapping = new Dictionary<string, string> { { oldName, newName } };
 	  }
 
-	  public override string mapMethodName(string owner, string name, string descriptor)
+	  public override string MapMethodName(string owner, string name, string descriptor)
 	  {
-		string remappedName = map(owner + '.' + name + descriptor);
+		string remappedName = Map(owner + '.' + name + descriptor);
 		return string.ReferenceEquals(remappedName, null) ? name : remappedName;
 	  }
 
-	  public override string mapInvokeDynamicMethodName(string name, string descriptor)
+	  public override string MapInvokeDynamicMethodName(string name, string descriptor)
 	  {
-		string remappedName = map('.' + name + descriptor);
+		string remappedName = Map('.' + name + descriptor);
 		return string.ReferenceEquals(remappedName, null) ? name : remappedName;
 	  }
 
-	  public override string mapAnnotationAttributeName(string descriptor, string name)
+	  public override string MapAnnotationAttributeName(string descriptor, string name)
 	  {
-		string remappedName = map(descriptor + '.' + name);
+		string remappedName = Map(descriptor + '.' + name);
 		return string.ReferenceEquals(remappedName, null) ? name : remappedName;
 	  }
 
-	  public override string mapFieldName(string owner, string name, string descriptor)
+	  public override string MapFieldName(string owner, string name, string descriptor)
 	  {
-		string remappedName = map(owner + '.' + name);
+		string remappedName = Map(owner + '.' + name);
 		return string.ReferenceEquals(remappedName, null) ? name : remappedName;
 	  }
 
-	  public override string map(string key)
+	  public override string Map(string key)
 	  {
-		return mapping.GetValueOrNull(key);
+		return _mapping.GetValueOrNull(key);
 	  }
 	}
 

@@ -53,7 +53,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="methodVisitor"> the method visitor to which this visitor must delegate method calls. May
 	  ///     be {@literal null}. </param>
-	  /// <param name="access"> the method's access flags (see <seealso cref="Opcodes"/>). This parameter also indicates if
+	  /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes"/>). This parameter also indicates if
 	  ///     the method is synthetic and/or deprecated. </param>
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </param>
@@ -61,7 +61,7 @@ namespace ObjectWeb.Asm.Commons
 	  ///     return type and exceptions do not use generic types. </param>
 	  /// <param name="exceptions"> the internal names of the method's exception classes (see {@link
 	  ///     org.objectweb.asm.Type#getInternalName()}). May be {@literal null}. </param>
-	  public TryCatchBlockSorter(MethodVisitor methodVisitor, int access, string name, string descriptor, string signature, string[] exceptions) : this(Opcodes.ASM9, methodVisitor, access, name, descriptor, signature, exceptions)
+	  public TryCatchBlockSorter(MethodVisitor methodVisitor, int access, string name, string descriptor, string signature, string[] exceptions) : this(IOpcodes.Asm9, methodVisitor, access, name, descriptor, signature, exceptions)
 	  {
 		if (this.GetType() != typeof(TryCatchBlockSorter))
 		{
@@ -74,40 +74,40 @@ namespace ObjectWeb.Asm.Commons
 		this.mv = methodVisitor;
 	  }
 
-	  public override void visitEnd()
+	  public override void VisitEnd()
 	  {
 		// Sort the TryCatchBlockNode elements by the length of their "try" block.
         tryCatchBlocks.Sort(new ComparatorAnonymousInnerClass(this));
 		// Update the 'target' of each try catch block annotation.
 		for (int i = 0; i < tryCatchBlocks.Count; ++i)
 		{
-		  tryCatchBlocks[i].updateIndex(i);
+		  tryCatchBlocks[i].UpdateIndex(i);
 		}
 		if (mv != null)
 		{
-		  accept(mv);
+		  Accept(mv);
 		}
 	  }
 
 	  private class ComparatorAnonymousInnerClass : IComparer<Tree.TryCatchBlockNode>
 	  {
-		  private readonly TryCatchBlockSorter outerInstance;
+		  private readonly TryCatchBlockSorter _outerInstance;
 
 		  public ComparatorAnonymousInnerClass(TryCatchBlockSorter outerInstance)
 		  {
-			  this.outerInstance = outerInstance;
+			  this._outerInstance = outerInstance;
 		  }
 
 
 		  public int Compare(TryCatchBlockNode tryCatchBlockNode1, TryCatchBlockNode tryCatchBlockNode2)
 		  {
-			return blockLength(tryCatchBlockNode1) - blockLength(tryCatchBlockNode2);
+			return BlockLength(tryCatchBlockNode1) - BlockLength(tryCatchBlockNode2);
 		  }
 
-		  private int blockLength(TryCatchBlockNode tryCatchBlockNode)
+		  private int BlockLength(TryCatchBlockNode tryCatchBlockNode)
 		  {
-			int startIndex = outerInstance.instructions.indexOf(tryCatchBlockNode.start);
-			int endIndex = outerInstance.instructions.indexOf(tryCatchBlockNode.end);
+			int startIndex = _outerInstance.instructions.IndexOf(tryCatchBlockNode.start);
+			int endIndex = _outerInstance.instructions.IndexOf(tryCatchBlockNode.end);
 			return endIndex - startIndex;
 		  }
 	  }

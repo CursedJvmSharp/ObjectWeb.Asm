@@ -81,9 +81,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given class visitor visit this inner class.
 	  /// </summary>
 	  /// <param name="classVisitor"> a class visitor. </param>
-	  public virtual void accept(ClassVisitor classVisitor)
+	  public virtual void Accept(ClassVisitor classVisitor)
 	  {
-		classVisitor.visitInnerClass(name, outerName, innerName, access);
+		classVisitor.VisitInnerClass(name, outerName, innerName, access);
 	  }
 	}
 

@@ -71,7 +71,7 @@ namespace ObjectWeb.Asm.Commons
         /// <param name="annotationVisitor"> the annotation visitor this remapper must delegate to. </param>
         /// <param name="remapper"> the remapper to use to remap the types in the visited annotation. </param>
         public AnnotationRemapper(string descriptor, AnnotationVisitor annotationVisitor, Remapper remapper) : this(
-            Opcodes.ASM9, descriptor, annotationVisitor, remapper)
+            IOpcodes.Asm9, descriptor, annotationVisitor, remapper)
         {
         }
 
@@ -80,7 +80,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="api">
         ///     the ASM API version supported by this remapper. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="Opcodes" />.
+        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
         /// </param>
         /// <param name="annotationVisitor"> the annotation visitor this remapper must delegate to. </param>
         /// <param name="remapper"> the remapper to use to remap the types in the visited annotation. </param>
@@ -98,7 +98,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="api">
         ///     the ASM API version supported by this remapper. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="Opcodes" />.
+        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
         /// </param>
         /// <param name="descriptor"> the descriptor of the visited annotation. May be {@literal null}. </param>
         /// <param name="annotationVisitor"> the annotation visitor this remapper must delegate to. </param>
@@ -110,31 +110,31 @@ namespace ObjectWeb.Asm.Commons
             this.remapper = remapper;
         }
 
-        public override void visit(string name, object value)
+        public override void Visit(string name, object value)
         {
-            base.visit(mapAnnotationAttributeName(name), remapper.mapValue(value));
+            base.Visit(MapAnnotationAttributeName(name), remapper.MapValue(value));
         }
 
-        public override void visitEnum(string name, string descriptor, string value)
+        public override void VisitEnum(string name, string descriptor, string value)
         {
-            base.visitEnum(mapAnnotationAttributeName(name), remapper.mapDesc(descriptor), value);
+            base.VisitEnum(MapAnnotationAttributeName(name), remapper.MapDesc(descriptor), value);
         }
 
-        public override AnnotationVisitor visitAnnotation(string name, string descriptor)
+        public override AnnotationVisitor VisitAnnotation(string name, string descriptor)
         {
             var annotationVisitor =
-                base.visitAnnotation(mapAnnotationAttributeName(name), remapper.mapDesc(descriptor));
+                base.VisitAnnotation(MapAnnotationAttributeName(name), remapper.MapDesc(descriptor));
             if (annotationVisitor == null)
                 return null;
-            return annotationVisitor == av ? this : createAnnotationRemapper(descriptor, annotationVisitor);
+            return annotationVisitor == av ? this : CreateAnnotationRemapper(descriptor, annotationVisitor);
         }
 
-        public override AnnotationVisitor visitArray(string name)
+        public override AnnotationVisitor VisitArray(string name)
         {
-            var annotationVisitor = base.visitArray(mapAnnotationAttributeName(name));
+            var annotationVisitor = base.VisitArray(MapAnnotationAttributeName(name));
             if (annotationVisitor == null)
                 return null;
-            return annotationVisitor == av ? this : createAnnotationRemapper(null, annotationVisitor);
+            return annotationVisitor == av ? this : CreateAnnotationRemapper(null, annotationVisitor);
         }
 
         /// <summary>
@@ -144,10 +144,10 @@ namespace ObjectWeb.Asm.Commons
         /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
         /// <returns> the newly created remapper. </returns>
         /// @deprecated use
-        /// <seealso cref="createAnnotationRemapper(string, AnnotationVisitor)" />
+        /// <seealso cref="CreateAnnotationRemapper(string,ObjectWeb.Asm.AnnotationVisitor)" />
         /// instead.
         [Obsolete("use <seealso cref=\"createAnnotationRemapper(String, AnnotationVisitor)\"/> instead.")]
-        public virtual AnnotationVisitor createAnnotationRemapper(AnnotationVisitor annotationVisitor)
+        public virtual AnnotationVisitor CreateAnnotationRemapper(AnnotationVisitor annotationVisitor)
         {
             return new AnnotationRemapper(api, null, annotationVisitor, remapper);
         }
@@ -159,11 +159,11 @@ namespace ObjectWeb.Asm.Commons
         /// <param name="descriptor"> the descriptor of the visited annotation. </param>
         /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
         /// <returns> the newly created remapper. </returns>
-        public virtual AnnotationVisitor createAnnotationRemapper(string descriptor,
+        public virtual AnnotationVisitor CreateAnnotationRemapper(string descriptor,
             AnnotationVisitor annotationVisitor)
         {
-            return new AnnotationRemapper(api, descriptor, annotationVisitor, remapper).orDeprecatedValue(
-                createAnnotationRemapper(annotationVisitor));
+            return new AnnotationRemapper(api, descriptor, annotationVisitor, remapper).OrDeprecatedValue(
+                CreateAnnotationRemapper(annotationVisitor));
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace ObjectWeb.Asm.Commons
         ///     createAnnotationRemapper method.
         /// </param>
         /// <returns> either this object, or the given one. </returns>
-        public AnnotationVisitor orDeprecatedValue(AnnotationVisitor deprecatedAnnotationVisitor)
+        public AnnotationVisitor OrDeprecatedValue(AnnotationVisitor deprecatedAnnotationVisitor)
         {
             if (deprecatedAnnotationVisitor.GetType() == GetType())
             {
@@ -196,10 +196,10 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="name"> the name of the annotation attribute. </param>
         /// <returns> the new name of the annotation attribute. </returns>
-        private string mapAnnotationAttributeName(string name)
+        private string MapAnnotationAttributeName(string name)
         {
             if (ReferenceEquals(descriptor, null)) return name;
-            return remapper.mapAnnotationAttributeName(descriptor, name);
+            return remapper.MapAnnotationAttributeName(descriptor, name);
         }
     }
 }

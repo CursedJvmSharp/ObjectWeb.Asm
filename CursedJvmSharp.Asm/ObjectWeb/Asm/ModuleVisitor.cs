@@ -41,7 +41,7 @@ namespace ObjectWeb.Asm
     {
         /// <summary>
         ///     The ASM API version implemented by this visitor. The value of this field must be one of {@link
-        ///     Opcodes#ASM6} or <seealso cref="Opcodes.ASM7" />.
+        ///     Opcodes#ASM6} or <seealso cref="IIOpcodes.Asm7 />.
         /// </summary>
         protected internal readonly int api;
 
@@ -54,8 +54,8 @@ namespace ObjectWeb.Asm
         ///     Constructs a new <seealso cref="ModuleVisitor" />.
         /// </summary>
         /// <param name="api">
-        ///     the ASM API version implemented by this visitor. Must be one of <seealso cref="Opcodes.ASM6" />
-        ///     or <seealso cref="Opcodes.ASM7" />.
+        ///     the ASM API version implemented by this visitor. Must be one of <seealso cref="IIOpcodes.Asm6 />
+        ///     or <seealso cref="IIOpcodes.Asm7 />.
         /// </param>
         public ModuleVisitor(int api) : this(api, null)
         {
@@ -65,8 +65,8 @@ namespace ObjectWeb.Asm
         ///     Constructs a new <seealso cref="ModuleVisitor" />.
         /// </summary>
         /// <param name="api">
-        ///     the ASM API version implemented by this visitor. Must be one of <seealso cref="Opcodes.ASM6" />
-        ///     or <seealso cref="Opcodes.ASM7" />.
+        ///     the ASM API version implemented by this visitor. Must be one of <seealso cref="IIOpcodes.Asm6 />
+        ///     or <seealso cref="IIOpcodes.Asm7 />.
         /// </param>
         /// <param name="moduleVisitor">
         ///     the module visitor to which this visitor must delegate method calls. May
@@ -74,10 +74,10 @@ namespace ObjectWeb.Asm
         /// </param>
         public ModuleVisitor(int api, ModuleVisitor moduleVisitor)
         {
-            if (api != Opcodes.ASM9 && api != Opcodes.ASM8 && api != Opcodes.ASM7 && api != Opcodes.ASM6 &&
-                api != Opcodes.ASM5 && api != Opcodes.ASM4 &&
-                api != Opcodes.ASM10_EXPERIMENTAL) throw new ArgumentException("Unsupported api " + api);
-            if (api == Opcodes.ASM10_EXPERIMENTAL) Constants.checkAsmExperimental(this);
+            if (api != IOpcodes.Asm9 && api != IOpcodes.Asm8 && api != IOpcodes.Asm7 && api != IOpcodes.Asm6 &&
+                api != IOpcodes.Asm5 && api != IOpcodes.Asm4 &&
+                api != IOpcodes.Asm10_Experimental) throw new ArgumentException("Unsupported api " + api);
+            if (api == IOpcodes.Asm10_Experimental) Constants.CheckAsmExperimental(this);
             this.api = api;
             mv = moduleVisitor;
         }
@@ -86,18 +86,18 @@ namespace ObjectWeb.Asm
         ///     Visit the main class of the current module.
         /// </summary>
         /// <param name="mainClass"> the internal name of the main class of the current module. </param>
-        public virtual void visitMainClass(string mainClass)
+        public virtual void VisitMainClass(string mainClass)
         {
-            if (mv != null) mv.visitMainClass(mainClass);
+            if (mv != null) mv.VisitMainClass(mainClass);
         }
 
         /// <summary>
         ///     Visit a package of the current module.
         /// </summary>
         /// <param name="packaze"> the internal name of a package. </param>
-        public virtual void visitPackage(string packaze)
+        public virtual void VisitPackage(string packaze)
         {
-            if (mv != null) mv.visitPackage(packaze);
+            if (mv != null) mv.VisitPackage(packaze);
         }
 
         /// <summary>
@@ -109,9 +109,9 @@ namespace ObjectWeb.Asm
         ///     ACC_STATIC_PHASE}, {@code ACC_SYNTHETIC} and {@code ACC_MANDATED}.
         /// </param>
         /// <param name="version"> the module version at compile time, or {@literal null}. </param>
-        public virtual void visitRequire(string module, int access, string version)
+        public virtual void VisitRequire(string module, int access, string version)
         {
-            if (mv != null) mv.visitRequire(module, access, version);
+            if (mv != null) mv.VisitRequire(module, access, version);
         }
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace ObjectWeb.Asm
         ///     the fully qualified names (using dots) of the modules that can access the public
         ///     classes of the exported package, or {@literal null}.
         /// </param>
-        public virtual void visitExport(string packaze, int access, params string[] modules)
+        public virtual void VisitExport(string packaze, int access, params string[] modules)
         {
-            if (mv != null) mv.visitExport(packaze, access, modules);
+            if (mv != null) mv.VisitExport(packaze, access, modules);
         }
 
         /// <summary>
@@ -143,9 +143,9 @@ namespace ObjectWeb.Asm
         ///     the fully qualified names (using dots) of the modules that can use deep
         ///     reflection to the classes of the open package, or {@literal null}.
         /// </param>
-        public virtual void visitOpen(string packaze, int access, params string[] modules)
+        public virtual void VisitOpen(string packaze, int access, params string[] modules)
         {
-            if (mv != null) mv.visitOpen(packaze, access, modules);
+            if (mv != null) mv.VisitOpen(packaze, access, modules);
         }
 
         /// <summary>
@@ -153,9 +153,9 @@ namespace ObjectWeb.Asm
         ///     or a class.
         /// </summary>
         /// <param name="service"> the internal name of the service. </param>
-        public virtual void visitUse(string service)
+        public virtual void VisitUse(string service)
         {
-            if (mv != null) mv.visitUse(service);
+            if (mv != null) mv.VisitUse(service);
         }
 
         /// <summary>
@@ -166,18 +166,18 @@ namespace ObjectWeb.Asm
         ///     the internal names of the implementations of the service (there is at least
         ///     one provider).
         /// </param>
-        public virtual void visitProvide(string service, params string[] providers)
+        public virtual void VisitProvide(string service, params string[] providers)
         {
-            if (mv != null) mv.visitProvide(service, providers);
+            if (mv != null) mv.VisitProvide(service, providers);
         }
 
         /// <summary>
         ///     Visits the end of the module. This method, which is the last one to be called, is used to
         ///     inform the visitor that everything have been visited.
         /// </summary>
-        public virtual void visitEnd()
+        public virtual void VisitEnd()
         {
-            if (mv != null) mv.visitEnd();
+            if (mv != null) mv.VisitEnd();
         }
     }
 }

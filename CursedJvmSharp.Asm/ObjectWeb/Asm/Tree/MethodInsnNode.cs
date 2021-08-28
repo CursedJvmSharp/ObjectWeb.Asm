@@ -69,7 +69,7 @@ namespace ObjectWeb.Asm.Tree
 	  ///     org.objectweb.asm.Type#getInternalName()}). </param>
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </param>
-	  public MethodInsnNode(int opcode, string owner, string name, string descriptor) : this(opcode, owner, name, descriptor, opcode == Opcodes.INVOKEINTERFACE)
+	  public MethodInsnNode(int opcode, string owner, string name, string descriptor) : this(opcode, owner, name, descriptor, opcode == IOpcodes.Invokeinterface)
 	  {
 	  }
 
@@ -108,19 +108,19 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return METHOD_INSN;
+			return Method_Insn;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitMethodInsn(opcode, owner, name, desc, itf);
-		acceptAnnotations(methodVisitor);
+		methodVisitor.VisitMethodInsn(opcode, owner, name, desc, itf);
+		AcceptAnnotations(methodVisitor);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return (new MethodInsnNode(opcode, owner, name, desc, itf)).cloneAnnotations(this);
+		return (new MethodInsnNode(opcode, owner, name, desc, itf)).CloneAnnotations(this);
 	  }
 	}
 

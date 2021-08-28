@@ -40,36 +40,36 @@ namespace ObjectWeb.Asm
 	{
 
 	  /// <summary>
-	  /// The kind of field or method designated by this Handle. Should be <seealso cref="Opcodes.H_GETFIELD"/>,
-	  /// <seealso cref="Opcodes.H_GETSTATIC"/>, <seealso cref="Opcodes.H_PUTFIELD"/>, <seealso cref="Opcodes.H_PUTSTATIC"/>, {@link
-	  /// Opcodes#H_INVOKEVIRTUAL}, <seealso cref="Opcodes.H_INVOKESTATIC"/>, <seealso cref="Opcodes.H_INVOKESPECIAL"/>,
-	  /// <seealso cref="Opcodes.H_NEWINVOKESPECIAL"/> or <seealso cref="Opcodes.H_INVOKEINTERFACE"/>.
+	  /// The kind of field or method designated by this Handle. Should be <seealso cref="IIOpcodes.H_Getfield/>,
+	  /// <seealso cref="IIOpcodes.H_Getstatic/>, <seealso cref="IIOpcodes.H_Putfield/>, <seealso cref="IIOpcodes.H_Putstatic/>, {@link
+	  /// Opcodes#H_INVOKEVIRTUAL}, <seealso cref="IIOpcodes.H_Invokestatic/>, <seealso cref="IIOpcodes.H_Invokespecial/>,
+	  /// <seealso cref="IIOpcodes.H_Newinvokespecial/> or <seealso cref="IIOpcodes.H_Invokeinterface/>.
 	  /// </summary>
-	  private readonly int tag;
+	  private readonly int _tag;
 
 	  /// <summary>
 	  /// The internal name of the class that owns the field or method designated by this handle. </summary>
-	  private readonly string owner;
+	  private readonly string _owner;
 
 	  /// <summary>
 	  /// The name of the field or method designated by this handle. </summary>
-	  private readonly string name;
+	  private readonly string _name;
 
 	  /// <summary>
 	  /// The descriptor of the field or method designated by this handle. </summary>
-	  private readonly string descriptor;
+	  private readonly string _descriptor;
 
 	  /// <summary>
 	  /// Whether the owner is an interface or not. </summary>
-	  private readonly bool isInterface;
+	  private readonly bool _isInterface;
 
 	  /// <summary>
 	  /// Constructs a new field or method handle.
 	  /// </summary>
 	  /// <param name="tag"> the kind of field or method designated by this Handle. Must be {@link
-	  ///     Opcodes#H_GETFIELD}, <seealso cref="Opcodes.H_GETSTATIC"/>, <seealso cref="Opcodes.H_PUTFIELD"/>, {@link
-	  ///     Opcodes#H_PUTSTATIC}, <seealso cref="Opcodes.H_INVOKEVIRTUAL"/>, <seealso cref="Opcodes.H_INVOKESTATIC"/>,
-	  ///     <seealso cref="Opcodes.H_INVOKESPECIAL"/>, <seealso cref="Opcodes.H_NEWINVOKESPECIAL"/> or {@link
+	  ///     Opcodes#H_GETFIELD}, <seealso cref="IIOpcodes.H_Getstatic/>, <seealso cref="IIOpcodes.H_Putfield/>, {@link
+	  ///     Opcodes#H_PUTSTATIC}, <seealso cref="IIOpcodes.H_Invokevirtual/>, <seealso cref="IIOpcodes.H_Invokestatic/>,
+	  ///     <seealso cref="IIOpcodes.H_Invokespecial/>, <seealso cref="IIOpcodes.H_Newinvokespecial/> or {@link
 	  ///     Opcodes#H_INVOKEINTERFACE}. </param>
 	  /// <param name="owner"> the internal name of the class that owns the field or method designated by this
 	  ///     handle. </param>
@@ -78,7 +78,7 @@ namespace ObjectWeb.Asm
 	  /// @deprecated this constructor has been superseded by {@link #Handle(int, String, String, String,
 	  ///     boolean)}. 
 	  [Obsolete("this constructor has been superseded by {@link #Handle(int, String, String, String,")]
-	  public Handle(int tag, string owner, string name, string descriptor) : this(tag, owner, name, descriptor, tag == Opcodes.H_INVOKEINTERFACE)
+	  public Handle(int tag, string owner, string name, string descriptor) : this(tag, owner, name, descriptor, tag == IOpcodes.H_Invokeinterface)
 	  {
 	  }
 
@@ -86,9 +86,9 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new field or method handle.
 	  /// </summary>
 	  /// <param name="tag"> the kind of field or method designated by this Handle. Must be {@link
-	  ///     Opcodes#H_GETFIELD}, <seealso cref="Opcodes.H_GETSTATIC"/>, <seealso cref="Opcodes.H_PUTFIELD"/>, {@link
-	  ///     Opcodes#H_PUTSTATIC}, <seealso cref="Opcodes.H_INVOKEVIRTUAL"/>, <seealso cref="Opcodes.H_INVOKESTATIC"/>,
-	  ///     <seealso cref="Opcodes.H_INVOKESPECIAL"/>, <seealso cref="Opcodes.H_NEWINVOKESPECIAL"/> or {@link
+	  ///     Opcodes#H_GETFIELD}, <seealso cref="IIOpcodes.H_Getstatic/>, <seealso cref="IIOpcodes.H_Putfield/>, {@link
+	  ///     Opcodes#H_PUTSTATIC}, <seealso cref="IIOpcodes.H_Invokevirtual/>, <seealso cref="IIOpcodes.H_Invokestatic/>,
+	  ///     <seealso cref="IIOpcodes.H_Invokespecial/>, <seealso cref="IIOpcodes.H_Newinvokespecial/> or {@link
 	  ///     Opcodes#H_INVOKEINTERFACE}. </param>
 	  /// <param name="owner"> the internal name of the class that owns the field or method designated by this
 	  ///     handle. </param>
@@ -97,25 +97,25 @@ namespace ObjectWeb.Asm
 	  /// <param name="isInterface"> whether the owner is an interface or not. </param>
 	  public Handle(int tag, string owner, string name, string descriptor, bool isInterface)
 	  {
-		this.tag = tag;
-		this.owner = owner;
-		this.name = name;
-		this.descriptor = descriptor;
-		this.isInterface = isInterface;
+		this._tag = tag;
+		this._owner = owner;
+		this._name = name;
+		this._descriptor = descriptor;
+		this._isInterface = isInterface;
 	  }
 
 	  /// <summary>
 	  /// Returns the kind of field or method designated by this handle.
 	  /// </summary>
-	  /// <returns> <seealso cref="Opcodes.H_GETFIELD"/>, <seealso cref="Opcodes.H_GETSTATIC"/>, <seealso cref="Opcodes.H_PUTFIELD"/>,
-	  ///     <seealso cref="Opcodes.H_PUTSTATIC"/>, <seealso cref="Opcodes.H_INVOKEVIRTUAL"/>, {@link
-	  ///     Opcodes#H_INVOKESTATIC}, <seealso cref="Opcodes.H_INVOKESPECIAL"/>, {@link
-	  ///     Opcodes#H_NEWINVOKESPECIAL} or <seealso cref="Opcodes.H_INVOKEINTERFACE"/>. </returns>
+	  /// <returns> <seealso cref="IIOpcodes.H_Getfield/>, <seealso cref="IIOpcodes.H_Getstatic/>, <seealso cref="IIOpcodes.H_Putfield/>,
+	  ///     <seealso cref="IIOpcodes.H_Putstatic/>, <seealso cref="IIOpcodes.H_Invokevirtual/>, {@link
+	  ///     Opcodes#H_INVOKESTATIC}, <seealso cref="IIOpcodes.H_Invokespecial/>, {@link
+	  ///     Opcodes#H_NEWINVOKESPECIAL} or <seealso cref="IIOpcodes.H_Invokeinterface/>. </returns>
 	  public int Tag
 	  {
 		  get
 		  {
-			return tag;
+			return _tag;
 		  }
 	  }
 
@@ -127,7 +127,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return owner;
+			return _owner;
 		  }
 	  }
 
@@ -139,7 +139,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return name;
+			return _name;
 		  }
 	  }
 
@@ -151,7 +151,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return descriptor;
+			return _descriptor;
 		  }
 	  }
 
@@ -163,7 +163,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return isInterface;
+			return _isInterface;
 		  }
 	  }
 
@@ -178,12 +178,12 @@ namespace ObjectWeb.Asm
 		  return false;
 		}
 		Handle handle = (Handle) @object;
-		return tag == handle.tag && isInterface == handle.isInterface && owner.Equals(handle.owner) && name.Equals(handle.name) && descriptor.Equals(handle.descriptor);
+		return _tag == handle._tag && _isInterface == handle._isInterface && _owner.Equals(handle._owner) && _name.Equals(handle._name) && _descriptor.Equals(handle._descriptor);
 	  }
 
 	  public override int GetHashCode()
 	  {
-		return tag + (isInterface ? 64 : 0) + owner.GetHashCode() * name.GetHashCode() * descriptor.GetHashCode();
+		return _tag + (_isInterface ? 64 : 0) + _owner.GetHashCode() * _name.GetHashCode() * _descriptor.GetHashCode();
 	  }
 
 	  /// <summary>
@@ -196,7 +196,7 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  public override string ToString()
 	  {
-		return owner + '.' + name + descriptor + " (" + tag + (isInterface ? " itf" : "") + ')';
+		return _owner + '.' + _name + _descriptor + " (" + _tag + (_isInterface ? " itf" : "") + ')';
 	  }
 	}
 

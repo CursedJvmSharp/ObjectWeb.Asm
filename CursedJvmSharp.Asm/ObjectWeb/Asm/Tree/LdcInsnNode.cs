@@ -56,7 +56,7 @@ namespace ObjectWeb.Asm.Tree
 	  ///     49, a <seealso cref="Type"/> of METHOD sort for MethodType, a <seealso cref="Handle"/> for MethodHandle
 	  ///     constants, for classes whose version is 51 or a <seealso cref="ConstantDynamic"/> for a constant
 	  ///     dynamic for classes whose version is 55. </param>
-	  public LdcInsnNode(object value) : base(Opcodes.LDC)
+	  public LdcInsnNode(object value) : base(IOpcodes.Ldc)
 	  {
 		this.cst = value;
 	  }
@@ -65,19 +65,19 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return LDC_INSN;
+			return Ldc_Insn;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitLdcInsn(cst);
-		acceptAnnotations(methodVisitor);
+		methodVisitor.VisitLdcInsn(cst);
+		AcceptAnnotations(methodVisitor);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return (new LdcInsnNode(cst)).cloneAnnotations(this);
+		return (new LdcInsnNode(cst)).CloneAnnotations(this);
 	  }
 	}
 

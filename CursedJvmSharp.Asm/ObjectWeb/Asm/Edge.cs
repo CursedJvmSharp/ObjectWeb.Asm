@@ -45,24 +45,24 @@ namespace ObjectWeb.Asm
 	  /// A control flow graph edge corresponding to a jump or ret instruction. Only used with {@link
 	  /// ClassWriter#COMPUTE_FRAMES}.
 	  /// </summary>
-	  internal const int JUMP = 0;
+	  internal const int Jump = 0;
 
 	  /// <summary>
 	  /// A control flow graph edge corresponding to an exception handler. Only used with {@link
 	  /// ClassWriter#COMPUTE_MAXS}.
 	  /// </summary>
-	  internal const int EXCEPTION = 0x7FFFFFFF;
+	  internal const int Exception = 0x7FFFFFFF;
 
 	  /// <summary>
 	  /// Information about this control flow graph edge.
 	  /// 
 	  /// <ul>
-	  ///   <li>If <seealso cref="ClassWriter.COMPUTE_MAXS"/> is used, this field contains either a stack size
+	  ///   <li>If <seealso cref="ClassWriter.Compute_Maxs"/> is used, this field contains either a stack size
 	  ///       delta (for an edge corresponding to a jump instruction), or the value EXCEPTION (for an
 	  ///       edge corresponding to an exception handler). The stack size delta is the stack size just
 	  ///       after the jump instruction, minus the stack size at the beginning of the predecessor
 	  ///       basic block, i.e. the one containing the jump instruction.
-	  ///   <li>If <seealso cref="ClassWriter.COMPUTE_FRAMES"/> is used, this field contains either the value JUMP
+	  ///   <li>If <seealso cref="ClassWriter.Compute_Frames"/> is used, this field contains either the value JUMP
 	  ///       (for an edge corresponding to a jump instruction), or the index, in the {@link
 	  ///       ClassWriter} type table, of the exception type that is handled (for an edge corresponding
 	  ///       to an exception handler).

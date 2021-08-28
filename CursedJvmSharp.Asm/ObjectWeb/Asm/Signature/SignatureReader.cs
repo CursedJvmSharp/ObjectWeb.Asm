@@ -42,7 +42,7 @@ namespace ObjectWeb.Asm.Signature
 
 	  /// <summary>
 	  /// The JVMS signature to be read. </summary>
-	  private readonly string signatureValue;
+	  private readonly string _signatureValue;
 
 	  /// <summary>
 	  /// Constructs a <seealso cref="SignatureReader"/> for the given signature.
@@ -50,21 +50,21 @@ namespace ObjectWeb.Asm.Signature
 	  /// <param name="signature"> A <i>JavaTypeSignature</i>, <i>ClassSignature</i> or <i>MethodSignature</i>. </param>
 	  public SignatureReader(string signature)
 	  {
-		this.signatureValue = signature;
+		this._signatureValue = signature;
 	  }
 
 	  /// <summary>
 	  /// Makes the given visitor visit the signature of this <seealso cref="SignatureReader"/>. This signature is
 	  /// the one specified in the constructor (see <seealso cref="SignatureReader"/>). This method is intended to
 	  /// be called on a <seealso cref="SignatureReader"/> that was created using a <i>ClassSignature</i> (such as
-	  /// the <code>signature</code> parameter of the <seealso cref="ClassVisitor.visit"/>
+	  /// the <code>signature</code> parameter of the <seealso cref="ClassVisitor.Visit"/>
 	  /// method) or a <i>MethodSignature</i> (such as the <code>signature</code> parameter of the {@link
 	  /// org.objectweb.asm.ClassVisitor#visitMethod} method).
 	  /// </summary>
 	  /// <param name="signatureVistor"> the visitor that must visit this signature. </param>
-	  public virtual void accept(SignatureVisitor signatureVistor)
+	  public virtual void Accept(SignatureVisitor signatureVistor)
 	  {
-		string signature = this.signatureValue;
+		string signature = this._signatureValue;
 		int length = signature.Length;
 		int offset; // Current offset in the parsed signature (parsed from left to right).
 		char currentChar; // The signature character at 'offset', or just before.
@@ -81,7 +81,7 @@ namespace ObjectWeb.Asm.Signature
 		  {
 			// The formal type parameter name is everything between offset - 1 and the first ':'.
 			int classBoundStartOffset = signature.IndexOf(':', offset);
-			signatureVistor.visitFormalTypeParameter(signature.Substring(offset - 1, classBoundStartOffset - (offset - 1)));
+			signatureVistor.VisitFormalTypeParameter(signature.Substring(offset - 1, classBoundStartOffset - (offset - 1)));
 
 			// If the character after the ':' class bound marker is not the start of a
 			// ReferenceTypeSignature, it means the class bound is empty (which is a valid case).
@@ -89,14 +89,14 @@ namespace ObjectWeb.Asm.Signature
 			currentChar = signature[offset];
 			if (currentChar == 'L' || currentChar == '[' || currentChar == 'T')
 			{
-			  offset = parseType(signature, offset, signatureVistor.visitClassBound());
+			  offset = ParseType(signature, offset, signatureVistor.VisitClassBound());
 			}
 
 			// While the character after the class bound or after the last parsed interface bound
 			// is ':', we need to parse another interface bound.
 			while ((currentChar = signature[offset++]) == ':')
 			{
-			  offset = parseType(signature, offset, signatureVistor.visitInterfaceBound());
+			  offset = ParseType(signature, offset, signatureVistor.VisitInterfaceBound());
 			}
 
 			// At this point a TypeParameter has been fully parsed, and we need to parse the next one
@@ -118,24 +118,24 @@ namespace ObjectWeb.Asm.Signature
 		  offset++;
 		  while (signature[offset] != ')')
 		  {
-			offset = parseType(signature, offset, signatureVistor.visitParameterType());
+			offset = ParseType(signature, offset, signatureVistor.VisitParameterType());
 		  }
 		  // Use offset + 1 to skip ')'.
-		  offset = parseType(signature, offset + 1, signatureVistor.visitReturnType());
+		  offset = ParseType(signature, offset + 1, signatureVistor.VisitReturnType());
 		  while (offset < length)
 		  {
 			// Use offset + 1 to skip the first character of a ThrowsSignature, i.e. '^'.
-			offset = parseType(signature, offset + 1, signatureVistor.visitExceptionType());
+			offset = ParseType(signature, offset + 1, signatureVistor.VisitExceptionType());
 		  }
 		}
 		else
 		{
 		  // Otherwise we are parsing a ClassSignature (by hypothesis on the method input), which has
 		  // one or more ClassTypeSignature for the super class and the implemented interfaces.
-		  offset = parseType(signature, offset, signatureVistor.visitSuperclass());
+		  offset = ParseType(signature, offset, signatureVistor.VisitSuperclass());
 		  while (offset < length)
 		  {
-			offset = parseType(signature, offset, signatureVistor.visitInterface());
+			offset = ParseType(signature, offset, signatureVistor.VisitInterface());
 		  }
 		}
 	  }
@@ -149,9 +149,9 @@ namespace ObjectWeb.Asm.Signature
 	  /// org.objectweb.asm.MethodVisitor#visitLocalVariable} methods.
 	  /// </summary>
 	  /// <param name="signatureVisitor"> the visitor that must visit this signature. </param>
-	  public virtual void acceptType(SignatureVisitor signatureVisitor)
+	  public virtual void AcceptType(SignatureVisitor signatureVisitor)
 	  {
-		parseType(signatureValue, 0, signatureVisitor);
+		ParseType(_signatureValue, 0, signatureVisitor);
 	  }
 
 	  /// <summary>
@@ -161,7 +161,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// <param name="startOffset"> index of the first character of the signature to parsed. </param>
 	  /// <param name="signatureVisitor"> the visitor that must visit this signature. </param>
 	  /// <returns> the index of the first character after the parsed signature. </returns>
-	  private static int parseType(string signature, int startOffset, SignatureVisitor signatureVisitor)
+	  private static int ParseType(string signature, int startOffset, SignatureVisitor signatureVisitor)
 	  {
 		int offset = startOffset; // Current offset in the parsed signature.
 		char currentChar = signature[offset++]; // The signature character at 'offset'.
@@ -179,17 +179,17 @@ namespace ObjectWeb.Asm.Signature
 		  case 'D':
 		  case 'V':
 			// Case of a BaseType or a VoidDescriptor.
-			signatureVisitor.visitBaseType(currentChar);
+			signatureVisitor.VisitBaseType(currentChar);
 			return offset;
 
 		  case '[':
 			// Case of an ArrayTypeSignature, a '[' followed by a JavaTypeSignature.
-			return parseType(signature, offset, signatureVisitor.visitArrayType());
+			return ParseType(signature, offset, signatureVisitor.VisitArrayType());
 
 		  case 'T':
 			// Case of TypeVariableSignature, an identifier between 'T' and ';'.
 			int endOffset = signature.IndexOf(';', offset);
-			signatureVisitor.visitTypeVariable(signature.Substring(offset, endOffset - offset));
+			signatureVisitor.VisitTypeVariable(signature.Substring(offset, endOffset - offset));
 			return endOffset + 1;
 
 		  case 'L':
@@ -213,18 +213,18 @@ namespace ObjectWeb.Asm.Signature
 				  string name = signature.Substring(start, (offset - 1) - start);
 				  if (inner)
 				  {
-					signatureVisitor.visitInnerClassType(name);
+					signatureVisitor.VisitInnerClassType(name);
 				  }
 				  else
 				  {
-					signatureVisitor.visitClassType(name);
+					signatureVisitor.VisitClassType(name);
 				  }
 				}
 				// If we reached the end of the ClassTypeSignature return, otherwise start the parsing
 				// of a new class name, which is necessarily an inner class name.
 				if (currentChar == ';')
 				{
-				  signatureVisitor.visitEnd();
+				  signatureVisitor.VisitEnd();
 				  break;
 				}
 				start = offset;
@@ -239,11 +239,11 @@ namespace ObjectWeb.Asm.Signature
 				string name = signature.Substring(start, (offset - 1) - start);
 				if (inner)
 				{
-				  signatureVisitor.visitInnerClassType(name);
+				  signatureVisitor.VisitInnerClassType(name);
 				}
 				else
 				{
-				  signatureVisitor.visitClassType(name);
+				  signatureVisitor.VisitClassType(name);
 				}
 				visited = true;
 				// Now, parse the TypeArgument(s), one at a time.
@@ -254,16 +254,16 @@ namespace ObjectWeb.Asm.Signature
 					case '*':
 					  // Unbounded TypeArgument.
 					  ++offset;
-					  signatureVisitor.visitTypeArgument();
+					  signatureVisitor.VisitTypeArgument();
 					  break;
 					case '+':
 					case '-':
 					  // Extends or Super TypeArgument. Use offset + 1 to skip the '+' or '-'.
-					  offset = parseType(signature, offset + 1, signatureVisitor.visitTypeArgument(currentChar));
+					  offset = ParseType(signature, offset + 1, signatureVisitor.VisitTypeArgument(currentChar));
 					  break;
 					default:
 					  // Instanceof TypeArgument. The '=' is implicit.
-					  offset = parseType(signature, offset, signatureVisitor.visitTypeArgument('='));
+					  offset = ParseType(signature, offset, signatureVisitor.VisitTypeArgument('='));
 					  break;
 				  }
 				}

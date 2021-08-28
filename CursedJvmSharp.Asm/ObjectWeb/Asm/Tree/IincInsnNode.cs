@@ -51,7 +51,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="var"> index of the local variable to be incremented. </param>
 	  /// <param name="incr"> increment amount to increment the local variable by. </param>
-	  public IincInsnNode(int var, int incr) : base(Opcodes.IINC)
+	  public IincInsnNode(int var, int incr) : base(IOpcodes.Iinc)
 	  {
 		this.var = var;
 		this.incr = incr;
@@ -61,19 +61,19 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return IINC_INSN;
+			return Iinc_Insn;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitIincInsn(var, incr);
-		acceptAnnotations(methodVisitor);
+		methodVisitor.VisitIincInsn(var, incr);
+		AcceptAnnotations(methodVisitor);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return (new IincInsnNode(var, incr)).cloneAnnotations(this);
+		return (new IincInsnNode(var, incr)).CloneAnnotations(this);
 	  }
 	}
 

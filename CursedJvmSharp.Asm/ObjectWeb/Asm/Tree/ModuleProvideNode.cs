@@ -62,9 +62,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given module visitor visit this require declaration.
 	  /// </summary>
 	  /// <param name="moduleVisitor"> a module visitor. </param>
-	  public virtual void accept(ModuleVisitor moduleVisitor)
+	  public virtual void Accept(ModuleVisitor moduleVisitor)
 	  {
-		moduleVisitor.visitProvide(service, ((List<string>)providers).ToArray());
+		moduleVisitor.VisitProvide(service, ((List<string>)providers).ToArray());
 	  }
 	}
 

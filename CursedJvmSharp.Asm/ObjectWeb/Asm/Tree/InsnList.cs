@@ -41,19 +41,19 @@ namespace ObjectWeb.Asm.Tree
 
 	  /// <summary>
 	  /// The number of instructions in this list. </summary>
-	  private int size_Conflict;
+	  private int _sizeConflict;
 
 	  /// <summary>
 	  /// The first instruction in this list. May be {@literal null}. </summary>
-	  private AbstractInsnNode firstInsn;
+	  private AbstractInsnNode _firstInsn;
 
 	  /// <summary>
 	  /// The last instruction in this list. May be {@literal null}. </summary>
-	  private AbstractInsnNode lastInsn;
+	  private AbstractInsnNode _lastInsn;
 
 	  /// <summary>
 	  /// A cache of the instructions of this list. This cache is used to improve the performance of the
-	  /// <seealso cref="get"/> method.
+	  /// <seealso cref="Get"/> method.
 	  /// </summary>
 	  internal AbstractInsnNode[] cache;
 
@@ -61,7 +61,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Returns the number of instructions in this list.
 	  /// </summary>
 	  /// <returns> the number of instructions in this list. </returns>
-	  public int Size => size_Conflict;
+	  public int Size => _sizeConflict;
 
       /// <summary>
 	  /// Returns the first instruction in this list.
@@ -71,7 +71,7 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return firstInsn;
+			return _firstInsn;
 		  }
 	  }
 
@@ -83,7 +83,7 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return lastInsn;
+			return _lastInsn;
 		  }
 	  }
 
@@ -96,15 +96,15 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="index"> the index of the instruction that must be returned. </param>
 	  /// <returns> the instruction whose index is given. </returns>
 	  /// <exception cref="IndexOutOfBoundsException"> if (index &lt; 0 || index &gt;= size()). </exception>
-	  public virtual AbstractInsnNode get(int index)
+	  public virtual AbstractInsnNode Get(int index)
 	  {
-		if (index < 0 || index >= size_Conflict)
+		if (index < 0 || index >= _sizeConflict)
 		{
 		  throw new System.IndexOutOfRangeException();
 		}
 		if (cache == null)
 		{
-		  cache = toArray();
+		  cache = ToArray();
 		}
 		return cache[index];
 	  }
@@ -116,9 +116,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="insnNode"> an instruction. </param>
 	  /// <returns> {@literal true} if the given instruction belongs to this list. </returns>
-	  public virtual bool contains(AbstractInsnNode insnNode)
+	  public virtual bool Contains(AbstractInsnNode insnNode)
 	  {
-		AbstractInsnNode currentInsn = firstInsn;
+		AbstractInsnNode currentInsn = _firstInsn;
 		while (currentInsn != null && currentInsn != insnNode)
 		{
 		  currentInsn = currentInsn.nextInsn;
@@ -134,13 +134,13 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="insnNode"> an instruction <i>of this list</i>. </param>
 	  /// <returns> the index of the given instruction in this list. <i>The result of this method is
-	  ///     undefined if the given instruction does not belong to this list</i>. Use <seealso cref="contains "/>
+	  ///     undefined if the given instruction does not belong to this list</i>. Use <seealso cref="Contains "/>
 	  ///     to test if an instruction belongs to an instruction list or not. </returns>
-	  public virtual int indexOf(AbstractInsnNode insnNode)
+	  public virtual int IndexOf(AbstractInsnNode insnNode)
 	  {
 		if (cache == null)
 		{
-		  cache = toArray();
+		  cache = ToArray();
 		}
 		return insnNode.index;
 	  }
@@ -149,12 +149,12 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given visitor visit all the instructions in this list.
 	  /// </summary>
 	  /// <param name="methodVisitor"> the method visitor that must visit the instructions. </param>
-	  public virtual void accept(MethodVisitor methodVisitor)
+	  public virtual void Accept(MethodVisitor methodVisitor)
 	  {
-		AbstractInsnNode currentInsn = firstInsn;
+		AbstractInsnNode currentInsn = _firstInsn;
 		while (currentInsn != null)
 		{
-		  currentInsn.accept(methodVisitor);
+		  currentInsn.Accept(methodVisitor);
 		  currentInsn = currentInsn.nextInsn;
 		}
 	  }
@@ -182,11 +182,11 @@ namespace ObjectWeb.Asm.Tree
 	  /// Returns an array containing all the instructions in this list.
 	  /// </summary>
 	  /// <returns> an array containing all the instructions in this list. </returns>
-	  public virtual AbstractInsnNode[] toArray()
+	  public virtual AbstractInsnNode[] ToArray()
 	  {
 		int currentInsnIndex = 0;
-		AbstractInsnNode currentInsn = firstInsn;
-		AbstractInsnNode[] insnNodeArray = new AbstractInsnNode[size_Conflict];
+		AbstractInsnNode currentInsn = _firstInsn;
+		AbstractInsnNode[] insnNodeArray = new AbstractInsnNode[_sizeConflict];
 		while (currentInsn != null)
 		{
 		  insnNodeArray[currentInsnIndex] = currentInsn;
@@ -201,7 +201,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="oldInsnNode"> an instruction <i>of this list</i>. </param>
 	  /// <param name="newInsnNode"> another instruction, <i>which must not belong to any <seealso cref="InsnList"/></i>. </param>
-	  public virtual void set(AbstractInsnNode oldInsnNode, AbstractInsnNode newInsnNode)
+	  public virtual void Set(AbstractInsnNode oldInsnNode, AbstractInsnNode newInsnNode)
 	  {
 		AbstractInsnNode nextInsn = oldInsnNode.nextInsn;
 		newInsnNode.nextInsn = nextInsn;
@@ -211,7 +211,7 @@ namespace ObjectWeb.Asm.Tree
 		}
 		else
 		{
-		  lastInsn = newInsnNode;
+		  _lastInsn = newInsnNode;
 		}
 		AbstractInsnNode previousInsn = oldInsnNode.previousInsn;
 		newInsnNode.previousInsn = previousInsn;
@@ -221,7 +221,7 @@ namespace ObjectWeb.Asm.Tree
 		}
 		else
 		{
-		  firstInsn = newInsnNode;
+		  _firstInsn = newInsnNode;
 		}
 		if (cache != null)
 		{
@@ -242,20 +242,20 @@ namespace ObjectWeb.Asm.Tree
 	  /// Adds the given instruction to the end of this list.
 	  /// </summary>
 	  /// <param name="insnNode"> an instruction, <i>which must not belong to any <seealso cref="InsnList"/></i>. </param>
-	  public virtual void add(AbstractInsnNode insnNode)
+	  public virtual void Add(AbstractInsnNode insnNode)
 	  {
-		++size_Conflict;
-		if (lastInsn == null)
+		++_sizeConflict;
+		if (_lastInsn == null)
 		{
-		  firstInsn = insnNode;
-		  lastInsn = insnNode;
+		  _firstInsn = insnNode;
+		  _lastInsn = insnNode;
 		}
 		else
 		{
-		  lastInsn.nextInsn = insnNode;
-		  insnNode.previousInsn = lastInsn;
+		  _lastInsn.nextInsn = insnNode;
+		  insnNode.previousInsn = _lastInsn;
 		}
-		lastInsn = insnNode;
+		_lastInsn = insnNode;
 		cache = null;
 		insnNode.index = 0; // insnNode now belongs to an InsnList.
 	  }
@@ -265,47 +265,47 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="insnList"> an instruction list, which is cleared during the process. This list must be
 	  ///     different from 'this'. </param>
-	  public virtual void add(InsnList insnList)
+	  public virtual void Add(InsnList insnList)
 	  {
 		if (insnList.Size == 0)
 		{
 		  return;
 		}
-		size_Conflict += insnList.Size;
-		if (lastInsn == null)
+		_sizeConflict += insnList.Size;
+		if (_lastInsn == null)
 		{
-		  firstInsn = insnList.firstInsn;
-		  lastInsn = insnList.lastInsn;
+		  _firstInsn = insnList._firstInsn;
+		  _lastInsn = insnList._lastInsn;
 		}
 		else
 		{
-		  AbstractInsnNode firstInsnListElement = insnList.firstInsn;
-		  lastInsn.nextInsn = firstInsnListElement;
-		  firstInsnListElement.previousInsn = lastInsn;
-		  lastInsn = insnList.lastInsn;
+		  AbstractInsnNode firstInsnListElement = insnList._firstInsn;
+		  _lastInsn.nextInsn = firstInsnListElement;
+		  firstInsnListElement.previousInsn = _lastInsn;
+		  _lastInsn = insnList._lastInsn;
 		}
 		cache = null;
-		insnList.removeAll(false);
+		insnList.RemoveAll(false);
 	  }
 
 	  /// <summary>
 	  /// Inserts the given instruction at the beginning of this list.
 	  /// </summary>
 	  /// <param name="insnNode"> an instruction, <i>which must not belong to any <seealso cref="InsnList"/></i>. </param>
-	  public virtual void insert(AbstractInsnNode insnNode)
+	  public virtual void Insert(AbstractInsnNode insnNode)
 	  {
-		++size_Conflict;
-		if (firstInsn == null)
+		++_sizeConflict;
+		if (_firstInsn == null)
 		{
-		  firstInsn = insnNode;
-		  lastInsn = insnNode;
+		  _firstInsn = insnNode;
+		  _lastInsn = insnNode;
 		}
 		else
 		{
-		  firstInsn.previousInsn = insnNode;
-		  insnNode.nextInsn = firstInsn;
+		  _firstInsn.previousInsn = insnNode;
+		  insnNode.nextInsn = _firstInsn;
 		}
-		firstInsn = insnNode;
+		_firstInsn = insnNode;
 		cache = null;
 		insnNode.index = 0; // insnNode now belongs to an InsnList.
 	  }
@@ -315,27 +315,27 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="insnList"> an instruction list, which is cleared during the process. This list must be
 	  ///     different from 'this'. </param>
-	  public virtual void insert(InsnList insnList)
+	  public virtual void Insert(InsnList insnList)
 	  {
 		if (insnList.Size == 0)
 		{
 		  return;
 		}
-		size_Conflict += insnList.Size;
-		if (firstInsn == null)
+		_sizeConflict += insnList.Size;
+		if (_firstInsn == null)
 		{
-		  firstInsn = insnList.firstInsn;
-		  lastInsn = insnList.lastInsn;
+		  _firstInsn = insnList._firstInsn;
+		  _lastInsn = insnList._lastInsn;
 		}
 		else
 		{
-		  AbstractInsnNode lastInsnListElement = insnList.lastInsn;
-		  firstInsn.previousInsn = lastInsnListElement;
-		  lastInsnListElement.nextInsn = firstInsn;
-		  firstInsn = insnList.firstInsn;
+		  AbstractInsnNode lastInsnListElement = insnList._lastInsn;
+		  _firstInsn.previousInsn = lastInsnListElement;
+		  lastInsnListElement.nextInsn = _firstInsn;
+		  _firstInsn = insnList._firstInsn;
 		}
 		cache = null;
-		insnList.removeAll(false);
+		insnList.RemoveAll(false);
 	  }
 
 	  /// <summary>
@@ -344,13 +344,13 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="previousInsn"> an instruction <i>of this list</i> after which insnNode must be inserted. </param>
 	  /// <param name="insnNode"> the instruction to be inserted, <i>which must not belong to any {@link
 	  ///     InsnList}</i>. </param>
-	  public virtual void insert(AbstractInsnNode previousInsn, AbstractInsnNode insnNode)
+	  public virtual void Insert(AbstractInsnNode previousInsn, AbstractInsnNode insnNode)
 	  {
-		++size_Conflict;
+		++_sizeConflict;
 		AbstractInsnNode nextInsn = previousInsn.nextInsn;
 		if (nextInsn == null)
 		{
-		  lastInsn = insnNode;
+		  _lastInsn = insnNode;
 		}
 		else
 		{
@@ -370,19 +370,19 @@ namespace ObjectWeb.Asm.Tree
 	  ///     inserted. </param>
 	  /// <param name="insnList"> the instruction list to be inserted, which is cleared during the process. This
 	  ///     list must be different from 'this'. </param>
-	  public virtual void insert(AbstractInsnNode previousInsn, InsnList insnList)
+	  public virtual void Insert(AbstractInsnNode previousInsn, InsnList insnList)
 	  {
 		if (insnList.Size == 0)
 		{
 		  return;
 		}
-		size_Conflict += insnList.Size;
-		AbstractInsnNode firstInsnListElement = insnList.firstInsn;
-		AbstractInsnNode lastInsnListElement = insnList.lastInsn;
+		_sizeConflict += insnList.Size;
+		AbstractInsnNode firstInsnListElement = insnList._firstInsn;
+		AbstractInsnNode lastInsnListElement = insnList._lastInsn;
 		AbstractInsnNode nextInsn = previousInsn.nextInsn;
 		if (nextInsn == null)
 		{
-		  lastInsn = lastInsnListElement;
+		  _lastInsn = lastInsnListElement;
 		}
 		else
 		{
@@ -392,7 +392,7 @@ namespace ObjectWeb.Asm.Tree
 		lastInsnListElement.nextInsn = nextInsn;
 		firstInsnListElement.previousInsn = previousInsn;
 		cache = null;
-		insnList.removeAll(false);
+		insnList.RemoveAll(false);
 	  }
 
 	  /// <summary>
@@ -401,13 +401,13 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="nextInsn"> an instruction <i>of this list</i> before which insnNode must be inserted. </param>
 	  /// <param name="insnNode"> the instruction to be inserted, <i>which must not belong to any {@link
 	  ///     InsnList}</i>. </param>
-	  public virtual void insertBefore(AbstractInsnNode nextInsn, AbstractInsnNode insnNode)
+	  public virtual void InsertBefore(AbstractInsnNode nextInsn, AbstractInsnNode insnNode)
 	  {
-		++size_Conflict;
+		++_sizeConflict;
 		AbstractInsnNode previousInsn = nextInsn.previousInsn;
 		if (previousInsn == null)
 		{
-		  firstInsn = insnNode;
+		  _firstInsn = insnNode;
 		}
 		else
 		{
@@ -427,19 +427,19 @@ namespace ObjectWeb.Asm.Tree
 	  ///     inserted. </param>
 	  /// <param name="insnList"> the instruction list to be inserted, which is cleared during the process. This
 	  ///     list must be different from 'this'. </param>
-	  public virtual void insertBefore(AbstractInsnNode nextInsn, InsnList insnList)
+	  public virtual void InsertBefore(AbstractInsnNode nextInsn, InsnList insnList)
 	  {
 		if (insnList.Size == 0)
 		{
 		  return;
 		}
-		size_Conflict += insnList.Size;
-		AbstractInsnNode firstInsnListElement = insnList.firstInsn;
-		AbstractInsnNode lastInsnListElement = insnList.lastInsn;
+		_sizeConflict += insnList.Size;
+		AbstractInsnNode firstInsnListElement = insnList._firstInsn;
+		AbstractInsnNode lastInsnListElement = insnList._lastInsn;
 		AbstractInsnNode previousInsn = nextInsn.previousInsn;
 		if (previousInsn == null)
 		{
-		  firstInsn = firstInsnListElement;
+		  _firstInsn = firstInsnListElement;
 		}
 		else
 		{
@@ -449,36 +449,36 @@ namespace ObjectWeb.Asm.Tree
 		lastInsnListElement.nextInsn = nextInsn;
 		firstInsnListElement.previousInsn = previousInsn;
 		cache = null;
-		insnList.removeAll(false);
+		insnList.RemoveAll(false);
 	  }
 
 	  /// <summary>
 	  /// Removes the given instruction from this list.
 	  /// </summary>
 	  /// <param name="insnNode"> the instruction <i>of this list</i> that must be removed. </param>
-	  public virtual void remove(AbstractInsnNode insnNode)
+	  public virtual void Remove(AbstractInsnNode insnNode)
 	  {
-		--size_Conflict;
+		--_sizeConflict;
 		AbstractInsnNode nextInsn = insnNode.nextInsn;
 		AbstractInsnNode previousInsn = insnNode.previousInsn;
 		if (nextInsn == null)
 		{
 		  if (previousInsn == null)
 		  {
-			firstInsn = null;
-			lastInsn = null;
+			_firstInsn = null;
+			_lastInsn = null;
 		  }
 		  else
 		  {
 			previousInsn.nextInsn = null;
-			lastInsn = previousInsn;
+			_lastInsn = previousInsn;
 		  }
 		}
 		else
 		{
 		  if (previousInsn == null)
 		  {
-			firstInsn = nextInsn;
+			_firstInsn = nextInsn;
 			nextInsn.previousInsn = null;
 		  }
 		  else
@@ -497,11 +497,11 @@ namespace ObjectWeb.Asm.Tree
 	  /// Removes all the instructions of this list.
 	  /// </summary>
 	  /// <param name="mark"> if the instructions must be marked as no longer belonging to any <seealso cref="InsnList"/>. </param>
-	  public virtual void removeAll(bool mark)
+	  public virtual void RemoveAll(bool mark)
 	  {
 		if (mark)
 		{
-		  AbstractInsnNode currentInsn = firstInsn;
+		  AbstractInsnNode currentInsn = _firstInsn;
 		  while (currentInsn != null)
 		  {
 			AbstractInsnNode next = currentInsn.nextInsn;
@@ -511,31 +511,31 @@ namespace ObjectWeb.Asm.Tree
 			currentInsn = next;
 		  }
 		}
-		size_Conflict = 0;
-		firstInsn = null;
-		lastInsn = null;
+		_sizeConflict = 0;
+		_firstInsn = null;
+		_lastInsn = null;
 		cache = null;
 	  }
 
 	  /// <summary>
 	  /// Removes all the instructions of this list. </summary>
-	  public virtual void clear()
+	  public virtual void Clear()
 	  {
-		removeAll(false);
+		RemoveAll(false);
 	  }
 
 	  /// <summary>
 	  /// Resets all the labels in the instruction list. This method should be called before reusing an
 	  /// instruction list between several <code>ClassWriter</code>s.
 	  /// </summary>
-	  public virtual void resetLabels()
+	  public virtual void ResetLabels()
 	  {
-		AbstractInsnNode currentInsn = firstInsn;
+		AbstractInsnNode currentInsn = _firstInsn;
 		while (currentInsn != null)
 		{
 		  if (currentInsn is LabelNode)
 		  {
-			((LabelNode) currentInsn).resetLabel();
+			((LabelNode) currentInsn).ResetLabel();
 		  }
 		  currentInsn = currentInsn.nextInsn;
 		}
@@ -544,20 +544,20 @@ namespace ObjectWeb.Asm.Tree
 	  // Note: this class is not generified because it would create bridges.
 	  private sealed class InsnListIterator : IEnumerator<AbstractInsnNode>
 	  {
-		  private readonly InsnList outerInstance;
+		  private readonly InsnList _outerInstance;
 
 
 		internal AbstractInsnNode nextInsn;
 
 		internal AbstractInsnNode previousInsn;
 
-		internal AbstractInsnNode remove_Conflict;
+		internal AbstractInsnNode removeConflict;
         private AbstractInsnNode _current;
 
         public InsnListIterator(InsnList outerInstance, int index)
 		{
-			this.outerInstance = outerInstance;
-            var outerInstanceCount = outerInstance.size_Conflict;
+			this._outerInstance = outerInstance;
+            var outerInstanceCount = outerInstance._sizeConflict;
             if (index < 0 || index > outerInstanceCount)
 		  {
 			throw new System.IndexOutOfRangeException();
@@ -580,12 +580,12 @@ namespace ObjectWeb.Asm.Tree
 		  }
 		}
 
-		public bool hasNext()
+		public bool HasNext()
 		{
 		  return nextInsn != null;
 		}
 
-		public AbstractInsnNode next()
+		public AbstractInsnNode Next()
 		{
 		  if (nextInsn == null)
 		  {
@@ -594,15 +594,15 @@ namespace ObjectWeb.Asm.Tree
 		  AbstractInsnNode result = nextInsn;
 		  previousInsn = result;
 		  nextInsn = result.nextInsn;
-		  remove_Conflict = result;
+		  removeConflict = result;
 		  return result;
 		}
 
-		public void remove()
+		public void Remove()
 		{
-		  if (remove_Conflict != null)
+		  if (removeConflict != null)
 		  {
-			if (remove_Conflict == nextInsn)
+			if (removeConflict == nextInsn)
 			{
 			  nextInsn = nextInsn.nextInsn;
 			}
@@ -610,8 +610,8 @@ namespace ObjectWeb.Asm.Tree
 			{
 			  previousInsn = previousInsn.previousInsn;
 			}
-			outerInstance.remove(remove_Conflict);
-			remove_Conflict = null;
+			_outerInstance.Remove(removeConflict);
+			removeConflict = null;
 		  }
 		  else
 		  {
@@ -619,12 +619,12 @@ namespace ObjectWeb.Asm.Tree
 		  }
 		}
 
-		public bool hasPrevious()
+		public bool HasPrevious()
 		{
 		  return previousInsn != null;
 		}
 
-		public object previous()
+		public object Previous()
 		{
 		  if (previousInsn == null)
 		  {
@@ -633,60 +633,60 @@ namespace ObjectWeb.Asm.Tree
 		  AbstractInsnNode result = previousInsn;
 		  nextInsn = result;
 		  previousInsn = result.previousInsn;
-		  remove_Conflict = result;
+		  removeConflict = result;
 		  return result;
 		}
 
-		public int nextIndex()
+		public int NextIndex()
 		{
 		  if (nextInsn == null)
 		  {
-			return outerInstance.Size;
+			return _outerInstance.Size;
 		  }
-		  if (outerInstance.cache == null)
+		  if (_outerInstance.cache == null)
 		  {
-			outerInstance.cache = outerInstance.toArray();
+			_outerInstance.cache = _outerInstance.ToArray();
 		  }
 		  return nextInsn.index;
 		}
 
-		public int previousIndex()
+		public int PreviousIndex()
 		{
 		  if (previousInsn == null)
 		  {
 			return -1;
 		  }
-		  if (outerInstance.cache == null)
+		  if (_outerInstance.cache == null)
 		  {
-			outerInstance.cache = outerInstance.toArray();
+			_outerInstance.cache = _outerInstance.ToArray();
 		  }
 		  return previousInsn.index;
 		}
 
-		public void add(object o)
+		public void Add(object o)
 		{
 		  if (nextInsn != null)
 		  {
-			outerInstance.insertBefore(nextInsn, (AbstractInsnNode) o);
+			_outerInstance.InsertBefore(nextInsn, (AbstractInsnNode) o);
 		  }
 		  else if (previousInsn != null)
 		  {
-			outerInstance.insert(previousInsn, (AbstractInsnNode) o);
+			_outerInstance.Insert(previousInsn, (AbstractInsnNode) o);
 		  }
 		  else
 		  {
-			outerInstance.add((AbstractInsnNode) o);
+			_outerInstance.Add((AbstractInsnNode) o);
 		  }
 		  previousInsn = (AbstractInsnNode) o;
-		  remove_Conflict = null;
+		  removeConflict = null;
 		}
 
-		public void set(object o)
+		public void Set(object o)
 		{
-		  if (remove_Conflict != null)
+		  if (removeConflict != null)
 		  {
-			outerInstance.set(remove_Conflict, (AbstractInsnNode) o);
-			if (remove_Conflict == previousInsn)
+			_outerInstance.Set(removeConflict, (AbstractInsnNode) o);
+			if (removeConflict == previousInsn)
 			{
 			  previousInsn = (AbstractInsnNode) o;
 			}
@@ -704,8 +704,8 @@ namespace ObjectWeb.Asm.Tree
 		
         public bool MoveNext()
         {
-            if (!hasNext()) return false;
-            Current = next();
+            if (!HasNext()) return false;
+            Current = Next();
             return true;
         }
 

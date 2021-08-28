@@ -39,7 +39,7 @@ namespace ObjectWeb.Asm.Tree
 	{
 
 	  /// <summary>
-	  /// The field's access flags (see <seealso cref="Opcodes"/>). This field also indicates if
+	  /// The field's access flags (see <seealso cref="IOpcodes"/>). This field also indicates if
 	  /// the field is synthetic and/or deprecated.
 	  /// </summary>
 	  public int access;
@@ -96,7 +96,7 @@ namespace ObjectWeb.Asm.Tree
 	  ///     field does not have an initial value, must be an <seealso cref="Integer"/>, a <seealso cref="Float"/>, a {@link
 	  ///     Long}, a <seealso cref="Double"/> or a <seealso cref="string"/>. </param>
 	  /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-	  public FieldNode(int access, string name, string descriptor, string signature, object value) : this(Opcodes.ASM9, access, name, descriptor, signature, value)
+	  public FieldNode(int access, string name, string descriptor, string signature, object value) : this(IOpcodes.Asm9, access, name, descriptor, signature, value)
 	  {
 		if (this.GetType() != typeof(FieldNode))
 		{
@@ -108,7 +108,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Constructs a new <seealso cref="FieldNode"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="access"> the field's access flags (see <seealso cref="org.objectweb.asm.Opcodes"/>). This parameter
 	  ///     also indicates if the field is synthetic and/or deprecated. </param>
 	  /// <param name="name"> the field's name. </param>
@@ -130,40 +130,40 @@ namespace ObjectWeb.Asm.Tree
 	  // Implementation of the FieldVisitor abstract class
 	  // -----------------------------------------------------------------------------------------------
 
-	  public override AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+	  public override AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
 	  {
 		AnnotationNode annotation = new AnnotationNode(descriptor);
 		if (visible)
 		{
-		  visibleAnnotations = Util.add(visibleAnnotations, annotation);
+		  visibleAnnotations = Util.Add(visibleAnnotations, annotation);
 		}
 		else
 		{
-		  invisibleAnnotations = Util.add(invisibleAnnotations, annotation);
+		  invisibleAnnotations = Util.Add(invisibleAnnotations, annotation);
 		}
 		return annotation;
 	  }
 
-	  public override AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+	  public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
 	  {
 		TypeAnnotationNode typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
 		if (visible)
 		{
-		  visibleTypeAnnotations = Util.add(visibleTypeAnnotations, typeAnnotation);
+		  visibleTypeAnnotations = Util.Add(visibleTypeAnnotations, typeAnnotation);
 		}
 		else
 		{
-		  invisibleTypeAnnotations = Util.add(invisibleTypeAnnotations, typeAnnotation);
+		  invisibleTypeAnnotations = Util.Add(invisibleTypeAnnotations, typeAnnotation);
 		}
 		return typeAnnotation;
 	  }
 
-	  public override void visitAttribute(Attribute attribute)
+	  public override void VisitAttribute(Attribute attribute)
 	  {
-		attrs = Util.add(attrs, attribute);
+		attrs = Util.Add(attrs, attribute);
 	  }
 
-	  public override void visitEnd()
+	  public override void VisitEnd()
 	  {
 		// Nothing to do.
 	  }
@@ -179,9 +179,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="api"> an ASM API version. Must be one of the {@code ASM}<i>x</i> values in {@link
 	  ///     Opcodes}. </param>
-	  public virtual void check(int api)
+	  public virtual void Check(int api)
 	  {
-		if (api == Opcodes.ASM4)
+		if (api == IOpcodes.Asm4)
 		{
 		  if (visibleTypeAnnotations != null && visibleTypeAnnotations.Count > 0)
 		  {
@@ -198,9 +198,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given class visitor visit this field.
 	  /// </summary>
 	  /// <param name="classVisitor"> a class visitor. </param>
-	  public virtual void accept(ClassVisitor classVisitor)
+	  public virtual void Accept(ClassVisitor classVisitor)
 	  {
-		FieldVisitor fieldVisitor = classVisitor.visitField(access, name, desc, signature, value);
+		FieldVisitor fieldVisitor = classVisitor.VisitField(access, name, desc, signature, value);
 		if (fieldVisitor == null)
 		{
 		  return;
@@ -211,7 +211,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = visibleAnnotations.Count; i < n; ++i)
 		  {
 			AnnotationNode annotation = visibleAnnotations[i];
-			annotation.accept(fieldVisitor.visitAnnotation(annotation.desc, true));
+			annotation.Accept(fieldVisitor.VisitAnnotation(annotation.desc, true));
 		  }
 		}
 		if (invisibleAnnotations != null)
@@ -219,7 +219,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = invisibleAnnotations.Count; i < n; ++i)
 		  {
 			AnnotationNode annotation = invisibleAnnotations[i];
-			annotation.accept(fieldVisitor.visitAnnotation(annotation.desc, false));
+			annotation.Accept(fieldVisitor.VisitAnnotation(annotation.desc, false));
 		  }
 		}
 		if (visibleTypeAnnotations != null)
@@ -227,7 +227,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
 		  {
 			TypeAnnotationNode typeAnnotation = visibleTypeAnnotations[i];
-			typeAnnotation.accept(fieldVisitor.visitTypeAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
+			typeAnnotation.Accept(fieldVisitor.VisitTypeAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
 		  }
 		}
 		if (invisibleTypeAnnotations != null)
@@ -235,7 +235,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
 		  {
 			TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations[i];
-			typeAnnotation.accept(fieldVisitor.visitTypeAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
+			typeAnnotation.Accept(fieldVisitor.VisitTypeAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
 		  }
 		}
 		// Visit the non standard attributes.
@@ -243,10 +243,10 @@ namespace ObjectWeb.Asm.Tree
 		{
 		  for (int i = 0, n = attrs.Count; i < n; ++i)
 		  {
-			fieldVisitor.visitAttribute(attrs[i]);
+			fieldVisitor.VisitAttribute(attrs[i]);
 		  }
 		}
-		fieldVisitor.visitEnd();
+		fieldVisitor.VisitEnd();
 	  }
 	}
 

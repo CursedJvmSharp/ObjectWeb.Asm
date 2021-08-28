@@ -106,71 +106,71 @@ namespace ObjectWeb.Asm.Commons
 	/// </para>
 	/// </summary>
 	// DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	public class SerialVersionUIDAdder : ClassVisitor
+	public class SerialVersionUidAdder : ClassVisitor
 	{
 
 	  /// <summary>
 	  /// The JVM name of static initializer methods. </summary>
-	  private const string CLINIT = "<clinit>";
+	  private const string Clinit = "<clinit>";
 
 	  /// <summary>
 	  /// A flag that indicates if we need to compute SVUID. </summary>
-	  private bool computeSvuid;
+	  private bool _computeSvuid;
 
 	  /// <summary>
 	  /// Whether the class already has a SVUID. </summary>
-	  private bool hasSvuid;
+	  private bool _hasSvuid;
 
 	  /// <summary>
 	  /// The class access flags. </summary>
-	  private int access;
+	  private int _access;
 
 	  /// <summary>
 	  /// The internal name of the class. </summary>
-	  private string name;
+	  private string _name;
 
 	  /// <summary>
 	  /// The interfaces implemented by the class. </summary>
-	  private string[] interfaces;
+	  private string[] _interfaces;
 
 	  /// <summary>
 	  /// The fields of the class that are needed to compute the SVUID. </summary>
-	  private ICollection<Item> svuidFields;
+	  private ICollection<Item> _svuidFields;
 
 	  /// <summary>
 	  /// Whether the class has a static initializer. </summary>
-	  private bool hasStaticInitializer;
+	  private bool _hasStaticInitializer;
 
 	  /// <summary>
 	  /// The constructors of the class that are needed to compute the SVUID. </summary>
-	  private ICollection<Item> svuidConstructors;
+	  private ICollection<Item> _svuidConstructors;
 
 	  /// <summary>
 	  /// The methods of the class that are needed to compute the SVUID. </summary>
-	  private ICollection<Item> svuidMethods;
+	  private ICollection<Item> _svuidMethods;
 
 	  /// <summary>
-	  /// Constructs a new <seealso cref="SerialVersionUIDAdder"/>. <i>Subclasses must not use this
-	  /// constructor</i>. Instead, they must use the <seealso cref="SerialVersionUIDAdder(int, ClassVisitor)"/>
+	  /// Constructs a new <seealso cref="SerialVersionUidAdder"/>. <i>Subclasses must not use this
+	  /// constructor</i>. Instead, they must use the <seealso cref="SerialVersionUidAdder(int,ObjectWeb.Asm.ClassVisitor)"/>
 	  /// version.
 	  /// </summary>
 	  /// <param name="classVisitor"> a <seealso cref="ClassVisitor"/> to which this visitor will delegate calls. </param>
 	  /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-	  public SerialVersionUIDAdder(ClassVisitor classVisitor) : this(Opcodes.ASM9, classVisitor)
+	  public SerialVersionUidAdder(ClassVisitor classVisitor) : this(IOpcodes.Asm9, classVisitor)
 	  {
-		if (this.GetType() != typeof(SerialVersionUIDAdder))
+		if (this.GetType() != typeof(SerialVersionUidAdder))
 		{
 		  throw new System.InvalidOperationException();
 		}
 	  }
 
 	  /// <summary>
-	  /// Constructs a new <seealso cref="SerialVersionUIDAdder"/>.
+	  /// Constructs a new <seealso cref="SerialVersionUidAdder"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="classVisitor"> a <seealso cref="ClassVisitor"/> to which this visitor will delegate calls. </param>
-	  public SerialVersionUIDAdder(int api, ClassVisitor classVisitor) : base(api, classVisitor)
+	  public SerialVersionUidAdder(int api, ClassVisitor classVisitor) : base(api, classVisitor)
 	  {
 	  }
 
@@ -178,110 +178,110 @@ namespace ObjectWeb.Asm.Commons
 	  // Overridden methods
 	  // -----------------------------------------------------------------------------------------------
 
-	  public override void visit(int version, int access, string name, string signature, string superName, string[] interfaces)
+	  public override void Visit(int version, int access, string name, string signature, string superName, string[] interfaces)
 	  {
 		// Get the class name, access flags, and interfaces information (step 1, 2 and 3) for SVUID
 		// computation.
-		computeSvuid = (access & Opcodes.ACC_ENUM) == 0;
+		_computeSvuid = (access & IOpcodes.Acc_Enum) == 0;
 
-		if (computeSvuid)
+		if (_computeSvuid)
 		{
-		  this.name = name;
-		  this.access = access;
-		  this.interfaces = (string[])interfaces.Clone();
-		  this.svuidFields = new List<Item>();
-		  this.svuidConstructors = new List<Item>();
-		  this.svuidMethods = new List<Item>();
+		  this._name = name;
+		  this._access = access;
+		  this._interfaces = (string[])interfaces.Clone();
+		  this._svuidFields = new List<Item>();
+		  this._svuidConstructors = new List<Item>();
+		  this._svuidMethods = new List<Item>();
 		}
 
-		base.visit(version, access, name, signature, superName, interfaces);
+		base.Visit(version, access, name, signature, superName, interfaces);
 	  }
 
-	  public override MethodVisitor visitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
+	  public override MethodVisitor VisitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
 	  {
 		// Get constructor and method information (step 5 and 7). Also determine if there is a class
 		// initializer (step 6).
-		if (computeSvuid)
+		if (_computeSvuid)
 		{
-		  if (CLINIT.Equals(name))
+		  if (Clinit.Equals(name))
 		  {
-			hasStaticInitializer = true;
+			_hasStaticInitializer = true;
 		  }
 		  // Collect the non private constructors and methods. Only the ACC_PUBLIC, ACC_PRIVATE,
 		  // ACC_PROTECTED, ACC_STATIC, ACC_FINAL, ACC_SYNCHRONIZED, ACC_NATIVE, ACC_ABSTRACT and
 		  // ACC_STRICT flags are used.
-		  int mods = access & (Opcodes.ACC_PUBLIC | Opcodes.ACC_PRIVATE | Opcodes.ACC_PROTECTED | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL | Opcodes.ACC_SYNCHRONIZED | Opcodes.ACC_NATIVE | Opcodes.ACC_ABSTRACT | Opcodes.ACC_STRICT);
+		  int mods = access & (IOpcodes.Acc_Public | IOpcodes.Acc_Private | IOpcodes.Acc_Protected | IOpcodes.Acc_Static | IOpcodes.Acc_Final | IOpcodes.Acc_Synchronized | IOpcodes.Acc_Native | IOpcodes.Acc_Abstract | IOpcodes.Acc_Strict);
 
-		  if ((access & Opcodes.ACC_PRIVATE) == 0)
+		  if ((access & IOpcodes.Acc_Private) == 0)
 		  {
 			if ("<init>".Equals(name))
 			{
-			  svuidConstructors.Add(new Item(name, mods, descriptor));
+			  _svuidConstructors.Add(new Item(name, mods, descriptor));
 			}
-			else if (!CLINIT.Equals(name))
+			else if (!Clinit.Equals(name))
 			{
-			  svuidMethods.Add(new Item(name, mods, descriptor));
+			  _svuidMethods.Add(new Item(name, mods, descriptor));
 			}
 		  }
 		}
 
-		return base.visitMethod(access, name, descriptor, signature, exceptions);
+		return base.VisitMethod(access, name, descriptor, signature, exceptions);
 	  }
 
-	  public override FieldVisitor visitField(int access, string name, string desc, string signature, object value)
+	  public override FieldVisitor VisitField(int access, string name, string desc, string signature, object value)
 	  {
 		// Get the class field information for step 4 of the algorithm. Also determine if the class
 		// already has a SVUID.
-		if (computeSvuid)
+		if (_computeSvuid)
 		{
 		  if ("serialVersionUID".Equals(name))
 		  {
 			// Since the class already has SVUID, we won't be computing it.
-			computeSvuid = false;
-			hasSvuid = true;
+			_computeSvuid = false;
+			_hasSvuid = true;
 		  }
 		  // Collect the non private fields. Only the ACC_PUBLIC, ACC_PRIVATE, ACC_PROTECTED,
 		  // ACC_STATIC, ACC_FINAL, ACC_VOLATILE, and ACC_TRANSIENT flags are used when computing
 		  // serialVersionUID values.
-		  if ((access & Opcodes.ACC_PRIVATE) == 0 || (access & (Opcodes.ACC_STATIC | Opcodes.ACC_TRANSIENT)) == 0)
+		  if ((access & IOpcodes.Acc_Private) == 0 || (access & (IOpcodes.Acc_Static | IOpcodes.Acc_Transient)) == 0)
 		  {
-			int mods = access & (Opcodes.ACC_PUBLIC | Opcodes.ACC_PRIVATE | Opcodes.ACC_PROTECTED | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL | Opcodes.ACC_VOLATILE | Opcodes.ACC_TRANSIENT);
-			svuidFields.Add(new Item(name, mods, desc));
+			int mods = access & (IOpcodes.Acc_Public | IOpcodes.Acc_Private | IOpcodes.Acc_Protected | IOpcodes.Acc_Static | IOpcodes.Acc_Final | IOpcodes.Acc_Volatile | IOpcodes.Acc_Transient);
+			_svuidFields.Add(new Item(name, mods, desc));
 		  }
 		}
 
-		return base.visitField(access, name, desc, signature, value);
+		return base.VisitField(access, name, desc, signature, value);
 	  }
 
-	  public override void visitInnerClass(string innerClassName, string outerName, string innerName, int innerClassAccess)
+	  public override void VisitInnerClass(string innerClassName, string outerName, string innerName, int innerClassAccess)
 	  {
 		// Handles a bizarre special case. Nested classes (static classes declared inside another class)
 		// that are protected have their access bit set to public in their class files to deal with some
 		// odd reflection situation. Our SVUID computation must do as the JVM does and ignore access
 		// bits in the class file in favor of the access bits of the InnerClass attribute.
-		if ((!string.ReferenceEquals(name, null)) && name.Equals(innerClassName))
+		if ((!string.ReferenceEquals(_name, null)) && _name.Equals(innerClassName))
 		{
-		  this.access = innerClassAccess;
+		  this._access = innerClassAccess;
 		}
-		base.visitInnerClass(innerClassName, outerName, innerName, innerClassAccess);
+		base.VisitInnerClass(innerClassName, outerName, innerName, innerClassAccess);
 	  }
 
-	  public override void visitEnd()
+	  public override void VisitEnd()
 	  {
 		// Add the SVUID field to the class if it doesn't have one.
-		if (computeSvuid && !hasSvuid)
+		if (_computeSvuid && !_hasSvuid)
 		{
 		  try
 		  {
-			addSVUID(computeSVUID());
+			AddSvuid(ComputeSvuid());
 		  }
 		  catch (IOException e)
 		  {
-			throw new System.InvalidOperationException("Error while computing SVUID for " + name, e);
+			throw new System.InvalidOperationException("Error while computing SVUID for " + _name, e);
 		  }
 		}
 
-		base.visitEnd();
+		base.VisitEnd();
 	  }
 
 	  // -----------------------------------------------------------------------------------------------
@@ -294,9 +294,9 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <returns> true if the class already has a SVUID field. </returns>
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	  public virtual bool hasSVUID()
+	  public virtual bool HasSvuid()
 	  {
-		return hasSvuid;
+		return _hasSvuid;
 	  }
 
 	  /// <summary>
@@ -304,12 +304,12 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="svuid"> the serialVersionUID field value. </param>
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	  public virtual void addSVUID(long svuid)
+	  public virtual void AddSvuid(long svuid)
 	  {
-		FieldVisitor fieldVisitor = base.visitField(Opcodes.ACC_FINAL + Opcodes.ACC_STATIC, "serialVersionUID", "J", null, svuid);
+		FieldVisitor fieldVisitor = base.VisitField(IOpcodes.Acc_Final + IOpcodes.Acc_Static, "serialVersionUID", "J", null, svuid);
 		if (fieldVisitor != null)
 		{
-		  fieldVisitor.visitEnd();
+		  fieldVisitor.VisitEnd();
 		}
 	  }
 
@@ -319,7 +319,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <returns> the serial version UID. </returns>
 	  /// <exception cref="IOException"> if an I/O error occurs. </exception>
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	  public virtual long computeSVUID()
+	  public virtual long ComputeSvuid()
 	  {
 		long svuid = 0;
 
@@ -328,21 +328,21 @@ namespace ObjectWeb.Asm.Commons
 		{
 
 		  // 1. The class name written using UTF encoding.
-		  dataOutputStream.WriteUTF(name.Replace('/', '.'));
+		  dataOutputStream.WriteUtf(_name.Replace('/', '.'));
 
 		  // 2. The class modifiers written as a 32-bit integer.
-		  int mods = access;
-		  if ((mods & Opcodes.ACC_INTERFACE) != 0)
+		  int mods = _access;
+		  if ((mods & IOpcodes.Acc_Interface) != 0)
 		  {
-			mods = svuidMethods.Count == 0 ? (mods & ~Opcodes.ACC_ABSTRACT) : (mods | Opcodes.ACC_ABSTRACT);
+			mods = _svuidMethods.Count == 0 ? (mods & ~IOpcodes.Acc_Abstract) : (mods | IOpcodes.Acc_Abstract);
 		  }
-		  dataOutputStream.WriteInt(mods & (Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_INTERFACE | Opcodes.ACC_ABSTRACT));
+		  dataOutputStream.WriteInt(mods & (IOpcodes.Acc_Public | IOpcodes.Acc_Final | IOpcodes.Acc_Interface | IOpcodes.Acc_Abstract));
 
 		  // 3. The name of each interface sorted by name written using UTF encoding.
-		  Array.Sort(interfaces);
-		  foreach (string interfaceName in interfaces)
+		  Array.Sort(_interfaces);
+		  foreach (string interfaceName in _interfaces)
 		  {
-			dataOutputStream.WriteUTF(interfaceName.Replace('/', '.'));
+			dataOutputStream.WriteUtf(interfaceName.Replace('/', '.'));
 		  }
 
 		  // 4. For each field of the class sorted by field name (except private static and private
@@ -352,36 +352,36 @@ namespace ObjectWeb.Asm.Commons
 		  //   3. The descriptor of the field in UTF encoding.
 		  // Note that field signatures are not dot separated. Method and constructor signatures are dot
 		  // separated. Go figure...
-		  writeItems(svuidFields, dataOutputStream, false);
+		  WriteItems(_svuidFields, dataOutputStream, false);
 
 		  // 5. If a class initializer exists, write out the following:
 		  //   1. The name of the method, <clinit>, in UTF encoding.
 		  //   2. The modifier of the method, ACC_STATIC, written as a 32-bit integer.
 		  //   3. The descriptor of the method, ()V, in UTF encoding.
-		  if (hasStaticInitializer)
+		  if (_hasStaticInitializer)
 		  {
-			dataOutputStream.WriteUTF(CLINIT);
-			dataOutputStream.WriteInt(Opcodes.ACC_STATIC);
-			dataOutputStream.WriteUTF("()V");
+			dataOutputStream.WriteUtf(Clinit);
+			dataOutputStream.WriteInt(IOpcodes.Acc_Static);
+			dataOutputStream.WriteUtf("()V");
 		  }
 
 		  // 6. For each non-private constructor sorted by method name and signature:
 		  //   1. The name of the method, <init>, in UTF encoding.
 		  //   2. The modifiers of the method written as a 32-bit integer.
 		  //   3. The descriptor of the method in UTF encoding.
-		  writeItems(svuidConstructors, dataOutputStream, true);
+		  WriteItems(_svuidConstructors, dataOutputStream, true);
 
 		  // 7. For each non-private method sorted by method name and signature:
 		  //   1. The name of the method in UTF encoding.
 		  //   2. The modifiers of the method written as a 32-bit integer.
 		  //   3. The descriptor of the method in UTF encoding.
-		  writeItems(svuidMethods, dataOutputStream, true);
+		  WriteItems(_svuidMethods, dataOutputStream, true);
 
 		  dataOutputStream.Flush();
 
 		  // 8. The SHA-1 algorithm is executed on the stream of bytes produced by DataOutputStream and
 		  // produces five 32-bit values sha[0..4].
-		  byte[] hashBytes = computeSHAdigest(byteArrayOutputStream.ToArray());
+		  byte[] hashBytes = ComputeShAdigest(byteArrayOutputStream.ToArray());
 
 		  // 9. The hash value is assembled from the first and second 32-bit values of the SHA-1 message
 		  // digest. If the result of the message digest, the five 32-bit words H0 H1 H2 H3 H4, is in an
@@ -395,16 +395,16 @@ namespace ObjectWeb.Asm.Commons
 		return svuid;
 	  }
 
-      private SHA1 sha1 = SHA1.Create();
+      private SHA1 _sha1 = SHA1.Create();
 	  /// <summary>
 	  /// Returns the SHA-1 message digest of the given value.
 	  /// </summary>
 	  /// <param name="value"> the value whose SHA message digest must be computed. </param>
 	  /// <returns> the SHA-1 message digest of the given value. </returns>
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	  public virtual byte[] computeSHAdigest(byte[] value)
+	  public virtual byte[] ComputeShAdigest(byte[] value)
       {
-          return sha1.ComputeHash(value);
+          return _sha1.ComputeHash(value);
       }
 
 	  /// <summary>
@@ -414,15 +414,15 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="dataOutputStream"> where the items must be written. </param>
 	  /// <param name="dotted"> whether package names must use dots, instead of slashes. </param>
 	  /// <exception cref="IOException"> if an error occurs. </exception>
-	  private static void writeItems(ICollection<Item> itemCollection, DataOutput dataOutputStream, bool dotted)
+	  private static void WriteItems(ICollection<Item> itemCollection, IDataOutput dataOutputStream, bool dotted)
 	  {
 		Item[] items = itemCollection.ToArray();
 		Array.Sort(items);
 		foreach (Item item in items)
 		{
-		  dataOutputStream.WriteUTF(item.name);
+		  dataOutputStream.WriteUtf(item.name);
 		  dataOutputStream.WriteInt(item.access);
-		  dataOutputStream.WriteUTF(dotted ? item.descriptor.Replace('/', '.') : item.descriptor);
+		  dataOutputStream.WriteUtf(dotted ? item.descriptor.Replace('/', '.') : item.descriptor);
 		}
 	  }
 

@@ -39,29 +39,29 @@ namespace ObjectWeb.Asm
     public sealed class TypePath
     {
         /// <summary>
-        ///     A type path step that steps into the element type of an array type. See <seealso cref="getStep" />.
+        ///     A type path step that steps into the element type of an array type. See <seealso cref="GetStep" />.
         /// </summary>
-        public const int ARRAY_ELEMENT = 0;
+        public const int Array_Element = 0;
 
         /// <summary>
-        ///     A type path step that steps into the nested type of a class type. See <seealso cref="getStep" />.
+        ///     A type path step that steps into the nested type of a class type. See <seealso cref="GetStep" />.
         /// </summary>
-        public const int INNER_TYPE = 1;
+        public const int Inner_Type = 1;
 
         /// <summary>
-        ///     A type path step that steps into the bound of a wildcard type. See <seealso cref="getStep" />.
+        ///     A type path step that steps into the bound of a wildcard type. See <seealso cref="GetStep" />.
         /// </summary>
-        public const int WILDCARD_BOUND = 2;
+        public const int Wildcard_Bound = 2;
 
         /// <summary>
-        ///     A type path step that steps into a type argument of a generic type. See <seealso cref="getStep" />.
+        ///     A type path step that steps into a type argument of a generic type. See <seealso cref="GetStep" />.
         /// </summary>
-        public const int TYPE_ARGUMENT = 3;
+        public const int Type_Argument = 3;
 
         /// <summary>
         ///     The byte array where the 'type_path' structure - as defined in the Java Virtual Machine
         ///     Specification (JVMS) - corresponding to this TypePath is stored. The first byte of the
-        ///     structure in this array is given by <seealso cref="typePathOffset" />.
+        ///     structure in this array is given by <seealso cref="_typePathOffset" />.
         /// </summary>
         /// <seealso cref=
         /// <a
@@ -70,12 +70,12 @@ namespace ObjectWeb.Asm
         ///     4.7.20.2
         /// </a>
         /// </seealso>
-        private readonly sbyte[] typePathContainer;
+        private readonly sbyte[] _typePathContainer;
 
         /// <summary>
-        ///     The offset of the first byte of the type_path JVMS structure in <seealso cref="typePathContainer" />.
+        ///     The offset of the first byte of the type_path JVMS structure in <seealso cref="_typePathContainer" />.
         /// </summary>
-        private readonly int typePathOffset;
+        private readonly int _typePathOffset;
 
         /// <summary>
         ///     Constructs a new TypePath.
@@ -87,8 +87,8 @@ namespace ObjectWeb.Asm
         /// </param>
         public TypePath(sbyte[] typePathContainer, int typePathOffset)
         {
-            this.typePathContainer = typePathContainer;
-            this.typePathOffset = typePathOffset;
+            this._typePathContainer = typePathContainer;
+            this._typePathOffset = typePathOffset;
         }
 
         /// <summary>
@@ -97,33 +97,33 @@ namespace ObjectWeb.Asm
         /// <returns> the length of this path. </returns>
         public int Length =>
             // path_length is stored in the first byte of a type_path.
-            typePathContainer[typePathOffset];
+            _typePathContainer[_typePathOffset];
 
         /// <summary>
         ///     Returns the value of the given step of this path.
         /// </summary>
         /// <param name="index"> an index between 0 and <seealso cref="getLength()" />, exclusive. </param>
         /// <returns>
-        ///     one of <seealso cref="ARRAY_ELEMENT" />, <seealso cref="INNER_TYPE" />, <seealso cref="WILDCARD_BOUND" />, or
+        ///     one of <seealso cref="Array_Element" />, <seealso cref="Inner_Type" />, <seealso cref="Wildcard_Bound" />, or
         ///     {@link
         ///     #TYPE_ARGUMENT}.
         /// </returns>
-        public int getStep(int index)
+        public int GetStep(int index)
         {
             // Returns the type_path_kind of the path element of the given index.
-            return typePathContainer[typePathOffset + 2 * index + 1];
+            return _typePathContainer[_typePathOffset + 2 * index + 1];
         }
 
         /// <summary>
         ///     Returns the index of the type argument that the given step is stepping into. This method should
-        ///     only be used for steps whose value is <seealso cref="TYPE_ARGUMENT" />.
+        ///     only be used for steps whose value is <seealso cref="Type_Argument" />.
         /// </summary>
         /// <param name="index"> an index between 0 and <seealso cref="getLength()" />, exclusive. </param>
         /// <returns> the index of the type argument that the given step is stepping into. </returns>
-        public int getStepArgument(int index)
+        public int GetStepArgument(int index)
         {
             // Returns the type_argument_index of the path element of the given index.
-            return typePathContainer[typePathOffset + 2 * index + 2];
+            return _typePathContainer[_typePathOffset + 2 * index + 2];
         }
 
         /// <summary>
@@ -135,27 +135,27 @@ namespace ObjectWeb.Asm
         ///     {@literal null} or empty.
         /// </param>
         /// <returns> the corresponding TypePath object, or {@literal null} if the path is empty. </returns>
-        public static TypePath fromString(string typePath)
+        public static TypePath FromString(string typePath)
         {
             if (ReferenceEquals(typePath, null) || typePath.Length == 0) return null;
             var typePathLength = typePath.Length;
             var output = new ByteVector(typePathLength);
-            output.putByte(0);
+            output.PutByte(0);
             var typePathIndex = 0;
             while (typePathIndex < typePathLength)
             {
                 var c = typePath[typePathIndex++];
                 if (c == '[')
                 {
-                    output.put11(ARRAY_ELEMENT, 0);
+                    output.Put11(Array_Element, 0);
                 }
                 else if (c == '.')
                 {
-                    output.put11(INNER_TYPE, 0);
+                    output.Put11(Inner_Type, 0);
                 }
                 else if (c == '*')
                 {
-                    output.put11(WILDCARD_BOUND, 0);
+                    output.Put11(Wildcard_Bound, 0);
                 }
                 else if (c >= '0' && c <= '9')
                 {
@@ -171,7 +171,7 @@ namespace ObjectWeb.Asm
                             throw new ArgumentException();
                     }
 
-                    output.put11(TYPE_ARGUMENT, typeArg);
+                    output.Put11(Type_Argument, typeArg);
                 }
                 else
                 {
@@ -184,8 +184,8 @@ namespace ObjectWeb.Asm
         }
 
         /// <summary>
-        ///     Returns a string representation of this type path. <seealso cref="ARRAY_ELEMENT" /> steps are represented
-        ///     with '[', <seealso cref="INNER_TYPE" /> steps with '.', <seealso cref="WILDCARD_BOUND" /> steps with '*' and {@link
+        ///     Returns a string representation of this type path. <seealso cref="Array_Element" /> steps are represented
+        ///     with '[', <seealso cref="Inner_Type" /> steps with '.', <seealso cref="Wildcard_Bound" /> steps with '*' and {@link
         ///     #TYPE_ARGUMENT} steps with their type argument index in decimal form followed by ';'.
         /// </summary>
         public override string ToString()
@@ -193,19 +193,19 @@ namespace ObjectWeb.Asm
             var length = Length;
             var result = new StringBuilder(length * 2);
             for (var i = 0; i < length; ++i)
-                switch (getStep(i))
+                switch (GetStep(i))
                 {
-                    case ARRAY_ELEMENT:
+                    case Array_Element:
                         result.Append('[');
                         break;
-                    case INNER_TYPE:
+                    case Inner_Type:
                         result.Append('.');
                         break;
-                    case WILDCARD_BOUND:
+                    case Wildcard_Bound:
                         result.Append('*');
                         break;
-                    case TYPE_ARGUMENT:
-                        result.Append(getStepArgument(i)).Append(';');
+                    case Type_Argument:
+                        result.Append(GetStepArgument(i)).Append(';');
                         break;
                     default:
                         throw new Exception();
@@ -220,16 +220,16 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="typePath"> a TypePath instance, or {@literal null} for empty paths. </param>
         /// <param name="output"> where the type path must be put. </param>
-        internal static void put(TypePath typePath, ByteVector output)
+        internal static void Put(TypePath typePath, ByteVector output)
         {
             if (typePath == null)
             {
-                output.putByte(0);
+                output.PutByte(0);
             }
             else
             {
-                var length = typePath.typePathContainer[typePath.typePathOffset] * 2 + 1;
-                output.putByteArray(typePath.typePathContainer, typePath.typePathOffset, length);
+                var length = typePath._typePathContainer[typePath._typePathOffset] * 2 + 1;
+                output.PutByteArray(typePath._typePathContainer, typePath._typePathOffset, length);
             }
         }
     }

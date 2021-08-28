@@ -48,17 +48,17 @@ namespace Java.IO
     /// <seealso cref="DataOutputStream" />
     /// <since>JDK1.0</since>
     [Guid("61B42867-2D34-4F4D-8853-2DA855000EED")]
-    public class DataInputStream : DataInput, IDisposable
+    public class DataInputStream : IDataInput, IDisposable
     {
         private readonly MemoryStream _in;
-        private readonly byte[] readBuffer = new byte[8];
+        private readonly byte[] _readBuffer = new byte[8];
 
         /// <summary>working arrays initialized on demand by readUTF</summary>
-        private byte[] bytearr = new byte[80];
+        private byte[] _bytearr = new byte[80];
 
-        private char[] chararr = new char[80];
+        private char[] _chararr = new char[80];
 
-        private char[] lineBuffer;
+        private char[] _lineBuffer;
 
         /// <summary>
         ///     Creates a DataInputStream that uses the specified
@@ -136,7 +136,7 @@ namespace Java.IO
             while (n < len)
             {
                 var count = _in.Read(b, off + n, len - n);
-                if (count < 0) throw new EOFException();
+                if (count < 0) throw new EofException();
                 n += count;
             }
         }
@@ -197,7 +197,7 @@ namespace Java.IO
         public bool ReadBoolean()
         {
             var ch = _in.ReadByte();
-            if (ch < 0) throw new EOFException();
+            if (ch < 0) throw new EofException();
             return ch != 0;
         }
 
@@ -232,7 +232,7 @@ namespace Java.IO
         public byte ReadByte()
         {
             var ch = _in.ReadByte();
-            if (ch < 0) throw new EOFException();
+            if (ch < 0) throw new EofException();
             return unchecked((byte)ch);
         }
 
@@ -267,7 +267,7 @@ namespace Java.IO
         public int ReadUnsignedByte()
         {
             var ch = _in.ReadByte();
-            if (ch < 0) throw new EOFException();
+            if (ch < 0) throw new EofException();
             return ch;
         }
 
@@ -304,7 +304,7 @@ namespace Java.IO
         {
             var ch1 = _in.ReadByte();
             var ch2 = _in.ReadByte();
-            if ((ch1 | ch2) < 0) throw new EOFException();
+            if ((ch1 | ch2) < 0) throw new EofException();
             return (short)((ch1 << 8) + (ch2 << 0));
         }
 
@@ -341,7 +341,7 @@ namespace Java.IO
         {
             var ch1 = _in.ReadByte();
             var ch2 = _in.ReadByte();
-            if ((ch1 | ch2) < 0) throw new EOFException();
+            if ((ch1 | ch2) < 0) throw new EofException();
             return (ch1 << 8) + (ch2 << 0);
         }
 
@@ -378,7 +378,7 @@ namespace Java.IO
         {
             var ch1 = _in.ReadByte();
             var ch2 = _in.ReadByte();
-            if ((ch1 | ch2) < 0) throw new EOFException();
+            if ((ch1 | ch2) < 0) throw new EofException();
             return (char)((ch1 << 8) + (ch2 << 0));
         }
 
@@ -417,7 +417,7 @@ namespace Java.IO
             var ch2 = _in.ReadByte();
             var ch3 = _in.ReadByte();
             var ch4 = _in.ReadByte();
-            if ((ch1 | ch2 | ch3 | ch4) < 0) throw new EOFException();
+            if ((ch1 | ch2 | ch3 | ch4) < 0) throw new EofException();
             return (ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0);
         }
 
@@ -452,14 +452,14 @@ namespace Java.IO
         /// <exception cref="IOException" />
         public long ReadLong()
         {
-            ReadFully(readBuffer, 0, 8);
-            return ((long)readBuffer[0] << 56) + ((long)(readBuffer[1] & 255) << 48) + ((long
-                       )(readBuffer[2] & 255) <<
-                       40) + ((long)(readBuffer[3] &
+            ReadFully(_readBuffer, 0, 8);
+            return ((long)_readBuffer[0] << 56) + ((long)(_readBuffer[1] & 255) << 48) + ((long
+                       )(_readBuffer[2] & 255) <<
+                       40) + ((long)(_readBuffer[3] &
                                      255) << 32) +
-                   ((long)(readBuffer
-                       [4] & 255) << 24) + ((readBuffer[5] & 255) << 16) + ((readBuffer[6] & 255) << 8)
-                   + ((readBuffer[7] & 255) << 0);
+                   ((long)(_readBuffer
+                       [4] & 255) << 24) + ((_readBuffer[5] & 255) << 16) + ((_readBuffer[6] & 255) << 8)
+                   + ((_readBuffer[7] & 255) << 0);
         }
 
         /// <summary>
@@ -562,11 +562,11 @@ namespace Java.IO
         ///     if the bytes do not represent a valid
         ///     modified UTF-8 encoding of a string.
         /// </exception>
-        /// <seealso cref="ReadUTF(DataInput)" />
+        /// <seealso cref="ReadUtf(Java.IO.IDataInput)" />
         /// <exception cref="IOException" />
-        public string ReadUTF()
+        public string ReadUtf()
         {
-            return ReadUTF(this);
+            return ReadUtf(this);
         }
 
         public void Dispose()
@@ -730,7 +730,7 @@ namespace Java.IO
         /// </exception>
         /// <seealso cref="ReadUnsignedShort()" />
         /// <exception cref="IOException" />
-        public static string ReadUTF(DataInput @in)
+        public static string ReadUtf(IDataInput @in)
         {
             var utflen = @in.ReadUnsignedShort();
             byte[] bytearr = null;
@@ -738,14 +738,14 @@ namespace Java.IO
             if (@in is DataInputStream)
             {
                 var dis = (DataInputStream)@in;
-                if (dis.bytearr.Length < utflen)
+                if (dis._bytearr.Length < utflen)
                 {
-                    dis.bytearr = new byte[utflen * 2];
-                    dis.chararr = new char[utflen * 2];
+                    dis._bytearr = new byte[utflen * 2];
+                    dis._chararr = new char[utflen * 2];
                 }
 
-                chararr = dis.chararr;
-                bytearr = dis.bytearr;
+                chararr = dis._chararr;
+                bytearr = dis._bytearr;
             }
             else
             {
@@ -757,14 +757,14 @@ namespace Java.IO
             int char2;
             int char3;
             var count = 0;
-            var chararr_count = 0;
+            var chararrCount = 0;
             @in.ReadFully(bytearr, 0, utflen);
             while (count < utflen)
             {
                 c = bytearr[count] & 0xff;
                 if (c > 127) break;
                 count++;
-                chararr[chararr_count++] = (char)c;
+                chararr[chararrCount++] = (char)c;
             }
 
             while (count < utflen)
@@ -783,7 +783,7 @@ namespace Java.IO
                     {
                         /* 0xxxxxxx*/
                         count++;
-                        chararr[chararr_count++] = (char)c;
+                        chararr[chararrCount++] = (char)c;
                         break;
                     }
 
@@ -797,7 +797,7 @@ namespace Java.IO
                         char2 = bytearr[count - 1];
                         if ((char2 & 0xC0) != 0x80)
                             throw new Exception("UTFDataFormat: malformed input around byte " + count);
-                        chararr[chararr_count++] = (char)(((c & 0x1F) << 6) | (char2 &
+                        chararr[chararrCount++] = (char)(((c & 0x1F) << 6) | (char2 &
                                                                                0x3F));
                         break;
                     }
@@ -812,7 +812,7 @@ namespace Java.IO
                         char3 = bytearr[count - 1];
                         if ((char2 & 0xC0) != 0x80 || (char3 & 0xC0) != 0x80)
                             throw new Exception("UTFDataFormat: malformed input around byte " + (count - 1));
-                        chararr[chararr_count++] = (char)(((c & 0x0F) << 12) | ((char2
+                        chararr[chararrCount++] = (char)(((c & 0x0F) << 12) | ((char2
                                                               & 0x3F) << 6) |
                                                           ((char3 & 0x3F) << 0));
                         break;
@@ -827,7 +827,7 @@ namespace Java.IO
             }
 
             // The number of chars produced may be less than utflen
-            return new string(chararr, 0, chararr_count);
+            return new string(chararr, 0, chararrCount);
         }
     }
 }

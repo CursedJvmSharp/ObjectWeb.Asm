@@ -43,9 +43,9 @@ namespace ObjectWeb.Asm
 	  internal Attribute[] attributePrototypes;
 
 	  /// <summary>
-	  /// The options used to parse this class. One or more of <seealso cref="ClassReader.SKIP_CODE"/>, {@link
-	  /// ClassReader#SKIP_DEBUG}, <seealso cref="ClassReader.SKIP_FRAMES"/>, <seealso cref="ClassReader.EXPAND_FRAMES"/> or
-	  /// <seealso cref="ClassReader.EXPAND_ASM_INSNS"/>.
+	  /// The options used to parse this class. One or more of <seealso cref="ClassReader.Skip_Code"/>, {@link
+	  /// ClassReader#SKIP_DEBUG}, <seealso cref="ClassReader.Skip_Frames"/>, <seealso cref="ClassReader.Expand_Frames"/> or
+	  /// <seealso cref="ClassReader.Expand_Asm_Insns"/>.
 	  /// </summary>
 	  internal int parsingOptions;
 
@@ -108,8 +108,8 @@ namespace ObjectWeb.Asm
 	  internal int currentFrameOffset;
 
 	  /// <summary>
-	  /// The type of the current stack map frame. One of <seealso cref="Opcodes.F_FULL"/>, {@link
-	  /// Opcodes#F_APPEND}, <seealso cref="Opcodes.F_CHOP"/>, <seealso cref="Opcodes.F_SAME"/> or <seealso cref="Opcodes.F_SAME1"/>.
+	  /// The type of the current stack map frame. One of <seealso cref="IOpcodes.F_FULL"/>, {@link
+	  /// Opcodes#F_APPEND}, <seealso cref="IOpcodes.F_CHOP"/>, <seealso cref="IOpcodes.F_SAME"/> or <seealso cref="IOpcodes.F_SAME1"/>.
 	  /// </summary>
 	  internal int currentFrameType;
 

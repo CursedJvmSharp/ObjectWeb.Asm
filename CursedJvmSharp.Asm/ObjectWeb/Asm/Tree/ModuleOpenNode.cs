@@ -73,9 +73,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given module visitor visit this opened package.
 	  /// </summary>
 	  /// <param name="moduleVisitor"> a module visitor. </param>
-	  public virtual void accept(ModuleVisitor moduleVisitor)
+	  public virtual void Accept(ModuleVisitor moduleVisitor)
 	  {
-		moduleVisitor.visitOpen(packaze, access, modules == null ? null : ((List<string>)modules).ToArray());
+		moduleVisitor.VisitOpen(packaze, access, modules == null ? null : ((List<string>)modules).ToArray());
 	  }
 	}
 

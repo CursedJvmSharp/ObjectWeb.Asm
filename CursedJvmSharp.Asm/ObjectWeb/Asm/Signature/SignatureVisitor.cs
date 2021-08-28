@@ -54,19 +54,19 @@ namespace ObjectWeb.Asm.Signature
 
 	  /// <summary>
 	  /// Wildcard for an "extends" type argument. </summary>
-	  public const char EXTENDS = '+';
+	  public const char Extends = '+';
 
 	  /// <summary>
 	  /// Wildcard for a "super" type argument. </summary>
-	  public const char SUPER = '-';
+	  public const char Super = '-';
 
 	  /// <summary>
 	  /// Wildcard for a normal type argument. </summary>
-	  public const char INSTANCEOF = '=';
+	  public const char Instanceof = '=';
 
 	  /// <summary>
 	  /// The ASM API version implemented by this visitor. The value of this field must be one of the
-	  /// {@code ASM}<i>x</i> values in <seealso cref="Opcodes"/>.
+	  /// {@code ASM}<i>x</i> values in <seealso cref="IOpcodes"/>.
 	  /// </summary>
 	  protected internal readonly int api;
 
@@ -74,10 +74,10 @@ namespace ObjectWeb.Asm.Signature
 	  /// Constructs a new <seealso cref="SignatureVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  public SignatureVisitor(int api)
 	  {
-		if (api != Opcodes.ASM9 && api != Opcodes.ASM8 && api != Opcodes.ASM7 && api != Opcodes.ASM6 && api != Opcodes.ASM5 && api != Opcodes.ASM4 && api != Opcodes.ASM10_EXPERIMENTAL)
+		if (api != IOpcodes.Asm9 && api != IOpcodes.Asm8 && api != IOpcodes.Asm7 && api != IOpcodes.Asm6 && api != IOpcodes.Asm5 && api != IOpcodes.Asm4 && api != IOpcodes.Asm10_Experimental)
 		{
 		  throw new System.ArgumentException("Unsupported api " + api);
 		}
@@ -88,7 +88,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits a formal type parameter.
 	  /// </summary>
 	  /// <param name="name"> the name of the formal parameter. </param>
-	  public virtual void visitFormalTypeParameter(string name)
+	  public virtual void VisitFormalTypeParameter(string name)
 	  {
 	  }
 
@@ -96,7 +96,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits the class bound of the last visited formal type parameter.
 	  /// </summary>
 	  /// <returns> a non null visitor to visit the signature of the class bound. </returns>
-	  public virtual SignatureVisitor visitClassBound()
+	  public virtual SignatureVisitor VisitClassBound()
 	  {
 		return this;
 	  }
@@ -105,7 +105,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits an interface bound of the last visited formal type parameter.
 	  /// </summary>
 	  /// <returns> a non null visitor to visit the signature of the interface bound. </returns>
-	  public virtual SignatureVisitor visitInterfaceBound()
+	  public virtual SignatureVisitor VisitInterfaceBound()
 	  {
 		return this;
 	  }
@@ -114,7 +114,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits the type of the super class.
 	  /// </summary>
 	  /// <returns> a non null visitor to visit the signature of the super class type. </returns>
-	  public virtual SignatureVisitor visitSuperclass()
+	  public virtual SignatureVisitor VisitSuperclass()
 	  {
 		return this;
 	  }
@@ -123,7 +123,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits the type of an interface implemented by the class.
 	  /// </summary>
 	  /// <returns> a non null visitor to visit the signature of the interface type. </returns>
-	  public virtual SignatureVisitor visitInterface()
+	  public virtual SignatureVisitor VisitInterface()
 	  {
 		return this;
 	  }
@@ -132,7 +132,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits the type of a method parameter.
 	  /// </summary>
 	  /// <returns> a non null visitor to visit the signature of the parameter type. </returns>
-	  public virtual SignatureVisitor visitParameterType()
+	  public virtual SignatureVisitor VisitParameterType()
 	  {
 		return this;
 	  }
@@ -141,7 +141,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits the return type of the method.
 	  /// </summary>
 	  /// <returns> a non null visitor to visit the signature of the return type. </returns>
-	  public virtual SignatureVisitor visitReturnType()
+	  public virtual SignatureVisitor VisitReturnType()
 	  {
 		return this;
 	  }
@@ -150,7 +150,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits the type of a method exception.
 	  /// </summary>
 	  /// <returns> a non null visitor to visit the signature of the exception type. </returns>
-	  public virtual SignatureVisitor visitExceptionType()
+	  public virtual SignatureVisitor VisitExceptionType()
 	  {
 		return this;
 	  }
@@ -159,7 +159,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits a signature corresponding to a primitive type.
 	  /// </summary>
 	  /// <param name="descriptor"> the descriptor of the primitive type, or 'V' for {@code void} . </param>
-	  public virtual void visitBaseType(char descriptor)
+	  public virtual void VisitBaseType(char descriptor)
 	  {
 	  }
 
@@ -167,7 +167,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits a signature corresponding to a type variable.
 	  /// </summary>
 	  /// <param name="name"> the name of the type variable. </param>
-	  public virtual void visitTypeVariable(string name)
+	  public virtual void VisitTypeVariable(string name)
 	  {
 	  }
 
@@ -175,7 +175,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits a signature corresponding to an array type.
 	  /// </summary>
 	  /// <returns> a non null visitor to visit the signature of the array element type. </returns>
-	  public virtual SignatureVisitor visitArrayType()
+	  public virtual SignatureVisitor VisitArrayType()
 	  {
 		return this;
 	  }
@@ -184,7 +184,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// Starts the visit of a signature corresponding to a class or interface type.
 	  /// </summary>
 	  /// <param name="name"> the internal name of the class or interface. </param>
-	  public virtual void visitClassType(string name)
+	  public virtual void VisitClassType(string name)
 	  {
 	  }
 
@@ -192,13 +192,13 @@ namespace ObjectWeb.Asm.Signature
 	  /// Visits an inner class.
 	  /// </summary>
 	  /// <param name="name"> the local name of the inner class in its enclosing class. </param>
-	  public virtual void visitInnerClassType(string name)
+	  public virtual void VisitInnerClassType(string name)
 	  {
 	  }
 
 	  /// <summary>
 	  /// Visits an unbounded type argument of the last visited class or inner class type. </summary>
-	  public virtual void visitTypeArgument()
+	  public virtual void VisitTypeArgument()
 	  {
 	  }
 
@@ -207,14 +207,14 @@ namespace ObjectWeb.Asm.Signature
 	  /// </summary>
 	  /// <param name="wildcard"> '+', '-' or '='. </param>
 	  /// <returns> a non null visitor to visit the signature of the type argument. </returns>
-	  public virtual SignatureVisitor visitTypeArgument(char wildcard)
+	  public virtual SignatureVisitor VisitTypeArgument(char wildcard)
 	  {
 		return this;
 	  }
 
 	  /// <summary>
 	  /// Ends the visit of a signature corresponding to a class or interface type. </summary>
-	  public virtual void visitEnd()
+	  public virtual void VisitEnd()
 	  {
 	  }
 	}

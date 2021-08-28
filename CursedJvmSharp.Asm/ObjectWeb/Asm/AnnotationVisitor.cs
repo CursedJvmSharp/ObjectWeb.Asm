@@ -42,7 +42,7 @@ namespace ObjectWeb.Asm
 
 	  /// <summary>
 	  /// The ASM API version implemented by this visitor. The value of this field must be one of the
-	  /// {@code ASM}<i>x</i> values in <seealso cref="Opcodes"/>.
+	  /// {@code ASM}<i>x</i> values in <seealso cref="IOpcodes"/>.
 	  /// </summary>
 	  protected internal readonly int api;
 
@@ -56,7 +56,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="AnnotationVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  public AnnotationVisitor(int api) : this(api, null)
 	  {
 	  }
@@ -65,18 +65,18 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="AnnotationVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="annotationVisitor"> the annotation visitor to which this visitor must delegate method
 	  ///     calls. May be {@literal null}. </param>
 	  public AnnotationVisitor(int api, AnnotationVisitor annotationVisitor)
 	  {
-		if (api != Opcodes.ASM9 && api != Opcodes.ASM8 && api != Opcodes.ASM7 && api != Opcodes.ASM6 && api != Opcodes.ASM5 && api != Opcodes.ASM4 && api != Opcodes.ASM10_EXPERIMENTAL)
+		if (api != IOpcodes.Asm9 && api != IOpcodes.Asm8 && api != IOpcodes.Asm7 && api != IOpcodes.Asm6 && api != IOpcodes.Asm5 && api != IOpcodes.Asm4 && api != IOpcodes.Asm10_Experimental)
 		{
 		  throw new System.ArgumentException("Unsupported api " + api);
 		}
-		if (api == Opcodes.ASM10_EXPERIMENTAL)
+		if (api == IOpcodes.Asm10_Experimental)
 		{
-		  Constants.checkAsmExperimental(this);
+		  Constants.CheckAsmExperimental(this);
 		}
 		this.api = api;
 		this.av = annotationVisitor;
@@ -90,13 +90,13 @@ namespace ObjectWeb.Asm
 	  ///     Character}, <seealso cref="Short"/>, <seealso cref="Integer"/> , <seealso cref="Long"/>, <seealso cref="Float"/>, <seealso cref="Double"/>,
 	  ///     <seealso cref="string"/> or <seealso cref="Type"/> of <seealso cref="Type.OBJECT"/> or <seealso cref="Type.ARRAY"/> sort. This
 	  ///     value can also be an array of byte, boolean, short, char, int, long, float or double values
-	  ///     (this is equivalent to using <seealso cref="visitArray"/> and visiting each array element in turn,
+	  ///     (this is equivalent to using <seealso cref="VisitArray"/> and visiting each array element in turn,
 	  ///     but is more convenient). </param>
-	  public virtual void visit(string name, object value)
+	  public virtual void Visit(string name, object value)
 	  {
 		if (av != null)
 		{
-		  av.visit(name, value);
+		  av.Visit(name, value);
 		}
 	  }
 
@@ -106,11 +106,11 @@ namespace ObjectWeb.Asm
 	  /// <param name="name"> the value name. </param>
 	  /// <param name="descriptor"> the class descriptor of the enumeration class. </param>
 	  /// <param name="value"> the actual enumeration value. </param>
-	  public virtual void visitEnum(string name, string descriptor, string value)
+	  public virtual void VisitEnum(string name, string descriptor, string value)
 	  {
 		if (av != null)
 		{
-		  av.visitEnum(name, descriptor, value);
+		  av.VisitEnum(name, descriptor, value);
 		}
 	  }
 
@@ -122,11 +122,11 @@ namespace ObjectWeb.Asm
 	  /// <returns> a visitor to visit the actual nested annotation value, or {@literal null} if this
 	  ///     visitor is not interested in visiting this nested annotation. <i>The nested annotation
 	  ///     value must be fully visited before calling other methods on this annotation visitor</i>. </returns>
-	  public virtual AnnotationVisitor visitAnnotation(string name, string descriptor)
+	  public virtual AnnotationVisitor VisitAnnotation(string name, string descriptor)
 	  {
 		if (av != null)
 		{
-		  return av.visitAnnotation(name, descriptor);
+		  return av.VisitAnnotation(name, descriptor);
 		}
 		return null;
 	  }
@@ -141,22 +141,22 @@ namespace ObjectWeb.Asm
 	  ///     is not interested in visiting these values. The 'name' parameters passed to the methods of
 	  ///     this visitor are ignored. <i>All the array values must be visited before calling other
 	  ///     methods on this annotation visitor</i>. </returns>
-	  public virtual AnnotationVisitor visitArray(string name)
+	  public virtual AnnotationVisitor VisitArray(string name)
 	  {
 		if (av != null)
 		{
-		  return av.visitArray(name);
+		  return av.VisitArray(name);
 		}
 		return null;
 	  }
 
 	  /// <summary>
 	  /// Visits the end of the annotation. </summary>
-	  public virtual void visitEnd()
+	  public virtual void VisitEnd()
 	  {
 		if (av != null)
 		{
-		  av.visitEnd();
+		  av.VisitEnd();
 		}
 	  }
 	}

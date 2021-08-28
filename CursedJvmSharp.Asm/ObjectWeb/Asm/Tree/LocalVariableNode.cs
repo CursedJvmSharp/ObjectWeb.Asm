@@ -86,9 +86,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given visitor visit this local variable declaration.
 	  /// </summary>
 	  /// <param name="methodVisitor"> a method visitor. </param>
-	  public virtual void accept(MethodVisitor methodVisitor)
+	  public virtual void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitLocalVariable(name, desc, signature, start.Label, end.Label, index);
+		methodVisitor.VisitLocalVariable(name, desc, signature, start.Label, end.Label, index);
 	  }
 	}
 

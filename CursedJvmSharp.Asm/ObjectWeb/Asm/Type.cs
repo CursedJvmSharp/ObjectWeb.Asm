@@ -43,161 +43,161 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     The sort of the {@code void} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int VOID = 0;
+        public const int Void = 0;
 
         /// <summary>
         ///     The sort of the {@code boolean} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int BOOLEAN = 1;
+        public const int Boolean = 1;
 
         /// <summary>
         ///     The sort of the {@code char} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int CHAR = 2;
+        public const int Char = 2;
 
         /// <summary>
         ///     The sort of the {@code byte} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int BYTE = 3;
+        public const int Byte = 3;
 
         /// <summary>
         ///     The sort of the {@code short} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int SHORT = 4;
+        public const int Short = 4;
 
         /// <summary>
         ///     The sort of the {@code int} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int INT = 5;
+        public const int Int = 5;
 
         /// <summary>
         ///     The sort of the {@code float} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int FLOAT = 6;
+        public const int Float = 6;
 
         /// <summary>
         ///     The sort of the {@code long} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int LONG = 7;
+        public const int Long = 7;
 
         /// <summary>
         ///     The sort of the {@code double} type. See <seealso cref="getSort" />.
         /// </summary>
-        public const int DOUBLE = 8;
+        public const int Double = 8;
 
         /// <summary>
         ///     The sort of array reference types. See <seealso cref="getSort" />.
         /// </summary>
-        public const int ARRAY = 9;
+        public const int Array = 9;
 
         /// <summary>
         ///     The sort of object reference types. See <seealso cref="getSort" />.
         /// </summary>
-        public const int OBJECT = 10;
+        public const int Object = 10;
 
         /// <summary>
         ///     The sort of method types. See <seealso cref="getSort" />.
         /// </summary>
-        public const int METHOD = 11;
+        public const int Method = 11;
 
         /// <summary>
         ///     The (private) sort of object reference types represented with an internal name.
         /// </summary>
-        private const int INTERNAL = 12;
+        private const int Internal = 12;
 
         /// <summary>
         ///     The descriptors of the primitive types.
         /// </summary>
-        private const string PRIMITIVE_DESCRIPTORS = "VZCBSIFJD";
+        private const string PrimitiveDescriptors = "VZCBSIFJD";
 
         /// <summary>
         ///     The {@code void} type.
         /// </summary>
-        public static readonly JType VOID_TYPE = new(VOID, PRIMITIVE_DESCRIPTORS, VOID, VOID + 1);
+        public static readonly JType VoidType = new(Void, PrimitiveDescriptors, Void, Void + 1);
 
         /// <summary>
         ///     The {@code boolean} type.
         /// </summary>
-        public static readonly JType BOOLEAN_TYPE = new(BOOLEAN, PRIMITIVE_DESCRIPTORS, BOOLEAN, BOOLEAN + 1);
+        public static readonly JType BooleanType = new(Boolean, PrimitiveDescriptors, Boolean, Boolean + 1);
 
         /// <summary>
         ///     The {@code char} type.
         /// </summary>
-        public static readonly JType CHAR_TYPE = new(CHAR, PRIMITIVE_DESCRIPTORS, CHAR, CHAR + 1);
+        public static readonly JType CharType = new(Char, PrimitiveDescriptors, Char, Char + 1);
 
         /// <summary>
         ///     The {@code byte} type.
         /// </summary>
-        public static readonly JType BYTE_TYPE = new(BYTE, PRIMITIVE_DESCRIPTORS, BYTE, BYTE + 1);
+        public static readonly JType ByteType = new(Byte, PrimitiveDescriptors, Byte, Byte + 1);
 
         /// <summary>
         ///     The {@code short} type.
         /// </summary>
-        public static readonly JType SHORT_TYPE = new(SHORT, PRIMITIVE_DESCRIPTORS, SHORT, SHORT + 1);
+        public static readonly JType ShortType = new(Short, PrimitiveDescriptors, Short, Short + 1);
 
         /// <summary>
         ///     The {@code int} type.
         /// </summary>
-        public static readonly JType INT_TYPE = new(INT, PRIMITIVE_DESCRIPTORS, INT, INT + 1);
+        public static readonly JType IntType = new(Int, PrimitiveDescriptors, Int, Int + 1);
 
         /// <summary>
         ///     The {@code float} type.
         /// </summary>
-        public static readonly JType FLOAT_TYPE = new(FLOAT, PRIMITIVE_DESCRIPTORS, FLOAT, FLOAT + 1);
+        public static readonly JType FloatType = new(Float, PrimitiveDescriptors, Float, Float + 1);
 
         /// <summary>
         ///     The {@code long} type.
         /// </summary>
-        public static readonly JType LONG_TYPE = new(LONG, PRIMITIVE_DESCRIPTORS, LONG, LONG + 1);
+        public static readonly JType LongType = new(Long, PrimitiveDescriptors, Long, Long + 1);
 
         /// <summary>
         ///     The {@code double} type.
         /// </summary>
-        public static readonly JType DOUBLE_TYPE = new(DOUBLE, PRIMITIVE_DESCRIPTORS, DOUBLE, DOUBLE + 1);
+        public static readonly JType DoubleType = new(Double, PrimitiveDescriptors, Double, Double + 1);
 
         // -----------------------------------------------------------------------------------------------
         // Fields
         // -----------------------------------------------------------------------------------------------
 
         /// <summary>
-        ///     The sort of this type. Either <seealso cref="VOID" />, <seealso cref="BOOLEAN" />, <seealso cref="CHAR" />,
-        ///     <seealso cref="BYTE" />,
-        ///     <seealso cref="SHORT" />, <seealso cref="INT" />, <seealso cref="FLOAT" />, <seealso cref="LONG" />,
-        ///     <seealso cref="DOUBLE" />, <seealso cref="ARRAY" />,
-        ///     <seealso cref="OBJECT" />, <seealso cref="METHOD" /> or <seealso cref="INTERNAL" />.
+        ///     The sort of this type. Either <seealso cref="Void" />, <seealso cref="Boolean" />, <seealso cref="Char" />,
+        ///     <seealso cref="Byte" />,
+        ///     <seealso cref="Short" />, <seealso cref="Int" />, <seealso cref="Float" />, <seealso cref="Long" />,
+        ///     <seealso cref="Double" />, <seealso cref="Array" />,
+        ///     <seealso cref="Object" />, <seealso cref="Method" /> or <seealso cref="Internal" />.
         /// </summary>
-        private readonly int sort;
+        private readonly int _sort;
 
         /// <summary>
         ///     The beginning index, inclusive, of the value of this Java field or method type in {@link
-        ///     #valueBuffer}. This value is an internal name for <seealso cref="OBJECT" /> and <seealso cref="INTERNAL" /> types,
+        ///     #valueBuffer}. This value is an internal name for <seealso cref="Object" /> and <seealso cref="Internal" /> types,
         ///     and a field or method descriptor in the other cases.
         /// </summary>
-        private readonly int valueBegin;
+        private readonly int _valueBegin;
 
         /// <summary>
         ///     A buffer containing the value of this field or method type. This value is an internal name for
-        ///     <seealso cref="OBJECT" /> and <seealso cref="INTERNAL" /> types, and a field or method descriptor in the other
+        ///     <seealso cref="Object" /> and <seealso cref="Internal" /> types, and a field or method descriptor in the other
         ///     cases.
         ///     <para>
-        ///         For <seealso cref="OBJECT" /> types, this field also contains the descriptor: the characters in
-        ///         [<seealso cref="valueBegin" />,<seealso cref="valueEnd" />) contain the internal name, and those in [{@link
-        ///         #valueBegin} - 1, <seealso cref="valueEnd" /> + 1) contain the descriptor.
+        ///         For <seealso cref="Object" /> types, this field also contains the descriptor: the characters in
+        ///         [<seealso cref="_valueBegin" />,<seealso cref="_valueEnd" />) contain the internal name, and those in [{@link
+        ///         #valueBegin} - 1, <seealso cref="_valueEnd" /> + 1) contain the descriptor.
         ///     </para>
         /// </summary>
-        private readonly string valueBuffer;
+        private readonly string _valueBuffer;
 
         /// <summary>
         ///     The end index, exclusive, of the value of this Java field or method type in {@link
-        ///     #valueBuffer}. This value is an internal name for <seealso cref="OBJECT" /> and <seealso cref="INTERNAL" /> types,
+        ///     #valueBuffer}. This value is an internal name for <seealso cref="Object" /> and <seealso cref="Internal" /> types,
         ///     and a field or method descriptor in the other cases.
         /// </summary>
-        private readonly int valueEnd;
+        private readonly int _valueEnd;
 
         /// <summary>
         ///     Constructs a reference type.
         /// </summary>
-        /// <param name="sort"> the sort of this type, see <seealso cref="sort" />. </param>
+        /// <param name="sort"> the sort of this type, see <seealso cref="_sort" />. </param>
         /// <param name="valueBuffer"> a buffer containing the value of this field or method type. </param>
         /// <param name="valueBegin">
         ///     the beginning index, inclusive, of the value of this field or method type in
@@ -209,10 +209,10 @@ namespace ObjectWeb.Asm
         /// </param>
         private JType(int sort, string valueBuffer, int valueBegin, int valueEnd)
         {
-            this.sort = sort;
-            this.valueBuffer = valueBuffer;
-            this.valueBegin = valueBegin;
-            this.valueEnd = valueEnd;
+            this._sort = sort;
+            this._valueBuffer = valueBuffer;
+            this._valueBegin = valueBegin;
+            this._valueEnd = valueEnd;
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace ObjectWeb.Asm
             get
             {
                 var numDimensions = Dimensions;
-                return getTypeInternal(valueBuffer, valueBegin + numDimensions, valueEnd);
+                return GetTypeInternal(_valueBuffer, _valueBegin + numDimensions, _valueEnd);
             }
         }
 
@@ -234,14 +234,14 @@ namespace ObjectWeb.Asm
         ///     types.
         /// </summary>
         /// <returns> the argument types of methods of this type. </returns>
-        public JType[] ArgumentTypes => getArgumentTypes(Descriptor);
+        public JType[] ArgumentTypes => GetArgumentTypes(Descriptor);
 
         /// <summary>
         ///     Returns the return type of methods of this type. This method should only be used for method
         ///     types.
         /// </summary>
         /// <returns> the return type of methods of this type. </returns>
-        public JType ReturnType => getReturnType(Descriptor);
+        public JType ReturnType => GetReturnType(Descriptor);
 
         // -----------------------------------------------------------------------------------------------
         // Methods to get class names, internal names or descriptors.
@@ -256,33 +256,33 @@ namespace ObjectWeb.Asm
         {
             get
             {
-                switch (sort)
+                switch (_sort)
                 {
-                    case VOID:
+                    case Void:
                         return "void";
-                    case BOOLEAN:
+                    case Boolean:
                         return "boolean";
-                    case CHAR:
+                    case Char:
                         return "char";
-                    case BYTE:
+                    case Byte:
                         return "byte";
-                    case SHORT:
+                    case Short:
                         return "short";
-                    case INT:
+                    case Int:
                         return "int";
-                    case FLOAT:
+                    case Float:
                         return "float";
-                    case LONG:
+                    case Long:
                         return "long";
-                    case DOUBLE:
+                    case Double:
                         return "double";
-                    case ARRAY:
+                    case Array:
                         var stringBuilder = new StringBuilder(ElementType.ClassName);
                         for (var i = Dimensions; i > 0; --i) stringBuilder.Append("[]");
                         return stringBuilder.ToString();
-                    case OBJECT:
-                    case INTERNAL:
-                        return valueBuffer.Substring(valueBegin, valueEnd - valueBegin).Replace('/', '.');
+                    case Object:
+                    case Internal:
+                        return _valueBuffer.Substring(_valueBegin, _valueEnd - _valueBegin).Replace('/', '.');
                     default:
                         throw new Exception("Unknown type sort");
                 }
@@ -295,7 +295,7 @@ namespace ObjectWeb.Asm
         ///     replaced by '/'). This method should only be used for an object or array type.
         /// </summary>
         /// <returns> the internal name of the class corresponding to this object type. </returns>
-        public string InternalName => valueBuffer.Substring(valueBegin, valueEnd - valueBegin);
+        public string InternalName => _valueBuffer.Substring(_valueBegin, _valueEnd - _valueBegin);
 
         /// <summary>
         ///     Returns the descriptor corresponding to this type.
@@ -305,11 +305,11 @@ namespace ObjectWeb.Asm
         {
             get
             {
-                if (sort == OBJECT)
-                    return valueBuffer.Substring(valueBegin - 1, valueEnd + 1 - (valueBegin - 1));
-                if (sort == INTERNAL)
-                    return 'L' + valueBuffer.Substring(valueBegin, valueEnd - valueBegin) + ';';
-                return valueBuffer.Substring(valueBegin, valueEnd - valueBegin);
+                if (_sort == Object)
+                    return _valueBuffer.Substring(_valueBegin - 1, _valueEnd + 1 - (_valueBegin - 1));
+                if (_sort == Internal)
+                    return 'L' + _valueBuffer.Substring(_valueBegin, _valueEnd - _valueBegin) + ';';
+                return _valueBuffer.Substring(_valueBegin, _valueEnd - _valueBegin);
             }
         }
 
@@ -321,13 +321,13 @@ namespace ObjectWeb.Asm
         ///     Returns the sort of this type.
         /// </summary>
         /// <returns>
-        ///     <seealso cref="VOID" />, <seealso cref="BOOLEAN" />, <seealso cref="CHAR" />, <seealso cref="BYTE" />,
-        ///     <seealso cref="SHORT" />, {@link
-        ///     #INT}, <seealso cref="FLOAT" />, <seealso cref="LONG" />, <seealso cref="DOUBLE" />, <seealso cref="ARRAY" />,
-        ///     <seealso cref="OBJECT" /> or
-        ///     <seealso cref="METHOD" />.
+        ///     <seealso cref="Void" />, <seealso cref="Boolean" />, <seealso cref="Char" />, <seealso cref="Byte" />,
+        ///     <seealso cref="Short" />, {@link
+        ///     #INT}, <seealso cref="Float" />, <seealso cref="Long" />, <seealso cref="Double" />, <seealso cref="Array" />,
+        ///     <seealso cref="Object" /> or
+        ///     <seealso cref="Method" />.
         /// </returns>
-        public int Sort => sort == INTERNAL ? OBJECT : sort;
+        public int Sort => _sort == Internal ? Object : _sort;
 
         /// <summary>
         ///     Returns the number of dimensions of this array type. This method should only be used for an
@@ -339,7 +339,7 @@ namespace ObjectWeb.Asm
             get
             {
                 var numDimensions = 1;
-                while (valueBuffer[valueBegin + numDimensions] == '[') numDimensions++;
+                while (_valueBuffer[_valueBegin + numDimensions] == '[') numDimensions++;
                 return numDimensions;
             }
         }
@@ -355,22 +355,22 @@ namespace ObjectWeb.Asm
         {
             get
             {
-                switch (sort)
+                switch (_sort)
                 {
-                    case VOID:
+                    case Void:
                         return 0;
-                    case BOOLEAN:
-                    case CHAR:
-                    case BYTE:
-                    case SHORT:
-                    case INT:
-                    case FLOAT:
-                    case ARRAY:
-                    case OBJECT:
-                    case INTERNAL:
+                    case Boolean:
+                    case Char:
+                    case Byte:
+                    case Short:
+                    case Int:
+                    case Float:
+                    case Array:
+                    case Object:
+                    case Internal:
                         return 1;
-                    case LONG:
-                    case DOUBLE:
+                    case Long:
+                    case Double:
                         return 2;
                     default:
                         throw new Exception("AssertionError");
@@ -388,7 +388,7 @@ namespace ObjectWeb.Asm
         ///     {@code (argumentsSize &lt;&lt; 2) | returnSize} (argumentsSize is therefore equal to {@code
         ///     i &gt;&gt; 2}, and returnSize to {@code i &amp; 0x03}).
         /// </returns>
-        public int ArgumentsAndReturnSizes => getArgumentsAndReturnSizes(Descriptor);
+        public int ArgumentsAndReturnSizes => GetArgumentsAndReturnSizes(Descriptor);
 
         // -----------------------------------------------------------------------------------------------
         // Methods to get Type(s) from a descriptor, a reflected Method or Constructor, other types, etc.
@@ -399,9 +399,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="typeDescriptor"> a field or method type descriptor. </param>
         /// <returns> the <seealso cref="Type" /> corresponding to the given type descriptor. </returns>
-        public static JType getType(string typeDescriptor)
+        public static JType GetType(string typeDescriptor)
         {
-            return getTypeInternal(typeDescriptor, 0, typeDescriptor.Length);
+            return GetTypeInternal(typeDescriptor, 0, typeDescriptor.Length);
         }
 
         /// <summary>
@@ -409,32 +409,32 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="clazz"> a class. </param>
         /// <returns> the <seealso cref="Type" /> corresponding to the given class. </returns>
-        public static JType getType(Type clazz)
+        public static JType GetType(Type clazz)
         {
             if (clazz.IsPrimitive)
             {
                 if (clazz == typeof(int))
-                    return INT_TYPE;
+                    return IntType;
                 if (clazz == typeof(void))
-                    return VOID_TYPE;
+                    return VoidType;
                 if (clazz == typeof(bool))
-                    return BOOLEAN_TYPE;
+                    return BooleanType;
                 if (clazz == typeof(byte) || clazz == typeof(sbyte))
-                    return BYTE_TYPE;
+                    return ByteType;
                 if (clazz == typeof(char))
-                    return CHAR_TYPE;
+                    return CharType;
                 if (clazz == typeof(short))
-                    return SHORT_TYPE;
+                    return ShortType;
                 if (clazz == typeof(double))
-                    return DOUBLE_TYPE;
+                    return DoubleType;
                 if (clazz == typeof(float))
-                    return FLOAT_TYPE;
+                    return FloatType;
                 if (clazz == typeof(long))
-                    return LONG_TYPE;
+                    return LongType;
                 throw new Exception("Unknown primitive type");
             }
 
-            return getType(getDescriptor(clazz));
+            return GetType(GetDescriptor(clazz));
         }
 
         /// <summary>
@@ -442,9 +442,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="constructor"> a <seealso cref="System.Reflection.ConstructorInfo" /> object. </param>
         /// <returns> the method <seealso cref="Type" /> corresponding to the given constructor. </returns>
-        public static JType getType(ConstructorInfo constructor)
+        public static JType GetType(ConstructorInfo constructor)
         {
-            return getType(getConstructorDescriptor(constructor));
+            return GetType(GetConstructorDescriptor(constructor));
         }
 
         /// <summary>
@@ -452,9 +452,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="method"> a <seealso cref="System.Reflection.MethodInfo" /> object. </param>
         /// <returns> the method <seealso cref="Type" /> corresponding to the given method. </returns>
-        public static JType getType(MethodInfo method)
+        public static JType GetType(MethodInfo method)
         {
-            return getType(getMethodDescriptor(method));
+            return GetType(GetMethodDescriptor(method));
         }
 
         /// <summary>
@@ -462,9 +462,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="internalName"> an internal name. </param>
         /// <returns> the <seealso cref="Type" /> corresponding to the given internal name. </returns>
-        public static JType getObjectType(string internalName)
+        public static JType GetObjectType(string internalName)
         {
-            return new JType(internalName[0] == '[' ? ARRAY : INTERNAL, internalName, 0, internalName.Length);
+            return new JType(internalName[0] == '[' ? Array : Internal, internalName, 0, internalName.Length);
         }
 
         /// <summary>
@@ -475,9 +475,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="methodDescriptor"> a method descriptor. </param>
         /// <returns> the <seealso cref="Type" /> corresponding to the given method descriptor. </returns>
-        public static JType getMethodType(string methodDescriptor)
+        public static JType GetMethodType(string methodDescriptor)
         {
-            return new JType(METHOD, methodDescriptor, 0, methodDescriptor.Length);
+            return new JType(Method, methodDescriptor, 0, methodDescriptor.Length);
         }
 
         /// <summary>
@@ -486,9 +486,9 @@ namespace ObjectWeb.Asm
         /// <param name="returnType"> the return type of the method. </param>
         /// <param name="argumentTypes"> the argument types of the method. </param>
         /// <returns> the method <seealso cref="Type" /> corresponding to the given argument and return types. </returns>
-        public static JType getMethodType(JType returnType, params JType[] argumentTypes)
+        public static JType GetMethodType(JType returnType, params JType[] argumentTypes)
         {
-            return getType(getMethodDescriptor(returnType, argumentTypes));
+            return GetType(GetMethodDescriptor(returnType, argumentTypes));
         }
 
         /// <summary>
@@ -500,7 +500,7 @@ namespace ObjectWeb.Asm
         ///     the <seealso cref="Type" /> values corresponding to the argument types of the given method
         ///     descriptor.
         /// </returns>
-        public static JType[] getArgumentTypes(string methodDescriptor)
+        public static JType[] GetArgumentTypes(string methodDescriptor)
         {
             // First step: compute the number of argument types in methodDescriptor.
             var numArgumentTypes = 0;
@@ -538,7 +538,7 @@ namespace ObjectWeb.Asm
                 }
 
                 argumentTypes[currentArgumentTypeIndex++] =
-                    getTypeInternal(methodDescriptor, currentArgumentTypeOffset, currentOffset);
+                    GetTypeInternal(methodDescriptor, currentArgumentTypeOffset, currentOffset);
             }
 
             return argumentTypes;
@@ -549,11 +549,11 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="method"> a method. </param>
         /// <returns> the <seealso cref="Type" /> values corresponding to the argument types of the given method. </returns>
-        public static JType[] getArgumentTypes(MethodInfo method)
+        public static JType[] GetArgumentTypes(MethodInfo method)
         {
             var classes = method.GetParameters().Select(p => p.ParameterType).ToArray();
             var types = new JType[classes.Length];
-            for (var i = classes.Length - 1; i >= 0; --i) types[i] = getType(classes[i]);
+            for (var i = classes.Length - 1; i >= 0; --i) types[i] = GetType(classes[i]);
             return types;
         }
 
@@ -562,9 +562,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="methodDescriptor"> a method descriptor. </param>
         /// <returns> the <seealso cref="Type" /> corresponding to the return type of the given method descriptor. </returns>
-        public static JType getReturnType(string methodDescriptor)
+        public static JType GetReturnType(string methodDescriptor)
         {
-            return getTypeInternal(methodDescriptor, getReturnTypeOffset(methodDescriptor), methodDescriptor.Length);
+            return GetTypeInternal(methodDescriptor, GetReturnTypeOffset(methodDescriptor), methodDescriptor.Length);
         }
 
         /// <summary>
@@ -572,9 +572,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="method"> a method. </param>
         /// <returns> the <seealso cref="Type" /> corresponding to the return type of the given method. </returns>
-        public static JType getReturnType(MethodInfo method)
+        public static JType GetReturnType(MethodInfo method)
         {
-            return getType(method.ReturnType);
+            return GetType(method.ReturnType);
         }
 
         /// <summary>
@@ -582,7 +582,7 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="methodDescriptor"> a method descriptor. </param>
         /// <returns> the start index of the return type of the given method descriptor. </returns>
-        internal static int getReturnTypeOffset(string methodDescriptor)
+        internal static int GetReturnTypeOffset(string methodDescriptor)
         {
             // Skip the first character, which is always a '('.
             var currentOffset = 1;
@@ -614,34 +614,34 @@ namespace ObjectWeb.Asm
         ///     descriptorBuffer.
         /// </param>
         /// <returns> the <seealso cref="Type" /> corresponding to the given type descriptor. </returns>
-        private static JType getTypeInternal(string descriptorBuffer, int descriptorBegin, int descriptorEnd)
+        private static JType GetTypeInternal(string descriptorBuffer, int descriptorBegin, int descriptorEnd)
         {
             switch (descriptorBuffer[descriptorBegin])
             {
                 case 'V':
-                    return VOID_TYPE;
+                    return VoidType;
                 case 'Z':
-                    return BOOLEAN_TYPE;
+                    return BooleanType;
                 case 'C':
-                    return CHAR_TYPE;
+                    return CharType;
                 case 'B':
-                    return BYTE_TYPE;
+                    return ByteType;
                 case 'S':
-                    return SHORT_TYPE;
+                    return ShortType;
                 case 'I':
-                    return INT_TYPE;
+                    return IntType;
                 case 'F':
-                    return FLOAT_TYPE;
+                    return FloatType;
                 case 'J':
-                    return LONG_TYPE;
+                    return LongType;
                 case 'D':
-                    return DOUBLE_TYPE;
+                    return DoubleType;
                 case '[':
-                    return new JType(ARRAY, descriptorBuffer, descriptorBegin, descriptorEnd);
+                    return new JType(Array, descriptorBuffer, descriptorBegin, descriptorEnd);
                 case 'L':
-                    return new JType(OBJECT, descriptorBuffer, descriptorBegin + 1, descriptorEnd - 1);
+                    return new JType(Object, descriptorBuffer, descriptorBegin + 1, descriptorEnd - 1);
                 case '(':
-                    return new JType(METHOD, descriptorBuffer, descriptorBegin, descriptorEnd);
+                    return new JType(Method, descriptorBuffer, descriptorBegin, descriptorEnd);
                 default:
                     throw new ArgumentException();
             }
@@ -653,7 +653,7 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="clazz"> an object or array class. </param>
         /// <returns> the internal name of the given class. </returns>
-        public static string getInternalName(Type clazz)
+        public static string GetInternalName(Type clazz)
         {
             return clazz.FullName.Replace('.', '/');
         }
@@ -663,10 +663,10 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="clazz"> an object class, a primitive class or an array class. </param>
         /// <returns> the descriptor corresponding to the given class. </returns>
-        public static string getDescriptor(Type clazz)
+        public static string GetDescriptor(Type clazz)
         {
             var stringBuilder = new StringBuilder();
-            appendDescriptor(clazz, stringBuilder);
+            AppendDescriptor(clazz, stringBuilder);
             return stringBuilder.ToString();
         }
 
@@ -675,12 +675,12 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="constructor"> a <seealso cref="System.Reflection.ConstructorInfo" /> object. </param>
         /// <returns> the descriptor of the given constructor. </returns>
-        public static string getConstructorDescriptor(ConstructorInfo constructor)
+        public static string GetConstructorDescriptor(ConstructorInfo constructor)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append('(');
             var parameters = constructor.GetParameters().Select(p => p.ParameterType).ToArray();
-            foreach (var parameter in parameters) appendDescriptor(parameter, stringBuilder);
+            foreach (var parameter in parameters) AppendDescriptor(parameter, stringBuilder);
             return stringBuilder.Append(")V").ToString();
         }
 
@@ -690,13 +690,13 @@ namespace ObjectWeb.Asm
         /// <param name="returnType"> the return type of the method. </param>
         /// <param name="argumentTypes"> the argument types of the method. </param>
         /// <returns> the descriptor corresponding to the given argument and return types. </returns>
-        public static string getMethodDescriptor(JType returnType, params JType[] argumentTypes)
+        public static string GetMethodDescriptor(JType returnType, params JType[] argumentTypes)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append('(');
-            foreach (var argumentType in argumentTypes) argumentType.appendDescriptor(stringBuilder);
+            foreach (var argumentType in argumentTypes) argumentType.AppendDescriptor(stringBuilder);
             stringBuilder.Append(')');
-            returnType.appendDescriptor(stringBuilder);
+            returnType.AppendDescriptor(stringBuilder);
             return stringBuilder.ToString();
         }
 
@@ -705,14 +705,14 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="method"> a <seealso cref="System.Reflection.MethodInfo" /> object. </param>
         /// <returns> the descriptor of the given method. </returns>
-        public static string getMethodDescriptor(MethodInfo method)
+        public static string GetMethodDescriptor(MethodInfo method)
         {
             var stringBuilder = new StringBuilder();
             stringBuilder.Append('(');
             var parameters = method.GetParameters().Select(p => p.ParameterType).ToArray();
-            foreach (var parameter in parameters) appendDescriptor(parameter, stringBuilder);
+            foreach (var parameter in parameters) AppendDescriptor(parameter, stringBuilder);
             stringBuilder.Append(')');
-            appendDescriptor(method.ReturnType, stringBuilder);
+            AppendDescriptor(method.ReturnType, stringBuilder);
             return stringBuilder.ToString();
         }
 
@@ -720,14 +720,14 @@ namespace ObjectWeb.Asm
         ///     Appends the descriptor corresponding to this type to the given string buffer.
         /// </summary>
         /// <param name="stringBuilder"> the string builder to which the descriptor must be appended. </param>
-        private void appendDescriptor(StringBuilder stringBuilder)
+        private void AppendDescriptor(StringBuilder stringBuilder)
         {
-            if (sort == OBJECT)
-                stringBuilder.Append(valueBuffer, valueBegin - 1, valueEnd + 1);
-            else if (sort == INTERNAL)
-                stringBuilder.Append('L').Append(valueBuffer, valueBegin, valueEnd).Append(';');
+            if (_sort == Object)
+                stringBuilder.Append(_valueBuffer, _valueBegin - 1, _valueEnd + 1);
+            else if (_sort == Internal)
+                stringBuilder.Append('L').Append(_valueBuffer, _valueBegin, _valueEnd).Append(';');
             else
-                stringBuilder.Append(valueBuffer, valueBegin, valueEnd);
+                stringBuilder.Append(_valueBuffer, _valueBegin, _valueEnd);
         }
 
         /// <summary>
@@ -735,7 +735,7 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="clazz"> the class whose descriptor must be computed. </param>
         /// <param name="stringBuilder"> the string builder to which the descriptor must be appended. </param>
-        private static void appendDescriptor(Type clazz, StringBuilder stringBuilder)
+        private static void AppendDescriptor(Type clazz, StringBuilder stringBuilder)
         {
             var currentClass = clazz;
             while (currentClass.IsArray)
@@ -771,7 +771,7 @@ namespace ObjectWeb.Asm
             }
             else
             {
-                stringBuilder.Append('L').Append(getInternalName(currentClass)).Append(';');
+                stringBuilder.Append('L').Append(GetInternalName(currentClass)).Append(';');
             }
         }
 
@@ -785,7 +785,7 @@ namespace ObjectWeb.Asm
         ///     {@code (argumentsSize &lt;&lt; 2) | returnSize} (argumentsSize is therefore equal to {@code
         ///     i &gt;&gt; 2}, and returnSize to {@code i &amp; 0x03}).
         /// </returns>
-        public static int getArgumentsAndReturnSizes(string methodDescriptor)
+        public static int GetArgumentsAndReturnSizes(string methodDescriptor)
         {
             var argumentsSize = 1;
             // Skip the first character, which is always a '('.
@@ -836,61 +836,61 @@ namespace ObjectWeb.Asm
         ///     example, if this type is {@code float} and {@code opcode} is IRETURN, this method returns
         ///     FRETURN.
         /// </returns>
-        public int getOpcode(int opcode)
+        public int GetOpcode(int opcode)
         {
-            if (opcode == Opcodes.IALOAD || opcode == Opcodes.IASTORE)
-                switch (sort)
+            if (opcode == IOpcodes.Iaload || opcode == IOpcodes.Iastore)
+                switch (_sort)
                 {
-                    case BOOLEAN:
-                    case BYTE:
-                        return opcode + (Opcodes.BALOAD - Opcodes.IALOAD);
-                    case CHAR:
-                        return opcode + (Opcodes.CALOAD - Opcodes.IALOAD);
-                    case SHORT:
-                        return opcode + (Opcodes.SALOAD - Opcodes.IALOAD);
-                    case INT:
+                    case Boolean:
+                    case Byte:
+                        return opcode + (IOpcodes.Baload - IOpcodes.Iaload);
+                    case Char:
+                        return opcode + (IOpcodes.Caload - IOpcodes.Iaload);
+                    case Short:
+                        return opcode + (IOpcodes.Saload - IOpcodes.Iaload);
+                    case Int:
                         return opcode;
-                    case FLOAT:
-                        return opcode + (Opcodes.FALOAD - Opcodes.IALOAD);
-                    case LONG:
-                        return opcode + (Opcodes.LALOAD - Opcodes.IALOAD);
-                    case DOUBLE:
-                        return opcode + (Opcodes.DALOAD - Opcodes.IALOAD);
-                    case ARRAY:
-                    case OBJECT:
-                    case INTERNAL:
-                        return opcode + (Opcodes.AALOAD - Opcodes.IALOAD);
-                    case METHOD:
-                    case VOID:
+                    case Float:
+                        return opcode + (IOpcodes.Faload - IOpcodes.Iaload);
+                    case Long:
+                        return opcode + (IOpcodes.Laload - IOpcodes.Iaload);
+                    case Double:
+                        return opcode + (IOpcodes.Daload - IOpcodes.Iaload);
+                    case Array:
+                    case Object:
+                    case Internal:
+                        return opcode + (IOpcodes.Aaload - IOpcodes.Iaload);
+                    case Method:
+                    case Void:
                         throw new NotSupportedException();
                     default:
                         throw new Exception("AssertionError");
                 }
 
-            switch (sort)
+            switch (_sort)
             {
-                case VOID:
-                    if (opcode != Opcodes.IRETURN) throw new NotSupportedException();
-                    return Opcodes.RETURN;
-                case BOOLEAN:
-                case BYTE:
-                case CHAR:
-                case SHORT:
-                case INT:
+                case Void:
+                    if (opcode != IOpcodes.Ireturn) throw new NotSupportedException();
+                    return IOpcodes.Return;
+                case Boolean:
+                case Byte:
+                case Char:
+                case Short:
+                case Int:
                     return opcode;
-                case FLOAT:
-                    return opcode + (Opcodes.FRETURN - Opcodes.IRETURN);
-                case LONG:
-                    return opcode + (Opcodes.LRETURN - Opcodes.IRETURN);
-                case DOUBLE:
-                    return opcode + (Opcodes.DRETURN - Opcodes.IRETURN);
-                case ARRAY:
-                case OBJECT:
-                case INTERNAL:
-                    if (opcode != Opcodes.ILOAD && opcode != Opcodes.ISTORE && opcode != Opcodes.IRETURN)
+                case Float:
+                    return opcode + (IOpcodes.Freturn - IOpcodes.Ireturn);
+                case Long:
+                    return opcode + (IOpcodes.Lreturn - IOpcodes.Ireturn);
+                case Double:
+                    return opcode + (IOpcodes.Dreturn - IOpcodes.Ireturn);
+                case Array:
+                case Object:
+                case Internal:
+                    if (opcode != IOpcodes.Iload && opcode != IOpcodes.Istore && opcode != IOpcodes.Ireturn)
                         throw new NotSupportedException();
-                    return opcode + (Opcodes.ARETURN - Opcodes.IRETURN);
-                case METHOD:
+                    return opcode + (IOpcodes.Areturn - IOpcodes.Ireturn);
+                case Method:
                     throw new NotSupportedException();
                 default:
                     throw new Exception("AssertionError");
@@ -911,15 +911,15 @@ namespace ObjectWeb.Asm
             if (this == @object) return true;
             if (!(@object is Type)) return false;
             var other = (JType)@object;
-            if ((sort == INTERNAL ? OBJECT : sort) != (other.sort == INTERNAL ? OBJECT : other.sort)) return false;
-            var begin = valueBegin;
-            var end = valueEnd;
-            var otherBegin = other.valueBegin;
-            var otherEnd = other.valueEnd;
+            if ((_sort == Internal ? Object : _sort) != (other._sort == Internal ? Object : other._sort)) return false;
+            var begin = _valueBegin;
+            var end = _valueEnd;
+            var otherBegin = other._valueBegin;
+            var otherEnd = other._valueEnd;
             // Compare the values.
             if (end - begin != otherEnd - otherBegin) return false;
             for (int i = begin, j = otherBegin; i < end; i++, j++)
-                if (valueBuffer[i] != other.valueBuffer[j])
+                if (_valueBuffer[i] != other._valueBuffer[j])
                     return false;
             return true;
         }
@@ -930,10 +930,10 @@ namespace ObjectWeb.Asm
         /// <returns> a hash code value for this type. </returns>
         public override int GetHashCode()
         {
-            var hashCode = 13 * (sort == INTERNAL ? OBJECT : sort);
-            if (sort >= ARRAY)
-                for (int i = valueBegin, end = valueEnd; i < end; i++)
-                    hashCode = 17 * (hashCode + valueBuffer[i]);
+            var hashCode = 13 * (_sort == Internal ? Object : _sort);
+            if (_sort >= Array)
+                for (int i = _valueBegin, end = _valueEnd; i < end; i++)
+                    hashCode = 17 * (hashCode + _valueBuffer[i]);
             return hashCode;
         }
 

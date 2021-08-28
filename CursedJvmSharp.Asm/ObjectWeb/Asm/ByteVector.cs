@@ -77,12 +77,12 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="byteValue"> a byte. </param>
 	  /// <returns> this byte vector. </returns>
-	  public virtual ByteVector putByte(int byteValue)
+	  public virtual ByteVector PutByte(int byteValue)
 	  {
 		int currentLength = length;
 		if (currentLength + 1 > data.Length)
 		{
-		  enlarge(1);
+		  Enlarge(1);
 		}
 		data[currentLength++] = (sbyte) byteValue;
 		length = currentLength;
@@ -95,12 +95,12 @@ namespace ObjectWeb.Asm
 	  /// <param name="byteValue1"> a byte. </param>
 	  /// <param name="byteValue2"> another byte. </param>
 	  /// <returns> this byte vector. </returns>
-	  public ByteVector put11(int byteValue1, int byteValue2)
+	  public ByteVector Put11(int byteValue1, int byteValue2)
 	  {
 		int currentLength = length;
 		if (currentLength + 2 > data.Length)
 		{
-		  enlarge(2);
+		  Enlarge(2);
 		}
 		sbyte[] currentData = data;
 		currentData[currentLength++] = (sbyte) byteValue1;
@@ -114,12 +114,12 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="shortValue"> a short. </param>
 	  /// <returns> this byte vector. </returns>
-	  public virtual ByteVector putShort(int shortValue)
+	  public virtual ByteVector PutShort(int shortValue)
 	  {
 		int currentLength = length;
 		if (currentLength + 2 > data.Length)
 		{
-		  enlarge(2);
+		  Enlarge(2);
 		}
 		sbyte[] currentData = data;
 		currentData[currentLength++] = (sbyte)((int)((uint)shortValue >> 8));
@@ -135,12 +135,12 @@ namespace ObjectWeb.Asm
 	  /// <param name="byteValue"> a byte. </param>
 	  /// <param name="shortValue"> a short. </param>
 	  /// <returns> this byte vector. </returns>
-	  public ByteVector put12(int byteValue, int shortValue)
+	  public ByteVector Put12(int byteValue, int shortValue)
 	  {
 		int currentLength = length;
 		if (currentLength + 3 > data.Length)
 		{
-		  enlarge(3);
+		  Enlarge(3);
 		}
 		sbyte[] currentData = data;
 		currentData[currentLength++] = (sbyte) byteValue;
@@ -158,12 +158,12 @@ namespace ObjectWeb.Asm
 	  /// <param name="byteValue2"> another byte. </param>
 	  /// <param name="shortValue"> a short. </param>
 	  /// <returns> this byte vector. </returns>
-	  public ByteVector put112(int byteValue1, int byteValue2, int shortValue)
+	  public ByteVector Put112(int byteValue1, int byteValue2, int shortValue)
 	  {
 		int currentLength = length;
 		if (currentLength + 4 > data.Length)
 		{
-		  enlarge(4);
+		  Enlarge(4);
 		}
 		sbyte[] currentData = data;
 		currentData[currentLength++] = (sbyte) byteValue1;
@@ -179,12 +179,12 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="intValue"> an int. </param>
 	  /// <returns> this byte vector. </returns>
-	  public virtual ByteVector putInt(int intValue)
+	  public virtual ByteVector PutInt(int intValue)
 	  {
 		int currentLength = length;
 		if (currentLength + 4 > data.Length)
 		{
-		  enlarge(4);
+		  Enlarge(4);
 		}
 		sbyte[] currentData = data;
 		currentData[currentLength++] = (sbyte)((int)((uint)intValue >> 24));
@@ -203,12 +203,12 @@ namespace ObjectWeb.Asm
 	  /// <param name="shortValue1"> a short. </param>
 	  /// <param name="shortValue2"> another short. </param>
 	  /// <returns> this byte vector. </returns>
-	  public ByteVector put122(int byteValue, int shortValue1, int shortValue2)
+	  public ByteVector Put122(int byteValue, int shortValue1, int shortValue2)
 	  {
 		int currentLength = length;
 		if (currentLength + 5 > data.Length)
 		{
-		  enlarge(5);
+		  Enlarge(5);
 		}
 		sbyte[] currentData = data;
 		currentData[currentLength++] = (sbyte) byteValue;
@@ -225,12 +225,12 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="longValue"> a long. </param>
 	  /// <returns> this byte vector. </returns>
-	  public virtual ByteVector putLong(long longValue)
+	  public virtual ByteVector PutLong(long longValue)
 	  {
 		int currentLength = length;
 		if (currentLength + 8 > data.Length)
 		{
-		  enlarge(8);
+		  Enlarge(8);
 		}
 		sbyte[] currentData = data;
 		int intValue = (int)((long)((ulong)longValue >> 32));
@@ -254,7 +254,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="stringValue"> a String whose UTF8 encoded length must be less than 65536. </param>
 	  /// <returns> this byte vector. </returns>
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	  public virtual ByteVector putUTF8(string stringValue)
+	  public virtual ByteVector PutUtf8(string stringValue)
 	  {
 		int charLength = stringValue.Length;
 		if (charLength > 65535)
@@ -264,7 +264,7 @@ namespace ObjectWeb.Asm
 		int currentLength = length;
 		if (currentLength + 2 + charLength > data.Length)
 		{
-		  enlarge(2 + charLength);
+		  Enlarge(2 + charLength);
 		}
 		sbyte[] currentData = data;
 		// Optimistic algorithm: instead of computing the byte length and then serializing the string
@@ -283,7 +283,7 @@ namespace ObjectWeb.Asm
 		  else
 		  {
 			length = currentLength;
-			return encodeUtf8(stringValue, i, 65535);
+			return EncodeUtf8(stringValue, i, 65535);
 		  }
 		}
 		length = currentLength;
@@ -301,7 +301,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="maxByteLength"> the maximum byte length of the encoded string, including the already
 	  ///     encoded characters. </param>
 	  /// <returns> this byte vector. </returns>
-	  public ByteVector encodeUtf8(string stringValue, int offset, int maxByteLength)
+	  public ByteVector EncodeUtf8(string stringValue, int offset, int maxByteLength)
 	  {
 		int charLength = stringValue.Length;
 		int byteLength = offset;
@@ -334,7 +334,7 @@ namespace ObjectWeb.Asm
 		}
 		if (length + byteLength - offset > data.Length)
 		{
-		  enlarge(byteLength - offset);
+		  Enlarge(byteLength - offset);
 		}
 		int currentLength = length;
 		for (int i = offset; i < charLength; ++i)
@@ -369,11 +369,11 @@ namespace ObjectWeb.Asm
 	  /// <param name="byteOffset"> index of the first byte of byteArrayValue that must be copied. </param>
 	  /// <param name="byteLength"> number of bytes of byteArrayValue that must be copied. </param>
 	  /// <returns> this byte vector. </returns>
-	  public virtual ByteVector putByteArray(sbyte[] byteArrayValue, int byteOffset, int byteLength)
+	  public virtual ByteVector PutByteArray(sbyte[] byteArrayValue, int byteOffset, int byteLength)
 	  {
 		if (length + byteLength > data.Length)
 		{
-		  enlarge(byteLength);
+		  Enlarge(byteLength);
 		}
 		if (byteArrayValue != null)
 		{
@@ -387,7 +387,7 @@ namespace ObjectWeb.Asm
 	  /// Enlarges this byte vector so that it can receive 'size' more bytes.
 	  /// </summary>
 	  /// <param name="size"> number of additional bytes that this byte vector should be able to receive. </param>
-	  private void enlarge(int size)
+	  private void Enlarge(int size)
 	  {
 		int doubleCapacity = 2 * data.Length;
 		int minimalCapacity = length + size;

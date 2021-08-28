@@ -74,7 +74,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="index"> the local variable's index in each range. This array must have the same size as
 	  ///     the 'start' array. </param>
 	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
-	  public LocalVariableAnnotationNode(int typeRef, TypePath typePath, LabelNode[] start, LabelNode[] end, int[] index, string descriptor) : this(Opcodes.ASM9, typeRef, typePath, start, end, index, descriptor)
+	  public LocalVariableAnnotationNode(int typeRef, TypePath typePath, LabelNode[] start, LabelNode[] end, int[] index, string descriptor) : this(IOpcodes.Asm9, typeRef, typePath, start, end, index, descriptor)
 	  {
 	  }
 
@@ -82,7 +82,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Constructs a new <seealso cref="LocalVariableAnnotationNode"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="typeRef"> a reference to the annotated type. See <seealso cref="TypeReference"/>. </param>
 	  /// <param name="start"> the fist instructions corresponding to the continuous ranges that make the scope
 	  ///     of this local variable (inclusive). </param>
@@ -96,9 +96,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
 	  public LocalVariableAnnotationNode(int api, int typeRef, TypePath typePath, LabelNode[] start, LabelNode[] end, int[] index, string descriptor) : base(api, typeRef, typePath, descriptor)
 	  {
-		this.start = Util.asArrayList(start);
-		this.end = Util.asArrayList(end);
-		this.index = Util.asArrayList(index);
+		this.start = Util.AsArrayList(start);
+		this.end = Util.AsArrayList(end);
+		this.index = Util.AsArrayList(index);
 	  }
 
 	  /// <summary>
@@ -106,7 +106,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="methodVisitor"> the visitor that must visit this annotation. </param>
 	  /// <param name="visible"> {@literal true} if the annotation is visible at runtime. </param>
-	  public virtual void accept(MethodVisitor methodVisitor, bool visible)
+	  public virtual void Accept(MethodVisitor methodVisitor, bool visible)
 	  {
 		Label[] startLabels = new Label[this.start.Count];
 		Label[] endLabels = new Label[this.end.Count];
@@ -117,7 +117,7 @@ namespace ObjectWeb.Asm.Tree
 		  endLabels[i] = this.end[i].Label;
 		  indices[i] = this.index[i];
 		}
-		accept(methodVisitor.visitLocalVariableAnnotation(typeRef, typePath, startLabels, endLabels, indices, desc, visible));
+		Accept(methodVisitor.VisitLocalVariableAnnotation(typeRef, typePath, startLabels, endLabels, indices, desc, visible));
 	  }
 	}
 

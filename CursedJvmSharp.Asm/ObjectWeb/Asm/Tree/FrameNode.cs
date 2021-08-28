@@ -47,9 +47,9 @@ namespace ObjectWeb.Asm.Tree
 	{
 
 	  /// <summary>
-	  /// The type of this frame. Must be <seealso cref="Opcodes.F_NEW"/> for expanded frames, or {@link
-	  /// Opcodes#F_FULL}, <seealso cref="Opcodes.F_APPEND"/>, <seealso cref="Opcodes.F_CHOP"/>, <seealso cref="Opcodes.F_SAME"/> or
-	  /// <seealso cref="Opcodes.F_APPEND"/>, <seealso cref="Opcodes.F_SAME1"/> for compressed frames.
+	  /// The type of this frame. Must be <seealso cref="IIOpcodes.F_New/> for expanded frames, or {@link
+	  /// Opcodes#F_FULL}, <seealso cref="IIOpcodes.F_Append/>, <seealso cref="IIOpcodes.F_Chop/>, <seealso cref="IIOpcodes.F_Same/> or
+	  /// <seealso cref="IIOpcodes.F_Append/>, <seealso cref="IIOpcodes.F_Same1/> for compressed frames.
 	  /// </summary>
 	  public int type;
 
@@ -74,9 +74,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// <summary>
 	  /// Constructs a new <seealso cref="FrameNode"/>.
 	  /// </summary>
-	  /// <param name="type"> the type of this frame. Must be <seealso cref="Opcodes.F_NEW"/> for expanded frames, or
-	  ///     <seealso cref="Opcodes.F_FULL"/>, <seealso cref="Opcodes.F_APPEND"/>, <seealso cref="Opcodes.F_CHOP"/>, {@link
-	  ///     Opcodes#F_SAME} or <seealso cref="Opcodes.F_APPEND"/>, <seealso cref="Opcodes.F_SAME1"/> for compressed frames. </param>
+	  /// <param name="type"> the type of this frame. Must be <seealso cref="IIOpcodes.F_New/> for expanded frames, or
+	  ///     <seealso cref="IIOpcodes.F_Full/>, <seealso cref="IIOpcodes.F_Append/>, <seealso cref="IIOpcodes.F_Chop/>, {@link
+	  ///     Opcodes#F_SAME} or <seealso cref="IIOpcodes.F_Append/>, <seealso cref="IIOpcodes.F_Same1/> for compressed frames. </param>
 	  /// <param name="numLocal"> number of local variables of this stack map frame. </param>
 	  /// <param name="local"> the types of the local variables of this stack map frame. Elements of this list
 	  ///     can be Integer, String or LabelNode objects (for primitive, reference and uninitialized
@@ -90,21 +90,21 @@ namespace ObjectWeb.Asm.Tree
 		this.type = type;
 		switch (type)
 		{
-		  case Opcodes.F_NEW:
-		  case Opcodes.F_FULL:
-			this.local = Util.asArrayList(numLocal, local);
-			this.stack = Util.asArrayList(numStack, stack);
+		  case IOpcodes.F_New:
+		  case IOpcodes.F_Full:
+			this.local = Util.AsArrayList(numLocal, local);
+			this.stack = Util.AsArrayList(numStack, stack);
 			break;
-		  case Opcodes.F_APPEND:
-			this.local = Util.asArrayList(numLocal, local);
+		  case IOpcodes.F_Append:
+			this.local = Util.AsArrayList(numLocal, local);
 			break;
-		  case Opcodes.F_CHOP:
-			this.local = Util.asArrayList(numLocal, new object[0]);
+		  case IOpcodes.F_Chop:
+			this.local = Util.AsArrayList(numLocal, new object[0]);
 			break;
-		  case Opcodes.F_SAME:
+		  case IOpcodes.F_Same:
 			break;
-		  case Opcodes.F_SAME1:
-			this.stack = Util.asArrayList(1, stack);
+		  case IOpcodes.F_Same1:
+			this.stack = Util.AsArrayList(1, stack);
 			break;
 		  default:
 			throw new System.ArgumentException();
@@ -115,36 +115,36 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return FRAME;
+			return Frame;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
 		switch (type)
 		{
-		  case Opcodes.F_NEW:
-		  case Opcodes.F_FULL:
-			methodVisitor.visitFrame(type, local.Count, asArray(local), stack.Count, asArray(stack));
+		  case IOpcodes.F_New:
+		  case IOpcodes.F_Full:
+			methodVisitor.VisitFrame(type, local.Count, AsArray(local), stack.Count, AsArray(stack));
 			break;
-		  case Opcodes.F_APPEND:
-			methodVisitor.visitFrame(type, local.Count, asArray(local), 0, null);
+		  case IOpcodes.F_Append:
+			methodVisitor.VisitFrame(type, local.Count, AsArray(local), 0, null);
 			break;
-		  case Opcodes.F_CHOP:
-			methodVisitor.visitFrame(type, local.Count, null, 0, null);
+		  case IOpcodes.F_Chop:
+			methodVisitor.VisitFrame(type, local.Count, null, 0, null);
 			break;
-		  case Opcodes.F_SAME:
-			methodVisitor.visitFrame(type, 0, null, 0, null);
+		  case IOpcodes.F_Same:
+			methodVisitor.VisitFrame(type, 0, null, 0, null);
 			break;
-		  case Opcodes.F_SAME1:
-			methodVisitor.visitFrame(type, 0, null, 1, asArray(stack));
+		  case IOpcodes.F_Same1:
+			methodVisitor.VisitFrame(type, 0, null, 1, AsArray(stack));
 			break;
 		  default:
 			throw new System.ArgumentException();
 		}
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
 		FrameNode clone = new FrameNode();
 		clone.type = type;
@@ -177,7 +177,7 @@ namespace ObjectWeb.Asm.Tree
 		return clone;
 	  }
 
-	  private static object[] asArray(List<object> list)
+	  private static object[] AsArray(List<object> list)
 	  {
 		object[] array = new object[list.Count];
 		for (int i = 0, n = array.Length; i < n; ++i)

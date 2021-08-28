@@ -89,7 +89,7 @@ namespace ObjectWeb.Asm.Tree
 	  ///     ACC_MANDATED}. </param>
 	  /// <param name="version"> the module version, or {@literal null}. </param>
 	  /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-	  public ModuleNode(string name, int access, string version) : base(Opcodes.ASM9)
+	  public ModuleNode(string name, int access, string version) : base(IOpcodes.Asm9)
 	  {
 		if (this.GetType() != typeof(ModuleNode))
 		{
@@ -105,7 +105,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Constructs a <seealso cref="ModuleNode"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of {@link
-	  ///     Opcodes#ASM6}, <seealso cref="Opcodes.ASM7"/>, <seealso cref="Opcodes.ASM8"/> or <seealso cref="Opcodes.ASM9"/>. </param>
+	  ///     Opcodes#ASM6}, <seealso cref="IIOpcodes.Asm7/>, <seealso cref="IIOpcodes.Asm8/> or <seealso cref="IIOpcodes.Asm9/>. </param>
 	  /// <param name="name"> the fully qualified name (using dots) of the module. </param>
 	  /// <param name="access"> the module access flags, among {@code ACC_OPEN}, {@code ACC_SYNTHETIC} and {@code
 	  ///     ACC_MANDATED}. </param>
@@ -127,12 +127,12 @@ namespace ObjectWeb.Asm.Tree
 		this.provides = provides;
 	  }
 
-	  public override void visitMainClass(string mainClass)
+	  public override void VisitMainClass(string mainClass)
 	  {
 		this.mainClass = mainClass;
 	  }
 
-	  public override void visitPackage(string packaze)
+	  public override void VisitPackage(string packaze)
 	  {
 		if (packages == null)
 		{
@@ -141,7 +141,7 @@ namespace ObjectWeb.Asm.Tree
 	packages.Add(packaze);
 	  }
 
-	  public override void visitRequire(string module, int access, string version)
+	  public override void VisitRequire(string module, int access, string version)
 	  {
 		if (requires == null)
 		{
@@ -150,25 +150,25 @@ namespace ObjectWeb.Asm.Tree
 		requires.Add(new ModuleRequireNode(module, access, version));
 	  }
 
-	  public override void visitExport(string packaze, int access, params string[] modules)
+	  public override void VisitExport(string packaze, int access, params string[] modules)
 	  {
 		if (exports == null)
 		{
 		  exports = new List<ModuleExportNode>(5);
 		}
-		exports.Add(new ModuleExportNode(packaze, access, Util.asArrayList(modules)));
+		exports.Add(new ModuleExportNode(packaze, access, Util.AsArrayList(modules)));
 	  }
 
-	  public override void visitOpen(string packaze, int access, params string[] modules)
+	  public override void VisitOpen(string packaze, int access, params string[] modules)
 	  {
 		if (opens == null)
 		{
 		  opens = new List<ModuleOpenNode>(5);
 		}
-		opens.Add(new ModuleOpenNode(packaze, access, Util.asArrayList(modules)));
+		opens.Add(new ModuleOpenNode(packaze, access, Util.AsArrayList(modules)));
 	  }
 
-	  public override void visitUse(string service)
+	  public override void VisitUse(string service)
 	  {
 		if (uses == null)
 		{
@@ -177,16 +177,16 @@ namespace ObjectWeb.Asm.Tree
 		uses.Add(service);
 	  }
 
-	  public override void visitProvide(string service, params string[] providers)
+	  public override void VisitProvide(string service, params string[] providers)
 	  {
 		if (provides == null)
 		{
 		  provides = new List<ModuleProvideNode>(5);
 		}
-		provides.Add(new ModuleProvideNode(service, Util.asArrayList(providers)));
+		provides.Add(new ModuleProvideNode(service, Util.AsArrayList(providers)));
 	  }
 
-	  public override void visitEnd()
+	  public override void VisitEnd()
 	  {
 		// Nothing to do.
 	  }
@@ -195,57 +195,57 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given class visitor visit this module.
 	  /// </summary>
 	  /// <param name="classVisitor"> a class visitor. </param>
-	  public virtual void accept(ClassVisitor classVisitor)
+	  public virtual void Accept(ClassVisitor classVisitor)
 	  {
-		ModuleVisitor moduleVisitor = classVisitor.visitModule(name, access, version);
+		ModuleVisitor moduleVisitor = classVisitor.VisitModule(name, access, version);
 		if (moduleVisitor == null)
 		{
 		  return;
 		}
 		if (!string.ReferenceEquals(mainClass, null))
 		{
-		  moduleVisitor.visitMainClass(mainClass);
+		  moduleVisitor.VisitMainClass(mainClass);
 		}
 		if (packages != null)
 		{
 		  for (int i = 0, n = packages.Count; i < n; i++)
 		  {
-			moduleVisitor.visitPackage(packages[i]);
+			moduleVisitor.VisitPackage(packages[i]);
 		  }
 		}
 		if (requires != null)
 		{
 		  for (int i = 0, n = requires.Count; i < n; i++)
 		  {
-			requires[i].accept(moduleVisitor);
+			requires[i].Accept(moduleVisitor);
 		  }
 		}
 		if (exports != null)
 		{
 		  for (int i = 0, n = exports.Count; i < n; i++)
 		  {
-			exports[i].accept(moduleVisitor);
+			exports[i].Accept(moduleVisitor);
 		  }
 		}
 		if (opens != null)
 		{
 		  for (int i = 0, n = opens.Count; i < n; i++)
 		  {
-			opens[i].accept(moduleVisitor);
+			opens[i].Accept(moduleVisitor);
 		  }
 		}
 		if (uses != null)
 		{
 		  for (int i = 0, n = uses.Count; i < n; i++)
 		  {
-			moduleVisitor.visitUse(uses[i]);
+			moduleVisitor.VisitUse(uses[i]);
 		  }
 		}
 		if (provides != null)
 		{
 		  for (int i = 0, n = provides.Count; i < n; i++)
 		  {
-			provides[i].accept(moduleVisitor);
+			provides[i].Accept(moduleVisitor);
 		  }
 		}
 	  }

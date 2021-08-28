@@ -43,7 +43,7 @@ namespace ObjectWeb.Asm.Tree
 	  public string name;
 
 	  /// <summary>
-	  /// The parameter's access flags (see <seealso cref="Opcodes"/>). Valid values are {@code
+	  /// The parameter's access flags (see <seealso cref="IOpcodes"/>). Valid values are {@code
 	  /// ACC_FINAL}, {@code ACC_SYNTHETIC} and {@code ACC_MANDATED}.
 	  /// </summary>
 	  public int access;
@@ -52,7 +52,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Constructs a new <seealso cref="ParameterNode"/>.
 	  /// </summary>
 	  /// <param name="access"> The parameter's access flags. Valid values are {@code ACC_FINAL}, {@code
-	  ///     ACC_SYNTHETIC} or/and {@code ACC_MANDATED} (see <seealso cref="Opcodes"/>). </param>
+	  ///     ACC_SYNTHETIC} or/and {@code ACC_MANDATED} (see <seealso cref="IOpcodes"/>). </param>
 	  /// <param name="name"> the parameter's name. </param>
 	  public ParameterNode(string name, int access)
 	  {
@@ -64,9 +64,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given visitor visit this parameter declaration.
 	  /// </summary>
 	  /// <param name="methodVisitor"> a method visitor. </param>
-	  public virtual void accept(MethodVisitor methodVisitor)
+	  public virtual void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitParameter(name, access);
+		methodVisitor.VisitParameter(name, access);
 	  }
 	}
 

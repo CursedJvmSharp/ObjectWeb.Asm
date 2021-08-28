@@ -78,7 +78,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="descriptor"> the record component descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </param>
 	  /// <param name="signature"> the record component signature. </param>
 	  /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-	  public RecordComponentNode(string name, string descriptor, string signature) : this(Opcodes.ASM9, name, descriptor, signature)
+	  public RecordComponentNode(string name, string descriptor, string signature) : this(IOpcodes.Asm9, name, descriptor, signature)
 	  {
 		if (this.GetType() != typeof(RecordComponentNode))
 		{
@@ -89,8 +89,8 @@ namespace ObjectWeb.Asm.Tree
 	  /// <summary>
 	  /// Constructs a new <seealso cref="RecordComponentNode"/>.
 	  /// </summary>
-	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of <seealso cref="Opcodes.ASM8"/>
-	  ///     or <seealso cref="Opcodes.ASM9"/>. </param>
+	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of <seealso cref="IIOpcodes.Asm8/>
+	  ///     or <seealso cref="IIOpcodes.Asm9/>. </param>
 	  /// <param name="name"> the record component name. </param>
 	  /// <param name="descriptor"> the record component descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </param>
 	  /// <param name="signature"> the record component signature. </param>
@@ -105,40 +105,40 @@ namespace ObjectWeb.Asm.Tree
 	  // Implementation of the FieldVisitor abstract class
 	  // -----------------------------------------------------------------------------------------------
 
-	  public override AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+	  public override AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
 	  {
 		AnnotationNode annotation = new AnnotationNode(descriptor);
 		if (visible)
 		{
-		  visibleAnnotations = Util.add(visibleAnnotations, annotation);
+		  visibleAnnotations = Util.Add(visibleAnnotations, annotation);
 		}
 		else
 		{
-		  invisibleAnnotations = Util.add(invisibleAnnotations, annotation);
+		  invisibleAnnotations = Util.Add(invisibleAnnotations, annotation);
 		}
 		return annotation;
 	  }
 
-	  public override AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+	  public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
 	  {
 		TypeAnnotationNode typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
 		if (visible)
 		{
-		  visibleTypeAnnotations = Util.add(visibleTypeAnnotations, typeAnnotation);
+		  visibleTypeAnnotations = Util.Add(visibleTypeAnnotations, typeAnnotation);
 		}
 		else
 		{
-		  invisibleTypeAnnotations = Util.add(invisibleTypeAnnotations, typeAnnotation);
+		  invisibleTypeAnnotations = Util.Add(invisibleTypeAnnotations, typeAnnotation);
 		}
 		return typeAnnotation;
 	  }
 
-	  public override void visitAttribute(Attribute attribute)
+	  public override void VisitAttribute(Attribute attribute)
 	  {
-		attrs = Util.add(attrs, attribute);
+		attrs = Util.Add(attrs, attribute);
 	  }
 
-	  public override void visitEnd()
+	  public override void VisitEnd()
 	  {
 		// Nothing to do.
 	  }
@@ -152,10 +152,10 @@ namespace ObjectWeb.Asm.Tree
 	  /// method checks that this node, and all its children recursively, do not contain elements that
 	  /// were introduced in more recent versions of the ASM API than the given version.
 	  /// </summary>
-	  /// <param name="api"> an ASM API version. Must be one of <seealso cref="Opcodes.ASM8"/> or <seealso cref="Opcodes.ASM9"/>. </param>
-	  public virtual void check(int api)
+	  /// <param name="api"> an ASM API version. Must be one of <seealso cref="IIOpcodes.Asm8/> or <seealso cref="IIOpcodes.Asm9/>. </param>
+	  public virtual void Check(int api)
 	  {
-		if (api < Opcodes.ASM8)
+		if (api < IOpcodes.Asm8)
 		{
 		  throw new UnsupportedClassVersionException();
 		}
@@ -165,9 +165,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given class visitor visit this record component.
 	  /// </summary>
 	  /// <param name="classVisitor"> a class visitor. </param>
-	  public virtual void accept(ClassVisitor classVisitor)
+	  public virtual void Accept(ClassVisitor classVisitor)
 	  {
-		RecordComponentVisitor recordComponentVisitor = classVisitor.visitRecordComponent(name, descriptor, signature);
+		RecordComponentVisitor recordComponentVisitor = classVisitor.VisitRecordComponent(name, descriptor, signature);
 		if (recordComponentVisitor == null)
 		{
 		  return;
@@ -178,7 +178,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = visibleAnnotations.Count; i < n; ++i)
 		  {
 			AnnotationNode annotation = visibleAnnotations[i];
-			annotation.accept(recordComponentVisitor.visitAnnotation(annotation.desc, true));
+			annotation.Accept(recordComponentVisitor.VisitAnnotation(annotation.desc, true));
 		  }
 		}
 		if (invisibleAnnotations != null)
@@ -186,7 +186,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = invisibleAnnotations.Count; i < n; ++i)
 		  {
 			AnnotationNode annotation = invisibleAnnotations[i];
-			annotation.accept(recordComponentVisitor.visitAnnotation(annotation.desc, false));
+			annotation.Accept(recordComponentVisitor.VisitAnnotation(annotation.desc, false));
 		  }
 		}
 		if (visibleTypeAnnotations != null)
@@ -194,7 +194,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
 		  {
 			TypeAnnotationNode typeAnnotation = visibleTypeAnnotations[i];
-			typeAnnotation.accept(recordComponentVisitor.visitTypeAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
+			typeAnnotation.Accept(recordComponentVisitor.VisitTypeAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
 		  }
 		}
 		if (invisibleTypeAnnotations != null)
@@ -202,7 +202,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
 		  {
 			TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations[i];
-			typeAnnotation.accept(recordComponentVisitor.visitTypeAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
+			typeAnnotation.Accept(recordComponentVisitor.VisitTypeAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
 		  }
 		}
 		// Visit the non standard attributes.
@@ -210,10 +210,10 @@ namespace ObjectWeb.Asm.Tree
 		{
 		  for (int i = 0, n = attrs.Count; i < n; ++i)
 		  {
-			recordComponentVisitor.visitAttribute(attrs[i]);
+			recordComponentVisitor.VisitAttribute(attrs[i]);
 		  }
 		}
-		recordComponentVisitor.visitEnd();
+		recordComponentVisitor.VisitEnd();
 	  }
 	}
 

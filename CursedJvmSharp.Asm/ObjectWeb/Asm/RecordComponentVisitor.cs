@@ -41,7 +41,7 @@ namespace ObjectWeb.Asm
     {
         /// <summary>
         ///     The ASM API version implemented by this visitor. The value of this field must be one of {@link
-        ///     Opcodes#ASM8} or <seealso cref="Opcodes.ASM9" />.
+        ///     Opcodes#ASM8} or <seealso cref="IIOpcodes.Asm9 />.
         /// </summary>
         protected internal readonly int api;
 
@@ -55,8 +55,8 @@ namespace ObjectWeb.Asm
         ///     Constructs a new <seealso cref="RecordComponentVisitor" />.
         /// </summary>
         /// <param name="api">
-        ///     the ASM API version implemented by this visitor. Must be one of <seealso cref="Opcodes.ASM8" />
-        ///     or <seealso cref="Opcodes.ASM9" />.
+        ///     the ASM API version implemented by this visitor. Must be one of <seealso cref="IIOpcodes.Asm8 />
+        ///     or <seealso cref="IIOpcodes.Asm9 />.
         /// </param>
         public RecordComponentVisitor(int api) : this(api, null)
         {
@@ -65,17 +65,17 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     Constructs a new <seealso cref="RecordComponentVisitor" />.
         /// </summary>
-        /// <param name="api"> the ASM API version implemented by this visitor. Must be <seealso cref="Opcodes.ASM8" />. </param>
+        /// <param name="api"> the ASM API version implemented by this visitor. Must be <seealso cref="IIOpcodes.Asm8 />. </param>
         /// <param name="recordComponentVisitor">
         ///     the record component visitor to which this visitor must delegate
         ///     method calls. May be null.
         /// </param>
         public RecordComponentVisitor(int api, RecordComponentVisitor recordComponentVisitor)
         {
-            if (api != Opcodes.ASM9 && api != Opcodes.ASM8 && api != Opcodes.ASM7 && api != Opcodes.ASM6 &&
-                api != Opcodes.ASM5 && api != Opcodes.ASM4 &&
-                api != Opcodes.ASM10_EXPERIMENTAL) throw new ArgumentException("Unsupported api " + api);
-            if (api == Opcodes.ASM10_EXPERIMENTAL) Constants.checkAsmExperimental(this);
+            if (api != IOpcodes.Asm9 && api != IOpcodes.Asm8 && api != IOpcodes.Asm7 && api != IOpcodes.Asm6 &&
+                api != IOpcodes.Asm5 && api != IOpcodes.Asm4 &&
+                api != IOpcodes.Asm10_Experimental) throw new ArgumentException("Unsupported api " + api);
+            if (api == IOpcodes.Asm10_Experimental) Constants.CheckAsmExperimental(this);
             this.api = api;
             @delegate = recordComponentVisitor;
         }
@@ -95,9 +95,9 @@ namespace ObjectWeb.Asm
         ///     a visitor to visit the annotation values, or {@literal null} if this visitor is not
         ///     interested in visiting this annotation.
         /// </returns>
-        public virtual AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+        public virtual AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
         {
-            if (@delegate != null) return @delegate.visitAnnotation(descriptor, visible);
+            if (@delegate != null) return @delegate.VisitAnnotation(descriptor, visible);
             return null;
         }
 
@@ -106,8 +106,8 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="typeRef">
         ///     a reference to the annotated type. The sort of this type reference must be
-        ///     <seealso cref="TypeReference.CLASS_TYPE_PARAMETER" />, {@link
-        ///     TypeReference#CLASS_TYPE_PARAMETER_BOUND} or <seealso cref="TypeReference.CLASS_EXTENDS" />. See
+        ///     <seealso cref="TypeReference.Class_Type_Parameter" />, {@link
+        ///     TypeReference#CLASS_TYPE_PARAMETER_BOUND} or <seealso cref="TypeReference.Class_Extends" />. See
         ///     <seealso cref="TypeReference" />.
         /// </param>
         /// <param name="typePath">
@@ -121,10 +121,10 @@ namespace ObjectWeb.Asm
         ///     a visitor to visit the annotation values, or {@literal null} if this visitor is not
         ///     interested in visiting this annotation.
         /// </returns>
-        public virtual AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+        public virtual AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
             bool visible)
         {
-            if (@delegate != null) return @delegate.visitTypeAnnotation(typeRef, typePath, descriptor, visible);
+            if (@delegate != null) return @delegate.VisitTypeAnnotation(typeRef, typePath, descriptor, visible);
             return null;
         }
 
@@ -132,18 +132,18 @@ namespace ObjectWeb.Asm
         ///     Visits a non standard attribute of the record component.
         /// </summary>
         /// <param name="attribute"> an attribute. </param>
-        public virtual void visitAttribute(Attribute attribute)
+        public virtual void VisitAttribute(Attribute attribute)
         {
-            if (@delegate != null) @delegate.visitAttribute(attribute);
+            if (@delegate != null) @delegate.VisitAttribute(attribute);
         }
 
         /// <summary>
         ///     Visits the end of the record component. This method, which is the last one to be called, is
         ///     used to inform the visitor that everything have been visited.
         /// </summary>
-        public virtual void visitEnd()
+        public virtual void VisitEnd()
         {
-            if (@delegate != null) @delegate.visitEnd();
+            if (@delegate != null) @delegate.VisitEnd();
         }
     }
 }

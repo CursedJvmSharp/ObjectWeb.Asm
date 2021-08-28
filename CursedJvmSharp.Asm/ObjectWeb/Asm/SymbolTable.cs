@@ -59,37 +59,37 @@ namespace ObjectWeb.Asm
         ///     The ClassReader from which this SymbolTable was constructed, or {@literal null} if it was
         ///     constructed from scratch.
         /// </summary>
-        private readonly ClassReader sourceClassReader;
+        private readonly ClassReader _sourceClassReader;
 
         /// <summary>
-        ///     The number of bootstrap methods in <seealso cref="bootstrapMethods" />. Corresponds to the
+        ///     The number of bootstrap methods in <seealso cref="_bootstrapMethods" />. Corresponds to the
         ///     BootstrapMethods_attribute's num_bootstrap_methods field value.
         /// </summary>
-        private int bootstrapMethodCount;
+        private int _bootstrapMethodCount;
 
         /// <summary>
         ///     The content of the BootstrapMethods attribute 'bootstrap_methods' array corresponding to this
         ///     SymbolTable. Note that the first 6 bytes of the BootstrapMethods_attribute, and its
         ///     num_bootstrap_methods field, are <i>not</i> included.
         /// </summary>
-        private ByteVector bootstrapMethods;
+        private ByteVector _bootstrapMethods;
 
         /// <summary>
         ///     The internal name of the class to which this symbol table belongs.
         /// </summary>
-        private string className;
+        private string _className;
 
         /// <summary>
         ///     The content of the ClassFile's constant_pool JVMS structure corresponding to this SymbolTable.
         ///     The ClassFile's constant_pool_count field is <i>not</i> included.
         /// </summary>
-        private readonly ByteVector constantPool;
+        private readonly ByteVector _constantPool;
 
         /// <summary>
-        ///     The number of constant pool items in <seealso cref="constantPool" />, plus 1. The first constant pool
+        ///     The number of constant pool items in <seealso cref="_constantPool" />, plus 1. The first constant pool
         ///     item has index 1, and long and double items count for two items.
         /// </summary>
-        private int constantPoolCount;
+        private int _constantPoolCount;
 
         /// <summary>
         ///     A hash set of all the entries in this SymbolTable (this includes the constant pool entries, the
@@ -98,34 +98,34 @@ namespace ObjectWeb.Asm
         ///     at the same array index, they are linked together via their <seealso cref="Entry.next" /> field. The
         ///     factory methods of this class make sure that this table does not contain duplicated entries.
         /// </summary>
-        private Entry[] entries;
+        private Entry[] _entries;
 
         /// <summary>
-        ///     The total number of <seealso cref="Entry" /> instances in <seealso cref="entries" />. This includes entries that
+        ///     The total number of <seealso cref="Entry" /> instances in <seealso cref="_entries" />. This includes entries that
         ///     are
         ///     accessible (recursively) via <seealso cref="Entry.next" />.
         /// </summary>
-        private int entryCount;
+        private int _entryCount;
 
         /// <summary>
         ///     The major version number of the class to which this symbol table belongs.
         /// </summary>
-        private int majorVersion;
+        private int _majorVersion;
 
         /// <summary>
-        ///     The actual number of elements in <seealso cref="typeTable" />. These elements are stored from index 0 to
+        ///     The actual number of elements in <seealso cref="_typeTable" />. These elements are stored from index 0 to
         ///     typeCount (excluded). The other array entries are empty.
         /// </summary>
-        private int typeCount;
+        private int _typeCount;
 
         /// <summary>
         ///     An ASM specific type table used to temporarily store internal names that will not necessarily
         ///     be stored in the constant pool. This type table is used by the control flow and data flow
         ///     analysis algorithm used to compute stack map frames from scratch. This array stores {@link
-        ///     Symbol#TYPE_TAG} and <seealso cref="Symbol.UNINITIALIZED_TYPE_TAG" />) Symbol. The type symbol at index
+        ///     Symbol#TYPE_TAG} and <seealso cref="Symbol.Uninitialized_Type_Tag" />) Symbol. The type symbol at index
         ///     {@code i} has its <seealso cref="Symbol.index" /> equal to {@code i} (and vice versa).
         /// </summary>
-        private Entry[] typeTable;
+        private Entry[] _typeTable;
 
         /// <summary>
         ///     Constructs a new, empty SymbolTable for the given ClassWriter.
@@ -134,10 +134,10 @@ namespace ObjectWeb.Asm
         public SymbolTable(ClassWriter classWriter)
         {
             this.classWriter = classWriter;
-            sourceClassReader = null;
-            entries = new Entry[256];
-            constantPoolCount = 1;
-            constantPool = new ByteVector();
+            _sourceClassReader = null;
+            _entries = new Entry[256];
+            _constantPoolCount = 1;
+            _constantPool = new ByteVector();
         }
 
         /// <summary>
@@ -152,87 +152,87 @@ namespace ObjectWeb.Asm
         public SymbolTable(ClassWriter classWriter, ClassReader classReader)
         {
             this.classWriter = classWriter;
-            sourceClassReader = classReader;
+            _sourceClassReader = classReader;
 
             // Copy the constant pool binary content.
             var inputBytes = classReader.classFileBuffer;
-            var constantPoolOffset = classReader.getItem(1) - 1;
+            var constantPoolOffset = classReader.GetItem(1) - 1;
             var constantPoolLength = classReader.header - constantPoolOffset;
-            constantPoolCount = classReader.ItemCount;
-            constantPool = new ByteVector(constantPoolLength);
-            constantPool.putByteArray(inputBytes, constantPoolOffset, constantPoolLength);
+            _constantPoolCount = classReader.ItemCount;
+            _constantPool = new ByteVector(constantPoolLength);
+            _constantPool.PutByteArray(inputBytes, constantPoolOffset, constantPoolLength);
 
             // Add the constant pool items in the symbol table entries. Reserve enough space in 'entries' to
             // avoid too many hash set collisions (entries is not dynamically resized by the addConstant*
             // method calls below), and to account for bootstrap method entries.
-            entries = new Entry[constantPoolCount * 2];
+            _entries = new Entry[_constantPoolCount * 2];
             var charBuffer = new char[classReader.MaxStringLength];
             var hasBootstrapMethods = false;
             var itemIndex = 1;
-            while (itemIndex < constantPoolCount)
+            while (itemIndex < _constantPoolCount)
             {
-                var itemOffset = classReader.getItem(itemIndex);
+                var itemOffset = classReader.GetItem(itemIndex);
                 int itemTag = inputBytes[itemOffset - 1];
                 int nameAndTypeItemOffset;
                 switch (itemTag)
                 {
-                    case Symbol.CONSTANT_FIELDREF_TAG:
-                    case Symbol.CONSTANT_METHODREF_TAG:
-                    case Symbol.CONSTANT_INTERFACE_METHODREF_TAG:
-                        nameAndTypeItemOffset = classReader.getItem(classReader.readUnsignedShort(itemOffset + 2));
-                        addConstantMemberReference(itemIndex, itemTag, classReader.readClass(itemOffset, charBuffer),
-                            classReader.readUTF8(nameAndTypeItemOffset, charBuffer),
-                            classReader.readUTF8(nameAndTypeItemOffset + 2, charBuffer));
+                    case Symbol.Constant_Fieldref_Tag:
+                    case Symbol.Constant_Methodref_Tag:
+                    case Symbol.Constant_Interface_Methodref_Tag:
+                        nameAndTypeItemOffset = classReader.GetItem(classReader.ReadUnsignedShort(itemOffset + 2));
+                        AddConstantMemberReference(itemIndex, itemTag, classReader.ReadClass(itemOffset, charBuffer),
+                            classReader.ReadUtf8(nameAndTypeItemOffset, charBuffer),
+                            classReader.ReadUtf8(nameAndTypeItemOffset + 2, charBuffer));
                         break;
-                    case Symbol.CONSTANT_INTEGER_TAG:
-                    case Symbol.CONSTANT_FLOAT_TAG:
-                        addConstantIntegerOrFloat(itemIndex, itemTag, classReader.readInt(itemOffset));
+                    case Symbol.Constant_Integer_Tag:
+                    case Symbol.Constant_Float_Tag:
+                        AddConstantIntegerOrFloat(itemIndex, itemTag, classReader.ReadInt(itemOffset));
                         break;
-                    case Symbol.CONSTANT_NAME_AND_TYPE_TAG:
-                        addConstantNameAndType(itemIndex, classReader.readUTF8(itemOffset, charBuffer),
-                            classReader.readUTF8(itemOffset + 2, charBuffer));
+                    case Symbol.Constant_Name_And_Type_Tag:
+                        AddConstantNameAndType(itemIndex, classReader.ReadUtf8(itemOffset, charBuffer),
+                            classReader.ReadUtf8(itemOffset + 2, charBuffer));
                         break;
-                    case Symbol.CONSTANT_LONG_TAG:
-                    case Symbol.CONSTANT_DOUBLE_TAG:
-                        addConstantLongOrDouble(itemIndex, itemTag, classReader.readLong(itemOffset));
+                    case Symbol.Constant_Long_Tag:
+                    case Symbol.Constant_Double_Tag:
+                        AddConstantLongOrDouble(itemIndex, itemTag, classReader.ReadLong(itemOffset));
                         break;
-                    case Symbol.CONSTANT_UTF8_TAG:
-                        addConstantUtf8(itemIndex, classReader.readUtf(itemIndex, charBuffer));
+                    case Symbol.Constant_Utf8_Tag:
+                        AddConstantUtf8(itemIndex, classReader.ReadUtf(itemIndex, charBuffer));
                         break;
-                    case Symbol.CONSTANT_METHOD_HANDLE_TAG:
-                        var memberRefItemOffset = classReader.getItem(classReader.readUnsignedShort(itemOffset + 1));
+                    case Symbol.Constant_Method_Handle_Tag:
+                        var memberRefItemOffset = classReader.GetItem(classReader.ReadUnsignedShort(itemOffset + 1));
                         nameAndTypeItemOffset =
-                            classReader.getItem(classReader.readUnsignedShort(memberRefItemOffset + 2));
-                        addConstantMethodHandle(itemIndex, classReader.readByte(itemOffset),
-                            classReader.readClass(memberRefItemOffset, charBuffer),
-                            classReader.readUTF8(nameAndTypeItemOffset, charBuffer),
-                            classReader.readUTF8(nameAndTypeItemOffset + 2, charBuffer));
+                            classReader.GetItem(classReader.ReadUnsignedShort(memberRefItemOffset + 2));
+                        AddConstantMethodHandle(itemIndex, classReader.ReadByte(itemOffset),
+                            classReader.ReadClass(memberRefItemOffset, charBuffer),
+                            classReader.ReadUtf8(nameAndTypeItemOffset, charBuffer),
+                            classReader.ReadUtf8(nameAndTypeItemOffset + 2, charBuffer));
                         break;
-                    case Symbol.CONSTANT_DYNAMIC_TAG:
-                    case Symbol.CONSTANT_INVOKE_DYNAMIC_TAG:
+                    case Symbol.Constant_Dynamic_Tag:
+                    case Symbol.Constant_Invoke_Dynamic_Tag:
                         hasBootstrapMethods = true;
-                        nameAndTypeItemOffset = classReader.getItem(classReader.readUnsignedShort(itemOffset + 2));
-                        addConstantDynamicOrInvokeDynamicReference(itemTag, itemIndex,
-                            classReader.readUTF8(nameAndTypeItemOffset, charBuffer),
-                            classReader.readUTF8(nameAndTypeItemOffset + 2, charBuffer),
-                            classReader.readUnsignedShort(itemOffset));
+                        nameAndTypeItemOffset = classReader.GetItem(classReader.ReadUnsignedShort(itemOffset + 2));
+                        AddConstantDynamicOrInvokeDynamicReference(itemTag, itemIndex,
+                            classReader.ReadUtf8(nameAndTypeItemOffset, charBuffer),
+                            classReader.ReadUtf8(nameAndTypeItemOffset + 2, charBuffer),
+                            classReader.ReadUnsignedShort(itemOffset));
                         break;
-                    case Symbol.CONSTANT_STRING_TAG:
-                    case Symbol.CONSTANT_CLASS_TAG:
-                    case Symbol.CONSTANT_METHOD_TYPE_TAG:
-                    case Symbol.CONSTANT_MODULE_TAG:
-                    case Symbol.CONSTANT_PACKAGE_TAG:
-                        addConstantUtf8Reference(itemIndex, itemTag, classReader.readUTF8(itemOffset, charBuffer));
+                    case Symbol.Constant_String_Tag:
+                    case Symbol.Constant_Class_Tag:
+                    case Symbol.Constant_Method_Type_Tag:
+                    case Symbol.Constant_Module_Tag:
+                    case Symbol.Constant_Package_Tag:
+                        AddConstantUtf8Reference(itemIndex, itemTag, classReader.ReadUtf8(itemOffset, charBuffer));
                         break;
                     default:
                         throw new ArgumentException();
                 }
 
-                itemIndex += itemTag == Symbol.CONSTANT_LONG_TAG || itemTag == Symbol.CONSTANT_DOUBLE_TAG ? 2 : 1;
+                itemIndex += itemTag == Symbol.Constant_Long_Tag || itemTag == Symbol.Constant_Double_Tag ? 2 : 1;
             }
 
             // Copy the BootstrapMethods, if any.
-            if (hasBootstrapMethods) copyBootstrapMethods(classReader, charBuffer);
+            if (hasBootstrapMethods) CopyBootstrapMethods(classReader, charBuffer);
         }
 
         /// <summary>
@@ -242,31 +242,31 @@ namespace ObjectWeb.Asm
         ///     the ClassReader from which this SymbolTable was constructed, or {@literal null} if it
         ///     was constructed from scratch.
         /// </returns>
-        public ClassReader Source => sourceClassReader;
+        public ClassReader Source => _sourceClassReader;
 
         /// <summary>
         ///     Returns the major version of the class to which this symbol table belongs.
         /// </summary>
         /// <returns> the major version of the class to which this symbol table belongs. </returns>
-        public int MajorVersion => majorVersion;
+        public int MajorVersion => _majorVersion;
 
         /// <summary>
         ///     Returns the internal name of the class to which this symbol table belongs.
         /// </summary>
         /// <returns> the internal name of the class to which this symbol table belongs. </returns>
-        public string ClassName => className;
+        public string ClassName => _className;
 
         /// <summary>
         ///     Returns the number of items in this symbol table's constant_pool array (plus 1).
         /// </summary>
         /// <returns> the number of items in this symbol table's constant_pool array (plus 1). </returns>
-        public int ConstantPoolCount => constantPoolCount;
+        public int ConstantPoolCount => _constantPoolCount;
 
         /// <summary>
         ///     Returns the length in bytes of this symbol table's constant_pool array.
         /// </summary>
         /// <returns> the length in bytes of this symbol table's constant_pool array. </returns>
-        public int ConstantPoolLength => constantPool.length;
+        public int ConstantPoolLength => _constantPool.length;
 
         /// <summary>
         ///     Read the BootstrapMethods 'bootstrap_methods' array binary content and add them as entries of
@@ -277,49 +277,49 @@ namespace ObjectWeb.Asm
         ///     SymbolTable.
         /// </param>
         /// <param name="charBuffer"> a buffer used to read strings in the constant pool. </param>
-        private void copyBootstrapMethods(ClassReader classReader, char[] charBuffer)
+        private void CopyBootstrapMethods(ClassReader classReader, char[] charBuffer)
         {
             // Find attributOffset of the 'bootstrap_methods' array.
             var inputBytes = classReader.classFileBuffer;
             var currentAttributeOffset = classReader.FirstAttributeOffset;
-            for (var i = classReader.readUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
+            for (var i = classReader.ReadUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
             {
-                var attributeName = classReader.readUTF8(currentAttributeOffset, charBuffer);
-                if (Constants.BOOTSTRAP_METHODS.Equals(attributeName))
+                var attributeName = classReader.ReadUtf8(currentAttributeOffset, charBuffer);
+                if (Constants.Bootstrap_Methods.Equals(attributeName))
                 {
-                    bootstrapMethodCount = classReader.readUnsignedShort(currentAttributeOffset + 6);
+                    _bootstrapMethodCount = classReader.ReadUnsignedShort(currentAttributeOffset + 6);
                     break;
                 }
 
-                currentAttributeOffset += 6 + classReader.readInt(currentAttributeOffset + 2);
+                currentAttributeOffset += 6 + classReader.ReadInt(currentAttributeOffset + 2);
             }
 
-            if (bootstrapMethodCount > 0)
+            if (_bootstrapMethodCount > 0)
             {
                 // Compute the offset and the length of the BootstrapMethods 'bootstrap_methods' array.
                 var bootstrapMethodsOffset = currentAttributeOffset + 8;
-                var bootstrapMethodsLength = classReader.readInt(currentAttributeOffset + 2) - 2;
-                bootstrapMethods = new ByteVector(bootstrapMethodsLength);
-                bootstrapMethods.putByteArray(inputBytes, bootstrapMethodsOffset, bootstrapMethodsLength);
+                var bootstrapMethodsLength = classReader.ReadInt(currentAttributeOffset + 2) - 2;
+                _bootstrapMethods = new ByteVector(bootstrapMethodsLength);
+                _bootstrapMethods.PutByteArray(inputBytes, bootstrapMethodsOffset, bootstrapMethodsLength);
 
                 // Add each bootstrap method in the symbol table entries.
                 var currentOffset = bootstrapMethodsOffset;
-                for (var i = 0; i < bootstrapMethodCount; i++)
+                for (var i = 0; i < _bootstrapMethodCount; i++)
                 {
                     var offset = currentOffset - bootstrapMethodsOffset;
-                    var bootstrapMethodRef = classReader.readUnsignedShort(currentOffset);
+                    var bootstrapMethodRef = classReader.ReadUnsignedShort(currentOffset);
                     currentOffset += 2;
-                    var numBootstrapArguments = classReader.readUnsignedShort(currentOffset);
+                    var numBootstrapArguments = classReader.ReadUnsignedShort(currentOffset);
                     currentOffset += 2;
-                    var hashCode = classReader.readConst(bootstrapMethodRef, charBuffer).GetHashCode();
+                    var hashCode = classReader.ReadConst(bootstrapMethodRef, charBuffer).GetHashCode();
                     while (numBootstrapArguments-- > 0)
                     {
-                        var bootstrapArgument = classReader.readUnsignedShort(currentOffset);
+                        var bootstrapArgument = classReader.ReadUnsignedShort(currentOffset);
                         currentOffset += 2;
-                        hashCode ^= classReader.readConst(bootstrapArgument, charBuffer).GetHashCode();
+                        hashCode ^= classReader.ReadConst(bootstrapArgument, charBuffer).GetHashCode();
                     }
 
-                    add(new Entry(i, Symbol.BOOTSTRAP_METHOD_TAG, offset, hashCode & 0x7FFFFFFF));
+                    Add(new Entry(i, Symbol.Bootstrap_Method_Tag, offset, hashCode & 0x7FFFFFFF));
                 }
             }
         }
@@ -331,11 +331,11 @@ namespace ObjectWeb.Asm
         /// <param name="majorVersion"> a major ClassFile version number. </param>
         /// <param name="className"> an internal class name. </param>
         /// <returns> the constant pool index of a new or already existing Symbol with the given class name. </returns>
-        public int setMajorVersionAndClassName(int majorVersion, string className)
+        public int SetMajorVersionAndClassName(int majorVersion, string className)
         {
-            this.majorVersion = majorVersion;
-            this.className = className;
-            return addConstantClass(className).index;
+            this._majorVersion = majorVersion;
+            this._className = className;
+            return AddConstantClass(className).index;
         }
 
         /// <summary>
@@ -343,9 +343,9 @@ namespace ObjectWeb.Asm
         ///     constant_pool_count value.
         /// </summary>
         /// <param name="output"> where the JVMS ClassFile's constant_pool array must be put. </param>
-        public void putConstantPool(ByteVector output)
+        public void PutConstantPool(ByteVector output)
         {
-            output.putShort(constantPoolCount).putByteArray(constantPool.data, 0, constantPool.length);
+            output.PutShort(_constantPoolCount).PutByteArray(_constantPool.data, 0, _constantPool.length);
         }
 
         /// <summary>
@@ -353,12 +353,12 @@ namespace ObjectWeb.Asm
         ///     attribute name in the constant pool.
         /// </summary>
         /// <returns> the size in bytes of this symbol table's BootstrapMethods attribute. </returns>
-        public int computeBootstrapMethodsSize()
+        public int ComputeBootstrapMethodsSize()
         {
-            if (bootstrapMethods != null)
+            if (_bootstrapMethods != null)
             {
-                addConstantUtf8(Constants.BOOTSTRAP_METHODS);
-                return 8 + bootstrapMethods.length;
+                AddConstantUtf8(Constants.Bootstrap_Methods);
+                return 8 + _bootstrapMethods.length;
             }
 
             return 0;
@@ -369,11 +369,11 @@ namespace ObjectWeb.Asm
         ///     6 attribute header bytes and the num_bootstrap_methods value.
         /// </summary>
         /// <param name="output"> where the JVMS BootstrapMethods attribute must be put. </param>
-        public void putBootstrapMethods(ByteVector output)
+        public void PutBootstrapMethods(ByteVector output)
         {
-            if (bootstrapMethods != null)
-                output.putShort(addConstantUtf8(Constants.BOOTSTRAP_METHODS)).putInt(bootstrapMethods.length + 2)
-                    .putShort(bootstrapMethodCount).putByteArray(bootstrapMethods.data, 0, bootstrapMethods.length);
+            if (_bootstrapMethods != null)
+                output.PutShort(AddConstantUtf8(Constants.Bootstrap_Methods)).PutInt(_bootstrapMethods.length + 2)
+                    .PutShort(_bootstrapMethodCount).PutByteArray(_bootstrapMethods.data, 0, _bootstrapMethods.length);
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -388,29 +388,29 @@ namespace ObjectWeb.Asm
         ///     the list of entries which can potentially have the given hash code. The list is stored
         ///     via the <seealso cref="Entry.next" /> field.
         /// </returns>
-        private Entry get(int hashCode)
+        private Entry Get(int hashCode)
         {
-            return entries[hashCode % entries.Length];
+            return _entries[hashCode % _entries.Length];
         }
 
         /// <summary>
-        ///     Puts the given entry in the <seealso cref="entries" /> hash set. This method does <i>not</i> check
-        ///     whether <seealso cref="entries" /> already contains a similar entry or not. <seealso cref="entries" /> is resized
+        ///     Puts the given entry in the <seealso cref="_entries" /> hash set. This method does <i>not</i> check
+        ///     whether <seealso cref="_entries" /> already contains a similar entry or not. <seealso cref="_entries" /> is resized
         ///     if necessary to avoid hash collisions (multiple entries needing to be stored at the same {@link
         ///     #entries} array index) as much as possible, with reasonable memory usage.
         /// </summary>
-        /// <param name="entry"> an Entry (which must not already be contained in <seealso cref="entries" />). </param>
+        /// <param name="entry"> an Entry (which must not already be contained in <seealso cref="_entries" />). </param>
         /// <returns> the given entry </returns>
-        private Entry put(Entry entry)
+        private Entry Put(Entry entry)
         {
-            if (entryCount > entries.Length * 3 / 4)
+            if (_entryCount > _entries.Length * 3 / 4)
             {
-                var currentCapacity = entries.Length;
+                var currentCapacity = _entries.Length;
                 var newCapacity = currentCapacity * 2 + 1;
                 var newEntries = new Entry[newCapacity];
                 for (var i = currentCapacity - 1; i >= 0; --i)
                 {
-                    var currentEntry = entries[i];
+                    var currentEntry = _entries[i];
                     while (currentEntry != null)
                     {
                         var newCurrentEntryIndex = currentEntry.hashCode % newCapacity;
@@ -421,27 +421,27 @@ namespace ObjectWeb.Asm
                     }
                 }
 
-                entries = newEntries;
+                _entries = newEntries;
             }
 
-            entryCount++;
-            var index = entry.hashCode % entries.Length;
-            entry.next = entries[index];
-            return entries[index] = entry;
+            _entryCount++;
+            var index = entry.hashCode % _entries.Length;
+            entry.next = _entries[index];
+            return _entries[index] = entry;
         }
 
         /// <summary>
-        ///     Adds the given entry in the <seealso cref="entries" /> hash set. This method does <i>not</i> check
-        ///     whether <seealso cref="entries" /> already contains a similar entry or not, and does <i>not</i> resize
-        ///     <seealso cref="entries" /> if necessary.
+        ///     Adds the given entry in the <seealso cref="_entries" /> hash set. This method does <i>not</i> check
+        ///     whether <seealso cref="_entries" /> already contains a similar entry or not, and does <i>not</i> resize
+        ///     <seealso cref="_entries" /> if necessary.
         /// </summary>
-        /// <param name="entry"> an Entry (which must not already be contained in <seealso cref="entries" />). </param>
-        private void add(Entry entry)
+        /// <param name="entry"> an Entry (which must not already be contained in <seealso cref="_entries" />). </param>
+        private void Add(Entry entry)
         {
-            entryCount++;
-            var index = entry.hashCode % entries.Length;
-            entry.next = entries[index];
-            entries[index] = entry;
+            _entryCount++;
+            var index = entry.hashCode % _entries.Length;
+            entry.next = _entries[index];
+            _entries[index] = entry;
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -460,47 +460,47 @@ namespace ObjectWeb.Asm
         ///     <seealso cref="Handle" />.
         /// </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstant(object value)
+        public Symbol AddConstant(object value)
         {
-            if (value is int || value is byte) return addConstantInteger(((int?)value).Value);
+            if (value is int || value is byte) return AddConstantInteger(((int?)value).Value);
 
-            if (value is sbyte) return addConstantInteger(((sbyte?)value).Value);
+            if (value is sbyte) return AddConstantInteger(((sbyte?)value).Value);
 
-            if (value is char) return addConstantInteger(((char?)value).Value);
+            if (value is char) return AddConstantInteger(((char?)value).Value);
 
-            if (value is short) return addConstantInteger(((short?)value).Value);
+            if (value is short) return AddConstantInteger(((short?)value).Value);
 
-            if (value is bool) return addConstantInteger(((bool?)value).Value ? 1 : 0);
+            if (value is bool) return AddConstantInteger(((bool?)value).Value ? 1 : 0);
 
-            if (value is float) return addConstantFloat(((float?)value).Value);
+            if (value is float) return AddConstantFloat(((float?)value).Value);
 
-            if (value is long) return addConstantLong(((long?)value).Value);
+            if (value is long) return AddConstantLong(((long?)value).Value);
 
-            if (value is double) return addConstantDouble(((double?)value).Value);
+            if (value is double) return AddConstantDouble(((double?)value).Value);
 
-            if (value is string) return addConstantString((string)value);
+            if (value is string) return AddConstantString((string)value);
 
             if (value is JType)
             {
                 var type = (JType)value;
                 var typeSort = type.Sort;
-                if (typeSort == JType.OBJECT)
-                    return addConstantClass(type.InternalName);
-                if (typeSort == JType.METHOD)
-                    return addConstantMethodType(type.Descriptor);
-                return addConstantClass(type.Descriptor);
+                if (typeSort == JType.Object)
+                    return AddConstantClass(type.InternalName);
+                if (typeSort == JType.Method)
+                    return AddConstantMethodType(type.Descriptor);
+                return AddConstantClass(type.Descriptor);
             }
 
             if (value is Handle)
             {
                 var handle = (Handle)value;
-                return addConstantMethodHandle(handle.Tag, handle.Owner, handle.Name, handle.Desc, handle.Interface);
+                return AddConstantMethodHandle(handle.Tag, handle.Owner, handle.Name, handle.Desc, handle.Interface);
             }
 
             if (value is ConstantDynamic)
             {
                 var constantDynamic = (ConstantDynamic)value;
-                return addConstantDynamic(constantDynamic.Name, constantDynamic.Descriptor,
+                return AddConstantDynamic(constantDynamic.Name, constantDynamic.Descriptor,
                     constantDynamic.BootstrapMethod, constantDynamic.BootstrapMethodArgumentsUnsafe);
             }
 
@@ -513,9 +513,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="value"> the internal name of a class. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantClass(string value)
+        public Symbol AddConstantClass(string value)
         {
-            return addConstantUtf8Reference(Symbol.CONSTANT_CLASS_TAG, value);
+            return AddConstantUtf8Reference(Symbol.Constant_Class_Tag, value);
         }
 
         /// <summary>
@@ -526,9 +526,9 @@ namespace ObjectWeb.Asm
         /// <param name="name"> a field name. </param>
         /// <param name="descriptor"> a field descriptor. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantFieldref(string owner, string name, string descriptor)
+        public Symbol AddConstantFieldref(string owner, string name, string descriptor)
         {
-            return addConstantMemberReference(Symbol.CONSTANT_FIELDREF_TAG, owner, name, descriptor);
+            return AddConstantMemberReference(Symbol.Constant_Fieldref_Tag, owner, name, descriptor);
         }
 
         /// <summary>
@@ -540,10 +540,10 @@ namespace ObjectWeb.Asm
         /// <param name="descriptor"> a method descriptor. </param>
         /// <param name="isInterface"> whether owner is an interface or not. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantMethodref(string owner, string name, string descriptor, bool isInterface)
+        public Symbol AddConstantMethodref(string owner, string name, string descriptor, bool isInterface)
         {
-            var tag = isInterface ? Symbol.CONSTANT_INTERFACE_METHODREF_TAG : Symbol.CONSTANT_METHODREF_TAG;
-            return addConstantMemberReference(tag, owner, name, descriptor);
+            var tag = isInterface ? Symbol.Constant_Interface_Methodref_Tag : Symbol.Constant_Methodref_Tag;
+            return AddConstantMemberReference(tag, owner, name, descriptor);
         }
 
         /// <summary>
@@ -552,17 +552,17 @@ namespace ObjectWeb.Asm
         ///     similar item.
         /// </summary>
         /// <param name="tag">
-        ///     one of <seealso cref="Symbol.CONSTANT_FIELDREF_TAG" />, <seealso cref="Symbol.CONSTANT_METHODREF_TAG" />
-        ///     or <seealso cref="Symbol.CONSTANT_INTERFACE_METHODREF_TAG" />.
+        ///     one of <seealso cref="Symbol.Constant_Fieldref_Tag" />, <seealso cref="Symbol.Constant_Methodref_Tag" />
+        ///     or <seealso cref="Symbol.Constant_Interface_Methodref_Tag" />.
         /// </param>
         /// <param name="owner"> the internal name of a class. </param>
         /// <param name="name"> a field or method name. </param>
         /// <param name="descriptor"> a field or method descriptor. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        private Entry addConstantMemberReference(int tag, string owner, string name, string descriptor)
+        private Entry AddConstantMemberReference(int tag, string owner, string name, string descriptor)
         {
-            var hashCode = hash(tag, owner, name, descriptor);
-            var entry = get(hashCode);
+            var hashCode = Hash(tag, owner, name, descriptor);
+            var entry = Get(hashCode);
             while (entry != null)
             {
                 if (entry.tag == tag && entry.hashCode == hashCode && entry.owner.Equals(owner) &&
@@ -570,8 +570,8 @@ namespace ObjectWeb.Asm
                 entry = entry.next;
             }
 
-            constantPool.put122(tag, addConstantClass(owner).index, addConstantNameAndType(name, descriptor));
-            return put(new Entry(constantPoolCount++, tag, owner, name, descriptor, 0, hashCode));
+            _constantPool.Put122(tag, AddConstantClass(owner).index, AddConstantNameAndType(name, descriptor));
+            return Put(new Entry(_constantPoolCount++, tag, owner, name, descriptor, 0, hashCode));
         }
 
         /// <summary>
@@ -580,15 +580,15 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="index"> the constant pool index of the new Symbol. </param>
         /// <param name="tag">
-        ///     one of <seealso cref="Symbol.CONSTANT_FIELDREF_TAG" />, <seealso cref="Symbol.CONSTANT_METHODREF_TAG" />
-        ///     or <seealso cref="Symbol.CONSTANT_INTERFACE_METHODREF_TAG" />.
+        ///     one of <seealso cref="Symbol.Constant_Fieldref_Tag" />, <seealso cref="Symbol.Constant_Methodref_Tag" />
+        ///     or <seealso cref="Symbol.Constant_Interface_Methodref_Tag" />.
         /// </param>
         /// <param name="owner"> the internal name of a class. </param>
         /// <param name="name"> a field or method name. </param>
         /// <param name="descriptor"> a field or method descriptor. </param>
-        private void addConstantMemberReference(int index, int tag, string owner, string name, string descriptor)
+        private void AddConstantMemberReference(int index, int tag, string owner, string name, string descriptor)
         {
-            add(new Entry(index, tag, owner, name, descriptor, 0, hash(tag, owner, name, descriptor)));
+            Add(new Entry(index, tag, owner, name, descriptor, 0, Hash(tag, owner, name, descriptor)));
         }
 
         /// <summary>
@@ -597,9 +597,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="value"> a string. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantString(string value)
+        public Symbol AddConstantString(string value)
         {
-            return addConstantUtf8Reference(Symbol.CONSTANT_STRING_TAG, value);
+            return AddConstantUtf8Reference(Symbol.Constant_String_Tag, value);
         }
 
         /// <summary>
@@ -608,9 +608,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="value"> an int. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantInteger(int value)
+        public Symbol AddConstantInteger(int value)
         {
-            return addConstantIntegerOrFloat(Symbol.CONSTANT_INTEGER_TAG, value);
+            return AddConstantIntegerOrFloat(Symbol.Constant_Integer_Tag, value);
         }
 
         /// <summary>
@@ -619,9 +619,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="value"> a float. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantFloat(float value)
+        public Symbol AddConstantFloat(float value)
         {
-            return addConstantIntegerOrFloat(Symbol.CONSTANT_FLOAT_TAG, BitConverter.SingleToInt32Bits(value));
+            return AddConstantIntegerOrFloat(Symbol.Constant_Float_Tag, BitConverter.SingleToInt32Bits(value));
         }
 
         /// <summary>
@@ -629,23 +629,23 @@ namespace ObjectWeb.Asm
         ///     Does nothing if the constant pool already contains a similar item.
         /// </summary>
         /// <param name="tag">
-        ///     one of <seealso cref="Symbol.CONSTANT_INTEGER_TAG" /> or
-        ///     <seealso cref="Symbol.CONSTANT_FLOAT_TAG" />.
+        ///     one of <seealso cref="Symbol.Constant_Integer_Tag" /> or
+        ///     <seealso cref="Symbol.Constant_Float_Tag" />.
         /// </param>
         /// <param name="value"> an int or float. </param>
         /// <returns> a constant pool constant with the given tag and primitive values. </returns>
-        private Symbol addConstantIntegerOrFloat(int tag, int value)
+        private Symbol AddConstantIntegerOrFloat(int tag, int value)
         {
-            var hashCode = hash(tag, value);
-            var entry = get(hashCode);
+            var hashCode = Hash(tag, value);
+            var entry = Get(hashCode);
             while (entry != null)
             {
                 if (entry.tag == tag && entry.hashCode == hashCode && entry.data == value) return entry;
                 entry = entry.next;
             }
 
-            constantPool.putByte(tag).putInt(value);
-            return put(new Entry(constantPoolCount++, tag, value, hashCode));
+            _constantPool.PutByte(tag).PutInt(value);
+            return Put(new Entry(_constantPoolCount++, tag, value, hashCode));
         }
 
         /// <summary>
@@ -654,13 +654,13 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="index"> the constant pool index of the new Symbol. </param>
         /// <param name="tag">
-        ///     one of <seealso cref="Symbol.CONSTANT_INTEGER_TAG" /> or
-        ///     <seealso cref="Symbol.CONSTANT_FLOAT_TAG" />.
+        ///     one of <seealso cref="Symbol.Constant_Integer_Tag" /> or
+        ///     <seealso cref="Symbol.Constant_Float_Tag" />.
         /// </param>
         /// <param name="value"> an int or float. </param>
-        private void addConstantIntegerOrFloat(int index, int tag, int value)
+        private void AddConstantIntegerOrFloat(int index, int tag, int value)
         {
-            add(new Entry(index, tag, value, hash(tag, value)));
+            Add(new Entry(index, tag, value, Hash(tag, value)));
         }
 
         /// <summary>
@@ -669,9 +669,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="value"> a long. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantLong(long value)
+        public Symbol AddConstantLong(long value)
         {
-            return addConstantLongOrDouble(Symbol.CONSTANT_LONG_TAG, value);
+            return AddConstantLongOrDouble(Symbol.Constant_Long_Tag, value);
         }
 
         /// <summary>
@@ -680,32 +680,32 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="value"> a double. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantDouble(double value)
+        public Symbol AddConstantDouble(double value)
         {
-            return addConstantLongOrDouble(Symbol.CONSTANT_DOUBLE_TAG, BitConverter.DoubleToInt64Bits(value));
+            return AddConstantLongOrDouble(Symbol.Constant_Double_Tag, BitConverter.DoubleToInt64Bits(value));
         }
 
         /// <summary>
         ///     Adds a CONSTANT_Long_info or CONSTANT_Double_info to the constant pool of this symbol table.
         ///     Does nothing if the constant pool already contains a similar item.
         /// </summary>
-        /// <param name="tag"> one of <seealso cref="Symbol.CONSTANT_LONG_TAG" /> or <seealso cref="Symbol.CONSTANT_DOUBLE_TAG" />. </param>
+        /// <param name="tag"> one of <seealso cref="Symbol.Constant_Long_Tag" /> or <seealso cref="Symbol.Constant_Double_Tag" />. </param>
         /// <param name="value"> a long or double. </param>
         /// <returns> a constant pool constant with the given tag and primitive values. </returns>
-        private Symbol addConstantLongOrDouble(int tag, long value)
+        private Symbol AddConstantLongOrDouble(int tag, long value)
         {
-            var hashCode = hash(tag, value);
-            var entry = get(hashCode);
+            var hashCode = Hash(tag, value);
+            var entry = Get(hashCode);
             while (entry != null)
             {
                 if (entry.tag == tag && entry.hashCode == hashCode && entry.data == value) return entry;
                 entry = entry.next;
             }
 
-            var index = constantPoolCount;
-            constantPool.putByte(tag).putLong(value);
-            constantPoolCount += 2;
-            return put(new Entry(index, tag, value, hashCode));
+            var index = _constantPoolCount;
+            _constantPool.PutByte(tag).PutLong(value);
+            _constantPoolCount += 2;
+            return Put(new Entry(index, tag, value, hashCode));
         }
 
         /// <summary>
@@ -713,11 +713,11 @@ namespace ObjectWeb.Asm
         ///     table.
         /// </summary>
         /// <param name="index"> the constant pool index of the new Symbol. </param>
-        /// <param name="tag"> one of <seealso cref="Symbol.CONSTANT_LONG_TAG" /> or <seealso cref="Symbol.CONSTANT_DOUBLE_TAG" />. </param>
+        /// <param name="tag"> one of <seealso cref="Symbol.Constant_Long_Tag" /> or <seealso cref="Symbol.Constant_Double_Tag" />. </param>
         /// <param name="value"> a long or double. </param>
-        private void addConstantLongOrDouble(int index, int tag, long value)
+        private void AddConstantLongOrDouble(int index, int tag, long value)
         {
-            add(new Entry(index, tag, value, hash(tag, value)));
+            Add(new Entry(index, tag, value, Hash(tag, value)));
         }
 
         /// <summary>
@@ -727,11 +727,11 @@ namespace ObjectWeb.Asm
         /// <param name="name"> a field or method name. </param>
         /// <param name="descriptor"> a field or method descriptor. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public int addConstantNameAndType(string name, string descriptor)
+        public int AddConstantNameAndType(string name, string descriptor)
         {
-            const int tag = Symbol.CONSTANT_NAME_AND_TYPE_TAG;
-            var hashCode = hash(tag, name, descriptor);
-            var entry = get(hashCode);
+            const int tag = Symbol.Constant_Name_And_Type_Tag;
+            var hashCode = Hash(tag, name, descriptor);
+            var entry = Get(hashCode);
             while (entry != null)
             {
                 if (entry.tag == tag && entry.hashCode == hashCode && entry.name.Equals(name) &&
@@ -739,8 +739,8 @@ namespace ObjectWeb.Asm
                 entry = entry.next;
             }
 
-            constantPool.put122(tag, addConstantUtf8(name), addConstantUtf8(descriptor));
-            return put(new Entry(constantPoolCount++, tag, name, descriptor, hashCode)).index;
+            _constantPool.Put122(tag, AddConstantUtf8(name), AddConstantUtf8(descriptor));
+            return Put(new Entry(_constantPoolCount++, tag, name, descriptor, hashCode)).index;
         }
 
         /// <summary>
@@ -749,10 +749,10 @@ namespace ObjectWeb.Asm
         /// <param name="index"> the constant pool index of the new Symbol. </param>
         /// <param name="name"> a field or method name. </param>
         /// <param name="descriptor"> a field or method descriptor. </param>
-        private void addConstantNameAndType(int index, string name, string descriptor)
+        private void AddConstantNameAndType(int index, string name, string descriptor)
         {
-            const int tag = Symbol.CONSTANT_NAME_AND_TYPE_TAG;
-            add(new Entry(index, tag, name, descriptor, hash(tag, name, descriptor)));
+            const int tag = Symbol.Constant_Name_And_Type_Tag;
+            Add(new Entry(index, tag, name, descriptor, Hash(tag, name, descriptor)));
         }
 
         /// <summary>
@@ -761,19 +761,19 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="value"> a string. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public int addConstantUtf8(string value)
+        public int AddConstantUtf8(string value)
         {
-            var hashCode = hash(Symbol.CONSTANT_UTF8_TAG, value);
-            var entry = get(hashCode);
+            var hashCode = Hash(Symbol.Constant_Utf8_Tag, value);
+            var entry = Get(hashCode);
             while (entry != null)
             {
-                if (entry.tag == Symbol.CONSTANT_UTF8_TAG && entry.hashCode == hashCode && entry.value.Equals(value))
+                if (entry.tag == Symbol.Constant_Utf8_Tag && entry.hashCode == hashCode && entry.value.Equals(value))
                     return entry.index;
                 entry = entry.next;
             }
 
-            constantPool.putByte(Symbol.CONSTANT_UTF8_TAG).putUTF8(value);
-            return put(new Entry(constantPoolCount++, Symbol.CONSTANT_UTF8_TAG, value, hashCode)).index;
+            _constantPool.PutByte(Symbol.Constant_Utf8_Tag).PutUtf8(value);
+            return Put(new Entry(_constantPoolCount++, Symbol.Constant_Utf8_Tag, value, hashCode)).index;
         }
 
         /// <summary>
@@ -781,9 +781,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="index"> the constant pool index of the new Symbol. </param>
         /// <param name="value"> a string. </param>
-        private void addConstantUtf8(int index, string value)
+        private void AddConstantUtf8(int index, string value)
         {
-            add(new Entry(index, Symbol.CONSTANT_UTF8_TAG, value, hash(Symbol.CONSTANT_UTF8_TAG, value)));
+            Add(new Entry(index, Symbol.Constant_Utf8_Tag, value, Hash(Symbol.Constant_Utf8_Tag, value)));
         }
 
         /// <summary>
@@ -791,24 +791,24 @@ namespace ObjectWeb.Asm
         ///     the constant pool already contains a similar item.
         /// </summary>
         /// <param name="referenceKind">
-        ///     one of <seealso cref="Opcodes.H_GETFIELD" />, <seealso cref="Opcodes.H_GETSTATIC" />, {@link
-        ///     Opcodes#H_PUTFIELD}, <seealso cref="Opcodes.H_PUTSTATIC" />, <seealso cref="Opcodes.H_INVOKEVIRTUAL" />, {@link
-        ///     Opcodes#H_INVOKESTATIC}, <seealso cref="Opcodes.H_INVOKESPECIAL" />, {@link
-        ///     Opcodes#H_NEWINVOKESPECIAL} or <seealso cref="Opcodes.H_INVOKEINTERFACE" />.
+        ///     one of <seealso cref="IIOpcodes.H_Getfield />, <seealso cref="IIOpcodes.H_Getstatic />, {@link
+        ///     Opcodes#H_PUTFIELD}, <seealso cref="IIOpcodes.H_Putstatic />, <seealso cref="IIOpcodes.H_Invokevirtual />, {@link
+        ///     Opcodes#H_INVOKESTATIC}, <seealso cref="IIOpcodes.H_Invokespecial />, {@link
+        ///     Opcodes#H_NEWINVOKESPECIAL} or <seealso cref="IIOpcodes.H_Invokeinterface />.
         /// </param>
         /// <param name="owner"> the internal name of a class of interface. </param>
         /// <param name="name"> a field or method name. </param>
         /// <param name="descriptor"> a field or method descriptor. </param>
         /// <param name="isInterface"> whether owner is an interface or not. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantMethodHandle(int referenceKind, string owner, string name, string descriptor,
+        public Symbol AddConstantMethodHandle(int referenceKind, string owner, string name, string descriptor,
             bool isInterface)
         {
-            const int tag = Symbol.CONSTANT_METHOD_HANDLE_TAG;
+            const int tag = Symbol.Constant_Method_Handle_Tag;
             // Note that we don't need to include isInterface in the hash computation, because it is
             // redundant with owner (we can't have the same owner with different isInterface values).
-            var hashCode = hash(tag, owner, name, descriptor, referenceKind);
-            var entry = get(hashCode);
+            var hashCode = Hash(tag, owner, name, descriptor, referenceKind);
+            var entry = Get(hashCode);
             while (entry != null)
             {
                 if (entry.tag == tag && entry.hashCode == hashCode && entry.data == referenceKind &&
@@ -817,12 +817,12 @@ namespace ObjectWeb.Asm
                 entry = entry.next;
             }
 
-            if (referenceKind <= Opcodes.H_PUTSTATIC)
-                constantPool.put112(tag, referenceKind, addConstantFieldref(owner, name, descriptor).index);
+            if (referenceKind <= IOpcodes.H_Putstatic)
+                _constantPool.Put112(tag, referenceKind, AddConstantFieldref(owner, name, descriptor).index);
             else
-                constantPool.put112(tag, referenceKind,
-                    addConstantMethodref(owner, name, descriptor, isInterface).index);
-            return put(new Entry(constantPoolCount++, tag, owner, name, descriptor, referenceKind, hashCode));
+                _constantPool.Put112(tag, referenceKind,
+                    AddConstantMethodref(owner, name, descriptor, isInterface).index);
+            return Put(new Entry(_constantPoolCount++, tag, owner, name, descriptor, referenceKind, hashCode));
         }
 
         /// <summary>
@@ -830,19 +830,19 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="index"> the constant pool index of the new Symbol. </param>
         /// <param name="referenceKind">
-        ///     one of <seealso cref="Opcodes.H_GETFIELD" />, <seealso cref="Opcodes.H_GETSTATIC" />, {@link
-        ///     Opcodes#H_PUTFIELD}, <seealso cref="Opcodes.H_PUTSTATIC" />, <seealso cref="Opcodes.H_INVOKEVIRTUAL" />, {@link
-        ///     Opcodes#H_INVOKESTATIC}, <seealso cref="Opcodes.H_INVOKESPECIAL" />, {@link
-        ///     Opcodes#H_NEWINVOKESPECIAL} or <seealso cref="Opcodes.H_INVOKEINTERFACE" />.
+        ///     one of <seealso cref="IIOpcodes.H_Getfield />, <seealso cref="IIOpcodes.H_Getstatic />, {@link
+        ///     Opcodes#H_PUTFIELD}, <seealso cref="IIOpcodes.H_Putstatic />, <seealso cref="IIOpcodes.H_Invokevirtual />, {@link
+        ///     Opcodes#H_INVOKESTATIC}, <seealso cref="IIOpcodes.H_Invokespecial />, {@link
+        ///     Opcodes#H_NEWINVOKESPECIAL} or <seealso cref="IIOpcodes.H_Invokeinterface />.
         /// </param>
         /// <param name="owner"> the internal name of a class of interface. </param>
         /// <param name="name"> a field or method name. </param>
         /// <param name="descriptor"> a field or method descriptor. </param>
-        private void addConstantMethodHandle(int index, int referenceKind, string owner, string name, string descriptor)
+        private void AddConstantMethodHandle(int index, int referenceKind, string owner, string name, string descriptor)
         {
-            const int tag = Symbol.CONSTANT_METHOD_HANDLE_TAG;
-            var hashCode = hash(tag, owner, name, descriptor, referenceKind);
-            add(new Entry(index, tag, owner, name, descriptor, referenceKind, hashCode));
+            const int tag = Symbol.Constant_Method_Handle_Tag;
+            var hashCode = Hash(tag, owner, name, descriptor, referenceKind);
+            Add(new Entry(index, tag, owner, name, descriptor, referenceKind, hashCode));
         }
 
         /// <summary>
@@ -851,9 +851,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="methodDescriptor"> a method descriptor. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantMethodType(string methodDescriptor)
+        public Symbol AddConstantMethodType(string methodDescriptor)
         {
-            return addConstantUtf8Reference(Symbol.CONSTANT_METHOD_TYPE_TAG, methodDescriptor);
+            return AddConstantUtf8Reference(Symbol.Constant_Method_Type_Tag, methodDescriptor);
         }
 
         /// <summary>
@@ -866,11 +866,11 @@ namespace ObjectWeb.Asm
         /// <param name="bootstrapMethodHandle"> a bootstrap method handle. </param>
         /// <param name="bootstrapMethodArguments"> the bootstrap method arguments. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantDynamic(string name, string descriptor, Handle bootstrapMethodHandle,
+        public Symbol AddConstantDynamic(string name, string descriptor, Handle bootstrapMethodHandle,
             params object[] bootstrapMethodArguments)
         {
-            var bootstrapMethod = addBootstrapMethod(bootstrapMethodHandle, bootstrapMethodArguments);
-            return addConstantDynamicOrInvokeDynamicReference(Symbol.CONSTANT_DYNAMIC_TAG, name, descriptor,
+            var bootstrapMethod = AddBootstrapMethod(bootstrapMethodHandle, bootstrapMethodArguments);
+            return AddConstantDynamicOrInvokeDynamicReference(Symbol.Constant_Dynamic_Tag, name, descriptor,
                 bootstrapMethod.index);
         }
 
@@ -884,11 +884,11 @@ namespace ObjectWeb.Asm
         /// <param name="bootstrapMethodHandle"> a bootstrap method handle. </param>
         /// <param name="bootstrapMethodArguments"> the bootstrap method arguments. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantInvokeDynamic(string name, string descriptor, Handle bootstrapMethodHandle,
+        public Symbol AddConstantInvokeDynamic(string name, string descriptor, Handle bootstrapMethodHandle,
             params object[] bootstrapMethodArguments)
         {
-            var bootstrapMethod = addBootstrapMethod(bootstrapMethodHandle, bootstrapMethodArguments);
-            return addConstantDynamicOrInvokeDynamicReference(Symbol.CONSTANT_INVOKE_DYNAMIC_TAG, name, descriptor,
+            var bootstrapMethod = AddBootstrapMethod(bootstrapMethodHandle, bootstrapMethodArguments);
+            return AddConstantDynamicOrInvokeDynamicReference(Symbol.Constant_Invoke_Dynamic_Tag, name, descriptor,
                 bootstrapMethod.index);
         }
 
@@ -897,7 +897,7 @@ namespace ObjectWeb.Asm
         ///     table. Does nothing if the constant pool already contains a similar item.
         /// </summary>
         /// <param name="tag">
-        ///     one of <seealso cref="Symbol.CONSTANT_DYNAMIC_TAG" /> or {@link
+        ///     one of <seealso cref="Symbol.Constant_Dynamic_Tag" /> or {@link
         ///     Symbol#CONSTANT_INVOKE_DYNAMIC_TAG}.
         /// </param>
         /// <param name="name"> a method name. </param>
@@ -907,11 +907,11 @@ namespace ObjectWeb.Asm
         /// </param>
         /// <param name="bootstrapMethodIndex"> the index of a bootstrap method in the BootstrapMethods attribute. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        private Symbol addConstantDynamicOrInvokeDynamicReference(int tag, string name, string descriptor,
+        private Symbol AddConstantDynamicOrInvokeDynamicReference(int tag, string name, string descriptor,
             int bootstrapMethodIndex)
         {
-            var hashCode = hash(tag, name, descriptor, bootstrapMethodIndex);
-            var entry = get(hashCode);
+            var hashCode = Hash(tag, name, descriptor, bootstrapMethodIndex);
+            var entry = Get(hashCode);
             while (entry != null)
             {
                 if (entry.tag == tag && entry.hashCode == hashCode && entry.data == bootstrapMethodIndex &&
@@ -919,8 +919,8 @@ namespace ObjectWeb.Asm
                 entry = entry.next;
             }
 
-            constantPool.put122(tag, bootstrapMethodIndex, addConstantNameAndType(name, descriptor));
-            return put(new Entry(constantPoolCount++, tag, null, name, descriptor, bootstrapMethodIndex, hashCode));
+            _constantPool.Put122(tag, bootstrapMethodIndex, AddConstantNameAndType(name, descriptor));
+            return Put(new Entry(_constantPoolCount++, tag, null, name, descriptor, bootstrapMethodIndex, hashCode));
         }
 
         /// <summary>
@@ -928,7 +928,7 @@ namespace ObjectWeb.Asm
         ///     symbol table.
         /// </summary>
         /// <param name="tag">
-        ///     one of <seealso cref="Symbol.CONSTANT_DYNAMIC_TAG" /> or {@link
+        ///     one of <seealso cref="Symbol.Constant_Dynamic_Tag" /> or {@link
         ///     Symbol#CONSTANT_INVOKE_DYNAMIC_TAG}.
         /// </param>
         /// <param name="index"> the constant pool index of the new Symbol. </param>
@@ -938,11 +938,11 @@ namespace ObjectWeb.Asm
         ///     CONSTANT_INVOKE_DYNAMIC_TAG.
         /// </param>
         /// <param name="bootstrapMethodIndex"> the index of a bootstrap method in the BootstrapMethods attribute. </param>
-        private void addConstantDynamicOrInvokeDynamicReference(int tag, int index, string name, string descriptor,
+        private void AddConstantDynamicOrInvokeDynamicReference(int tag, int index, string name, string descriptor,
             int bootstrapMethodIndex)
         {
-            var hashCode = hash(tag, name, descriptor, bootstrapMethodIndex);
-            add(new Entry(index, tag, null, name, descriptor, bootstrapMethodIndex, hashCode));
+            var hashCode = Hash(tag, name, descriptor, bootstrapMethodIndex);
+            Add(new Entry(index, tag, null, name, descriptor, bootstrapMethodIndex, hashCode));
         }
 
         /// <summary>
@@ -951,9 +951,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="moduleName"> a fully qualified name (using dots) of a module. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantModule(string moduleName)
+        public Symbol AddConstantModule(string moduleName)
         {
-            return addConstantUtf8Reference(Symbol.CONSTANT_MODULE_TAG, moduleName);
+            return AddConstantUtf8Reference(Symbol.Constant_Module_Tag, moduleName);
         }
 
         /// <summary>
@@ -962,9 +962,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="packageName"> the internal name of a package. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addConstantPackage(string packageName)
+        public Symbol AddConstantPackage(string packageName)
         {
-            return addConstantUtf8Reference(Symbol.CONSTANT_PACKAGE_TAG, packageName);
+            return AddConstantUtf8Reference(Symbol.Constant_Package_Tag, packageName);
         }
 
         /// <summary>
@@ -973,8 +973,8 @@ namespace ObjectWeb.Asm
         ///     nothing if the constant pool already contains a similar item.
         /// </summary>
         /// <param name="tag">
-        ///     one of <seealso cref="Symbol.CONSTANT_CLASS_TAG" />, <seealso cref="Symbol.CONSTANT_STRING_TAG" />, {@link
-        ///     Symbol#CONSTANT_METHOD_TYPE_TAG}, <seealso cref="Symbol.CONSTANT_MODULE_TAG" /> or {@link
+        ///     one of <seealso cref="Symbol.Constant_Class_Tag" />, <seealso cref="Symbol.Constant_String_Tag" />, {@link
+        ///     Symbol#CONSTANT_METHOD_TYPE_TAG}, <seealso cref="Symbol.Constant_Module_Tag" /> or {@link
         ///     Symbol#CONSTANT_PACKAGE_TAG}.
         /// </param>
         /// <param name="value">
@@ -982,18 +982,18 @@ namespace ObjectWeb.Asm
         ///     package name, depending on tag.
         /// </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        private Symbol addConstantUtf8Reference(int tag, string value)
+        private Symbol AddConstantUtf8Reference(int tag, string value)
         {
-            var hashCode = hash(tag, value);
-            var entry = get(hashCode);
+            var hashCode = Hash(tag, value);
+            var entry = Get(hashCode);
             while (entry != null)
             {
                 if (entry.tag == tag && entry.hashCode == hashCode && entry.value.Equals(value)) return entry;
                 entry = entry.next;
             }
 
-            constantPool.put12(tag, addConstantUtf8(value));
-            return put(new Entry(constantPoolCount++, tag, value, hashCode));
+            _constantPool.Put12(tag, AddConstantUtf8(value));
+            return Put(new Entry(_constantPoolCount++, tag, value, hashCode));
         }
 
         /// <summary>
@@ -1002,17 +1002,17 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="index"> the constant pool index of the new Symbol. </param>
         /// <param name="tag">
-        ///     one of <seealso cref="Symbol.CONSTANT_CLASS_TAG" />, <seealso cref="Symbol.CONSTANT_STRING_TAG" />, {@link
-        ///     Symbol#CONSTANT_METHOD_TYPE_TAG}, <seealso cref="Symbol.CONSTANT_MODULE_TAG" /> or {@link
+        ///     one of <seealso cref="Symbol.Constant_Class_Tag" />, <seealso cref="Symbol.Constant_String_Tag" />, {@link
+        ///     Symbol#CONSTANT_METHOD_TYPE_TAG}, <seealso cref="Symbol.Constant_Module_Tag" /> or {@link
         ///     Symbol#CONSTANT_PACKAGE_TAG}.
         /// </param>
         /// <param name="value">
         ///     an internal class name, an arbitrary string, a method descriptor, a module or a
         ///     package name, depending on tag.
         /// </param>
-        private void addConstantUtf8Reference(int index, int tag, string value)
+        private void AddConstantUtf8Reference(int index, int tag, string value)
         {
-            add(new Entry(index, tag, value, hash(tag, value)));
+            Add(new Entry(index, tag, value, Hash(tag, value)));
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -1026,10 +1026,10 @@ namespace ObjectWeb.Asm
         /// <param name="bootstrapMethodHandle"> a bootstrap method handle. </param>
         /// <param name="bootstrapMethodArguments"> the bootstrap method arguments. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        public Symbol addBootstrapMethod(Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
+        public Symbol AddBootstrapMethod(Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
         {
-            var bootstrapMethodsAttribute = bootstrapMethods;
-            if (bootstrapMethodsAttribute == null) bootstrapMethodsAttribute = bootstrapMethods = new ByteVector();
+            var bootstrapMethodsAttribute = _bootstrapMethods;
+            if (bootstrapMethodsAttribute == null) bootstrapMethodsAttribute = _bootstrapMethods = new ByteVector();
 
             // The bootstrap method arguments can be Constant_Dynamic values, which reference other
             // bootstrap methods. We must therefore add the bootstrap method arguments to the constant pool
@@ -1038,19 +1038,19 @@ namespace ObjectWeb.Asm
             var numBootstrapArguments = bootstrapMethodArguments.Length;
             var bootstrapMethodArgumentIndexes = new int[numBootstrapArguments];
             for (var i = 0; i < numBootstrapArguments; i++)
-                bootstrapMethodArgumentIndexes[i] = addConstant(bootstrapMethodArguments[i]).index;
+                bootstrapMethodArgumentIndexes[i] = AddConstant(bootstrapMethodArguments[i]).index;
 
             // Write the bootstrap method in the BootstrapMethods table. This is necessary to be able to
             // compare it with existing ones, and will be reverted below if there is already a similar
             // bootstrap method.
             var bootstrapMethodOffset = bootstrapMethodsAttribute.length;
-            bootstrapMethodsAttribute.putShort(addConstantMethodHandle(bootstrapMethodHandle.Tag,
+            bootstrapMethodsAttribute.PutShort(AddConstantMethodHandle(bootstrapMethodHandle.Tag,
                 bootstrapMethodHandle.Owner, bootstrapMethodHandle.Name, bootstrapMethodHandle.Desc,
                 bootstrapMethodHandle.Interface).index);
 
-            bootstrapMethodsAttribute.putShort(numBootstrapArguments);
+            bootstrapMethodsAttribute.PutShort(numBootstrapArguments);
             for (var i = 0; i < numBootstrapArguments; i++)
-                bootstrapMethodsAttribute.putShort(bootstrapMethodArgumentIndexes[i]);
+                bootstrapMethodsAttribute.PutShort(bootstrapMethodArgumentIndexes[i]);
 
             // Compute the length and the hash code of the bootstrap method.
             var bootstrapMethodlength = bootstrapMethodsAttribute.length - bootstrapMethodOffset;
@@ -1060,25 +1060,25 @@ namespace ObjectWeb.Asm
             hashCode &= 0x7FFFFFFF;
 
             // Add the bootstrap method to the symbol table or revert the above changes.
-            return addBootstrapMethod(bootstrapMethodOffset, bootstrapMethodlength, hashCode);
+            return AddBootstrapMethod(bootstrapMethodOffset, bootstrapMethodlength, hashCode);
         }
 
         /// <summary>
         ///     Adds a bootstrap method to the BootstrapMethods attribute of this symbol table. Does nothing if
         ///     the BootstrapMethods already contains a similar bootstrap method (more precisely, reverts the
-        ///     content of <seealso cref="bootstrapMethods" /> to remove the last, duplicate bootstrap method).
+        ///     content of <seealso cref="_bootstrapMethods" /> to remove the last, duplicate bootstrap method).
         /// </summary>
-        /// <param name="offset"> the offset of the last bootstrap method in <seealso cref="bootstrapMethods" />, in bytes. </param>
-        /// <param name="length"> the length of this bootstrap method in <seealso cref="bootstrapMethods" />, in bytes. </param>
+        /// <param name="offset"> the offset of the last bootstrap method in <seealso cref="_bootstrapMethods" />, in bytes. </param>
+        /// <param name="length"> the length of this bootstrap method in <seealso cref="_bootstrapMethods" />, in bytes. </param>
         /// <param name="hashCode"> the hash code of this bootstrap method. </param>
         /// <returns> a new or already existing Symbol with the given value. </returns>
-        private Symbol addBootstrapMethod(int offset, int length, int hashCode)
+        private Symbol AddBootstrapMethod(int offset, int length, int hashCode)
         {
-            var bootstrapMethodsData = bootstrapMethods.data;
-            var entry = get(hashCode);
+            var bootstrapMethodsData = _bootstrapMethods.data;
+            var entry = Get(hashCode);
             while (entry != null)
             {
-                if (entry.tag == Symbol.BOOTSTRAP_METHOD_TAG && entry.hashCode == hashCode)
+                if (entry.tag == Symbol.Bootstrap_Method_Tag && entry.hashCode == hashCode)
                 {
                     var otherOffset = (int)entry.data;
                     var isSameBootstrapMethod = true;
@@ -1091,7 +1091,7 @@ namespace ObjectWeb.Asm
 
                     if (isSameBootstrapMethod)
                     {
-                        bootstrapMethods.length = offset; // Revert to old position.
+                        _bootstrapMethods.length = offset; // Revert to old position.
                         return entry;
                     }
                 }
@@ -1099,7 +1099,7 @@ namespace ObjectWeb.Asm
                 entry = entry.next;
             }
 
-            return put(new Entry(bootstrapMethodCount++, Symbol.BOOTSTRAP_METHOD_TAG, offset, hashCode));
+            return Put(new Entry(_bootstrapMethodCount++, Symbol.Bootstrap_Method_Tag, offset, hashCode));
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -1111,9 +1111,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="typeIndex"> a type table index. </param>
         /// <returns> the type table element whose index is given. </returns>
-        public Symbol getType(int typeIndex)
+        public Symbol GetType(int typeIndex)
         {
-            return typeTable[typeIndex];
+            return _typeTable[typeIndex];
         }
 
         /// <summary>
@@ -1122,22 +1122,22 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="value"> an internal class name. </param>
         /// <returns> the index of a new or already existing type Symbol with the given value. </returns>
-        public int addType(string value)
+        public int AddType(string value)
         {
-            var hashCode = hash(Symbol.TYPE_TAG, value);
-            var entry = get(hashCode);
+            var hashCode = Hash(Symbol.Type_Tag, value);
+            var entry = Get(hashCode);
             while (entry != null)
             {
-                if (entry.tag == Symbol.TYPE_TAG && entry.hashCode == hashCode && entry.value.Equals(value))
+                if (entry.tag == Symbol.Type_Tag && entry.hashCode == hashCode && entry.value.Equals(value))
                     return entry.index;
                 entry = entry.next;
             }
 
-            return addTypeInternal(new Entry(typeCount, Symbol.TYPE_TAG, value, hashCode));
+            return AddTypeInternal(new Entry(_typeCount, Symbol.Type_Tag, value, hashCode));
         }
 
         /// <summary>
-        ///     Adds an <seealso cref="Frame.ITEM_UNINITIALIZED" /> type in the type table of this symbol table. Does
+        ///     Adds an <seealso cref="Frame.Item_Uninitialized" /> type in the type table of this symbol table. Does
         ///     nothing if the type table already contains a similar type.
         /// </summary>
         /// <param name="value"> an internal class name. </param>
@@ -1146,18 +1146,18 @@ namespace ObjectWeb.Asm
         ///     Frame#ITEM_UNINITIALIZED} type value.
         /// </param>
         /// <returns> the index of a new or already existing type Symbol with the given value. </returns>
-        public int addUninitializedType(string value, int bytecodeOffset)
+        public int AddUninitializedType(string value, int bytecodeOffset)
         {
-            var hashCode = hash(Symbol.UNINITIALIZED_TYPE_TAG, value, bytecodeOffset);
-            var entry = get(hashCode);
+            var hashCode = Hash(Symbol.Uninitialized_Type_Tag, value, bytecodeOffset);
+            var entry = Get(hashCode);
             while (entry != null)
             {
-                if (entry.tag == Symbol.UNINITIALIZED_TYPE_TAG && entry.hashCode == hashCode &&
+                if (entry.tag == Symbol.Uninitialized_Type_Tag && entry.hashCode == hashCode &&
                     entry.data == bytecodeOffset && entry.value.Equals(value)) return entry.index;
                 entry = entry.next;
             }
 
-            return addTypeInternal(new Entry(typeCount, Symbol.UNINITIALIZED_TYPE_TAG, value, bytecodeOffset,
+            return AddTypeInternal(new Entry(_typeCount, Symbol.Uninitialized_Type_Tag, value, bytecodeOffset,
                 hashCode));
         }
 
@@ -1166,103 +1166,103 @@ namespace ObjectWeb.Asm
         ///     already contains a similar type.
         /// </summary>
         /// <param name="typeTableIndex1">
-        ///     a <seealso cref="Symbol.TYPE_TAG" /> type, specified by its index in the type
+        ///     a <seealso cref="Symbol.Type_Tag" /> type, specified by its index in the type
         ///     table.
         /// </param>
         /// <param name="typeTableIndex2">
-        ///     another <seealso cref="Symbol.TYPE_TAG" /> type, specified by its index in the type
+        ///     another <seealso cref="Symbol.Type_Tag" /> type, specified by its index in the type
         ///     table.
         /// </param>
         /// <returns>
-        ///     the index of a new or already existing <seealso cref="Symbol.TYPE_TAG" /> type Symbol,
+        ///     the index of a new or already existing <seealso cref="Symbol.Type_Tag" /> type Symbol,
         ///     corresponding to the common super class of the given types.
         /// </returns>
-        public int addMergedType(int typeTableIndex1, int typeTableIndex2)
+        public int AddMergedType(int typeTableIndex1, int typeTableIndex2)
         {
             var data = typeTableIndex1 < typeTableIndex2
                 ? (uint)typeTableIndex1 | ((long)typeTableIndex2 << 32)
                 : typeTableIndex2 | ((long)typeTableIndex1 << 32);
-            var hashCode = hash(Symbol.MERGED_TYPE_TAG, typeTableIndex1 + typeTableIndex2);
-            var entry = get(hashCode);
+            var hashCode = Hash(Symbol.Merged_Type_Tag, typeTableIndex1 + typeTableIndex2);
+            var entry = Get(hashCode);
             while (entry != null)
             {
-                if (entry.tag == Symbol.MERGED_TYPE_TAG && entry.hashCode == hashCode && entry.data == data)
+                if (entry.tag == Symbol.Merged_Type_Tag && entry.hashCode == hashCode && entry.data == data)
                     return entry.info;
                 entry = entry.next;
             }
 
-            var type1 = typeTable[typeTableIndex1].value;
-            var type2 = typeTable[typeTableIndex2].value;
-            var commonSuperTypeIndex = addType(classWriter.getCommonSuperClass(type1, type2));
-            put(new Entry(typeCount, Symbol.MERGED_TYPE_TAG, data, hashCode)).info = commonSuperTypeIndex;
+            var type1 = _typeTable[typeTableIndex1].value;
+            var type2 = _typeTable[typeTableIndex2].value;
+            var commonSuperTypeIndex = AddType(classWriter.GetCommonSuperClass(type1, type2));
+            Put(new Entry(_typeCount, Symbol.Merged_Type_Tag, data, hashCode)).info = commonSuperTypeIndex;
             return commonSuperTypeIndex;
         }
 
         /// <summary>
-        ///     Adds the given type Symbol to <seealso cref="typeTable" />.
+        ///     Adds the given type Symbol to <seealso cref="_typeTable" />.
         /// </summary>
         /// <param name="entry">
-        ///     a <seealso cref="Symbol.TYPE_TAG" /> or <seealso cref="Symbol.UNINITIALIZED_TYPE_TAG" /> type symbol.
-        ///     The index of this Symbol must be equal to the current value of <seealso cref="typeCount" />.
+        ///     a <seealso cref="Symbol.Type_Tag" /> or <seealso cref="Symbol.Uninitialized_Type_Tag" /> type symbol.
+        ///     The index of this Symbol must be equal to the current value of <seealso cref="_typeCount" />.
         /// </param>
         /// <returns>
-        ///     the index in <seealso cref="typeTable" /> where the given type was added, which is also equal to
+        ///     the index in <seealso cref="_typeTable" /> where the given type was added, which is also equal to
         ///     entry's index by hypothesis.
         /// </returns>
-        private int addTypeInternal(Entry entry)
+        private int AddTypeInternal(Entry entry)
         {
-            if (typeTable == null) typeTable = new Entry[16];
-            if (typeCount == typeTable.Length)
+            if (_typeTable == null) _typeTable = new Entry[16];
+            if (_typeCount == _typeTable.Length)
             {
-                var newTypeTable = new Entry[2 * typeTable.Length];
-                Array.Copy(typeTable, 0, newTypeTable, 0, typeTable.Length);
-                typeTable = newTypeTable;
+                var newTypeTable = new Entry[2 * _typeTable.Length];
+                Array.Copy(_typeTable, 0, newTypeTable, 0, _typeTable.Length);
+                _typeTable = newTypeTable;
             }
 
-            typeTable[typeCount++] = entry;
-            return put(entry).index;
+            _typeTable[_typeCount++] = entry;
+            return Put(entry).index;
         }
 
         // -----------------------------------------------------------------------------------------------
         // Static helper methods to compute hash codes.
         // -----------------------------------------------------------------------------------------------
 
-        private static int hash(int tag, int value)
+        private static int Hash(int tag, int value)
         {
             return 0x7FFFFFFF & (tag + value);
         }
 
-        private static int hash(int tag, long value)
+        private static int Hash(int tag, long value)
         {
             return 0x7FFFFFFF & (tag + (int)value + (int)(long)((ulong)value >> 32));
         }
 
-        private static int hash(int tag, string value)
+        private static int Hash(int tag, string value)
         {
             return 0x7FFFFFFF & (tag + value.GetHashCode());
         }
 
-        private static int hash(int tag, string value1, int value2)
+        private static int Hash(int tag, string value1, int value2)
         {
             return 0x7FFFFFFF & (tag + value1.GetHashCode() + value2);
         }
 
-        private static int hash(int tag, string value1, string value2)
+        private static int Hash(int tag, string value1, string value2)
         {
             return 0x7FFFFFFF & (tag + value1.GetHashCode() * value2.GetHashCode());
         }
 
-        private static int hash(int tag, string value1, string value2, int value3)
+        private static int Hash(int tag, string value1, string value2, int value3)
         {
             return 0x7FFFFFFF & (tag + value1.GetHashCode() * value2.GetHashCode() * (value3 + 1));
         }
 
-        private static int hash(int tag, string value1, string value2, string value3)
+        private static int Hash(int tag, string value1, string value2, string value3)
         {
             return 0x7FFFFFFF & (tag + value1.GetHashCode() * value2.GetHashCode() * value3.GetHashCode());
         }
 
-        private static int hash(int tag, string value1, string value2, string value3, int value4)
+        private static int Hash(int tag, string value1, string value2, string value3, int value4)
         {
             return 0x7FFFFFFF & (tag + value1.GetHashCode() * value2.GetHashCode() * value3.GetHashCode() * value4);
         }
@@ -1270,7 +1270,7 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     An entry of a SymbolTable. This concrete and private subclass of <seealso cref="Symbol" /> adds two fields
         ///     which are only used inside SymbolTable, to implement hash sets of symbols (in order to avoid
-        ///     duplicate symbols). See <seealso cref="entries" />.
+        ///     duplicate symbols). See <seealso cref="SymbolTable._entries" />.
         ///     @author Eric Bruneton
         /// </summary>
         private class Entry : Symbol

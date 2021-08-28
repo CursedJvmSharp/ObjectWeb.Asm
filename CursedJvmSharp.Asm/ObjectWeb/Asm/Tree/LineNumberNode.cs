@@ -63,18 +63,18 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return LINE;
+			return Line;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitLineNumber(line, start.Label);
+		methodVisitor.VisitLineNumber(line, start.Label);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return new LineNumberNode(line, clone(start, clonedLabels));
+		return new LineNumberNode(line, Clone(start, clonedLabels));
 	  }
 	}
 

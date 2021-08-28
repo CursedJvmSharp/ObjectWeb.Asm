@@ -43,15 +43,15 @@ namespace ObjectWeb.Asm.Signature
 
 	  /// <summary>
 	  /// The builder used to construct the visited signature. </summary>
-	  private readonly StringBuilder stringBuilder = new StringBuilder();
+	  private readonly StringBuilder _stringBuilder = new StringBuilder();
 
 	  /// <summary>
 	  /// Whether the visited signature contains formal type parameters. </summary>
-	  private bool hasFormals;
+	  private bool _hasFormals;
 
 	  /// <summary>
 	  /// Whether the visited signature contains method parameter types. </summary>
-	  private bool hasParameters;
+	  private bool _hasParameters;
 
 	  /// <summary>
 	  /// The stack used to keep track of class types that have arguments. Each element of this stack is
@@ -72,11 +72,11 @@ namespace ObjectWeb.Asm.Signature
 	  /// visitEnd, or because visitInnerClassType is called).
 	  /// </para>
 	  /// </summary>
-	  private int argumentStack;
+	  private int _argumentStack;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="SignatureWriter"/>. </summary>
-	  public SignatureWriter() : base(Opcodes.ASM9)
+	  public SignatureWriter() : base(IOpcodes.Asm9)
 	  {
 	  }
 
@@ -84,138 +84,138 @@ namespace ObjectWeb.Asm.Signature
 	  // Implementation of the SignatureVisitor interface
 	  // -----------------------------------------------------------------------------------------------
 
-	  public override void visitFormalTypeParameter(string name)
+	  public override void VisitFormalTypeParameter(string name)
 	  {
-		if (!hasFormals)
+		if (!_hasFormals)
 		{
-		  hasFormals = true;
-		  stringBuilder.Append('<');
+		  _hasFormals = true;
+		  _stringBuilder.Append('<');
 		}
-		stringBuilder.Append(name);
-		stringBuilder.Append(':');
+		_stringBuilder.Append(name);
+		_stringBuilder.Append(':');
 	  }
 
-	  public override SignatureVisitor visitClassBound()
+	  public override SignatureVisitor VisitClassBound()
 	  {
 		return this;
 	  }
 
-	  public override SignatureVisitor visitInterfaceBound()
+	  public override SignatureVisitor VisitInterfaceBound()
 	  {
-		stringBuilder.Append(':');
+		_stringBuilder.Append(':');
 		return this;
 	  }
 
-	  public override SignatureVisitor visitSuperclass()
+	  public override SignatureVisitor VisitSuperclass()
 	  {
-		endFormals();
+		EndFormals();
 		return this;
 	  }
 
-	  public override SignatureVisitor visitInterface()
+	  public override SignatureVisitor VisitInterface()
 	  {
 		return this;
 	  }
 
-	  public override SignatureVisitor visitParameterType()
+	  public override SignatureVisitor VisitParameterType()
 	  {
-		endFormals();
-		if (!hasParameters)
+		EndFormals();
+		if (!_hasParameters)
 		{
-		  hasParameters = true;
-		  stringBuilder.Append('(');
+		  _hasParameters = true;
+		  _stringBuilder.Append('(');
 		}
 		return this;
 	  }
 
-	  public override SignatureVisitor visitReturnType()
+	  public override SignatureVisitor VisitReturnType()
 	  {
-		endFormals();
-		if (!hasParameters)
+		EndFormals();
+		if (!_hasParameters)
 		{
-		  stringBuilder.Append('(');
+		  _stringBuilder.Append('(');
 		}
-		stringBuilder.Append(')');
+		_stringBuilder.Append(')');
 		return this;
 	  }
 
-	  public override SignatureVisitor visitExceptionType()
+	  public override SignatureVisitor VisitExceptionType()
 	  {
-		stringBuilder.Append('^');
+		_stringBuilder.Append('^');
 		return this;
 	  }
 
-	  public override void visitBaseType(char descriptor)
+	  public override void VisitBaseType(char descriptor)
 	  {
-		stringBuilder.Append(descriptor);
+		_stringBuilder.Append(descriptor);
 	  }
 
-	  public override void visitTypeVariable(string name)
+	  public override void VisitTypeVariable(string name)
 	  {
-		stringBuilder.Append('T');
-		stringBuilder.Append(name);
-		stringBuilder.Append(';');
+		_stringBuilder.Append('T');
+		_stringBuilder.Append(name);
+		_stringBuilder.Append(';');
 	  }
 
-	  public override SignatureVisitor visitArrayType()
+	  public override SignatureVisitor VisitArrayType()
 	  {
-		stringBuilder.Append('[');
+		_stringBuilder.Append('[');
 		return this;
 	  }
 
-	  public override void visitClassType(string name)
+	  public override void VisitClassType(string name)
 	  {
-		stringBuilder.Append('L');
-		stringBuilder.Append(name);
+		_stringBuilder.Append('L');
+		_stringBuilder.Append(name);
 		// Pushes 'false' on the stack, meaning that this type does not have type arguments (as far as
 		// we can tell at this point).
-		argumentStack *= 2;
+		_argumentStack *= 2;
 	  }
 
-	  public override void visitInnerClassType(string name)
+	  public override void VisitInnerClassType(string name)
 	  {
-		endArguments();
-		stringBuilder.Append('.');
-		stringBuilder.Append(name);
+		EndArguments();
+		_stringBuilder.Append('.');
+		_stringBuilder.Append(name);
 		// Pushes 'false' on the stack, meaning that this type does not have type arguments (as far as
 		// we can tell at this point).
-		argumentStack *= 2;
+		_argumentStack *= 2;
 	  }
 
-	  public override void visitTypeArgument()
+	  public override void VisitTypeArgument()
 	  {
 		// If the top of the stack is 'false', this means we are visiting the first type argument of the
 		// currently visited type. We therefore need to append a '<', and to replace the top stack
 		// element with 'true' (meaning that the current type does have type arguments).
-		if (argumentStack % 2 == 0)
+		if (_argumentStack % 2 == 0)
 		{
-		  argumentStack |= 1;
-		  stringBuilder.Append('<');
+		  _argumentStack |= 1;
+		  _stringBuilder.Append('<');
 		}
-		stringBuilder.Append('*');
+		_stringBuilder.Append('*');
 	  }
 
-	  public override SignatureVisitor visitTypeArgument(char wildcard)
+	  public override SignatureVisitor VisitTypeArgument(char wildcard)
 	  {
 		// If the top of the stack is 'false', this means we are visiting the first type argument of the
 		// currently visited type. We therefore need to append a '<', and to replace the top stack
 		// element with 'true' (meaning that the current type does have type arguments).
-		if (argumentStack % 2 == 0)
+		if (_argumentStack % 2 == 0)
 		{
-		  argumentStack |= 1;
-		  stringBuilder.Append('<');
+		  _argumentStack |= 1;
+		  _stringBuilder.Append('<');
 		}
 		if (wildcard != '=')
 		{
-		  stringBuilder.Append(wildcard);
+		  _stringBuilder.Append(wildcard);
 		}
 		return this;
 	  }
 
-	  public override void visitEnd()
+	  public override void VisitEnd()
 	  {
-		endArguments();
-		stringBuilder.Append(';');
+		EndArguments();
+		_stringBuilder.Append(';');
 	  }
 
 	  /// <summary>
@@ -224,7 +224,7 @@ namespace ObjectWeb.Asm.Signature
 	  /// <returns> the signature that was built by this signature writer. </returns>
 	  public override string ToString()
 	  {
-		return stringBuilder.ToString();
+		return _stringBuilder.ToString();
 	  }
 
 	  // -----------------------------------------------------------------------------------------------
@@ -233,27 +233,27 @@ namespace ObjectWeb.Asm.Signature
 
 	  /// <summary>
 	  /// Ends the formal type parameters section of the signature. </summary>
-	  private void endFormals()
+	  private void EndFormals()
 	  {
-		if (hasFormals)
+		if (_hasFormals)
 		{
-		  hasFormals = false;
-		  stringBuilder.Append('>');
+		  _hasFormals = false;
+		  _stringBuilder.Append('>');
 		}
 	  }
 
 	  /// <summary>
 	  /// Ends the type arguments of a class or inner class type. </summary>
-	  private void endArguments()
+	  private void EndArguments()
 	  {
 		// If the top of the stack is 'true', this means that some type arguments have been visited for
 		// the type whose visit is now ending. We therefore need to append a '>', and to pop one element
 		// from the stack.
-		if (argumentStack % 2 == 1)
+		if (_argumentStack % 2 == 1)
 		{
-		  stringBuilder.Append('>');
+		  _stringBuilder.Append('>');
 		}
-		argumentStack /= 2;
+		_argumentStack /= 2;
 	  }
 	}
 

@@ -44,7 +44,7 @@ namespace ObjectWeb.Asm
 
 	  /// <summary>
 	  /// The ASM API version implemented by this visitor. The value of this field must be one of the
-	  /// {@code ASM}<i>x</i> values in <seealso cref="Opcodes"/>.
+	  /// {@code ASM}<i>x</i> values in <seealso cref="IOpcodes"/>.
 	  /// </summary>
 	  protected internal readonly int api;
 
@@ -56,7 +56,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="ClassVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  public ClassVisitor(int api) : this(api, null)
 	  {
 	  }
@@ -65,18 +65,18 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="ClassVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="classVisitor"> the class visitor to which this visitor must delegate method calls. May be
 	  ///     null. </param>
 	  public ClassVisitor(int api, ClassVisitor classVisitor)
 	  {
-		if (api != Opcodes.ASM9 && api != Opcodes.ASM8 && api != Opcodes.ASM7 && api != Opcodes.ASM6 && api != Opcodes.ASM5 && api != Opcodes.ASM4 && api != Opcodes.ASM10_EXPERIMENTAL)
+		if (api != IOpcodes.Asm9 && api != IOpcodes.Asm8 && api != IOpcodes.Asm7 && api != IOpcodes.Asm6 && api != IOpcodes.Asm5 && api != IOpcodes.Asm4 && api != IOpcodes.Asm10_Experimental)
 		{
 		  throw new System.ArgumentException("Unsupported api " + api);
 		}
-		if (api == Opcodes.ASM10_EXPERIMENTAL)
+		if (api == IOpcodes.Asm10_Experimental)
 		{
-		  Constants.checkAsmExperimental(this);
+		  Constants.CheckAsmExperimental(this);
 		}
 		this.api = api;
 		this.cv = classVisitor;
@@ -87,8 +87,8 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="version"> the class version. The minor version is stored in the 16 most significant bits,
 	  ///     and the major version in the 16 least significant bits. </param>
-	  /// <param name="access"> the class's access flags (see <seealso cref="Opcodes"/>). This parameter also indicates if
-	  ///     the class is deprecated <seealso cref="Opcodes.ACC_DEPRECATED"/> or a record {@link
+	  /// <param name="access"> the class's access flags (see <seealso cref="IOpcodes"/>). This parameter also indicates if
+	  ///     the class is deprecated <seealso cref="IIOpcodes.Acc_Deprecated/> or a record {@link
 	  ///     Opcodes#ACC_RECORD}. </param>
 	  /// <param name="name"> the internal name of the class (see <seealso cref="Type.InternalName"/>). </param>
 	  /// <param name="signature"> the signature of this class. May be {@literal null} if the class is not a
@@ -98,15 +98,15 @@ namespace ObjectWeb.Asm
 	  ///     <seealso cref="object"/> class. </param>
 	  /// <param name="interfaces"> the internal names of the class's interfaces (see {@link
 	  ///     Type#getInternalName()}). May be {@literal null}. </param>
-	  public virtual void visit(int version, int access, string name, string signature, string superName, string[] interfaces)
+	  public virtual void Visit(int version, int access, string name, string signature, string superName, string[] interfaces)
 	  {
-		if (api < Opcodes.ASM8 && (access & Opcodes.ACC_RECORD) != 0)
+		if (api < IOpcodes.Asm8 && (access & IOpcodes.Acc_Record) != 0)
 		{
 		  throw new System.NotSupportedException("Records requires ASM8");
 		}
 		if (cv != null)
 		{
-		  cv.visit(version, access, name, signature, superName, interfaces);
+		  cv.Visit(version, access, name, signature, superName, interfaces);
 		}
 	  }
 
@@ -117,11 +117,11 @@ namespace ObjectWeb.Asm
 	  ///     null}. </param>
 	  /// <param name="debug"> additional debug information to compute the correspondence between source and
 	  ///     compiled elements of the class. May be {@literal null}. </param>
-	  public virtual void visitSource(string source, string debug)
+	  public virtual void VisitSource(string source, string debug)
 	  {
 		if (cv != null)
 		{
-		  cv.visitSource(source, debug);
+		  cv.VisitSource(source, debug);
 		}
 	  }
 
@@ -134,15 +134,15 @@ namespace ObjectWeb.Asm
 	  /// <param name="version"> the module version, or {@literal null}. </param>
 	  /// <returns> a visitor to visit the module values, or {@literal null} if this visitor is not
 	  ///     interested in visiting this module. </returns>
-	  public virtual ModuleVisitor visitModule(string name, int access, string version)
+	  public virtual ModuleVisitor VisitModule(string name, int access, string version)
 	  {
-		if (api < Opcodes.ASM6)
+		if (api < IOpcodes.Asm6)
 		{
 		  throw new System.NotSupportedException("Module requires ASM6");
 		}
 		if (cv != null)
 		{
-		  return cv.visitModule(name, access, version);
+		  return cv.VisitModule(name, access, version);
 		}
 		return null;
 	  }
@@ -156,15 +156,15 @@ namespace ObjectWeb.Asm
 	  /// argument.
 	  /// </summary>
 	  /// <param name="nestHost"> the internal name of the host class of the nest. </param>
-	  public virtual void visitNestHost(string nestHost)
+	  public virtual void VisitNestHost(string nestHost)
 	  {
-		if (api < Opcodes.ASM7)
+		if (api < IOpcodes.Asm7)
 		{
 		  throw new System.NotSupportedException("NestHost requires ASM7");
 		}
 		if (cv != null)
 		{
-		  cv.visitNestHost(nestHost);
+		  cv.VisitNestHost(nestHost);
 		}
 	  }
 
@@ -177,11 +177,11 @@ namespace ObjectWeb.Asm
 	  ///     not enclosed in a method of its enclosing class. </param>
 	  /// <param name="descriptor"> the descriptor of the method that contains the class, or {@literal null} if
 	  ///     the class is not enclosed in a method of its enclosing class. </param>
-	  public virtual void visitOuterClass(string owner, string name, string descriptor)
+	  public virtual void VisitOuterClass(string owner, string name, string descriptor)
 	  {
 		if (cv != null)
 		{
-		  cv.visitOuterClass(owner, name, descriptor);
+		  cv.VisitOuterClass(owner, name, descriptor);
 		}
 	  }
 
@@ -192,11 +192,11 @@ namespace ObjectWeb.Asm
 	  /// <param name="visible"> {@literal true} if the annotation is visible at runtime. </param>
 	  /// <returns> a visitor to visit the annotation values, or {@literal null} if this visitor is not
 	  ///     interested in visiting this annotation. </returns>
-	  public virtual AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+	  public virtual AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
 	  {
 		if (cv != null)
 		{
-		  return cv.visitAnnotation(descriptor, visible);
+		  return cv.VisitAnnotation(descriptor, visible);
 		}
 		return null;
 	  }
@@ -205,8 +205,8 @@ namespace ObjectWeb.Asm
 	  /// Visits an annotation on a type in the class signature.
 	  /// </summary>
 	  /// <param name="typeRef"> a reference to the annotated type. The sort of this type reference must be
-	  ///     <seealso cref="TypeReference.CLASS_TYPE_PARAMETER"/>, {@link
-	  ///     TypeReference#CLASS_TYPE_PARAMETER_BOUND} or <seealso cref="TypeReference.CLASS_EXTENDS"/>. See
+	  ///     <seealso cref="TypeReference.Class_Type_Parameter"/>, {@link
+	  ///     TypeReference#CLASS_TYPE_PARAMETER_BOUND} or <seealso cref="TypeReference.Class_Extends"/>. See
 	  ///     <seealso cref="TypeReference"/>. </param>
 	  /// <param name="typePath"> the path to the annotated type argument, wildcard bound, array element type, or
 	  ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets
@@ -215,15 +215,15 @@ namespace ObjectWeb.Asm
 	  /// <param name="visible"> {@literal true} if the annotation is visible at runtime. </param>
 	  /// <returns> a visitor to visit the annotation values, or {@literal null} if this visitor is not
 	  ///     interested in visiting this annotation. </returns>
-	  public virtual AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+	  public virtual AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
 	  {
-		if (api < Opcodes.ASM5)
+		if (api < IOpcodes.Asm5)
 		{
 		  throw new System.NotSupportedException("TypeAnnotation requires ASM5");
 		}
 		if (cv != null)
 		{
-		  return cv.visitTypeAnnotation(typeRef, typePath, descriptor, visible);
+		  return cv.VisitTypeAnnotation(typeRef, typePath, descriptor, visible);
 		}
 		return null;
 	  }
@@ -232,11 +232,11 @@ namespace ObjectWeb.Asm
 	  /// Visits a non standard attribute of the class.
 	  /// </summary>
 	  /// <param name="attribute"> an attribute. </param>
-	  public virtual void visitAttribute(Attribute attribute)
+	  public virtual void VisitAttribute(Attribute attribute)
 	  {
 		if (cv != null)
 		{
-		  cv.visitAttribute(attribute);
+		  cv.VisitAttribute(attribute);
 		}
 	  }
 
@@ -248,15 +248,15 @@ namespace ObjectWeb.Asm
 	  /// it's invalid to call this method with the visited class name as argument.
 	  /// </summary>
 	  /// <param name="nestMember"> the internal name of a nest member. </param>
-	  public virtual void visitNestMember(string nestMember)
+	  public virtual void VisitNestMember(string nestMember)
 	  {
-		if (api < Opcodes.ASM7)
+		if (api < IOpcodes.Asm7)
 		{
 		  throw new System.NotSupportedException("NestMember requires ASM7");
 		}
 		if (cv != null)
 		{
-		  cv.visitNestMember(nestMember);
+		  cv.VisitNestMember(nestMember);
 		}
 	  }
 
@@ -265,15 +265,15 @@ namespace ObjectWeb.Asm
 	  /// current class.
 	  /// </summary>
 	  /// <param name="permittedSubclass"> the internal name of a permitted subclass. </param>
-	  public virtual void visitPermittedSubclass(string permittedSubclass)
+	  public virtual void VisitPermittedSubclass(string permittedSubclass)
 	  {
-		if (api < Opcodes.ASM9)
+		if (api < IOpcodes.Asm9)
 		{
 		  throw new System.NotSupportedException("PermittedSubclasses requires ASM9");
 		}
 		if (cv != null)
 		{
-		  cv.visitPermittedSubclass(permittedSubclass);
+		  cv.VisitPermittedSubclass(permittedSubclass);
 		}
 	  }
 
@@ -288,11 +288,11 @@ namespace ObjectWeb.Asm
 	  ///     {@literal null} for anonymous inner classes. </param>
 	  /// <param name="access"> the access flags of the inner class as originally declared in the enclosing
 	  ///     class. </param>
-	  public virtual void visitInnerClass(string name, string outerName, string innerName, int access)
+	  public virtual void VisitInnerClass(string name, string outerName, string innerName, int access)
 	  {
 		if (cv != null)
 		{
-		  cv.visitInnerClass(name, outerName, innerName, access);
+		  cv.VisitInnerClass(name, outerName, innerName, access);
 		}
 	  }
 
@@ -305,15 +305,15 @@ namespace ObjectWeb.Asm
 	  ///     type does not use generic types. </param>
 	  /// <returns> a visitor to visit this record component annotations and attributes, or {@literal null}
 	  ///     if this class visitor is not interested in visiting these annotations and attributes. </returns>
-	  public virtual RecordComponentVisitor visitRecordComponent(string name, string descriptor, string signature)
+	  public virtual RecordComponentVisitor VisitRecordComponent(string name, string descriptor, string signature)
 	  {
-		if (api < Opcodes.ASM8)
+		if (api < IOpcodes.Asm8)
 		{
 		  throw new System.NotSupportedException("Record requires ASM8");
 		}
 		if (cv != null)
 		{
-		  return cv.visitRecordComponent(name, descriptor, signature);
+		  return cv.VisitRecordComponent(name, descriptor, signature);
 		}
 		return null;
 	  }
@@ -321,7 +321,7 @@ namespace ObjectWeb.Asm
 	  /// <summary>
 	  /// Visits a field of the class.
 	  /// </summary>
-	  /// <param name="access"> the field's access flags (see <seealso cref="Opcodes"/>). This parameter also indicates if
+	  /// <param name="access"> the field's access flags (see <seealso cref="IOpcodes"/>). This parameter also indicates if
 	  ///     the field is synthetic and/or deprecated. </param>
 	  /// <param name="name"> the field's name. </param>
 	  /// <param name="descriptor"> the field's descriptor (see <seealso cref="Type"/>). </param>
@@ -335,11 +335,11 @@ namespace ObjectWeb.Asm
 	  ///     bytecode instructions in constructors or methods. </param>
 	  /// <returns> a visitor to visit field annotations and attributes, or {@literal null} if this class
 	  ///     visitor is not interested in visiting these annotations and attributes. </returns>
-	  public virtual FieldVisitor visitField(int access, string name, string descriptor, string signature, object value)
+	  public virtual FieldVisitor VisitField(int access, string name, string descriptor, string signature, object value)
 	  {
 		if (cv != null)
 		{
-		  return cv.visitField(access, name, descriptor, signature, value);
+		  return cv.VisitField(access, name, descriptor, signature, value);
 		}
 		return null;
 	  }
@@ -349,7 +349,7 @@ namespace ObjectWeb.Asm
 	  /// instance (or {@literal null}) each time it is called, i.e., it should not return a previously
 	  /// returned visitor.
 	  /// </summary>
-	  /// <param name="access"> the method's access flags (see <seealso cref="Opcodes"/>). This parameter also indicates if
+	  /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes"/>). This parameter also indicates if
 	  ///     the method is synthetic and/or deprecated. </param>
 	  /// <param name="name"> the method's name. </param>
 	  /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type"/>). </param>
@@ -359,11 +359,11 @@ namespace ObjectWeb.Asm
 	  ///     Type#getInternalName()}). May be {@literal null}. </param>
 	  /// <returns> an object to visit the byte code of the method, or {@literal null} if this class
 	  ///     visitor is not interested in visiting the code of this method. </returns>
-	  public virtual MethodVisitor visitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
+	  public virtual MethodVisitor VisitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
 	  {
 		if (cv != null)
 		{
-		  return cv.visitMethod(access, name, descriptor, signature, exceptions);
+		  return cv.VisitMethod(access, name, descriptor, signature, exceptions);
 		}
 		return null;
 	  }
@@ -372,11 +372,11 @@ namespace ObjectWeb.Asm
 	  /// Visits the end of the class. This method, which is the last one to be called, is used to inform
 	  /// the visitor that all the fields and methods of the class have been visited.
 	  /// </summary>
-	  public virtual void visitEnd()
+	  public virtual void VisitEnd()
 	  {
 		if (cv != null)
 		{
-		  cv.visitEnd();
+		  cv.VisitEnd();
 		}
 	  }
 	}

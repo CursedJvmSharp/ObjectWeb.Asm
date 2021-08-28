@@ -52,119 +52,119 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     The tag value of CONSTANT_Class_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_CLASS_TAG = 7;
+        internal const int Constant_Class_Tag = 7;
 
         /// <summary>
         ///     The tag value of CONSTANT_Fieldref_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_FIELDREF_TAG = 9;
+        internal const int Constant_Fieldref_Tag = 9;
 
         /// <summary>
         ///     The tag value of CONSTANT_Methodref_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_METHODREF_TAG = 10;
+        internal const int Constant_Methodref_Tag = 10;
 
         /// <summary>
         ///     The tag value of CONSTANT_InterfaceMethodref_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_INTERFACE_METHODREF_TAG = 11;
+        internal const int Constant_Interface_Methodref_Tag = 11;
 
         /// <summary>
         ///     The tag value of CONSTANT_String_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_STRING_TAG = 8;
+        internal const int Constant_String_Tag = 8;
 
         /// <summary>
         ///     The tag value of CONSTANT_Integer_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_INTEGER_TAG = 3;
+        internal const int Constant_Integer_Tag = 3;
 
         /// <summary>
         ///     The tag value of CONSTANT_Float_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_FLOAT_TAG = 4;
+        internal const int Constant_Float_Tag = 4;
 
         /// <summary>
         ///     The tag value of CONSTANT_Long_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_LONG_TAG = 5;
+        internal const int Constant_Long_Tag = 5;
 
         /// <summary>
         ///     The tag value of CONSTANT_Double_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_DOUBLE_TAG = 6;
+        internal const int Constant_Double_Tag = 6;
 
         /// <summary>
         ///     The tag value of CONSTANT_NameAndType_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_NAME_AND_TYPE_TAG = 12;
+        internal const int Constant_Name_And_Type_Tag = 12;
 
         /// <summary>
         ///     The tag value of CONSTANT_Utf8_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_UTF8_TAG = 1;
+        internal const int Constant_Utf8_Tag = 1;
 
         /// <summary>
         ///     The tag value of CONSTANT_MethodHandle_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_METHOD_HANDLE_TAG = 15;
+        internal const int Constant_Method_Handle_Tag = 15;
 
         /// <summary>
         ///     The tag value of CONSTANT_MethodType_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_METHOD_TYPE_TAG = 16;
+        internal const int Constant_Method_Type_Tag = 16;
 
         /// <summary>
         ///     The tag value of CONSTANT_Dynamic_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_DYNAMIC_TAG = 17;
+        internal const int Constant_Dynamic_Tag = 17;
 
         /// <summary>
         ///     The tag value of CONSTANT_InvokeDynamic_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_INVOKE_DYNAMIC_TAG = 18;
+        internal const int Constant_Invoke_Dynamic_Tag = 18;
 
         /// <summary>
         ///     The tag value of CONSTANT_Module_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_MODULE_TAG = 19;
+        internal const int Constant_Module_Tag = 19;
 
         /// <summary>
         ///     The tag value of CONSTANT_Package_info JVMS structures.
         /// </summary>
-        internal const int CONSTANT_PACKAGE_TAG = 20;
+        internal const int Constant_Package_Tag = 20;
 
         // Tag values for the BootstrapMethods attribute entries (ASM specific tag).
 
         /// <summary>
         ///     The tag value of the BootstrapMethods attribute entries.
         /// </summary>
-        internal const int BOOTSTRAP_METHOD_TAG = 64;
+        internal const int Bootstrap_Method_Tag = 64;
 
         // Tag values for the type table entries (ASM specific tags).
 
         /// <summary>
         ///     The tag value of a normal type entry in the (ASM specific) type table of a class.
         /// </summary>
-        internal const int TYPE_TAG = 128;
+        internal const int Type_Tag = 128;
 
         /// <summary>
-        ///     The tag value of an <seealso cref="Frame.ITEM_UNINITIALIZED" /> type entry in the type table of a class.
+        ///     The tag value of an <seealso cref="Frame.Item_Uninitialized" /> type entry in the type table of a class.
         /// </summary>
-        internal const int UNINITIALIZED_TYPE_TAG = 129;
+        internal const int Uninitialized_Type_Tag = 129;
 
         /// <summary>
         ///     The tag value of a merged type entry in the (ASM specific) type table of a class.
         /// </summary>
-        internal const int MERGED_TYPE_TAG = 130;
+        internal const int Merged_Type_Tag = 130;
 
         /// <summary>
         ///     The numeric value of this symbol. This is:
         ///     <ul>
         ///         <li>
-        ///             the symbol's value for <seealso cref="CONSTANT_INTEGER_TAG" />,<seealso cref="CONSTANT_FLOAT_TAG" />,
+        ///             the symbol's value for <seealso cref="Constant_Integer_Tag" />,<seealso cref="Constant_Float_Tag" />,
         ///             {@link
-        ///             #CONSTANT_LONG_TAG}, <seealso cref="CONSTANT_DOUBLE_TAG" />,
+        ///             #CONSTANT_LONG_TAG}, <seealso cref="Constant_Double_Tag" />,
         ///             <li>
         ///                 the CONSTANT_MethodHandle_info reference_kind field value for {@link
         ///                 #CONSTANT_METHOD_HANDLE_TAG} symbols,
@@ -173,12 +173,12 @@ namespace ObjectWeb.Asm
         ///                     #CONSTANT_INVOKE_DYNAMIC_TAG} symbols,
         ///                     <li>
         ///                         the offset of a bootstrap method in the BootstrapMethods boostrap_methods array, for
-        ///                         <seealso cref="CONSTANT_DYNAMIC_TAG" /> or <seealso cref="BOOTSTRAP_METHOD_TAG" /> symbols,
+        ///                         <seealso cref="Constant_Dynamic_Tag" /> or <seealso cref="Bootstrap_Method_Tag" /> symbols,
         ///                         <li>
         ///                             the bytecode offset of the NEW instruction that created an {@link
-        ///                             Frame#ITEM_UNINITIALIZED} type for <seealso cref="UNINITIALIZED_TYPE_TAG" /> symbols,
+        ///                             Frame#ITEM_UNINITIALIZED} type for <seealso cref="Uninitialized_Type_Tag" /> symbols,
         ///                             <li>
-        ///                                 the indices (in the class' type table) of two <seealso cref="TYPE_TAG" /> source types
+        ///                                 the indices (in the class' type table) of two <seealso cref="Type_Tag" /> source types
         ///                                 for {@link
         ///                                 #MERGED_TYPE_TAG} symbols,
         ///                                 <li>0 for the other types of symbol.
@@ -196,17 +196,17 @@ namespace ObjectWeb.Asm
 
         /// <summary>
         ///     The name of the class field or method corresponding to this symbol. Only used for {@link
-        ///     #CONSTANT_FIELDREF_TAG}, <seealso cref="CONSTANT_METHODREF_TAG" />, {@link
-        ///     #CONSTANT_INTERFACE_METHODREF_TAG}, <seealso cref="CONSTANT_NAME_AND_TYPE_TAG" />, {@link
-        ///     #CONSTANT_METHOD_HANDLE_TAG}, <seealso cref="CONSTANT_DYNAMIC_TAG" /> and {@link
+        ///     #CONSTANT_FIELDREF_TAG}, <seealso cref="Constant_Methodref_Tag" />, {@link
+        ///     #CONSTANT_INTERFACE_METHODREF_TAG}, <seealso cref="Constant_Name_And_Type_Tag" />, {@link
+        ///     #CONSTANT_METHOD_HANDLE_TAG}, <seealso cref="Constant_Dynamic_Tag" /> and {@link
         ///     #CONSTANT_INVOKE_DYNAMIC_TAG} symbols.
         /// </summary>
         internal readonly string name;
 
         /// <summary>
         ///     The internal name of the owner class of this symbol. Only used for {@link
-        ///     #CONSTANT_FIELDREF_TAG}, <seealso cref="CONSTANT_METHODREF_TAG" />, {@link
-        ///     #CONSTANT_INTERFACE_METHODREF_TAG}, and <seealso cref="CONSTANT_METHOD_HANDLE_TAG" /> symbols.
+        ///     #CONSTANT_FIELDREF_TAG}, <seealso cref="Constant_Methodref_Tag" />, {@link
+        ///     #CONSTANT_INTERFACE_METHODREF_TAG}, and <seealso cref="Constant_Method_Handle_Tag" /> symbols.
         /// </summary>
         internal readonly string owner;
 
@@ -220,16 +220,16 @@ namespace ObjectWeb.Asm
         ///     The string value of this symbol. This is:
         ///     <ul>
         ///         <li>
-        ///             a field or method descriptor for <seealso cref="CONSTANT_FIELDREF_TAG" />, {@link
-        ///             #CONSTANT_METHODREF_TAG}, <seealso cref="CONSTANT_INTERFACE_METHODREF_TAG" />, {@link
-        ///             #CONSTANT_NAME_AND_TYPE_TAG}, <seealso cref="CONSTANT_METHOD_HANDLE_TAG" />, {@link
-        ///             #CONSTANT_METHOD_TYPE_TAG}, <seealso cref="CONSTANT_DYNAMIC_TAG" /> and {@link
+        ///             a field or method descriptor for <seealso cref="Constant_Fieldref_Tag" />, {@link
+        ///             #CONSTANT_METHODREF_TAG}, <seealso cref="Constant_Interface_Methodref_Tag" />, {@link
+        ///             #CONSTANT_NAME_AND_TYPE_TAG}, <seealso cref="Constant_Method_Handle_Tag" />, {@link
+        ///             #CONSTANT_METHOD_TYPE_TAG}, <seealso cref="Constant_Dynamic_Tag" /> and {@link
         ///             #CONSTANT_INVOKE_DYNAMIC_TAG} symbols,
         ///             <li>
-        ///                 an arbitrary string for <seealso cref="CONSTANT_UTF8_TAG" /> and <seealso cref="CONSTANT_STRING_TAG" />
+        ///                 an arbitrary string for <seealso cref="Constant_Utf8_Tag" /> and <seealso cref="Constant_String_Tag" />
         ///                 symbols,
         ///                 <li>
-        ///                     an internal class name for <seealso cref="CONSTANT_CLASS_TAG" />, <seealso cref="TYPE_TAG" /> and
+        ///                     an internal class name for <seealso cref="Constant_Class_Tag" />, <seealso cref="Type_Tag" /> and
         ///                     {@link
         ///                     #UNINITIALIZED_TYPE_TAG} symbols,
         ///                     <li>{@literal null} for the other types of symbol.
@@ -249,14 +249,14 @@ namespace ObjectWeb.Asm
         ///     <ul>
         ///         <li>
         ///             the <seealso cref="Type.getArgumentsAndReturnSizes" /> of the symbol's method descriptor for {@link
-        ///             #CONSTANT_METHODREF_TAG}, <seealso cref="CONSTANT_INTERFACE_METHODREF_TAG" /> and {@link
+        ///             #CONSTANT_METHODREF_TAG}, <seealso cref="Constant_Interface_Methodref_Tag" /> and {@link
         ///             #CONSTANT_INVOKE_DYNAMIC_TAG} symbols,
         ///             <li>
         ///                 the index in the InnerClasses_attribute 'classes' array (plus one) corresponding to this
-        ///                 class, for <seealso cref="CONSTANT_CLASS_TAG" /> symbols,
+        ///                 class, for <seealso cref="Constant_Class_Tag" /> symbols,
         ///                 <li>
         ///                     the index (in the class' type table) of the merged type of the two source types for
-        ///                     <seealso cref="MERGED_TYPE_TAG" /> symbols,
+        ///                     <seealso cref="Merged_Type_Tag" /> symbols,
         ///                     <li>0 for the other types of symbol, or if this field has not been computed yet.
         ///     </ul>
         /// </summary>
@@ -294,14 +294,14 @@ namespace ObjectWeb.Asm
         /// <returns>
         ///     the result <seealso cref="Type.getArgumentsAndReturnSizes" /> on <seealso cref="value" /> (memoized in
         ///     <seealso cref="info" /> for efficiency). This should only be used for {@link
-        ///     #CONSTANT_METHODREF_TAG}, <seealso cref="CONSTANT_INTERFACE_METHODREF_TAG" /> and {@link
+        ///     #CONSTANT_METHODREF_TAG}, <seealso cref="Constant_Interface_Methodref_Tag" /> and {@link
         ///     #CONSTANT_INVOKE_DYNAMIC_TAG} symbols.
         /// </returns>
         public virtual int ArgumentsAndReturnSizes
         {
             get
             {
-                if (info == 0) info = JType.getArgumentsAndReturnSizes(value);
+                if (info == 0) info = JType.GetArgumentsAndReturnSizes(value);
                 return info;
             }
         }

@@ -48,12 +48,12 @@ namespace ObjectWeb.Asm.Commons
         /// <summary>
         ///     The method descriptor.
         /// </summary>
-        private readonly string descriptor;
+        private readonly string _descriptor;
 
         /// <summary>
         ///     The method name.
         /// </summary>
-        private readonly string name;
+        private readonly string _name;
 
         static Method()
         {
@@ -77,8 +77,8 @@ namespace ObjectWeb.Asm.Commons
         /// <param name="descriptor"> the method's descriptor. </param>
         public Method(string name, string descriptor)
         {
-            this.name = name;
-            this.descriptor = descriptor;
+            this._name = name;
+            this._descriptor = descriptor;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace ObjectWeb.Asm.Commons
         /// <param name="returnType"> the method's return type. </param>
         /// <param name="argumentTypes"> the method's argument types. </param>
         public Method(string name, JType returnType, JType[] argumentTypes) : this(name,
-            JType.getMethodDescriptor(returnType, argumentTypes))
+            JType.GetMethodDescriptor(returnType, argumentTypes))
         {
         }
 
@@ -96,34 +96,34 @@ namespace ObjectWeb.Asm.Commons
         ///     Returns the name of the method described by this object.
         /// </summary>
         /// <returns> the name of the method described by this object. </returns>
-        public virtual string Name => name;
+        public virtual string Name => _name;
 
         /// <summary>
         ///     Returns the descriptor of the method described by this object.
         /// </summary>
         /// <returns> the descriptor of the method described by this object. </returns>
-        public virtual string Descriptor => descriptor;
+        public virtual string Descriptor => _descriptor;
 
         /// <summary>
         ///     Returns the return type of the method described by this object.
         /// </summary>
         /// <returns> the return type of the method described by this object. </returns>
-        public virtual JType ReturnType => JType.getReturnType(descriptor);
+        public virtual JType ReturnType => JType.GetReturnType(_descriptor);
 
         /// <summary>
         ///     Returns the argument types of the method described by this object.
         /// </summary>
         /// <returns> the argument types of the method described by this object. </returns>
-        public virtual JType[] ArgumentTypes => JType.getArgumentTypes(descriptor);
+        public virtual JType[] ArgumentTypes => JType.GetArgumentTypes(_descriptor);
 
         /// <summary>
         ///     Creates a new <seealso cref="System.Reflection.MethodInfo" />.
         /// </summary>
         /// <param name="method"> a java.lang.reflect method descriptor </param>
         /// <returns> a <seealso cref="System.Reflection.MethodInfo" /> corresponding to the given Java method declaration. </returns>
-        public static Method getMethod(MethodInfo method)
+        public static Method GetMethod(MethodInfo method)
         {
-            return new Method(method.Name, JType.getMethodDescriptor(method));
+            return new Method(method.Name, JType.GetMethodDescriptor(method));
         }
 
         /// <summary>
@@ -131,9 +131,9 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="constructor"> a java.lang.reflect constructor descriptor </param>
         /// <returns> a <seealso cref="System.Reflection.MethodInfo" /> corresponding to the given Java constructor declaration. </returns>
-        public static Method getMethod<T1>(ConstructorInfo constructor)
+        public static Method GetMethod<T1>(ConstructorInfo constructor)
         {
-            return new Method("<init>", JType.getConstructorDescriptor(constructor));
+            return new Method("<init>", JType.GetConstructorDescriptor(constructor));
         }
 
         /// <summary>
@@ -147,9 +147,9 @@ namespace ObjectWeb.Asm.Commons
         /// </param>
         /// <returns> a <seealso cref="System.Reflection.MethodInfo" /> corresponding to the given Java method declaration. </returns>
         /// <exception cref="IllegalArgumentException"> if <code>method</code> could not get parsed. </exception>
-        public static Method getMethod(string method)
+        public static Method GetMethod(string method)
         {
-            return getMethod(method, false);
+            return GetMethod(method, false);
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace ObjectWeb.Asm.Commons
         /// </param>
         /// <returns> a <seealso cref="System.Reflection.MethodInfo" /> corresponding to the given Java method declaration. </returns>
         /// <exception cref="IllegalArgumentException"> if <code>method</code> could not get parsed. </exception>
-        public static Method getMethod(string method, bool defaultPackage)
+        public static Method GetMethod(string method, bool defaultPackage)
         {
             var spaceIndex = method.IndexOf(' ');
             var currentArgumentStartIndex = method.IndexOf('(', spaceIndex) + 1;
@@ -187,14 +187,14 @@ namespace ObjectWeb.Asm.Commons
                 if (currentArgumentEndIndex == -1)
                 {
                     argumentDescriptor =
-                        getDescriptorInternal(
+                        GetDescriptorInternal(
                             method.Substring(currentArgumentStartIndex, endIndex - currentArgumentStartIndex).Trim(),
                             defaultPackage);
                 }
                 else
                 {
                     argumentDescriptor =
-                        getDescriptorInternal(
+                        GetDescriptorInternal(
                             method.Substring(currentArgumentStartIndex,
                                 currentArgumentEndIndex - currentArgumentStartIndex).Trim(), defaultPackage);
                     currentArgumentStartIndex = currentArgumentEndIndex + 1;
@@ -203,7 +203,7 @@ namespace ObjectWeb.Asm.Commons
                 stringBuilder.Append(argumentDescriptor);
             } while (currentArgumentEndIndex != -1);
 
-            stringBuilder.Append(')').Append(getDescriptorInternal(returnType, defaultPackage));
+            stringBuilder.Append(')').Append(GetDescriptorInternal(returnType, defaultPackage));
             return new Method(methodName, stringBuilder.ToString());
         }
 
@@ -217,7 +217,7 @@ namespace ObjectWeb.Asm.Commons
         ///     option is true, or "java.lang.Object" otherwise.
         /// </param>
         /// <returns> the descriptor corresponding to the given type name. </returns>
-        private static string getDescriptorInternal(string type, bool defaultPackage)
+        private static string GetDescriptorInternal(string type, bool defaultPackage)
         {
             if ("".Equals(type)) return type;
 
@@ -253,19 +253,19 @@ namespace ObjectWeb.Asm.Commons
 
         public override string ToString()
         {
-            return name + descriptor;
+            return _name + _descriptor;
         }
 
         public override bool Equals(object other)
         {
             if (!(other is Method)) return false;
             var otherMethod = (Method)other;
-            return name.Equals(otherMethod.name) && descriptor.Equals(otherMethod.descriptor);
+            return _name.Equals(otherMethod._name) && _descriptor.Equals(otherMethod._descriptor);
         }
 
         public override int GetHashCode()
         {
-            return name.GetHashCode() ^ descriptor.GetHashCode();
+            return _name.GetHashCode() ^ _descriptor.GetHashCode();
         }
     }
 }

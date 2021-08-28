@@ -37,7 +37,7 @@ namespace ObjectWeb.Asm.Commons
 	/// @author Chris Nokleberg
 	/// @author Eric Bruneton
 	/// </summary>
-	public interface TableSwitchGenerator
+	public interface ITableSwitchGenerator
 	{
 
 	  /// <summary>
@@ -45,11 +45,11 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="key"> the switch case key. </param>
 	  /// <param name="end"> a label that corresponds to the end of the switch statement. </param>
-	  void generateCase(int key, Label end);
+	  void GenerateCase(int key, Label end);
 
 	  /// <summary>
 	  /// Generates the code for the default switch case. </summary>
-	  void generateDefault();
+	  void GenerateDefault();
 	}
 
 }

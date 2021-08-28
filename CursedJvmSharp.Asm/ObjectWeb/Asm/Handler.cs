@@ -112,7 +112,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="start"> the start of the range to be removed. </param>
 	  /// <param name="end"> the end of the range to be removed. Maybe {@literal null}. </param>
 	  /// <returns> the exception handler list with the start-end range removed. </returns>
-	  internal static Handler removeRange(Handler firstHandler, Label start, Label end)
+	  internal static Handler RemoveRange(Handler firstHandler, Label start, Label end)
 	  {
 		if (firstHandler == null)
 		{
@@ -120,7 +120,7 @@ namespace ObjectWeb.Asm
 		}
 		else
 		{
-		  firstHandler.nextHandler = removeRange(firstHandler.nextHandler, start, end);
+		  firstHandler.nextHandler = RemoveRange(firstHandler.nextHandler, start, end);
 		}
 		int handlerStart = firstHandler.startPc.bytecodeOffset;
 		int handlerEnd = firstHandler.endPc.bytecodeOffset;
@@ -163,7 +163,7 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="firstHandler"> the beginning of a Handler list. May be {@literal null}. </param>
 	  /// <returns> the number of elements of the Handler list that begins with 'handler'. </returns>
-	  internal static int getExceptionTableLength(Handler firstHandler)
+	  internal static int GetExceptionTableLength(Handler firstHandler)
 	  {
 		int length = 0;
 		Handler handler = firstHandler;
@@ -181,9 +181,9 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="firstHandler"> the beginning of a Handler list. May be {@literal null}. </param>
 	  /// <returns> the size in bytes of the exception_table_length and exception_table structures. </returns>
-	  internal static int getExceptionTableSize(Handler firstHandler)
+	  internal static int GetExceptionTableSize(Handler firstHandler)
 	  {
-		return 2 + 8 * getExceptionTableLength(firstHandler);
+		return 2 + 8 * GetExceptionTableLength(firstHandler);
 	  }
 
 	  /// <summary>
@@ -192,13 +192,13 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="firstHandler"> the beginning of a Handler list. May be {@literal null}. </param>
 	  /// <param name="output"> where the exception_table_length and exception_table structures must be put. </param>
-	  internal static void putExceptionTable(Handler firstHandler, ByteVector output)
+	  internal static void PutExceptionTable(Handler firstHandler, ByteVector output)
 	  {
-		output.putShort(getExceptionTableLength(firstHandler));
+		output.PutShort(GetExceptionTableLength(firstHandler));
 		Handler handler = firstHandler;
 		while (handler != null)
 		{
-		  output.putShort(handler.startPc.bytecodeOffset).putShort(handler.endPc.bytecodeOffset).putShort(handler.handlerPc.bytecodeOffset).putShort(handler.catchType);
+		  output.PutShort(handler.startPc.bytecodeOffset).PutShort(handler.endPc.bytecodeOffset).PutShort(handler.handlerPc.bytecodeOffset).PutShort(handler.catchType);
 		  handler = handler.nextHandler;
 		}
 	  }

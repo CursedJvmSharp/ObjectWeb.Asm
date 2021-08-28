@@ -41,67 +41,67 @@ namespace ObjectWeb.Asm.Tree
 
 	  /// <summary>
 	  /// The type of <seealso cref="InsnNode"/> instructions. </summary>
-	  public const int INSN = 0;
+	  public const int Insn = 0;
 
 	  /// <summary>
 	  /// The type of <seealso cref="IntInsnNode"/> instructions. </summary>
-	  public const int INT_INSN = 1;
+	  public const int Int_Insn = 1;
 
 	  /// <summary>
 	  /// The type of <seealso cref="VarInsnNode"/> instructions. </summary>
-	  public const int VAR_INSN = 2;
+	  public const int Var_Insn = 2;
 
 	  /// <summary>
 	  /// The type of <seealso cref="TypeInsnNode"/> instructions. </summary>
-	  public const int TYPE_INSN = 3;
+	  public const int Type_Insn = 3;
 
 	  /// <summary>
 	  /// The type of <seealso cref="FieldInsnNode"/> instructions. </summary>
-	  public const int FIELD_INSN = 4;
+	  public const int Field_Insn = 4;
 
 	  /// <summary>
 	  /// The type of <seealso cref="MethodInsnNode"/> instructions. </summary>
-	  public const int METHOD_INSN = 5;
+	  public const int Method_Insn = 5;
 
 	  /// <summary>
 	  /// The type of <seealso cref="InvokeDynamicInsnNode"/> instructions. </summary>
-	  public const int INVOKE_DYNAMIC_INSN = 6;
+	  public const int Invoke_Dynamic_Insn = 6;
 
 	  /// <summary>
 	  /// The type of <seealso cref="JumpInsnNode"/> instructions. </summary>
-	  public const int JUMP_INSN = 7;
+	  public const int Jump_Insn = 7;
 
 	  /// <summary>
 	  /// The type of <seealso cref="LabelNode"/> "instructions". </summary>
-	  public const int LABEL = 8;
+	  public const int Label = 8;
 
 	  /// <summary>
 	  /// The type of <seealso cref="LdcInsnNode"/> instructions. </summary>
-	  public const int LDC_INSN = 9;
+	  public const int Ldc_Insn = 9;
 
 	  /// <summary>
 	  /// The type of <seealso cref="IincInsnNode"/> instructions. </summary>
-	  public const int IINC_INSN = 10;
+	  public const int Iinc_Insn = 10;
 
 	  /// <summary>
 	  /// The type of <seealso cref="TableSwitchInsnNode"/> instructions. </summary>
-	  public const int TABLESWITCH_INSN = 11;
+	  public const int Tableswitch_Insn = 11;
 
 	  /// <summary>
 	  /// The type of <seealso cref="LookupSwitchInsnNode"/> instructions. </summary>
-	  public const int LOOKUPSWITCH_INSN = 12;
+	  public const int Lookupswitch_Insn = 12;
 
 	  /// <summary>
 	  /// The type of <seealso cref="MultiANewArrayInsnNode"/> instructions. </summary>
-	  public const int MULTIANEWARRAY_INSN = 13;
+	  public const int Multianewarray_Insn = 13;
 
 	  /// <summary>
 	  /// The type of <seealso cref="FrameNode"/> "instructions". </summary>
-	  public const int FRAME = 14;
+	  public const int Frame = 14;
 
 	  /// <summary>
 	  /// The type of <seealso cref="LineNumberNode"/> "instructions". </summary>
-	  public const int LINE = 15;
+	  public const int Line = 15;
 
 	  /// <summary>
 	  /// The opcode of this instruction. </summary>
@@ -194,20 +194,20 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given method visitor visit this instruction.
 	  /// </summary>
 	  /// <param name="methodVisitor"> a method visitor. </param>
-	  public abstract void accept(MethodVisitor methodVisitor);
+	  public abstract void Accept(MethodVisitor methodVisitor);
 
 	  /// <summary>
 	  /// Makes the given visitor visit the annotations of this instruction.
 	  /// </summary>
 	  /// <param name="methodVisitor"> a method visitor. </param>
-	  public void acceptAnnotations(MethodVisitor methodVisitor)
+	  public void AcceptAnnotations(MethodVisitor methodVisitor)
 	  {
 		if (visibleTypeAnnotations != null)
 		{
 		  for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
 		  {
 			TypeAnnotationNode typeAnnotation = visibleTypeAnnotations[i];
-			typeAnnotation.accept(methodVisitor.visitInsnAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
+			typeAnnotation.Accept(methodVisitor.VisitInsnAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
 		  }
 		}
 		if (invisibleTypeAnnotations != null)
@@ -215,7 +215,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
 		  {
 			TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations[i];
-			typeAnnotation.accept(methodVisitor.visitInsnAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
+			typeAnnotation.Accept(methodVisitor.VisitInsnAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
 		  }
 		}
 	  }
@@ -226,7 +226,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="clonedLabels"> a map from LabelNodes to cloned LabelNodes. </param>
 	  /// <returns> a copy of this instruction. The returned instruction does not belong to any {@link
 	  ///     InsnList}. </returns>
-	  public abstract AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels);
+	  public abstract AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels);
 
 	  /// <summary>
 	  /// Returns the clone of the given label.
@@ -234,7 +234,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="label"> a label. </param>
 	  /// <param name="clonedLabels"> a map from LabelNodes to cloned LabelNodes. </param>
 	  /// <returns> the clone of the given label. </returns>
-	  internal static LabelNode clone(LabelNode label, IDictionary<LabelNode, LabelNode> clonedLabels)
+	  internal static LabelNode Clone(LabelNode label, IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
 		return clonedLabels.GetValueOrNull(label);
 	  }
@@ -245,7 +245,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="labels"> a list of labels. </param>
 	  /// <param name="clonedLabels"> a map from LabelNodes to cloned LabelNodes. </param>
 	  /// <returns> the clones of the given labels. </returns>
-	  internal static LabelNode[] clone(List<LabelNode> labels, IDictionary<LabelNode, LabelNode> clonedLabels)
+	  internal static LabelNode[] Clone(List<LabelNode> labels, IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
 		LabelNode[] clones = new LabelNode[labels.Count];
 		for (int i = 0, n = clones.Length; i < n; ++i)
@@ -260,7 +260,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="insnNode"> the source instruction. </param>
 	  /// <returns> this instruction. </returns>
-	  public AbstractInsnNode cloneAnnotations(AbstractInsnNode insnNode)
+	  public AbstractInsnNode CloneAnnotations(AbstractInsnNode insnNode)
 	  {
 		if (insnNode.visibleTypeAnnotations != null)
 		{
@@ -269,7 +269,7 @@ namespace ObjectWeb.Asm.Tree
 		  {
 			TypeAnnotationNode sourceAnnotation = insnNode.visibleTypeAnnotations[i];
 			TypeAnnotationNode cloneAnnotation = new TypeAnnotationNode(sourceAnnotation.typeRef, sourceAnnotation.typePath, sourceAnnotation.desc);
-			sourceAnnotation.accept(cloneAnnotation);
+			sourceAnnotation.Accept(cloneAnnotation);
 			this.visibleTypeAnnotations.Add(cloneAnnotation);
 		  }
 		}
@@ -280,7 +280,7 @@ namespace ObjectWeb.Asm.Tree
 		  {
 			TypeAnnotationNode sourceAnnotation = insnNode.invisibleTypeAnnotations[i];
 			TypeAnnotationNode cloneAnnotation = new TypeAnnotationNode(sourceAnnotation.typeRef, sourceAnnotation.typePath, sourceAnnotation.desc);
-			sourceAnnotation.accept(cloneAnnotation);
+			sourceAnnotation.Accept(cloneAnnotation);
 			this.invisibleTypeAnnotations.Add(cloneAnnotation);
 		  }
 		}

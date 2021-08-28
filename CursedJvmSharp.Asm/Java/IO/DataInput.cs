@@ -206,9 +206,9 @@ namespace Java.IO
     /// </summary>
     /// <author>Frank Yellin</author>
     /// <seealso cref="DataInputStream" />
-    /// <seealso cref="DataOutput" />
+    /// <seealso cref="IDataOutput" />
     /// <since>JDK1.0</since>
-    public interface DataInput
+    public interface IDataInput
     {
         /// <summary>
         ///     Reads some bytes from an input
@@ -924,6 +924,6 @@ namespace Java.IO
         ///     valid modified UTF-8 encoding of a string.
         /// </exception>
         /// <exception cref="IOException" />
-        string ReadUTF();
+        string ReadUtf();
     }
 }

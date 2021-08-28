@@ -43,7 +43,7 @@ namespace ObjectWeb.Asm.Tree
 	  public string packaze;
 
 	  /// <summary>
-	  /// The access flags (see <seealso cref="Opcodes"/>). Valid values are {@code
+	  /// The access flags (see <seealso cref="IOpcodes"/>). Valid values are {@code
 	  /// ACC_SYNTHETIC} and {@code ACC_MANDATED}.
 	  /// </summary>
 	  public int access;
@@ -73,9 +73,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given module visitor visit this export declaration.
 	  /// </summary>
 	  /// <param name="moduleVisitor"> a module visitor. </param>
-	  public virtual void accept(ModuleVisitor moduleVisitor)
+	  public virtual void Accept(ModuleVisitor moduleVisitor)
 	  {
-		moduleVisitor.visitExport(packaze, access, modules == null ? null : ((List<string>)modules).ToArray());
+		moduleVisitor.VisitExport(packaze, access, modules == null ? null : ((List<string>)modules).ToArray());
 	  }
 	}
 

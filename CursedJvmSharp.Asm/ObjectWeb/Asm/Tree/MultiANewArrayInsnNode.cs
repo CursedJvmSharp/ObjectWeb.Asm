@@ -51,7 +51,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="descriptor"> an array type descriptor (see <seealso cref="org.objectweb.asm.Type"/>). </param>
 	  /// <param name="numDimensions"> the number of dimensions of the array to allocate. </param>
-	  public MultiANewArrayInsnNode(string descriptor, int numDimensions) : base(Opcodes.MULTIANEWARRAY)
+	  public MultiANewArrayInsnNode(string descriptor, int numDimensions) : base(IOpcodes.Multianewarray)
 	  {
 		this.desc = descriptor;
 		this.dims = numDimensions;
@@ -61,19 +61,19 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return MULTIANEWARRAY_INSN;
+			return Multianewarray_Insn;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitMultiANewArrayInsn(desc, dims);
-		acceptAnnotations(methodVisitor);
+		methodVisitor.VisitMultiANewArrayInsn(desc, dims);
+		AcceptAnnotations(methodVisitor);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return (new MultiANewArrayInsnNode(desc, dims)).cloneAnnotations(this);
+		return (new MultiANewArrayInsnNode(desc, dims)).CloneAnnotations(this);
 	  }
 	}
 

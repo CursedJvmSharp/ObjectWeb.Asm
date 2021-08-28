@@ -54,21 +54,21 @@ namespace ObjectWeb.Asm.Commons
 
 	  /// <summary>
 	  /// Constructs an empty <seealso cref="ModuleTargetAttribute"/>. This object can be passed as a prototype to
-	  /// the <seealso cref="ClassReader.accept(ObjectWeb.Asm.ClassVisitor,ObjectWeb.Asm.Attribute[],int)"/> method.
+	  /// the <seealso cref="ClassReader.Accept(ObjectWeb.Asm.ClassVisitor,ObjectWeb.Asm.Attribute[],int)"/> method.
 	  /// </summary>
 	  public ModuleTargetAttribute() : this(null)
 	  {
 	  }
 
-	  public override Attribute read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeOffset, Label[] labels)
+	  public override Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeOffset, Label[] labels)
 	  {
-		return new ModuleTargetAttribute(classReader.readUTF8(offset, charBuffer));
+		return new ModuleTargetAttribute(classReader.ReadUtf8(offset, charBuffer));
 	  }
 
-	  public override ByteVector write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
+	  public override ByteVector Write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
 		ByteVector byteVector = new ByteVector();
-		byteVector.putShort(string.ReferenceEquals(platform, null) ? 0 : classWriter.newUTF8(platform));
+		byteVector.PutShort(string.ReferenceEquals(platform, null) ? 0 : classWriter.NewUtf8(platform));
 		return byteVector;
 	  }
 	}

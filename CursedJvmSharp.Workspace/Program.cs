@@ -7,14 +7,14 @@ using ObjectWeb.Asm.Tree;
 
 var node = new ClassNode();
 
-new ClassReader(Unsafe.As<sbyte[]>(File.ReadAllBytes(@"D:\Downloads\Swapchain.class"))).accept(node, 0);
+new ClassReader(Unsafe.As<sbyte[]>(File.ReadAllBytes(@"D:\Downloads\Swapchain.class"))).Accept(node, 0);
 
 Console.WriteLine(node);
 //Debugger.Break();
 
 var classVisitor = new ClassWriter(0);
-node.accept(classVisitor);
+node.Accept(classVisitor);
 
-var byteArray = classVisitor.toByteArray();
+var byteArray = classVisitor.ToByteArray();
 
 File.WriteAllBytes(@"D:\Downloads\Swapchain-out.class", Unsafe.As<byte[]>(byteArray));

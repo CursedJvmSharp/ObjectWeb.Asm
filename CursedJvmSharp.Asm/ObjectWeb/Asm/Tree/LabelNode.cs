@@ -35,7 +35,7 @@ namespace ObjectWeb.Asm.Tree
 	public class LabelNode : AbstractInsnNode
 	{
 
-	  private Label value;
+	  private Label _value;
 
 	  public LabelNode() : base(-1)
 	  {
@@ -43,14 +43,14 @@ namespace ObjectWeb.Asm.Tree
 
 	  public LabelNode(Label label) : base(-1)
 	  {
-		this.value = label;
+		this._value = label;
 	  }
 
 	  public override int Type
 	  {
 		  get
 		  {
-			return LABEL;
+			return AbstractInsnNode.Label;
 		  }
 	  }
 
@@ -63,27 +63,27 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			if (value == null)
+			if (_value == null)
 			{
-			  value = new Label();
+			  _value = new Label();
 			}
-			return value;
+			return _value;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitLabel(Label);
+		methodVisitor.VisitLabel(Label);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
 		return clonedLabels.GetValueOrNull(this);
 	  }
 
-	  public virtual void resetLabel()
+	  public virtual void ResetLabel()
 	  {
-		value = null;
+		_value = null;
 	  }
 	}
 

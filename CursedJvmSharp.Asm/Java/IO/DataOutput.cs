@@ -48,10 +48,10 @@ namespace Java.IO
     ///         an <code>IOException</code> is thrown.
     /// </remarks>
     /// <author>Frank Yellin</author>
-    /// <seealso cref="DataInput" />
+    /// <seealso cref="IDataInput" />
     /// <seealso cref="DataOutputStream" />
     /// <since>JDK1.0</since>
-    public interface DataOutput
+    public interface IDataOutput
     {
         /// <summary>
         ///     Writes to the output stream the eight
@@ -437,6 +437,6 @@ namespace Java.IO
         /// <param name="s">the string value to be written.</param>
         /// <exception cref="IOException">if an I/O error occurs.</exception>
         /// <exception cref="System.IO.IOException" />
-        void WriteUTF(string s);
+        void WriteUtf(string s);
     }
 }

@@ -43,27 +43,27 @@ namespace ObjectWeb.Asm.Commons
 	  /// The resolution state of a module meaning that the module is not available from the class-path
 	  /// by default.
 	  /// </summary>
-	  public const int RESOLUTION_DO_NOT_RESOLVE_BY_DEFAULT = 1;
+	  public const int Resolution_Do_Not_Resolve_By_Default = 1;
 
 	  /// <summary>
 	  /// The resolution state of a module meaning the module is marked as deprecated. </summary>
-	  public const int RESOLUTION_WARN_DEPRECATED = 2;
+	  public const int Resolution_Warn_Deprecated = 2;
 
 	  /// <summary>
 	  /// The resolution state of a module meaning the module is marked as deprecated and will be removed
 	  /// in a future release.
 	  /// </summary>
-	  public const int RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL = 4;
+	  public const int Resolution_Warn_Deprecated_For_Removal = 4;
 
 	  /// <summary>
 	  /// The resolution state of a module meaning the module is not yet standardized, so in incubating
 	  /// mode.
 	  /// </summary>
-	  public const int RESOLUTION_WARN_INCUBATING = 8;
+	  public const int Resolution_Warn_Incubating = 8;
 
 	  /// <summary>
-	  /// The resolution state of the module. Must be one of <seealso cref="RESOLUTION_WARN_DEPRECATED"/>, {@link
-	  /// #RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL}, and <seealso cref="RESOLUTION_WARN_INCUBATING"/>.
+	  /// The resolution state of the module. Must be one of <seealso cref="Resolution_Warn_Deprecated"/>, {@link
+	  /// #RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL}, and <seealso cref="Resolution_Warn_Incubating"/>.
 	  /// </summary>
 	  public int resolution;
 
@@ -71,7 +71,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// Constructs a new <seealso cref="ModuleResolutionAttribute"/>.
 	  /// </summary>
 	  /// <param name="resolution"> the resolution state of the module. Must be one of {@link
-	  ///     #RESOLUTION_WARN_DEPRECATED}, <seealso cref="RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL"/>, and {@link
+	  ///     #RESOLUTION_WARN_DEPRECATED}, <seealso cref="Resolution_Warn_Deprecated_For_Removal"/>, and {@link
 	  ///     #RESOLUTION_WARN_INCUBATING}. </param>
 	  public ModuleResolutionAttribute(int resolution) : base("ModuleResolution")
 	  {
@@ -80,21 +80,21 @@ namespace ObjectWeb.Asm.Commons
 
 	  /// <summary>
 	  /// Constructs an empty <seealso cref="ModuleResolutionAttribute"/>. This object can be passed as a prototype
-	  /// to the <seealso cref="ClassReader.accept(ObjectWeb.Asm.ClassVisitor,ObjectWeb.Asm.Attribute[],int)"/> method.
+	  /// to the <seealso cref="ClassReader.Accept(ObjectWeb.Asm.ClassVisitor,ObjectWeb.Asm.Attribute[],int)"/> method.
 	  /// </summary>
 	  public ModuleResolutionAttribute() : this(0)
 	  {
 	  }
 
-	  public override Attribute read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeOffset, Label[] labels)
+	  public override Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeOffset, Label[] labels)
 	  {
-		return new ModuleResolutionAttribute(classReader.readUnsignedShort(offset));
+		return new ModuleResolutionAttribute(classReader.ReadUnsignedShort(offset));
 	  }
 
-	  public override ByteVector write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
+	  public override ByteVector Write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
 		ByteVector byteVector = new ByteVector();
-		byteVector.putShort(resolution);
+		byteVector.PutShort(resolution);
 		return byteVector;
 	  }
 	}

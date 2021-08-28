@@ -50,7 +50,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="recordComponentVisitor"> the record component visitor this remapper must delegate to. </param>
 	  /// <param name="remapper"> the remapper to use to remap the types in the visited record component. </param>
-	  public RecordComponentRemapper(RecordComponentVisitor recordComponentVisitor, Remapper remapper) : this(Opcodes.ASM9, recordComponentVisitor, remapper)
+	  public RecordComponentRemapper(RecordComponentVisitor recordComponentVisitor, Remapper remapper) : this(IOpcodes.Asm9, recordComponentVisitor, remapper)
 	  {
 	  }
 
@@ -58,7 +58,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// Constructs a new <seealso cref="RecordComponentRemapper"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version supported by this remapper. Must be one of {@link
-	  ///     org.objectweb.asm.Opcodes#ASM8} or <seealso cref="Opcodes.ASM9"/>. </param>
+	  ///     org.objectweb.asm.Opcodes#ASM8} or <seealso cref="IIOpcodes.Asm9/>. </param>
 	  /// <param name="recordComponentVisitor"> the record component visitor this remapper must delegate to. </param>
 	  /// <param name="remapper"> the remapper to use to remap the types in the visited record component. </param>
 	  public RecordComponentRemapper(int api, RecordComponentVisitor recordComponentVisitor, Remapper remapper) : base(api, recordComponentVisitor)
@@ -66,16 +66,16 @@ namespace ObjectWeb.Asm.Commons
 		this.remapper = remapper;
 	  }
 
-	  public override AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+	  public override AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
 	  {
-		AnnotationVisitor annotationVisitor = base.visitAnnotation(remapper.mapDesc(descriptor), visible);
-		return annotationVisitor == null ? null : createAnnotationRemapper(descriptor, annotationVisitor);
+		AnnotationVisitor annotationVisitor = base.VisitAnnotation(remapper.MapDesc(descriptor), visible);
+		return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
 	  }
 
-	  public override AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+	  public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
 	  {
-		AnnotationVisitor annotationVisitor = base.visitTypeAnnotation(typeRef, typePath, remapper.mapDesc(descriptor), visible);
-		return annotationVisitor == null ? null : createAnnotationRemapper(descriptor, annotationVisitor);
+		AnnotationVisitor annotationVisitor = base.VisitTypeAnnotation(typeRef, typePath, remapper.MapDesc(descriptor), visible);
+		return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
 	  }
 
 	  /// <summary>
@@ -84,9 +84,9 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
 	  /// <returns> the newly created remapper. </returns>
-	  /// @deprecated use <seealso cref="createAnnotationRemapper(String, AnnotationVisitor)"/> instead. 
+	  /// @deprecated use <seealso cref="CreateAnnotationRemapper(string,ObjectWeb.Asm.AnnotationVisitor)"/> instead. 
 	  [Obsolete("use <seealso cref=\"createAnnotationRemapper(String, AnnotationVisitor)\"/> instead.")]
-	  public virtual AnnotationVisitor createAnnotationRemapper(AnnotationVisitor annotationVisitor)
+	  public virtual AnnotationVisitor CreateAnnotationRemapper(AnnotationVisitor annotationVisitor)
 	  {
 		return new AnnotationRemapper(api, null, annotationVisitor, remapper);
 	  }
@@ -98,9 +98,9 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="descriptor"> the descriptor sof the visited annotation. </param>
 	  /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
 	  /// <returns> the newly created remapper. </returns>
-	  public virtual AnnotationVisitor createAnnotationRemapper(string descriptor, AnnotationVisitor annotationVisitor)
+	  public virtual AnnotationVisitor CreateAnnotationRemapper(string descriptor, AnnotationVisitor annotationVisitor)
 	  {
-		return (new AnnotationRemapper(api, descriptor, annotationVisitor, remapper)).orDeprecatedValue(createAnnotationRemapper(annotationVisitor));
+		return (new AnnotationRemapper(api, descriptor, annotationVisitor, remapper)).OrDeprecatedValue(CreateAnnotationRemapper(annotationVisitor));
 	  }
 	}
 

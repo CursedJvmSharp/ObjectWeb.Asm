@@ -44,19 +44,19 @@ namespace ObjectWeb.Asm.Commons
 	{
 
 	  /// <summary>
-	  /// Returns the given descriptor, remapped with <seealso cref="map(String)"/>.
+	  /// Returns the given descriptor, remapped with <seealso cref="Map"/>.
 	  /// </summary>
 	  /// <param name="descriptor"> a type descriptor. </param>
 	  /// <returns> the given descriptor, with its [array element type] internal name remapped with {@link
 	  ///     #map(String)} (if the descriptor corresponds to an array or object type, otherwise the
 	  ///     descriptor is returned as is). </returns>
-	  public virtual string mapDesc(string descriptor)
+	  public virtual string MapDesc(string descriptor)
 	  {
-		return mapType(JType.getType(descriptor)).Descriptor;
+		return MapType(JType.GetType(descriptor)).Descriptor;
 	  }
 
 	  /// <summary>
-	  /// Returns the given <seealso cref="Type"/>, remapped with <seealso cref="map(String)"/> or {@link
+	  /// Returns the given <seealso cref="Type"/>, remapped with <seealso cref="Map"/> or {@link
 	  /// #mapMethodDesc(String)}.
 	  /// </summary>
 	  /// <param name="type"> a type, which can be a method type. </param>
@@ -64,54 +64,54 @@ namespace ObjectWeb.Asm.Commons
 	  ///     #map(String)} (if the type is an array or object type, otherwise the type is returned as
 	  ///     is) or, of the type is a method type, with its descriptor remapped with {@link
 	  ///     #mapMethodDesc(String)}. </returns>
-	  private JType mapType(JType type)
+	  private JType MapType(JType type)
 	  {
 		switch (type.Sort)
 		{
-		  case JType.ARRAY:
+		  case JType.Array:
 			StringBuilder remappedDescriptor = new StringBuilder();
 			for (int i = 0; i < type.Dimensions; ++i)
 			{
 			  remappedDescriptor.Append('[');
 			}
-			remappedDescriptor.Append(mapType(type.ElementType).Descriptor);
-			return JType.getType(remappedDescriptor.ToString());
-		  case JType.OBJECT:
-			string remappedInternalName = map(type.InternalName);
-			return !string.ReferenceEquals(remappedInternalName, null) ? JType.getObjectType(remappedInternalName) : type;
-		  case JType.METHOD:
-			return JType.getMethodType(mapMethodDesc(type.Descriptor));
+			remappedDescriptor.Append(MapType(type.ElementType).Descriptor);
+			return JType.GetType(remappedDescriptor.ToString());
+		  case JType.Object:
+			string remappedInternalName = Map(type.InternalName);
+			return !string.ReferenceEquals(remappedInternalName, null) ? JType.GetObjectType(remappedInternalName) : type;
+		  case JType.Method:
+			return JType.GetMethodType(MapMethodDesc(type.Descriptor));
 		  default:
 			return type;
 		}
 	  }
 
 	  /// <summary>
-	  /// Returns the given internal name, remapped with <seealso cref="map(String)"/>.
+	  /// Returns the given internal name, remapped with <seealso cref="Map"/>.
 	  /// </summary>
 	  /// <param name="internalName"> the internal name (or array type descriptor) of some (array) class. </param>
-	  /// <returns> the given internal name, remapped with <seealso cref="map(String)"/>. </returns>
-	  public virtual string mapType(string internalName)
+	  /// <returns> the given internal name, remapped with <seealso cref="Map"/>. </returns>
+	  public virtual string MapType(string internalName)
 	  {
 		if (string.ReferenceEquals(internalName, null))
 		{
 		  return null;
 		}
-		return mapType(JType.getObjectType(internalName)).InternalName;
+		return MapType(JType.GetObjectType(internalName)).InternalName;
 	  }
 
 	  /// <summary>
-	  /// Returns the given internal names, remapped with <seealso cref="map(String)"/>.
+	  /// Returns the given internal names, remapped with <seealso cref="Map"/>.
 	  /// </summary>
 	  /// <param name="internalNames"> the internal names (or array type descriptors) of some (array) classes. </param>
-	  /// <returns> the given internal name, remapped with <seealso cref="map(String)"/>. </returns>
-	  public virtual string[] mapTypes(string[] internalNames)
+	  /// <returns> the given internal name, remapped with <seealso cref="Map"/>. </returns>
+	  public virtual string[] MapTypes(string[] internalNames)
 	  {
 		string[] remappedInternalNames = null;
 		for (int i = 0; i < internalNames.Length; ++i)
 		{
 		  string internalName = internalNames[i];
-		  string remappedInternalName = mapType(internalName);
+		  string remappedInternalName = MapType(internalName);
 		  if (!string.ReferenceEquals(remappedInternalName, null))
 		  {
 			if (remappedInternalNames == null)
@@ -126,12 +126,12 @@ namespace ObjectWeb.Asm.Commons
 
 	  /// <summary>
 	  /// Returns the given method descriptor, with its argument and return type descriptors remapped
-	  /// with <seealso cref="mapDesc(String)"/>.
+	  /// with <seealso cref="MapDesc"/>.
 	  /// </summary>
 	  /// <param name="methodDescriptor"> a method descriptor. </param>
 	  /// <returns> the given method descriptor, with its argument and return type descriptors remapped
-	  ///     with <seealso cref="mapDesc(String)"/>. </returns>
-	  public virtual string mapMethodDesc(string methodDescriptor)
+	  ///     with <seealso cref="MapDesc"/>. </returns>
+	  public virtual string MapMethodDesc(string methodDescriptor)
 	  {
 		if ("()V".Equals(methodDescriptor))
 		{
@@ -139,18 +139,18 @@ namespace ObjectWeb.Asm.Commons
 		}
 
 		StringBuilder stringBuilder = new StringBuilder("(");
-		foreach (JType argumentType in JType.getArgumentTypes(methodDescriptor))
+		foreach (JType argumentType in JType.GetArgumentTypes(methodDescriptor))
 		{
-		  stringBuilder.Append(mapType(argumentType).Descriptor);
+		  stringBuilder.Append(MapType(argumentType).Descriptor);
 		}
-		JType returnType = JType.getReturnType(methodDescriptor);
-		if (returnType == JType.VOID_TYPE)
+		JType returnType = JType.GetReturnType(methodDescriptor);
+		if (returnType == JType.VoidType)
 		{
 		  stringBuilder.Append(")V");
 		}
 		else
 		{
-		  stringBuilder.Append(')').Append(mapType(returnType).Descriptor);
+		  stringBuilder.Append(')').Append(MapType(returnType).Descriptor);
 		}
 		return stringBuilder.ToString();
 	  }
@@ -164,16 +164,16 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="value"> an object. Only <seealso cref="Type"/>, <seealso cref="Handle"/> and <seealso cref="ConstantDynamic"/> values
 	  ///     are remapped. </param>
 	  /// <returns> the given value, remapped with this remapper. </returns>
-	  public virtual object mapValue(object value)
+	  public virtual object MapValue(object value)
 	  {
 		if (value is Type)
 		{
-		  return mapType((JType) value);
+		  return MapType((JType) value);
 		}
 		if (value is Handle)
 		{
 		  Handle handle = (Handle) value;
-		  return new Handle(handle.Tag, mapType(handle.Owner), mapMethodName(handle.Owner, handle.Name, handle.Desc), handle.Tag <= Opcodes.H_PUTSTATIC ? mapDesc(handle.Desc) : mapMethodDesc(handle.Desc), handle.Interface);
+		  return new Handle(handle.Tag, MapType(handle.Owner), MapMethodName(handle.Owner, handle.Name, handle.Desc), handle.Tag <= IOpcodes.H_Putstatic ? MapDesc(handle.Desc) : MapMethodDesc(handle.Desc), handle.Interface);
 		}
 		if (value is ConstantDynamic)
 		{
@@ -182,10 +182,10 @@ namespace ObjectWeb.Asm.Commons
 		  object[] remappedBootstrapMethodArguments = new object[bootstrapMethodArgumentCount];
 		  for (int i = 0; i < bootstrapMethodArgumentCount; ++i)
 		  {
-			remappedBootstrapMethodArguments[i] = mapValue(constantDynamic.getBootstrapMethodArgument(i));
+			remappedBootstrapMethodArguments[i] = MapValue(constantDynamic.GetBootstrapMethodArgument(i));
 		  }
 		  string descriptor = constantDynamic.Descriptor;
-		  return new ConstantDynamic(mapInvokeDynamicMethodName(constantDynamic.Name, descriptor), mapDesc(descriptor), (Handle) mapValue(constantDynamic.BootstrapMethod), remappedBootstrapMethodArguments);
+		  return new ConstantDynamic(MapInvokeDynamicMethodName(constantDynamic.Name, descriptor), MapDesc(descriptor), (Handle) MapValue(constantDynamic.BootstrapMethod), remappedBootstrapMethodArguments);
 		}
 		return value;
 	  }
@@ -197,8 +197,8 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="signature"> a <i>JavaTypeSignature</i>, <i>ClassSignature</i> or <i>MethodSignature</i>. </param>
 	  /// <param name="typeSignature"> whether the given signature is a <i>JavaTypeSignature</i>. </param>
 	  /// <returns> signature the given signature, remapped with the <seealso cref="SignatureVisitor"/> returned by
-	  ///     <seealso cref="createSignatureRemapper(SignatureVisitor)"/>. </returns>
-	  public virtual string mapSignature(string signature, bool typeSignature)
+	  ///     <seealso cref="CreateSignatureRemapper"/>. </returns>
+	  public virtual string MapSignature(string signature, bool typeSignature)
 	  {
 		if (string.ReferenceEquals(signature, null))
 		{
@@ -206,14 +206,14 @@ namespace ObjectWeb.Asm.Commons
 		}
 		SignatureReader signatureReader = new SignatureReader(signature);
 		SignatureWriter signatureWriter = new SignatureWriter();
-		SignatureVisitor signatureRemapper = createSignatureRemapper(signatureWriter);
+		SignatureVisitor signatureRemapper = CreateSignatureRemapper(signatureWriter);
 		if (typeSignature)
 		{
-		  signatureReader.acceptType(signatureRemapper);
+		  signatureReader.AcceptType(signatureRemapper);
 		}
 		else
 		{
-		  signatureReader.accept(signatureRemapper);
+		  signatureReader.Accept(signatureRemapper);
 		}
 		return signatureWriter.ToString();
 	  }
@@ -224,11 +224,11 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="signatureVisitor"> the SignatureVisitor the remapper must delegate to. </param>
 	  /// <returns> the newly created remapper. </returns>
-	  /// @deprecated use <seealso cref="createSignatureRemapper"/> instead. 
+	  /// @deprecated use <seealso cref="CreateSignatureRemapper"/> instead. 
 	  [Obsolete("use <seealso cref=\"createSignatureRemapper\"/> instead.")]
-	  public virtual SignatureVisitor createRemappingSignatureAdapter(SignatureVisitor signatureVisitor)
+	  public virtual SignatureVisitor CreateRemappingSignatureAdapter(SignatureVisitor signatureVisitor)
 	  {
-		return createSignatureRemapper(signatureVisitor);
+		return CreateSignatureRemapper(signatureVisitor);
 	  }
 
 	  /// <summary>
@@ -237,7 +237,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="signatureVisitor"> the SignatureVisitor the remapper must delegate to. </param>
 	  /// <returns> the newly created remapper. </returns>
-	  public virtual SignatureVisitor createSignatureRemapper(SignatureVisitor signatureVisitor)
+	  public virtual SignatureVisitor CreateSignatureRemapper(SignatureVisitor signatureVisitor)
 	  {
 		return new SignatureRemapper(signatureVisitor, this);
 	  }
@@ -249,7 +249,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="descriptor"> the descriptor of the annotation class. </param>
 	  /// <param name="name"> the name of the annotation attribute. </param>
 	  /// <returns> the new name of the annotation attribute. </returns>
-	  public virtual string mapAnnotationAttributeName(string descriptor, string name)
+	  public virtual string MapAnnotationAttributeName(string descriptor, string name)
 	  {
 		return name;
 	  }
@@ -263,9 +263,9 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="ownerName"> the internal name of the owner class of the inner class. </param>
 	  /// <param name="innerName"> the internal name of the inner class. </param>
 	  /// <returns> the new inner name of the inner class. </returns>
-	  public virtual string mapInnerClassName(string name, string ownerName, string innerName)
+	  public virtual string MapInnerClassName(string name, string ownerName, string innerName)
 	  {
-		string remappedInnerName = this.mapType(name);
+		string remappedInnerName = this.MapType(name);
 		if (remappedInnerName.Contains("$"))
 		{
 		  int index = remappedInnerName.LastIndexOf('$') + 1;
@@ -289,7 +289,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="name"> the name of the method. </param>
 	  /// <param name="descriptor"> the descriptor of the method. </param>
 	  /// <returns> the new name of the method. </returns>
-	  public virtual string mapMethodName(string owner, string name, string descriptor)
+	  public virtual string MapMethodName(string owner, string name, string descriptor)
 	  {
 		return name;
 	  }
@@ -301,7 +301,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="name"> the name of the method. </param>
 	  /// <param name="descriptor"> the descriptor of the method. </param>
 	  /// <returns> the new name of the method. </returns>
-	  public virtual string mapInvokeDynamicMethodName(string name, string descriptor)
+	  public virtual string MapInvokeDynamicMethodName(string name, string descriptor)
 	  {
 		return name;
 	  }
@@ -314,7 +314,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="name"> the name of the field. </param>
 	  /// <param name="descriptor"> the descriptor of the field. </param>
 	  /// <returns> the new name of the field. </returns>
-	  public virtual string mapRecordComponentName(string owner, string name, string descriptor)
+	  public virtual string MapRecordComponentName(string owner, string name, string descriptor)
 	  {
 		return name;
 	  }
@@ -327,7 +327,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="name"> the name of the field. </param>
 	  /// <param name="descriptor"> the descriptor of the field. </param>
 	  /// <returns> the new name of the field. </returns>
-	  public virtual string mapFieldName(string owner, string name, string descriptor)
+	  public virtual string MapFieldName(string owner, string name, string descriptor)
 	  {
 		return name;
 	  }
@@ -338,7 +338,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="name"> the fully qualified name of the package (using dots). </param>
 	  /// <returns> the new name of the package. </returns>
-	  public virtual string mapPackageName(string name)
+	  public virtual string MapPackageName(string name)
 	  {
 		return name;
 	  }
@@ -349,7 +349,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="name"> the fully qualified name (using dots) of a module. </param>
 	  /// <returns> the new name of the module. </returns>
-	  public virtual string mapModuleName(string name)
+	  public virtual string MapModuleName(string name)
 	  {
 		return name;
 	  }
@@ -360,7 +360,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="internalName"> the internal name of a class. </param>
 	  /// <returns> the new internal name. </returns>
-	  public virtual string map(string internalName)
+	  public virtual string Map(string internalName)
 	  {
 		return internalName;
 	  }

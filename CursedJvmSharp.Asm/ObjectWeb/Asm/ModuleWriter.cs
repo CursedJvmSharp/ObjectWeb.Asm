@@ -57,100 +57,100 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     The binary content of the 'exports' array of the JVMS Module attribute.
         /// </summary>
-        private readonly ByteVector exports;
+        private readonly ByteVector _exports;
 
         /// <summary>
         ///     The module_flags field of the JVMS Module attribute.
         /// </summary>
-        private readonly int moduleFlags;
+        private readonly int _moduleFlags;
 
         /// <summary>
         ///     The module_name_index field of the JVMS Module attribute.
         /// </summary>
-        private readonly int moduleNameIndex;
+        private readonly int _moduleNameIndex;
 
         /// <summary>
         ///     The module_version_index field of the JVMS Module attribute.
         /// </summary>
-        private readonly int moduleVersionIndex;
+        private readonly int _moduleVersionIndex;
 
         /// <summary>
         ///     The binary content of the 'opens' array of the JVMS Module attribute.
         /// </summary>
-        private readonly ByteVector opens;
+        private readonly ByteVector _opens;
 
         /// <summary>
         ///     The binary content of the 'package_index' array of the JVMS ModulePackages attribute.
         /// </summary>
-        private readonly ByteVector packageIndex;
+        private readonly ByteVector _packageIndex;
 
         /// <summary>
         ///     The binary content of the 'provides' array of the JVMS Module attribute.
         /// </summary>
-        private readonly ByteVector provides;
+        private readonly ByteVector _provides;
 
         /// <summary>
         ///     The binary content of the 'requires' array of the JVMS Module attribute.
         /// </summary>
-        private readonly ByteVector requires;
+        private readonly ByteVector _requires;
 
         /// <summary>
         ///     Where the constants used in this AnnotationWriter must be stored.
         /// </summary>
-        private readonly SymbolTable symbolTable;
+        private readonly SymbolTable _symbolTable;
 
         /// <summary>
         ///     The binary content of the 'uses_index' array of the JVMS Module attribute.
         /// </summary>
-        private readonly ByteVector usesIndex;
+        private readonly ByteVector _usesIndex;
 
         /// <summary>
         ///     The exports_count field of the JVMS Module attribute.
         /// </summary>
-        private int exportsCount;
+        private int _exportsCount;
 
         /// <summary>
         ///     The main_class_index field of the JVMS ModuleMainClass attribute, or 0.
         /// </summary>
-        private int mainClassIndex;
+        private int _mainClassIndex;
 
         /// <summary>
         ///     The opens_count field of the JVMS Module attribute.
         /// </summary>
-        private int opensCount;
+        private int _opensCount;
 
         /// <summary>
         ///     The provides_count field of the JVMS ModulePackages attribute.
         /// </summary>
-        private int packageCount;
+        private int _packageCount;
 
         /// <summary>
         ///     The provides_count field of the JVMS Module attribute.
         /// </summary>
-        private int providesCount;
+        private int _providesCount;
 
         /// <summary>
         ///     The requires_count field of the JVMS Module attribute.
         /// </summary>
-        private int requiresCount;
+        private int _requiresCount;
 
         /// <summary>
         ///     The uses_count field of the JVMS Module attribute.
         /// </summary>
-        private int usesCount;
+        private int _usesCount;
 
-        public ModuleWriter(SymbolTable symbolTable, int name, int access, int version) : base(Opcodes.ASM9)
+        public ModuleWriter(SymbolTable symbolTable, int name, int access, int version) : base(IOpcodes.Asm9)
         {
-            this.symbolTable = symbolTable;
-            moduleNameIndex = name;
-            moduleFlags = access;
-            moduleVersionIndex = version;
-            requires = new ByteVector();
-            exports = new ByteVector();
-            opens = new ByteVector();
-            usesIndex = new ByteVector();
-            provides = new ByteVector();
-            packageIndex = new ByteVector();
+            this._symbolTable = symbolTable;
+            _moduleNameIndex = name;
+            _moduleFlags = access;
+            _moduleVersionIndex = version;
+            _requires = new ByteVector();
+            _exports = new ByteVector();
+            _opens = new ByteVector();
+            _usesIndex = new ByteVector();
+            _provides = new ByteVector();
+            _packageIndex = new ByteVector();
         }
 
         /// <summary>
@@ -158,73 +158,73 @@ namespace ObjectWeb.Asm
         ///     ModuleWriter.
         /// </summary>
         /// <returns> the number of Module, ModulePackages and ModuleMainClass attributes (between 1 and 3). </returns>
-        public int AttributeCount => 1 + (packageCount > 0 ? 1 : 0) + (mainClassIndex > 0 ? 1 : 0);
+        public int AttributeCount => 1 + (_packageCount > 0 ? 1 : 0) + (_mainClassIndex > 0 ? 1 : 0);
 
-        public override void visitMainClass(string mainClass)
+        public override void VisitMainClass(string mainClass)
         {
-            mainClassIndex = symbolTable.addConstantClass(mainClass).index;
+            _mainClassIndex = _symbolTable.AddConstantClass(mainClass).index;
         }
 
-        public override void visitPackage(string packaze)
+        public override void VisitPackage(string packaze)
         {
-            packageIndex.putShort(symbolTable.addConstantPackage(packaze).index);
-            packageCount++;
+            _packageIndex.PutShort(_symbolTable.AddConstantPackage(packaze).index);
+            _packageCount++;
         }
 
-        public override void visitRequire(string module, int access, string version)
+        public override void VisitRequire(string module, int access, string version)
         {
-            requires.putShort(symbolTable.addConstantModule(module).index).putShort(access)
-                .putShort(ReferenceEquals(version, null) ? 0 : symbolTable.addConstantUtf8(version));
-            requiresCount++;
+            _requires.PutShort(_symbolTable.AddConstantModule(module).index).PutShort(access)
+                .PutShort(ReferenceEquals(version, null) ? 0 : _symbolTable.AddConstantUtf8(version));
+            _requiresCount++;
         }
 
-        public override void visitExport(string packaze, int access, params string[] modules)
+        public override void VisitExport(string packaze, int access, params string[] modules)
         {
-            exports.putShort(symbolTable.addConstantPackage(packaze).index).putShort(access);
+            _exports.PutShort(_symbolTable.AddConstantPackage(packaze).index).PutShort(access);
             if (modules == null)
             {
-                exports.putShort(0);
+                _exports.PutShort(0);
             }
             else
             {
-                exports.putShort(modules.Length);
-                foreach (var module in modules) exports.putShort(symbolTable.addConstantModule(module).index);
+                _exports.PutShort(modules.Length);
+                foreach (var module in modules) _exports.PutShort(_symbolTable.AddConstantModule(module).index);
             }
 
-            exportsCount++;
+            _exportsCount++;
         }
 
-        public override void visitOpen(string packaze, int access, params string[] modules)
+        public override void VisitOpen(string packaze, int access, params string[] modules)
         {
-            opens.putShort(symbolTable.addConstantPackage(packaze).index).putShort(access);
+            _opens.PutShort(_symbolTable.AddConstantPackage(packaze).index).PutShort(access);
             if (modules == null)
             {
-                opens.putShort(0);
+                _opens.PutShort(0);
             }
             else
             {
-                opens.putShort(modules.Length);
-                foreach (var module in modules) opens.putShort(symbolTable.addConstantModule(module).index);
+                _opens.PutShort(modules.Length);
+                foreach (var module in modules) _opens.PutShort(_symbolTable.AddConstantModule(module).index);
             }
 
-            opensCount++;
+            _opensCount++;
         }
 
-        public override void visitUse(string service)
+        public override void VisitUse(string service)
         {
-            usesIndex.putShort(symbolTable.addConstantClass(service).index);
-            usesCount++;
+            _usesIndex.PutShort(_symbolTable.AddConstantClass(service).index);
+            _usesCount++;
         }
 
-        public override void visitProvide(string service, params string[] providers)
+        public override void VisitProvide(string service, params string[] providers)
         {
-            provides.putShort(symbolTable.addConstantClass(service).index);
-            provides.putShort(providers.Length);
-            foreach (var provider in providers) provides.putShort(symbolTable.addConstantClass(provider).index);
-            providesCount++;
+            _provides.PutShort(_symbolTable.AddConstantClass(service).index);
+            _provides.PutShort(providers.Length);
+            foreach (var provider in providers) _provides.PutShort(_symbolTable.AddConstantClass(provider).index);
+            _providesCount++;
         }
 
-        public override void visitEnd()
+        public override void VisitEnd()
         {
             // Nothing to do.
         }
@@ -234,21 +234,21 @@ namespace ObjectWeb.Asm
         ///     ModuleWriter. Also add the names of these attributes in the constant pool.
         /// </summary>
         /// <returns> the size in bytes of the Module, ModulePackages and ModuleMainClass attributes. </returns>
-        public int computeAttributesSize()
+        public int ComputeAttributesSize()
         {
-            symbolTable.addConstantUtf8(Constants.MODULE);
+            _symbolTable.AddConstantUtf8(Constants.Module);
             // 6 attribute header bytes, 6 bytes for name, flags and version, and 5 * 2 bytes for counts.
-            var size = 22 + requires.length + exports.length + opens.length + usesIndex.length + provides.length;
-            if (packageCount > 0)
+            var size = 22 + _requires.length + _exports.length + _opens.length + _usesIndex.length + _provides.length;
+            if (_packageCount > 0)
             {
-                symbolTable.addConstantUtf8(Constants.MODULE_PACKAGES);
+                _symbolTable.AddConstantUtf8(Constants.Module_Packages);
                 // 6 attribute header bytes, and 2 bytes for package_count.
-                size += 8 + packageIndex.length;
+                size += 8 + _packageIndex.length;
             }
 
-            if (mainClassIndex > 0)
+            if (_mainClassIndex > 0)
             {
-                symbolTable.addConstantUtf8(Constants.MODULE_MAIN_CLASS);
+                _symbolTable.AddConstantUtf8(Constants.Module_Main_Class);
                 // 6 attribute header bytes, and 2 bytes for main_class_index.
                 size += 8;
             }
@@ -261,24 +261,24 @@ namespace ObjectWeb.Asm
         ///     in the given ByteVector.
         /// </summary>
         /// <param name="output"> where the attributes must be put. </param>
-        public void putAttributes(ByteVector output)
+        public void PutAttributes(ByteVector output)
         {
             // 6 bytes for name, flags and version, and 5 * 2 bytes for counts.
-            var moduleAttributeLength = 16 + requires.length + exports.length + opens.length + usesIndex.length +
-                                        provides.length;
-            output.putShort(symbolTable.addConstantUtf8(Constants.MODULE)).putInt(moduleAttributeLength)
-                .putShort(moduleNameIndex).putShort(moduleFlags).putShort(moduleVersionIndex).putShort(requiresCount)
-                .putByteArray(requires.data, 0, requires.length).putShort(exportsCount)
-                .putByteArray(exports.data, 0, exports.length).putShort(opensCount)
-                .putByteArray(opens.data, 0, opens.length).putShort(usesCount)
-                .putByteArray(usesIndex.data, 0, usesIndex.length).putShort(providesCount)
-                .putByteArray(provides.data, 0, provides.length);
-            if (packageCount > 0)
-                output.putShort(symbolTable.addConstantUtf8(Constants.MODULE_PACKAGES)).putInt(2 + packageIndex.length)
-                    .putShort(packageCount).putByteArray(packageIndex.data, 0, packageIndex.length);
-            if (mainClassIndex > 0)
-                output.putShort(symbolTable.addConstantUtf8(Constants.MODULE_MAIN_CLASS)).putInt(2)
-                    .putShort(mainClassIndex);
+            var moduleAttributeLength = 16 + _requires.length + _exports.length + _opens.length + _usesIndex.length +
+                                        _provides.length;
+            output.PutShort(_symbolTable.AddConstantUtf8(Constants.Module)).PutInt(moduleAttributeLength)
+                .PutShort(_moduleNameIndex).PutShort(_moduleFlags).PutShort(_moduleVersionIndex).PutShort(_requiresCount)
+                .PutByteArray(_requires.data, 0, _requires.length).PutShort(_exportsCount)
+                .PutByteArray(_exports.data, 0, _exports.length).PutShort(_opensCount)
+                .PutByteArray(_opens.data, 0, _opens.length).PutShort(_usesCount)
+                .PutByteArray(_usesIndex.data, 0, _usesIndex.length).PutShort(_providesCount)
+                .PutByteArray(_provides.data, 0, _provides.length);
+            if (_packageCount > 0)
+                output.PutShort(_symbolTable.AddConstantUtf8(Constants.Module_Packages)).PutInt(2 + _packageIndex.length)
+                    .PutShort(_packageCount).PutByteArray(_packageIndex.data, 0, _packageIndex.length);
+            if (_mainClassIndex > 0)
+                output.PutShort(_symbolTable.AddConstantUtf8(Constants.Module_Main_Class)).PutInt(2)
+                    .PutShort(_mainClassIndex);
         }
     }
 }

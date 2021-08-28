@@ -43,14 +43,14 @@ namespace ObjectWeb.Asm.Tree
 	  {
 	  }
 
-	  internal static List<T> add<T>(List<T> list, T element)
+	  internal static List<T> Add<T>(List<T> list, T element)
 	  {
 		List<T> newList = list == null ? new List<T>(1) : list;
 		newList.Add(element);
 		return newList;
 	  }
 
-	  internal static List<T> asArrayList<T>(int length)
+	  internal static List<T> AsArrayList<T>(int length)
 	  {
 		List<T> list = new List<T>(length);
 		for (int i = 0; i < length; ++i)
@@ -60,7 +60,7 @@ namespace ObjectWeb.Asm.Tree
 		return list;
 	  }
 
-	  internal static List<T> asArrayList<T>(T[] array)
+	  internal static List<T> AsArrayList<T>(T[] array)
 	  {
 		if (array == null)
 		{
@@ -74,7 +74,7 @@ namespace ObjectWeb.Asm.Tree
 		return list;
 	  }
 
-	  internal static List<sbyte> asArrayList(sbyte[] byteArray)
+	  internal static List<sbyte> AsArrayList(sbyte[] byteArray)
 	  {
 		if (byteArray == null)
 		{
@@ -88,7 +88,7 @@ namespace ObjectWeb.Asm.Tree
 		return byteList;
 	  }
 
-	  internal static List<bool> asArrayList(bool[] booleanArray)
+	  internal static List<bool> AsArrayList(bool[] booleanArray)
 	  {
 		if (booleanArray == null)
 		{
@@ -102,7 +102,7 @@ namespace ObjectWeb.Asm.Tree
 		return booleanList;
 	  }
 
-	  internal static List<short> asArrayList(short[] shortArray)
+	  internal static List<short> AsArrayList(short[] shortArray)
 	  {
 		if (shortArray == null)
 		{
@@ -116,7 +116,7 @@ namespace ObjectWeb.Asm.Tree
 		return shortList;
 	  }
 
-	  internal static List<char> asArrayList(char[] charArray)
+	  internal static List<char> AsArrayList(char[] charArray)
 	  {
 		if (charArray == null)
 		{
@@ -130,7 +130,7 @@ namespace ObjectWeb.Asm.Tree
 		return charList;
 	  }
 
-	  internal static List<int> asArrayList(int[] intArray)
+	  internal static List<int> AsArrayList(int[] intArray)
 	  {
 		if (intArray == null)
 		{
@@ -144,7 +144,7 @@ namespace ObjectWeb.Asm.Tree
 		return intList;
 	  }
 
-	  internal static List<float> asArrayList(float[] floatArray)
+	  internal static List<float> AsArrayList(float[] floatArray)
 	  {
 		if (floatArray == null)
 		{
@@ -158,7 +158,7 @@ namespace ObjectWeb.Asm.Tree
 		return floatList;
 	  }
 
-	  internal static List<long> asArrayList(long[] longArray)
+	  internal static List<long> AsArrayList(long[] longArray)
 	  {
 		if (longArray == null)
 		{
@@ -172,7 +172,7 @@ namespace ObjectWeb.Asm.Tree
 		return longList;
 	  }
 
-	  internal static List<double> asArrayList(double[] doubleArray)
+	  internal static List<double> AsArrayList(double[] doubleArray)
 	  {
 		if (doubleArray == null)
 		{
@@ -186,7 +186,7 @@ namespace ObjectWeb.Asm.Tree
 		return doubleList;
 	  }
 
-	  internal static List<T> asArrayList<T>(int length, T[] array)
+	  internal static List<T> AsArrayList<T>(int length, T[] array)
 	  {
 		List<T> list = new List<T>(length);
 		for (int i = 0; i < length; ++i)

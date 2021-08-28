@@ -40,21 +40,21 @@ namespace ObjectWeb.Asm
 
 	  /// <summary>
 	  /// The constant name (can be arbitrary). </summary>
-	  private readonly string name;
+	  private readonly string _name;
 
 	  /// <summary>
 	  /// The constant type (must be a field descriptor). </summary>
-	  private readonly string descriptor;
+	  private readonly string _descriptor;
 
 	  /// <summary>
 	  /// The bootstrap method to use to compute the constant value at runtime. </summary>
-	  private readonly Handle bootstrapMethod;
+	  private readonly Handle _bootstrapMethod;
 
 	  /// <summary>
 	  /// The arguments to pass to the bootstrap method, in order to compute the constant value at
 	  /// runtime.
 	  /// </summary>
-	  private readonly object[] bootstrapMethodArguments;
+	  private readonly object[] _bootstrapMethodArguments;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ConstantDynamic"/>.
@@ -66,10 +66,10 @@ namespace ObjectWeb.Asm
 	  ///     compute the constant value at runtime. </param>
 	  public ConstantDynamic(string name, string descriptor, Handle bootstrapMethod, params object[] bootstrapMethodArguments)
 	  {
-		this.name = name;
-		this.descriptor = descriptor;
-		this.bootstrapMethod = bootstrapMethod;
-		this.bootstrapMethodArguments = bootstrapMethodArguments;
+		this._name = name;
+		this._descriptor = descriptor;
+		this._bootstrapMethod = bootstrapMethod;
+		this._bootstrapMethodArguments = bootstrapMethodArguments;
 	  }
 
 	  /// <summary>
@@ -80,7 +80,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return name;
+			return _name;
 		  }
 	  }
 
@@ -92,7 +92,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return descriptor;
+			return _descriptor;
 		  }
 	  }
 
@@ -104,7 +104,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return bootstrapMethod;
+			return _bootstrapMethod;
 		  }
 	  }
 
@@ -118,7 +118,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return bootstrapMethodArguments.Length;
+			return _bootstrapMethodArguments.Length;
 		  }
 	  }
 
@@ -129,9 +129,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="index"> an argument index, between 0 and <seealso cref="getBootstrapMethodArgumentCount()"/>
 	  ///     (exclusive). </param>
 	  /// <returns> the argument passed to the bootstrap method, with the given index. </returns>
-	  public object getBootstrapMethodArgument(int index)
+	  public object GetBootstrapMethodArgument(int index)
 	  {
-		return bootstrapMethodArguments[index];
+		return _bootstrapMethodArguments[index];
 	  }
 
 	  /// <summary>
@@ -144,7 +144,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return bootstrapMethodArguments;
+			return _bootstrapMethodArguments;
 		  }
 	  }
 
@@ -156,16 +156,16 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			char firstCharOfDescriptor = descriptor[0];
+			char firstCharOfDescriptor = _descriptor[0];
 			return (firstCharOfDescriptor == 'J' || firstCharOfDescriptor == 'D') ? 2 : 1;
 		  }
 	  }
 
-      public static int rotateLeft(int i, int distance)
+      public static int RotateLeft(int i, int distance)
       {
           return (i << distance) | ((int)((uint)i >> -distance));
       }
-      public static int rotateRight(int i, int distance)
+      public static int RotateRight(int i, int distance)
       {
           return ((int)((uint)i >> distance)) | (i << -distance);
       }
@@ -182,17 +182,17 @@ namespace ObjectWeb.Asm
 		  return false;
 		}
 		ConstantDynamic constantDynamic = (ConstantDynamic) @object;
-		return name.Equals(constantDynamic.name) && descriptor.Equals(constantDynamic.descriptor) && bootstrapMethod.Equals(constantDynamic.bootstrapMethod) && bootstrapMethodArguments.SequenceEqual(constantDynamic.bootstrapMethodArguments);
+		return _name.Equals(constantDynamic._name) && _descriptor.Equals(constantDynamic._descriptor) && _bootstrapMethod.Equals(constantDynamic._bootstrapMethod) && _bootstrapMethodArguments.SequenceEqual(constantDynamic._bootstrapMethodArguments);
 	  }
 
 	  public override int GetHashCode()
 	  {
-		return name.GetHashCode() ^ rotateLeft(descriptor.GetHashCode(), 8) ^ rotateLeft(bootstrapMethod.GetHashCode(), 16) ^ rotateLeft((bootstrapMethodArguments).GetHashCode(), 24);
+		return _name.GetHashCode() ^ RotateLeft(_descriptor.GetHashCode(), 8) ^ RotateLeft(_bootstrapMethod.GetHashCode(), 16) ^ RotateLeft((_bootstrapMethodArguments).GetHashCode(), 24);
 	  }
 
 	  public override string ToString()
 	  {
-		return name + " : " + descriptor + ' ' + bootstrapMethod + ' ' + $"[{string.Join(", ", bootstrapMethodArguments)}]";
+		return _name + " : " + _descriptor + ' ' + _bootstrapMethod + ' ' + $"[{string.Join(", ", _bootstrapMethodArguments)}]";
 	  }
 	}
 

@@ -47,25 +47,25 @@ namespace ObjectWeb.Asm
 	  /// #visitMethod} method will be ignored, and computed automatically from the signature and the
 	  /// bytecode of each method.
 	  /// 
-	  /// <para><b>Note:</b> for classes whose version is <seealso cref="Opcodes.V1_7"/> of more, this option requires
+	  /// <para><b>Note:</b> for classes whose version is <seealso cref="IOpcodes.V1_7"/> of more, this option requires
 	  /// valid stack map frames. The maximum stack size is then computed from these frames, and from the
 	  /// bytecode instructions in between. If stack map frames are not present or must be recomputed,
-	  /// used <seealso cref="COMPUTE_FRAMES"/> instead.
+	  /// used <seealso cref="Compute_Frames"/> instead.
 	  /// 
 	  /// </para>
 	  /// </summary>
 	  /// <seealso cref= #ClassWriter(int) </seealso>
-	  public const int COMPUTE_MAXS = 1;
+	  public const int Compute_Maxs = 1;
 
 	  /// <summary>
 	  /// A flag to automatically compute the stack map frames of methods from scratch. If this flag is
-	  /// set, then the calls to the <seealso cref="MethodVisitor.visitFrame"/> method are ignored, and the stack
+	  /// set, then the calls to the <seealso cref="MethodVisitor.VisitFrame"/> method are ignored, and the stack
 	  /// map frames are recomputed from the methods bytecode. The arguments of the {@link
 	  /// MethodVisitor#visitMaxs} method are also ignored and recomputed from the bytecode. In other
-	  /// words, <seealso cref="COMPUTE_FRAMES"/> implies <seealso cref="COMPUTE_MAXS"/>.
+	  /// words, <seealso cref="Compute_Frames"/> implies <seealso cref="Compute_Maxs"/>.
 	  /// </summary>
 	  /// <seealso cref= #ClassWriter(int) </seealso>
-	  public const int COMPUTE_FRAMES = 2;
+	  public const int Compute_Frames = 2;
 
 	  // Note: fields are ordered as in the ClassFile structure, and those related to attributes are
 	  // ordered as in Section 4.7 of the JVMS.
@@ -74,167 +74,167 @@ namespace ObjectWeb.Asm
 	  /// The minor_version and major_version fields of the JVMS ClassFile structure. minor_version is
 	  /// stored in the 16 most significant bits, and major_version in the 16 least significant bits.
 	  /// </summary>
-	  private int version;
+	  private int _version;
 
 	  /// <summary>
 	  /// The symbol table for this class (contains the constant_pool and the BootstrapMethods). </summary>
-	  private readonly SymbolTable symbolTable;
+	  private readonly SymbolTable _symbolTable;
 
 	  /// <summary>
 	  /// The access_flags field of the JVMS ClassFile structure. This field can contain ASM specific
-	  /// access flags, such as <seealso cref="Opcodes.ACC_DEPRECATED"/> or <seealso cref="Opcodes.ACC_RECORD"/>, which are
+	  /// access flags, such as <seealso cref="IIOpcodes.Acc_Deprecated/> or <seealso cref="IIOpcodes.Acc_Record/>, which are
 	  /// removed when generating the ClassFile structure.
 	  /// </summary>
-	  private int accessFlags;
+	  private int _accessFlags;
 
 	  /// <summary>
 	  /// The this_class field of the JVMS ClassFile structure. </summary>
-	  private int thisClass;
+	  private int _thisClass;
 
 	  /// <summary>
 	  /// The super_class field of the JVMS ClassFile structure. </summary>
-	  private int superClass;
+	  private int _superClass;
 
 	  /// <summary>
 	  /// The interface_count field of the JVMS ClassFile structure. </summary>
-	  private int interfaceCount;
+	  private int _interfaceCount;
 
 	  /// <summary>
 	  /// The 'interfaces' array of the JVMS ClassFile structure. </summary>
-	  private int[] interfaces;
+	  private int[] _interfaces;
 
 	  /// <summary>
 	  /// The fields of this class, stored in a linked list of <seealso cref="FieldWriter"/> linked via their
 	  /// <seealso cref="FieldWriter.fv"/> field. This field stores the first element of this list.
 	  /// </summary>
-	  private FieldWriter firstField;
+	  private FieldWriter _firstField;
 
 	  /// <summary>
 	  /// The fields of this class, stored in a linked list of <seealso cref="FieldWriter"/> linked via their
 	  /// <seealso cref="FieldWriter.fv"/> field. This field stores the last element of this list.
 	  /// </summary>
-	  private FieldWriter lastField;
+	  private FieldWriter _lastField;
 
 	  /// <summary>
 	  /// The methods of this class, stored in a linked list of <seealso cref="MethodWriter"/> linked via their
 	  /// <seealso cref="MethodWriter.mv"/> field. This field stores the first element of this list.
 	  /// </summary>
-	  private MethodWriter firstMethod;
+	  private MethodWriter _firstMethod;
 
 	  /// <summary>
 	  /// The methods of this class, stored in a linked list of <seealso cref="MethodWriter"/> linked via their
 	  /// <seealso cref="MethodWriter.mv"/> field. This field stores the last element of this list.
 	  /// </summary>
-	  private MethodWriter lastMethod;
+	  private MethodWriter _lastMethod;
 
 	  /// <summary>
 	  /// The number_of_classes field of the InnerClasses attribute, or 0. </summary>
-	  private int numberOfInnerClasses;
+	  private int _numberOfInnerClasses;
 
 	  /// <summary>
 	  /// The 'classes' array of the InnerClasses attribute, or {@literal null}. </summary>
-	  private ByteVector innerClasses;
+	  private ByteVector _innerClasses;
 
 	  /// <summary>
 	  /// The class_index field of the EnclosingMethod attribute, or 0. </summary>
-	  private int enclosingClassIndex;
+	  private int _enclosingClassIndex;
 
 	  /// <summary>
 	  /// The method_index field of the EnclosingMethod attribute. </summary>
-	  private int enclosingMethodIndex;
+	  private int _enclosingMethodIndex;
 
 	  /// <summary>
 	  /// The signature_index field of the Signature attribute, or 0. </summary>
-	  private int signatureIndex;
+	  private int _signatureIndex;
 
 	  /// <summary>
 	  /// The source_file_index field of the SourceFile attribute, or 0. </summary>
-	  private int sourceFileIndex;
+	  private int _sourceFileIndex;
 
 	  /// <summary>
 	  /// The debug_extension field of the SourceDebugExtension attribute, or {@literal null}. </summary>
-	  private ByteVector debugExtension;
+	  private ByteVector _debugExtension;
 
 	  /// <summary>
 	  /// The last runtime visible annotation of this class. The previous ones can be accessed with the
-	  /// <seealso cref="AnnotationWriter.previousAnnotation"/> field. May be {@literal null}.
+	  /// <seealso cref="AnnotationWriter._previousAnnotation"/> field. May be {@literal null}.
 	  /// </summary>
-	  private AnnotationWriter lastRuntimeVisibleAnnotation;
+	  private AnnotationWriter _lastRuntimeVisibleAnnotation;
 
 	  /// <summary>
 	  /// The last runtime invisible annotation of this class. The previous ones can be accessed with the
-	  /// <seealso cref="AnnotationWriter.previousAnnotation"/> field. May be {@literal null}.
+	  /// <seealso cref="AnnotationWriter._previousAnnotation"/> field. May be {@literal null}.
 	  /// </summary>
-	  private AnnotationWriter lastRuntimeInvisibleAnnotation;
+	  private AnnotationWriter _lastRuntimeInvisibleAnnotation;
 
 	  /// <summary>
 	  /// The last runtime visible type annotation of this class. The previous ones can be accessed with
-	  /// the <seealso cref="AnnotationWriter.previousAnnotation"/> field. May be {@literal null}.
+	  /// the <seealso cref="AnnotationWriter._previousAnnotation"/> field. May be {@literal null}.
 	  /// </summary>
-	  private AnnotationWriter lastRuntimeVisibleTypeAnnotation;
+	  private AnnotationWriter _lastRuntimeVisibleTypeAnnotation;
 
 	  /// <summary>
 	  /// The last runtime invisible type annotation of this class. The previous ones can be accessed
-	  /// with the <seealso cref="AnnotationWriter.previousAnnotation"/> field. May be {@literal null}.
+	  /// with the <seealso cref="AnnotationWriter._previousAnnotation"/> field. May be {@literal null}.
 	  /// </summary>
-	  private AnnotationWriter lastRuntimeInvisibleTypeAnnotation;
+	  private AnnotationWriter _lastRuntimeInvisibleTypeAnnotation;
 
 	  /// <summary>
 	  /// The Module attribute of this class, or {@literal null}. </summary>
-	  private ModuleWriter moduleWriter;
+	  private ModuleWriter _moduleWriter;
 
 	  /// <summary>
 	  /// The host_class_index field of the NestHost attribute, or 0. </summary>
-	  private int nestHostClassIndex;
+	  private int _nestHostClassIndex;
 
 	  /// <summary>
 	  /// The number_of_classes field of the NestMembers attribute, or 0. </summary>
-	  private int numberOfNestMemberClasses;
+	  private int _numberOfNestMemberClasses;
 
 	  /// <summary>
 	  /// The 'classes' array of the NestMembers attribute, or {@literal null}. </summary>
-	  private ByteVector nestMemberClasses;
+	  private ByteVector _nestMemberClasses;
 
 	  /// <summary>
 	  /// The number_of_classes field of the PermittedSubclasses attribute, or 0. </summary>
-	  private int numberOfPermittedSubclasses;
+	  private int _numberOfPermittedSubclasses;
 
 	  /// <summary>
 	  /// The 'classes' array of the PermittedSubclasses attribute, or {@literal null}. </summary>
-	  private ByteVector permittedSubclasses;
+	  private ByteVector _permittedSubclasses;
 
 	  /// <summary>
 	  /// The record components of this class, stored in a linked list of <seealso cref="RecordComponentWriter"/>
 	  /// linked via their <seealso cref="RecordComponentWriter.delegate"/> field. This field stores the first
 	  /// element of this list.
 	  /// </summary>
-	  private RecordComponentWriter firstRecordComponent;
+	  private RecordComponentWriter _firstRecordComponent;
 
 	  /// <summary>
 	  /// The record components of this class, stored in a linked list of <seealso cref="RecordComponentWriter"/>
 	  /// linked via their <seealso cref="RecordComponentWriter.delegate"/> field. This field stores the last
 	  /// element of this list.
 	  /// </summary>
-	  private RecordComponentWriter lastRecordComponent;
+	  private RecordComponentWriter _lastRecordComponent;
 
 	  /// <summary>
 	  /// The first non standard attribute of this class. The next ones can be accessed with the {@link
 	  /// Attribute#nextAttribute} field. May be {@literal null}.
 	  /// 
 	  /// <para><b>WARNING</b>: this list stores the attributes in the <i>reverse</i> order of their visit.
-	  /// firstAttribute is actually the last attribute visited in <seealso cref="visitAttribute"/>. The {@link
+	  /// firstAttribute is actually the last attribute visited in <seealso cref="VisitAttribute"/>. The {@link
 	  /// #toByteArray} method writes the attributes in the order defined by this list, i.e. in the
 	  /// reverse order specified by the user.
 	  /// </para>
 	  /// </summary>
-	  private Attribute firstAttribute;
+	  private Attribute _firstAttribute;
 
 	  /// <summary>
 	  /// Indicates what must be automatically computed in <seealso cref="MethodWriter"/>. Must be one of {@link
-	  /// MethodWriter#COMPUTE_NOTHING}, <seealso cref="MethodWriter.COMPUTE_MAX_STACK_AND_LOCAL"/>, {@link
-	  /// MethodWriter#COMPUTE_INSERTED_FRAMES}, or <seealso cref="MethodWriter.COMPUTE_ALL_FRAMES"/>.
+	  /// MethodWriter#COMPUTE_NOTHING}, <seealso cref="MethodWriter.Compute_Max_Stack_And_Local"/>, {@link
+	  /// MethodWriter#COMPUTE_INSERTED_FRAMES}, or <seealso cref="MethodWriter.Compute_All_Frames"/>.
 	  /// </summary>
-	  private int compute;
+	  private int _compute;
 
 	  // -----------------------------------------------------------------------------------------------
 	  // Constructor
@@ -244,7 +244,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="ClassWriter"/> object.
 	  /// </summary>
 	  /// <param name="flags"> option flags that can be used to modify the default behavior of this class. Must
-	  ///     be zero or more of <seealso cref="COMPUTE_MAXS"/> and <seealso cref="COMPUTE_FRAMES"/>. </param>
+	  ///     be zero or more of <seealso cref="Compute_Maxs"/> and <seealso cref="Compute_Frames"/>. </param>
 	  public ClassWriter(int flags) : this(null, flags)
 	  {
 	  }
@@ -269,23 +269,23 @@ namespace ObjectWeb.Asm
 	  ///     copy the entire constant pool and bootstrap methods from the original class and also to
 	  ///     copy other fragments of original bytecode where applicable. </param>
 	  /// <param name="flags"> option flags that can be used to modify the default behavior of this class.Must be
-	  ///     zero or more of <seealso cref="COMPUTE_MAXS"/> and <seealso cref="COMPUTE_FRAMES"/>. <i>These option flags do
+	  ///     zero or more of <seealso cref="Compute_Maxs"/> and <seealso cref="Compute_Frames"/>. <i>These option flags do
 	  ///     not affect methods that are copied as is in the new class. This means that neither the
 	  ///     maximum stack size nor the stack frames will be computed for these methods</i>. </param>
-	  public ClassWriter(ClassReader classReader, int flags) : base(Opcodes.ASM9)
+	  public ClassWriter(ClassReader classReader, int flags) : base(IOpcodes.Asm9)
 	  {
-		symbolTable = classReader == null ? new SymbolTable(this) : new SymbolTable(this, classReader);
-		if ((flags & COMPUTE_FRAMES) != 0)
+		_symbolTable = classReader == null ? new SymbolTable(this) : new SymbolTable(this, classReader);
+		if ((flags & Compute_Frames) != 0)
 		{
-		  this.compute = MethodWriter.COMPUTE_ALL_FRAMES;
+		  this._compute = MethodWriter.Compute_All_Frames;
 		}
-		else if ((flags & COMPUTE_MAXS) != 0)
+		else if ((flags & Compute_Maxs) != 0)
 		{
-		  this.compute = MethodWriter.COMPUTE_MAX_STACK_AND_LOCAL;
+		  this._compute = MethodWriter.Compute_Max_Stack_And_Local;
 		}
 		else
 		{
-		  this.compute = MethodWriter.COMPUTE_NOTHING;
+		  this._compute = MethodWriter.Compute_Nothing;
 		}
 	  }
 
@@ -293,118 +293,118 @@ namespace ObjectWeb.Asm
 	  // Implementation of the ClassVisitor abstract class
 	  // -----------------------------------------------------------------------------------------------
 
-	  public override sealed void visit(int version, int access, string name, string signature, string superName, string[] interfaces)
+	  public override sealed void Visit(int version, int access, string name, string signature, string superName, string[] interfaces)
 	  {
-		this.version = version;
-		this.accessFlags = access;
-		this.thisClass = symbolTable.setMajorVersionAndClassName(version & 0xFFFF, name);
+		this._version = version;
+		this._accessFlags = access;
+		this._thisClass = _symbolTable.SetMajorVersionAndClassName(version & 0xFFFF, name);
 		if (!string.ReferenceEquals(signature, null))
 		{
-		  this.signatureIndex = symbolTable.addConstantUtf8(signature);
+		  this._signatureIndex = _symbolTable.AddConstantUtf8(signature);
 		}
-		this.superClass = string.ReferenceEquals(superName, null) ? 0 : symbolTable.addConstantClass(superName).index;
+		this._superClass = string.ReferenceEquals(superName, null) ? 0 : _symbolTable.AddConstantClass(superName).index;
 		if (interfaces != null && interfaces.Length > 0)
 		{
-		  interfaceCount = interfaces.Length;
-		  this.interfaces = new int[interfaceCount];
-		  for (int i = 0; i < interfaceCount; ++i)
+		  _interfaceCount = interfaces.Length;
+		  this._interfaces = new int[_interfaceCount];
+		  for (int i = 0; i < _interfaceCount; ++i)
 		  {
-			this.interfaces[i] = symbolTable.addConstantClass(interfaces[i]).index;
+			this._interfaces[i] = _symbolTable.AddConstantClass(interfaces[i]).index;
 		  }
 		}
-		if (compute == MethodWriter.COMPUTE_MAX_STACK_AND_LOCAL && (version & 0xFFFF) >= Opcodes.V1_7)
+		if (_compute == MethodWriter.Compute_Max_Stack_And_Local && (version & 0xFFFF) >= IOpcodes.V1_7)
 		{
-		  compute = MethodWriter.COMPUTE_MAX_STACK_AND_LOCAL_FROM_FRAMES;
+		  _compute = MethodWriter.Compute_Max_Stack_And_Local_From_Frames;
 		}
 	  }
 
-	  public override sealed void visitSource(string file, string debug)
+	  public override sealed void VisitSource(string file, string debug)
 	  {
 		if (!string.ReferenceEquals(file, null))
 		{
-		  sourceFileIndex = symbolTable.addConstantUtf8(file);
+		  _sourceFileIndex = _symbolTable.AddConstantUtf8(file);
 		}
 		if (!string.ReferenceEquals(debug, null))
 		{
-		  debugExtension = (new ByteVector()).encodeUtf8(debug, 0, int.MaxValue);
+		  _debugExtension = (new ByteVector()).EncodeUtf8(debug, 0, int.MaxValue);
 		}
 	  }
 
-	  public override sealed ModuleVisitor visitModule(string name, int access, string version)
+	  public override sealed ModuleVisitor VisitModule(string name, int access, string version)
 	  {
-		return moduleWriter = new ModuleWriter(symbolTable, symbolTable.addConstantModule(name).index, access, string.ReferenceEquals(version, null) ? 0 : symbolTable.addConstantUtf8(version));
+		return _moduleWriter = new ModuleWriter(_symbolTable, _symbolTable.AddConstantModule(name).index, access, string.ReferenceEquals(version, null) ? 0 : _symbolTable.AddConstantUtf8(version));
 	  }
 
-	  public override sealed void visitNestHost(string nestHost)
+	  public override sealed void VisitNestHost(string nestHost)
 	  {
-		nestHostClassIndex = symbolTable.addConstantClass(nestHost).index;
+		_nestHostClassIndex = _symbolTable.AddConstantClass(nestHost).index;
 	  }
 
-	  public override sealed void visitOuterClass(string owner, string name, string descriptor)
+	  public override sealed void VisitOuterClass(string owner, string name, string descriptor)
 	  {
-		enclosingClassIndex = symbolTable.addConstantClass(owner).index;
+		_enclosingClassIndex = _symbolTable.AddConstantClass(owner).index;
 		if (!string.ReferenceEquals(name, null) && !string.ReferenceEquals(descriptor, null))
 		{
-		  enclosingMethodIndex = symbolTable.addConstantNameAndType(name, descriptor);
+		  _enclosingMethodIndex = _symbolTable.AddConstantNameAndType(name, descriptor);
 		}
 	  }
 
-	  public override sealed AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+	  public override sealed AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
 	  {
 		if (visible)
 		{
-		  return lastRuntimeVisibleAnnotation = AnnotationWriter.create(symbolTable, descriptor, lastRuntimeVisibleAnnotation);
+		  return _lastRuntimeVisibleAnnotation = AnnotationWriter.Create(_symbolTable, descriptor, _lastRuntimeVisibleAnnotation);
 		}
 		else
 		{
-		  return lastRuntimeInvisibleAnnotation = AnnotationWriter.create(symbolTable, descriptor, lastRuntimeInvisibleAnnotation);
+		  return _lastRuntimeInvisibleAnnotation = AnnotationWriter.Create(_symbolTable, descriptor, _lastRuntimeInvisibleAnnotation);
 		}
 	  }
 
-	  public override sealed AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+	  public override sealed AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
 	  {
 		if (visible)
 		{
-		  return lastRuntimeVisibleTypeAnnotation = AnnotationWriter.create(symbolTable, typeRef, typePath, descriptor, lastRuntimeVisibleTypeAnnotation);
+		  return _lastRuntimeVisibleTypeAnnotation = AnnotationWriter.Create(_symbolTable, typeRef, typePath, descriptor, _lastRuntimeVisibleTypeAnnotation);
 		}
 		else
 		{
-		  return lastRuntimeInvisibleTypeAnnotation = AnnotationWriter.create(symbolTable, typeRef, typePath, descriptor, lastRuntimeInvisibleTypeAnnotation);
+		  return _lastRuntimeInvisibleTypeAnnotation = AnnotationWriter.Create(_symbolTable, typeRef, typePath, descriptor, _lastRuntimeInvisibleTypeAnnotation);
 		}
 	  }
 
-	  public override sealed void visitAttribute(Attribute attribute)
+	  public override sealed void VisitAttribute(Attribute attribute)
 	  {
 		// Store the attributes in the <i>reverse</i> order of their visit by this method.
-		attribute.nextAttribute = firstAttribute;
-		firstAttribute = attribute;
+		attribute.nextAttribute = _firstAttribute;
+		_firstAttribute = attribute;
 	  }
 
-	  public override sealed void visitNestMember(string nestMember)
+	  public override sealed void VisitNestMember(string nestMember)
 	  {
-		if (nestMemberClasses == null)
+		if (_nestMemberClasses == null)
 		{
-		  nestMemberClasses = new ByteVector();
+		  _nestMemberClasses = new ByteVector();
 		}
-		++numberOfNestMemberClasses;
-		nestMemberClasses.putShort(symbolTable.addConstantClass(nestMember).index);
+		++_numberOfNestMemberClasses;
+		_nestMemberClasses.PutShort(_symbolTable.AddConstantClass(nestMember).index);
 	  }
 
-	  public override sealed void visitPermittedSubclass(string permittedSubclass)
+	  public override sealed void VisitPermittedSubclass(string permittedSubclass)
 	  {
-		if (permittedSubclasses == null)
+		if (_permittedSubclasses == null)
 		{
-		  permittedSubclasses = new ByteVector();
+		  _permittedSubclasses = new ByteVector();
 		}
-		++numberOfPermittedSubclasses;
-		permittedSubclasses.putShort(symbolTable.addConstantClass(permittedSubclass).index);
+		++_numberOfPermittedSubclasses;
+		_permittedSubclasses.PutShort(_symbolTable.AddConstantClass(permittedSubclass).index);
 	  }
 
-	  public override sealed void visitInnerClass(string name, string outerName, string innerName, int access)
+	  public override sealed void VisitInnerClass(string name, string outerName, string innerName, int access)
 	  {
-		if (innerClasses == null)
+		if (_innerClasses == null)
 		{
-		  innerClasses = new ByteVector();
+		  _innerClasses = new ByteVector();
 		}
 		// Section 4.7.6 of the JVMS states "Every CONSTANT_Class_info entry in the constant_pool table
 		// which represents a class or interface C that is not a package member must have exactly one
@@ -412,63 +412,63 @@ namespace ObjectWeb.Asm
 		// field of the Symbol of each CONSTANT_Class_info entry C whether an inner class entry has
 		// already been added for C. If so, we store the index of this inner class entry (plus one) in
 		// the info field. This trick allows duplicate detection in O(1) time.
-		Symbol nameSymbol = symbolTable.addConstantClass(name);
+		Symbol nameSymbol = _symbolTable.AddConstantClass(name);
 		if (nameSymbol.info == 0)
 		{
-		  ++numberOfInnerClasses;
-		  innerClasses.putShort(nameSymbol.index);
-		  innerClasses.putShort(string.ReferenceEquals(outerName, null) ? 0 : symbolTable.addConstantClass(outerName).index);
-		  innerClasses.putShort(string.ReferenceEquals(innerName, null) ? 0 : symbolTable.addConstantUtf8(innerName));
-		  innerClasses.putShort(access);
-		  nameSymbol.info = numberOfInnerClasses;
+		  ++_numberOfInnerClasses;
+		  _innerClasses.PutShort(nameSymbol.index);
+		  _innerClasses.PutShort(string.ReferenceEquals(outerName, null) ? 0 : _symbolTable.AddConstantClass(outerName).index);
+		  _innerClasses.PutShort(string.ReferenceEquals(innerName, null) ? 0 : _symbolTable.AddConstantUtf8(innerName));
+		  _innerClasses.PutShort(access);
+		  nameSymbol.info = _numberOfInnerClasses;
 		}
 		// Else, compare the inner classes entry nameSymbol.info - 1 with the arguments of this method
 		// and throw an exception if there is a difference?
 	  }
 
-	  public override sealed RecordComponentVisitor visitRecordComponent(string name, string descriptor, string signature)
+	  public override sealed RecordComponentVisitor VisitRecordComponent(string name, string descriptor, string signature)
 	  {
-		RecordComponentWriter recordComponentWriter = new RecordComponentWriter(symbolTable, name, descriptor, signature);
-		if (firstRecordComponent == null)
+		RecordComponentWriter recordComponentWriter = new RecordComponentWriter(_symbolTable, name, descriptor, signature);
+		if (_firstRecordComponent == null)
 		{
-		  firstRecordComponent = recordComponentWriter;
+		  _firstRecordComponent = recordComponentWriter;
 		}
 		else
 		{
-		  lastRecordComponent.@delegate = recordComponentWriter;
+		  _lastRecordComponent.@delegate = recordComponentWriter;
 		}
-		return lastRecordComponent = recordComponentWriter;
+		return _lastRecordComponent = recordComponentWriter;
 	  }
 
-	  public override sealed FieldVisitor visitField(int access, string name, string descriptor, string signature, object value)
+	  public override sealed FieldVisitor VisitField(int access, string name, string descriptor, string signature, object value)
 	  {
-		FieldWriter fieldWriter = new FieldWriter(symbolTable, access, name, descriptor, signature, value);
-		if (firstField == null)
+		FieldWriter fieldWriter = new FieldWriter(_symbolTable, access, name, descriptor, signature, value);
+		if (_firstField == null)
 		{
-		  firstField = fieldWriter;
+		  _firstField = fieldWriter;
 		}
 		else
 		{
-		  lastField.fv = fieldWriter;
+		  _lastField.fv = fieldWriter;
 		}
-		return lastField = fieldWriter;
+		return _lastField = fieldWriter;
 	  }
 
-	  public override sealed MethodVisitor visitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
+	  public override sealed MethodVisitor VisitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
 	  {
-		MethodWriter methodWriter = new MethodWriter(symbolTable, access, name, descriptor, signature, exceptions, compute);
-		if (firstMethod == null)
+		MethodWriter methodWriter = new MethodWriter(_symbolTable, access, name, descriptor, signature, exceptions, _compute);
+		if (_firstMethod == null)
 		{
-		  firstMethod = methodWriter;
+		  _firstMethod = methodWriter;
 		}
 		else
 		{
-		  lastMethod.mv = methodWriter;
+		  _lastMethod.mv = methodWriter;
 		}
-		return lastMethod = methodWriter;
+		return _lastMethod = methodWriter;
 	  }
 
-	  public override sealed void visitEnd()
+	  public override sealed void VisitEnd()
 	  {
 		// Nothing to do.
 	  }
@@ -483,249 +483,249 @@ namespace ObjectWeb.Asm
 	  /// <returns> the binary content of the JVMS ClassFile structure that was built by this ClassWriter. </returns>
 	  /// <exception cref="ClassTooLargeException"> if the constant pool of the class is too large. </exception>
 	  /// <exception cref="MethodTooLargeException"> if the Code attribute of a method is too large. </exception>
-	  public virtual sbyte[] toByteArray()
+	  public virtual sbyte[] ToByteArray()
 	  {
 		// First step: compute the size in bytes of the ClassFile structure.
 		// The magic field uses 4 bytes, 10 mandatory fields (minor_version, major_version,
 		// constant_pool_count, access_flags, this_class, super_class, interfaces_count, fields_count,
 		// methods_count and attributes_count) use 2 bytes each, and each interface uses 2 bytes too.
-		int size = 24 + 2 * interfaceCount;
+		int size = 24 + 2 * _interfaceCount;
 		int fieldsCount = 0;
-		FieldWriter fieldWriter = firstField;
+		FieldWriter fieldWriter = _firstField;
 		while (fieldWriter != null)
 		{
 		  ++fieldsCount;
-		  size += fieldWriter.computeFieldInfoSize();
+		  size += fieldWriter.ComputeFieldInfoSize();
 		  fieldWriter = (FieldWriter) fieldWriter.fv;
 		}
 		int methodsCount = 0;
-		MethodWriter methodWriter = firstMethod;
+		MethodWriter methodWriter = _firstMethod;
 		while (methodWriter != null)
 		{
 		  ++methodsCount;
-		  size += methodWriter.computeMethodInfoSize();
+		  size += methodWriter.ComputeMethodInfoSize();
 		  methodWriter = (MethodWriter) methodWriter.mv;
 		}
 
 		// For ease of reference, we use here the same attribute order as in Section 4.7 of the JVMS.
 		int attributesCount = 0;
-		if (innerClasses != null)
+		if (_innerClasses != null)
 		{
 		  ++attributesCount;
-		  size += 8 + innerClasses.length;
-		  symbolTable.addConstantUtf8(Constants.INNER_CLASSES);
+		  size += 8 + _innerClasses.length;
+		  _symbolTable.AddConstantUtf8(Constants.Inner_Classes);
 		}
-		if (enclosingClassIndex != 0)
+		if (_enclosingClassIndex != 0)
 		{
 		  ++attributesCount;
 		  size += 10;
-		  symbolTable.addConstantUtf8(Constants.ENCLOSING_METHOD);
+		  _symbolTable.AddConstantUtf8(Constants.Enclosing_Method);
 		}
-		if ((accessFlags & Opcodes.ACC_SYNTHETIC) != 0 && (version & 0xFFFF) < Opcodes.V1_5)
+		if ((_accessFlags & IOpcodes.Acc_Synthetic) != 0 && (_version & 0xFFFF) < IOpcodes.V1_5)
 		{
 		  ++attributesCount;
 		  size += 6;
-		  symbolTable.addConstantUtf8(Constants.SYNTHETIC);
+		  _symbolTable.AddConstantUtf8(Constants.Synthetic);
 		}
-		if (signatureIndex != 0)
+		if (_signatureIndex != 0)
 		{
 		  ++attributesCount;
 		  size += 8;
-		  symbolTable.addConstantUtf8(Constants.SIGNATURE);
+		  _symbolTable.AddConstantUtf8(Constants.Signature);
 		}
-		if (sourceFileIndex != 0)
+		if (_sourceFileIndex != 0)
 		{
 		  ++attributesCount;
 		  size += 8;
-		  symbolTable.addConstantUtf8(Constants.SOURCE_FILE);
+		  _symbolTable.AddConstantUtf8(Constants.Source_File);
 		}
-		if (debugExtension != null)
+		if (_debugExtension != null)
 		{
 		  ++attributesCount;
-		  size += 6 + debugExtension.length;
-		  symbolTable.addConstantUtf8(Constants.SOURCE_DEBUG_EXTENSION);
+		  size += 6 + _debugExtension.length;
+		  _symbolTable.AddConstantUtf8(Constants.Source_Debug_Extension);
 		}
-		if ((accessFlags & Opcodes.ACC_DEPRECATED) != 0)
+		if ((_accessFlags & IOpcodes.Acc_Deprecated) != 0)
 		{
 		  ++attributesCount;
 		  size += 6;
-		  symbolTable.addConstantUtf8(Constants.DEPRECATED);
+		  _symbolTable.AddConstantUtf8(Constants.Deprecated);
 		}
-		if (lastRuntimeVisibleAnnotation != null)
+		if (_lastRuntimeVisibleAnnotation != null)
 		{
 		  ++attributesCount;
-		  size += lastRuntimeVisibleAnnotation.computeAnnotationsSize(Constants.RUNTIME_VISIBLE_ANNOTATIONS);
+		  size += _lastRuntimeVisibleAnnotation.ComputeAnnotationsSize(Constants.Runtime_Visible_Annotations);
 		}
-		if (lastRuntimeInvisibleAnnotation != null)
+		if (_lastRuntimeInvisibleAnnotation != null)
 		{
 		  ++attributesCount;
-		  size += lastRuntimeInvisibleAnnotation.computeAnnotationsSize(Constants.RUNTIME_INVISIBLE_ANNOTATIONS);
+		  size += _lastRuntimeInvisibleAnnotation.ComputeAnnotationsSize(Constants.Runtime_Invisible_Annotations);
 		}
-		if (lastRuntimeVisibleTypeAnnotation != null)
+		if (_lastRuntimeVisibleTypeAnnotation != null)
 		{
 		  ++attributesCount;
-		  size += lastRuntimeVisibleTypeAnnotation.computeAnnotationsSize(Constants.RUNTIME_VISIBLE_TYPE_ANNOTATIONS);
+		  size += _lastRuntimeVisibleTypeAnnotation.ComputeAnnotationsSize(Constants.Runtime_Visible_Type_Annotations);
 		}
-		if (lastRuntimeInvisibleTypeAnnotation != null)
+		if (_lastRuntimeInvisibleTypeAnnotation != null)
 		{
 		  ++attributesCount;
-		  size += lastRuntimeInvisibleTypeAnnotation.computeAnnotationsSize(Constants.RUNTIME_INVISIBLE_TYPE_ANNOTATIONS);
+		  size += _lastRuntimeInvisibleTypeAnnotation.ComputeAnnotationsSize(Constants.Runtime_Invisible_Type_Annotations);
 		}
-		if (symbolTable.computeBootstrapMethodsSize() > 0)
+		if (_symbolTable.ComputeBootstrapMethodsSize() > 0)
 		{
 		  ++attributesCount;
-		  size += symbolTable.computeBootstrapMethodsSize();
+		  size += _symbolTable.ComputeBootstrapMethodsSize();
 		}
-		if (moduleWriter != null)
+		if (_moduleWriter != null)
 		{
-		  attributesCount += moduleWriter.AttributeCount;
-		  size += moduleWriter.computeAttributesSize();
+		  attributesCount += _moduleWriter.AttributeCount;
+		  size += _moduleWriter.ComputeAttributesSize();
 		}
-		if (nestHostClassIndex != 0)
+		if (_nestHostClassIndex != 0)
 		{
 		  ++attributesCount;
 		  size += 8;
-		  symbolTable.addConstantUtf8(Constants.NEST_HOST);
+		  _symbolTable.AddConstantUtf8(Constants.Nest_Host);
 		}
-		if (nestMemberClasses != null)
+		if (_nestMemberClasses != null)
 		{
 		  ++attributesCount;
-		  size += 8 + nestMemberClasses.length;
-		  symbolTable.addConstantUtf8(Constants.NEST_MEMBERS);
+		  size += 8 + _nestMemberClasses.length;
+		  _symbolTable.AddConstantUtf8(Constants.Nest_Members);
 		}
-		if (permittedSubclasses != null)
+		if (_permittedSubclasses != null)
 		{
 		  ++attributesCount;
-		  size += 8 + permittedSubclasses.length;
-		  symbolTable.addConstantUtf8(Constants.PERMITTED_SUBCLASSES);
+		  size += 8 + _permittedSubclasses.length;
+		  _symbolTable.AddConstantUtf8(Constants.Permitted_Subclasses);
 		}
 		int recordComponentCount = 0;
 		int recordSize = 0;
-		if ((accessFlags & Opcodes.ACC_RECORD) != 0 || firstRecordComponent != null)
+		if ((_accessFlags & IOpcodes.Acc_Record) != 0 || _firstRecordComponent != null)
 		{
-		  RecordComponentWriter recordComponentWriter = firstRecordComponent;
+		  RecordComponentWriter recordComponentWriter = _firstRecordComponent;
 		  while (recordComponentWriter != null)
 		  {
 			++recordComponentCount;
-			recordSize += recordComponentWriter.computeRecordComponentInfoSize();
+			recordSize += recordComponentWriter.ComputeRecordComponentInfoSize();
 			recordComponentWriter = (RecordComponentWriter) recordComponentWriter.@delegate;
 		  }
 		  ++attributesCount;
 		  size += 8 + recordSize;
-		  symbolTable.addConstantUtf8(Constants.RECORD);
+		  _symbolTable.AddConstantUtf8(Constants.Record);
 		}
-		if (firstAttribute != null)
+		if (_firstAttribute != null)
 		{
-		  attributesCount += firstAttribute.AttributeCount;
-		  size += firstAttribute.computeAttributesSize(symbolTable);
+		  attributesCount += _firstAttribute.AttributeCount;
+		  size += _firstAttribute.ComputeAttributesSize(_symbolTable);
 		}
 		// IMPORTANT: this must be the last part of the ClassFile size computation, because the previous
 		// statements can add attribute names to the constant pool, thereby changing its size!
-		size += symbolTable.ConstantPoolLength;
-		int constantPoolCount = symbolTable.ConstantPoolCount;
+		size += _symbolTable.ConstantPoolLength;
+		int constantPoolCount = _symbolTable.ConstantPoolCount;
 		if (constantPoolCount > 0xFFFF)
 		{
-		  throw new ClassTooLargeException(symbolTable.ClassName, constantPoolCount);
+		  throw new ClassTooLargeException(_symbolTable.ClassName, constantPoolCount);
 		}
 
 		// Second step: allocate a ByteVector of the correct size (in order to avoid any array copy in
 		// dynamic resizes) and fill it with the ClassFile content.
 		ByteVector result = new ByteVector(size);
-		result.putInt(unchecked((int)0xCAFEBABE)).putInt(version);
-		symbolTable.putConstantPool(result);
-		int mask = (version & 0xFFFF) < Opcodes.V1_5 ? Opcodes.ACC_SYNTHETIC : 0;
-		result.putShort(accessFlags & ~mask).putShort(thisClass).putShort(superClass);
-		result.putShort(interfaceCount);
-		for (int i = 0; i < interfaceCount; ++i)
+		result.PutInt(unchecked((int)0xCAFEBABE)).PutInt(_version);
+		_symbolTable.PutConstantPool(result);
+		int mask = (_version & 0xFFFF) < IOpcodes.V1_5 ? IOpcodes.Acc_Synthetic : 0;
+		result.PutShort(_accessFlags & ~mask).PutShort(_thisClass).PutShort(_superClass);
+		result.PutShort(_interfaceCount);
+		for (int i = 0; i < _interfaceCount; ++i)
 		{
-		  result.putShort(interfaces[i]);
+		  result.PutShort(_interfaces[i]);
 		}
-		result.putShort(fieldsCount);
-		fieldWriter = firstField;
+		result.PutShort(fieldsCount);
+		fieldWriter = _firstField;
 		while (fieldWriter != null)
 		{
-		  fieldWriter.putFieldInfo(result);
+		  fieldWriter.PutFieldInfo(result);
 		  fieldWriter = (FieldWriter) fieldWriter.fv;
 		}
-		result.putShort(methodsCount);
+		result.PutShort(methodsCount);
 		bool hasFrames = false;
 		bool hasAsmInstructions = false;
-		methodWriter = firstMethod;
+		methodWriter = _firstMethod;
 		while (methodWriter != null)
 		{
-		  hasFrames |= methodWriter.hasFrames();
-		  hasAsmInstructions |= methodWriter.hasAsmInstructions();
-		  methodWriter.putMethodInfo(result);
+		  hasFrames |= methodWriter.HasFrames();
+		  hasAsmInstructions |= methodWriter.HasAsmInstructions();
+		  methodWriter.PutMethodInfo(result);
 		  methodWriter = (MethodWriter) methodWriter.mv;
 		}
 		// For ease of reference, we use here the same attribute order as in Section 4.7 of the JVMS.
-		result.putShort(attributesCount);
-		if (innerClasses != null)
+		result.PutShort(attributesCount);
+		if (_innerClasses != null)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.INNER_CLASSES)).putInt(innerClasses.length + 2).putShort(numberOfInnerClasses).putByteArray(innerClasses.data, 0, innerClasses.length);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Inner_Classes)).PutInt(_innerClasses.length + 2).PutShort(_numberOfInnerClasses).PutByteArray(_innerClasses.data, 0, _innerClasses.length);
 		}
-		if (enclosingClassIndex != 0)
+		if (_enclosingClassIndex != 0)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.ENCLOSING_METHOD)).putInt(4).putShort(enclosingClassIndex).putShort(enclosingMethodIndex);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Enclosing_Method)).PutInt(4).PutShort(_enclosingClassIndex).PutShort(_enclosingMethodIndex);
 		}
-		if ((accessFlags & Opcodes.ACC_SYNTHETIC) != 0 && (version & 0xFFFF) < Opcodes.V1_5)
+		if ((_accessFlags & IOpcodes.Acc_Synthetic) != 0 && (_version & 0xFFFF) < IOpcodes.V1_5)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.SYNTHETIC)).putInt(0);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Synthetic)).PutInt(0);
 		}
-		if (signatureIndex != 0)
+		if (_signatureIndex != 0)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.SIGNATURE)).putInt(2).putShort(signatureIndex);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Signature)).PutInt(2).PutShort(_signatureIndex);
 		}
-		if (sourceFileIndex != 0)
+		if (_sourceFileIndex != 0)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.SOURCE_FILE)).putInt(2).putShort(sourceFileIndex);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Source_File)).PutInt(2).PutShort(_sourceFileIndex);
 		}
-		if (debugExtension != null)
+		if (_debugExtension != null)
 		{
-		  int length = debugExtension.length;
-		  result.putShort(symbolTable.addConstantUtf8(Constants.SOURCE_DEBUG_EXTENSION)).putInt(length).putByteArray(debugExtension.data, 0, length);
+		  int length = _debugExtension.length;
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Source_Debug_Extension)).PutInt(length).PutByteArray(_debugExtension.data, 0, length);
 		}
-		if ((accessFlags & Opcodes.ACC_DEPRECATED) != 0)
+		if ((_accessFlags & IOpcodes.Acc_Deprecated) != 0)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.DEPRECATED)).putInt(0);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Deprecated)).PutInt(0);
 		}
-		AnnotationWriter.putAnnotations(symbolTable, lastRuntimeVisibleAnnotation, lastRuntimeInvisibleAnnotation, lastRuntimeVisibleTypeAnnotation, lastRuntimeInvisibleTypeAnnotation, result);
-		symbolTable.putBootstrapMethods(result);
-		if (moduleWriter != null)
+		AnnotationWriter.PutAnnotations(_symbolTable, _lastRuntimeVisibleAnnotation, _lastRuntimeInvisibleAnnotation, _lastRuntimeVisibleTypeAnnotation, _lastRuntimeInvisibleTypeAnnotation, result);
+		_symbolTable.PutBootstrapMethods(result);
+		if (_moduleWriter != null)
 		{
-		  moduleWriter.putAttributes(result);
+		  _moduleWriter.PutAttributes(result);
 		}
-		if (nestHostClassIndex != 0)
+		if (_nestHostClassIndex != 0)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.NEST_HOST)).putInt(2).putShort(nestHostClassIndex);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Nest_Host)).PutInt(2).PutShort(_nestHostClassIndex);
 		}
-		if (nestMemberClasses != null)
+		if (_nestMemberClasses != null)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.NEST_MEMBERS)).putInt(nestMemberClasses.length + 2).putShort(numberOfNestMemberClasses).putByteArray(nestMemberClasses.data, 0, nestMemberClasses.length);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Nest_Members)).PutInt(_nestMemberClasses.length + 2).PutShort(_numberOfNestMemberClasses).PutByteArray(_nestMemberClasses.data, 0, _nestMemberClasses.length);
 		}
-		if (permittedSubclasses != null)
+		if (_permittedSubclasses != null)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.PERMITTED_SUBCLASSES)).putInt(permittedSubclasses.length + 2).putShort(numberOfPermittedSubclasses).putByteArray(permittedSubclasses.data, 0, permittedSubclasses.length);
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Permitted_Subclasses)).PutInt(_permittedSubclasses.length + 2).PutShort(_numberOfPermittedSubclasses).PutByteArray(_permittedSubclasses.data, 0, _permittedSubclasses.length);
 		}
-		if ((accessFlags & Opcodes.ACC_RECORD) != 0 || firstRecordComponent != null)
+		if ((_accessFlags & IOpcodes.Acc_Record) != 0 || _firstRecordComponent != null)
 		{
-		  result.putShort(symbolTable.addConstantUtf8(Constants.RECORD)).putInt(recordSize + 2).putShort(recordComponentCount);
-		  RecordComponentWriter recordComponentWriter = firstRecordComponent;
+		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Record)).PutInt(recordSize + 2).PutShort(recordComponentCount);
+		  RecordComponentWriter recordComponentWriter = _firstRecordComponent;
 		  while (recordComponentWriter != null)
 		  {
-			recordComponentWriter.putRecordComponentInfo(result);
+			recordComponentWriter.PutRecordComponentInfo(result);
 			recordComponentWriter = (RecordComponentWriter) recordComponentWriter.@delegate;
 		  }
 		}
-		if (firstAttribute != null)
+		if (_firstAttribute != null)
 		{
-		  firstAttribute.putAttributes(symbolTable, result);
+		  _firstAttribute.PutAttributes(_symbolTable, result);
 		}
 
 		// Third step: replace the ASM specific instructions, if any.
 		if (hasAsmInstructions)
 		{
-		  return replaceAsmInstructions(result.data, hasFrames);
+		  return ReplaceAsmInstructions(result.data, hasFrames);
 		}
 		else
 		{
@@ -742,29 +742,29 @@ namespace ObjectWeb.Asm
 	  /// <param name="hasFrames"> whether there is at least one stack map frames in 'classFile'. </param>
 	  /// <returns> an equivalent of 'classFile', with the ASM specific instructions replaced with standard
 	  ///     ones. </returns>
-	  private sbyte[] replaceAsmInstructions(sbyte[] classFile, bool hasFrames)
+	  private sbyte[] ReplaceAsmInstructions(sbyte[] classFile, bool hasFrames)
 	  {
 		Attribute[] attributes = AttributePrototypes;
-		firstField = null;
-		lastField = null;
-		firstMethod = null;
-		lastMethod = null;
-		lastRuntimeVisibleAnnotation = null;
-		lastRuntimeInvisibleAnnotation = null;
-		lastRuntimeVisibleTypeAnnotation = null;
-		lastRuntimeInvisibleTypeAnnotation = null;
-		moduleWriter = null;
-		nestHostClassIndex = 0;
-		numberOfNestMemberClasses = 0;
-		nestMemberClasses = null;
-		numberOfPermittedSubclasses = 0;
-		permittedSubclasses = null;
-		firstRecordComponent = null;
-		lastRecordComponent = null;
-		firstAttribute = null;
-		compute = hasFrames ? MethodWriter.COMPUTE_INSERTED_FRAMES : MethodWriter.COMPUTE_NOTHING;
-		(new ClassReader(classFile, 0, false)).accept(this, attributes, (hasFrames ? ClassReader.EXPAND_FRAMES : 0) | ClassReader.EXPAND_ASM_INSNS);
-		return toByteArray();
+		_firstField = null;
+		_lastField = null;
+		_firstMethod = null;
+		_lastMethod = null;
+		_lastRuntimeVisibleAnnotation = null;
+		_lastRuntimeInvisibleAnnotation = null;
+		_lastRuntimeVisibleTypeAnnotation = null;
+		_lastRuntimeInvisibleTypeAnnotation = null;
+		_moduleWriter = null;
+		_nestHostClassIndex = 0;
+		_numberOfNestMemberClasses = 0;
+		_nestMemberClasses = null;
+		_numberOfPermittedSubclasses = 0;
+		_permittedSubclasses = null;
+		_firstRecordComponent = null;
+		_lastRecordComponent = null;
+		_firstAttribute = null;
+		_compute = hasFrames ? MethodWriter.Compute_Inserted_Frames : MethodWriter.Compute_Nothing;
+		(new ClassReader(classFile, 0, false)).Accept(this, attributes, (hasFrames ? ClassReader.Expand_Frames : 0) | ClassReader.Expand_Asm_Insns);
+		return ToByteArray();
 	  }
 
 	  /// <summary>
@@ -776,26 +776,26 @@ namespace ObjectWeb.Asm
 		  get
 		  {
 			Attribute.Set attributePrototypes = new Attribute.Set();
-			attributePrototypes.addAttributes(firstAttribute);
-			FieldWriter fieldWriter = firstField;
+			attributePrototypes.AddAttributes(_firstAttribute);
+			FieldWriter fieldWriter = _firstField;
 			while (fieldWriter != null)
 			{
-			  fieldWriter.collectAttributePrototypes(attributePrototypes);
+			  fieldWriter.CollectAttributePrototypes(attributePrototypes);
 			  fieldWriter = (FieldWriter) fieldWriter.fv;
 			}
-			MethodWriter methodWriter = firstMethod;
+			MethodWriter methodWriter = _firstMethod;
 			while (methodWriter != null)
 			{
-			  methodWriter.collectAttributePrototypes(attributePrototypes);
+			  methodWriter.CollectAttributePrototypes(attributePrototypes);
 			  methodWriter = (MethodWriter) methodWriter.mv;
 			}
-			RecordComponentWriter recordComponentWriter = firstRecordComponent;
+			RecordComponentWriter recordComponentWriter = _firstRecordComponent;
 			while (recordComponentWriter != null)
 			{
-			  recordComponentWriter.collectAttributePrototypes(attributePrototypes);
+			  recordComponentWriter.CollectAttributePrototypes(attributePrototypes);
 			  recordComponentWriter = (RecordComponentWriter) recordComponentWriter.@delegate;
 			}
-			return attributePrototypes.toArray();
+			return attributePrototypes.ToArray();
 		  }
 	  }
 
@@ -811,9 +811,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="value"> the value of the constant to be added to the constant pool. This parameter must be
 	  ///     an <seealso cref="Integer"/>, a <seealso cref="Float"/>, a <seealso cref="Long"/>, a <seealso cref="Double"/> or a <seealso cref="string"/>. </param>
 	  /// <returns> the index of a new or already existing constant item with the given value. </returns>
-	  public virtual int newConst(object value)
+	  public virtual int NewConst(object value)
 	  {
-		return symbolTable.addConstant(value).index;
+		return _symbolTable.AddConstant(value).index;
 	  }
 
 	  /// <summary>
@@ -824,9 +824,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="value"> the String value. </param>
 	  /// <returns> the index of a new or already existing UTF8 item. </returns>
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	  public virtual int newUTF8(string value)
+	  public virtual int NewUtf8(string value)
 	  {
-		return symbolTable.addConstantUtf8(value);
+		return _symbolTable.AddConstantUtf8(value);
 	  }
 
 	  /// <summary>
@@ -836,9 +836,9 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="value"> the internal name of the class. </param>
 	  /// <returns> the index of a new or already existing class reference item. </returns>
-	  public virtual int newClass(string value)
+	  public virtual int NewClass(string value)
 	  {
-		return symbolTable.addConstantClass(value).index;
+		return _symbolTable.AddConstantClass(value).index;
 	  }
 
 	  /// <summary>
@@ -848,9 +848,9 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="methodDescriptor"> method descriptor of the method type. </param>
 	  /// <returns> the index of a new or already existing method type reference item. </returns>
-	  public virtual int newMethodType(string methodDescriptor)
+	  public virtual int NewMethodType(string methodDescriptor)
 	  {
-		return symbolTable.addConstantMethodType(methodDescriptor).index;
+		return _symbolTable.AddConstantMethodType(methodDescriptor).index;
 	  }
 
 	  /// <summary>
@@ -860,9 +860,9 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="moduleName"> name of the module. </param>
 	  /// <returns> the index of a new or already existing module reference item. </returns>
-	  public virtual int newModule(string moduleName)
+	  public virtual int NewModule(string moduleName)
 	  {
-		return symbolTable.addConstantModule(moduleName).index;
+		return _symbolTable.AddConstantModule(moduleName).index;
 	  }
 
 	  /// <summary>
@@ -872,9 +872,9 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="packageName"> name of the package in its internal form. </param>
 	  /// <returns> the index of a new or already existing module reference item. </returns>
-	  public virtual int newPackage(string packageName)
+	  public virtual int NewPackage(string packageName)
 	  {
-		return symbolTable.addConstantPackage(packageName).index;
+		return _symbolTable.AddConstantPackage(packageName).index;
 	  }
 
 	  /// <summary>
@@ -882,10 +882,10 @@ namespace ObjectWeb.Asm
 	  /// already contains a similar item. <i>This method is intended for <seealso cref="Attribute"/> sub classes,
 	  /// and is normally not needed by class generators or adapters.</i>
 	  /// </summary>
-	  /// <param name="tag"> the kind of this handle. Must be <seealso cref="Opcodes.H_GETFIELD"/>, {@link
-	  ///     Opcodes#H_GETSTATIC}, <seealso cref="Opcodes.H_PUTFIELD"/>, <seealso cref="Opcodes.H_PUTSTATIC"/>, {@link
-	  ///     Opcodes#H_INVOKEVIRTUAL}, <seealso cref="Opcodes.H_INVOKESTATIC"/>, <seealso cref="Opcodes.H_INVOKESPECIAL"/>,
-	  ///     <seealso cref="Opcodes.H_NEWINVOKESPECIAL"/> or <seealso cref="Opcodes.H_INVOKEINTERFACE"/>. </param>
+	  /// <param name="tag"> the kind of this handle. Must be <seealso cref="IIOpcodes.H_Getfield/>, {@link
+	  ///     Opcodes#H_GETSTATIC}, <seealso cref="IIOpcodes.H_Putfield/>, <seealso cref="IIOpcodes.H_Putstatic/>, {@link
+	  ///     Opcodes#H_INVOKEVIRTUAL}, <seealso cref="IIOpcodes.H_Invokestatic/>, <seealso cref="IIOpcodes.H_Invokespecial/>,
+	  ///     <seealso cref="IIOpcodes.H_Newinvokespecial/> or <seealso cref="IIOpcodes.H_Invokeinterface/>. </param>
 	  /// <param name="owner"> the internal name of the field or method owner class. </param>
 	  /// <param name="name"> the name of the field or method. </param>
 	  /// <param name="descriptor"> the descriptor of the field or method. </param>
@@ -893,9 +893,9 @@ namespace ObjectWeb.Asm
 	  /// @deprecated this method is superseded by {@link #newHandle(int, String, String, String,
 	  ///     boolean)}. 
 	  [Obsolete("this method is superseded by {@link #newHandle(int, String, String, String,")]
-	  public virtual int newHandle(int tag, string owner, string name, string descriptor)
+	  public virtual int NewHandle(int tag, string owner, string name, string descriptor)
 	  {
-		return newHandle(tag, owner, name, descriptor, tag == Opcodes.H_INVOKEINTERFACE);
+		return NewHandle(tag, owner, name, descriptor, tag == IOpcodes.H_Invokeinterface);
 	  }
 
 	  /// <summary>
@@ -903,18 +903,18 @@ namespace ObjectWeb.Asm
 	  /// already contains a similar item. <i>This method is intended for <seealso cref="Attribute"/> sub classes,
 	  /// and is normally not needed by class generators or adapters.</i>
 	  /// </summary>
-	  /// <param name="tag"> the kind of this handle. Must be <seealso cref="Opcodes.H_GETFIELD"/>, {@link
-	  ///     Opcodes#H_GETSTATIC}, <seealso cref="Opcodes.H_PUTFIELD"/>, <seealso cref="Opcodes.H_PUTSTATIC"/>, {@link
-	  ///     Opcodes#H_INVOKEVIRTUAL}, <seealso cref="Opcodes.H_INVOKESTATIC"/>, <seealso cref="Opcodes.H_INVOKESPECIAL"/>,
-	  ///     <seealso cref="Opcodes.H_NEWINVOKESPECIAL"/> or <seealso cref="Opcodes.H_INVOKEINTERFACE"/>. </param>
+	  /// <param name="tag"> the kind of this handle. Must be <seealso cref="IIOpcodes.H_Getfield/>, {@link
+	  ///     Opcodes#H_GETSTATIC}, <seealso cref="IIOpcodes.H_Putfield/>, <seealso cref="IIOpcodes.H_Putstatic/>, {@link
+	  ///     Opcodes#H_INVOKEVIRTUAL}, <seealso cref="IIOpcodes.H_Invokestatic/>, <seealso cref="IIOpcodes.H_Invokespecial/>,
+	  ///     <seealso cref="IIOpcodes.H_Newinvokespecial/> or <seealso cref="IIOpcodes.H_Invokeinterface/>. </param>
 	  /// <param name="owner"> the internal name of the field or method owner class. </param>
 	  /// <param name="name"> the name of the field or method. </param>
 	  /// <param name="descriptor"> the descriptor of the field or method. </param>
 	  /// <param name="isInterface"> true if the owner is an interface. </param>
 	  /// <returns> the index of a new or already existing method type reference item. </returns>
-	  public virtual int newHandle(int tag, string owner, string name, string descriptor, bool isInterface)
+	  public virtual int NewHandle(int tag, string owner, string name, string descriptor, bool isInterface)
 	  {
-		return symbolTable.addConstantMethodHandle(tag, owner, name, descriptor, isInterface).index;
+		return _symbolTable.AddConstantMethodHandle(tag, owner, name, descriptor, isInterface).index;
 	  }
 
 	  /// <summary>
@@ -927,9 +927,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="bootstrapMethodHandle"> the bootstrap method. </param>
 	  /// <param name="bootstrapMethodArguments"> the bootstrap method constant arguments. </param>
 	  /// <returns> the index of a new or already existing dynamic constant reference item. </returns>
-	  public virtual int newConstantDynamic(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
+	  public virtual int NewConstantDynamic(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
 	  {
-		return symbolTable.addConstantDynamic(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments).index;
+		return _symbolTable.AddConstantDynamic(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments).index;
 	  }
 
 	  /// <summary>
@@ -942,9 +942,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="bootstrapMethodHandle"> the bootstrap method. </param>
 	  /// <param name="bootstrapMethodArguments"> the bootstrap method constant arguments. </param>
 	  /// <returns> the index of a new or already existing invokedynamic reference item. </returns>
-	  public virtual int newInvokeDynamic(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
+	  public virtual int NewInvokeDynamic(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
 	  {
-		return symbolTable.addConstantInvokeDynamic(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments).index;
+		return _symbolTable.AddConstantInvokeDynamic(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments).index;
 	  }
 
 	  /// <summary>
@@ -956,9 +956,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="name"> the field's name. </param>
 	  /// <param name="descriptor"> the field's descriptor. </param>
 	  /// <returns> the index of a new or already existing field reference item. </returns>
-	  public virtual int newField(string owner, string name, string descriptor)
+	  public virtual int NewField(string owner, string name, string descriptor)
 	  {
-		return symbolTable.addConstantFieldref(owner, name, descriptor).index;
+		return _symbolTable.AddConstantFieldref(owner, name, descriptor).index;
 	  }
 
 	  /// <summary>
@@ -971,9 +971,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="descriptor"> the method's descriptor. </param>
 	  /// <param name="isInterface"> {@literal true} if {@code owner} is an interface. </param>
 	  /// <returns> the index of a new or already existing method reference item. </returns>
-	  public virtual int newMethod(string owner, string name, string descriptor, bool isInterface)
+	  public virtual int NewMethod(string owner, string name, string descriptor, bool isInterface)
 	  {
-		return symbolTable.addConstantMethodref(owner, name, descriptor, isInterface).index;
+		return _symbolTable.AddConstantMethodref(owner, name, descriptor, isInterface).index;
 	  }
 
 	  /// <summary>
@@ -984,9 +984,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="name"> a name. </param>
 	  /// <param name="descriptor"> a type descriptor. </param>
 	  /// <returns> the index of a new or already existing name and type item. </returns>
-	  public virtual int newNameType(string name, string descriptor)
+	  public virtual int NewNameType(string name, string descriptor)
 	  {
-		return symbolTable.addConstantNameAndType(name, descriptor);
+		return _symbolTable.AddConstantNameAndType(name, descriptor);
 	  }
 
 	  // -----------------------------------------------------------------------------------------------
@@ -1004,7 +1004,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="type1"> the internal name of a class. </param>
 	  /// <param name="type2"> the internal name of another class. </param>
 	  /// <returns> the internal name of the common super class of the two given classes. </returns>
-	  public virtual string getCommonSuperClass(string type1, string type2)
+	  public virtual string GetCommonSuperClass(string type1, string type2)
 	  {
 		  return "java/lang/Object";
 	  }

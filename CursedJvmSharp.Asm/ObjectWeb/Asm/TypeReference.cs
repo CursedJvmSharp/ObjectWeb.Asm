@@ -43,136 +43,136 @@ namespace ObjectWeb.Asm
         ///     The sort of type references that target a type parameter of a generic class. See {@link
         ///     #getSort}.
         /// </summary>
-        public const int CLASS_TYPE_PARAMETER = 0x00;
+        public const int Class_Type_Parameter = 0x00;
 
         /// <summary>
         ///     The sort of type references that target a type parameter of a generic method. See {@link
         ///     #getSort}.
         /// </summary>
-        public const int METHOD_TYPE_PARAMETER = 0x01;
+        public const int Method_Type_Parameter = 0x01;
 
         /// <summary>
         ///     The sort of type references that target the super class of a class or one of the interfaces it
         ///     implements. See <seealso cref="getSort" />.
         /// </summary>
-        public const int CLASS_EXTENDS = 0x10;
+        public const int Class_Extends = 0x10;
 
         /// <summary>
         ///     The sort of type references that target a bound of a type parameter of a generic class. See
         ///     <seealso cref="getSort" />.
         /// </summary>
-        public const int CLASS_TYPE_PARAMETER_BOUND = 0x11;
+        public const int Class_Type_Parameter_Bound = 0x11;
 
         /// <summary>
         ///     The sort of type references that target a bound of a type parameter of a generic method. See
         ///     <seealso cref="getSort" />.
         /// </summary>
-        public const int METHOD_TYPE_PARAMETER_BOUND = 0x12;
+        public const int Method_Type_Parameter_Bound = 0x12;
 
         /// <summary>
         ///     The sort of type references that target the type of a field. See <seealso cref="getSort" />.
         /// </summary>
-        public const int FIELD = 0x13;
+        public const int Field = 0x13;
 
         /// <summary>
         ///     The sort of type references that target the return type of a method. See <seealso cref="getSort" />.
         /// </summary>
-        public const int METHOD_RETURN = 0x14;
+        public const int Method_Return = 0x14;
 
         /// <summary>
         ///     The sort of type references that target the receiver type of a method. See <seealso cref="getSort" />.
         /// </summary>
-        public const int METHOD_RECEIVER = 0x15;
+        public const int Method_Receiver = 0x15;
 
         /// <summary>
         ///     The sort of type references that target the type of a formal parameter of a method. See {@link
         ///     #getSort}.
         /// </summary>
-        public const int METHOD_FORMAL_PARAMETER = 0x16;
+        public const int Method_Formal_Parameter = 0x16;
 
         /// <summary>
         ///     The sort of type references that target the type of an exception declared in the throws clause
         ///     of a method. See <seealso cref="getSort" />.
         /// </summary>
-        public const int THROWS = 0x17;
+        public const int Throws = 0x17;
 
         /// <summary>
         ///     The sort of type references that target the type of a local variable in a method. See {@link
         ///     #getSort}.
         /// </summary>
-        public const int LOCAL_VARIABLE = 0x40;
+        public const int Local_Variable = 0x40;
 
         /// <summary>
         ///     The sort of type references that target the type of a resource variable in a method. See {@link
         ///     #getSort}.
         /// </summary>
-        public const int RESOURCE_VARIABLE = 0x41;
+        public const int Resource_Variable = 0x41;
 
         /// <summary>
         ///     The sort of type references that target the type of the exception of a 'catch' clause in a
         ///     method. See <seealso cref="getSort" />.
         /// </summary>
-        public const int EXCEPTION_PARAMETER = 0x42;
+        public const int Exception_Parameter = 0x42;
 
         /// <summary>
         ///     The sort of type references that target the type declared in an 'instanceof' instruction. See
         ///     <seealso cref="getSort" />.
         /// </summary>
-        public const int INSTANCEOF = 0x43;
+        public const int Instanceof = 0x43;
 
         /// <summary>
         ///     The sort of type references that target the type of the object created by a 'new' instruction.
         ///     See <seealso cref="getSort" />.
         /// </summary>
-        public const int NEW = 0x44;
+        public const int New = 0x44;
 
         /// <summary>
         ///     The sort of type references that target the receiver type of a constructor reference. See
         ///     <seealso cref="getSort" />.
         /// </summary>
-        public const int CONSTRUCTOR_REFERENCE = 0x45;
+        public const int Constructor_Reference = 0x45;
 
         /// <summary>
         ///     The sort of type references that target the receiver type of a method reference. See {@link
         ///     #getSort}.
         /// </summary>
-        public const int METHOD_REFERENCE = 0x46;
+        public const int Method_Reference = 0x46;
 
         /// <summary>
         ///     The sort of type references that target the type declared in an explicit or implicit cast
         ///     instruction. See <seealso cref="getSort" />.
         /// </summary>
-        public const int CAST = 0x47;
+        public const int Cast = 0x47;
 
         /// <summary>
         ///     The sort of type references that target a type parameter of a generic constructor in a
         ///     constructor call. See <seealso cref="getSort" />.
         /// </summary>
-        public const int CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT = 0x48;
+        public const int Constructor_Invocation_Type_Argument = 0x48;
 
         /// <summary>
         ///     The sort of type references that target a type parameter of a generic method in a method call.
         ///     See <seealso cref="getSort" />.
         /// </summary>
-        public const int METHOD_INVOCATION_TYPE_ARGUMENT = 0x49;
+        public const int Method_Invocation_Type_Argument = 0x49;
 
         /// <summary>
         ///     The sort of type references that target a type parameter of a generic constructor in a
         ///     constructor reference. See <seealso cref="getSort" />.
         /// </summary>
-        public const int CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT = 0x4A;
+        public const int Constructor_Reference_Type_Argument = 0x4A;
 
         /// <summary>
         ///     The sort of type references that target a type parameter of a generic method in a method
         ///     reference. See <seealso cref="getSort" />.
         /// </summary>
-        public const int METHOD_REFERENCE_TYPE_ARGUMENT = 0x4B;
+        public const int Method_Reference_Type_Argument = 0x4B;
 
         /// <summary>
         ///     The target_type and target_info structures - as defined in the Java Virtual Machine
         ///     Specification (JVMS) - corresponding to this type reference. target_type uses one byte, and all
         ///     the target_info union fields use up to 3 bytes (except localvar_target, handled with the
-        ///     specific method <seealso cref="MethodVisitor.visitLocalVariableAnnotation" />). Thus, both structures can
+        ///     specific method <seealso cref="MethodVisitor.VisitLocalVariableAnnotation" />). Thus, both structures can
         ///     be stored in an int.
         ///     <para>
         ///         This int field stores target_type (called the TypeReference 'sort' in the public API of this
@@ -195,69 +195,69 @@ namespace ObjectWeb.Asm
         ///     4.7.20.1
         /// </a>
         /// </seealso>
-        private readonly int targetTypeAndInfo;
+        private readonly int _targetTypeAndInfo;
 
         /// <summary>
         ///     Constructs a new TypeReference.
         /// </summary>
         /// <param name="typeRef">
         ///     the int encoded value of the type reference, as received in a visit method
-        ///     related to type annotations, such as <seealso cref="ClassVisitor.visitTypeAnnotation" />.
+        ///     related to type annotations, such as <seealso cref="ClassVisitor.VisitTypeAnnotation" />.
         /// </param>
         public TypeReference(int typeRef)
         {
-            targetTypeAndInfo = typeRef;
+            _targetTypeAndInfo = typeRef;
         }
 
         /// <summary>
         ///     Returns the sort of this type reference.
         /// </summary>
         /// <returns>
-        ///     one of <seealso cref="CLASS_TYPE_PARAMETER" />, <seealso cref="METHOD_TYPE_PARAMETER" />, {@link
-        ///     #CLASS_EXTENDS}, <seealso cref="CLASS_TYPE_PARAMETER_BOUND" />, <seealso cref="METHOD_TYPE_PARAMETER_BOUND" />,
-        ///     <seealso cref="FIELD" />, <seealso cref="METHOD_RETURN" />, <seealso cref="METHOD_RECEIVER" />, {@link
-        ///     #METHOD_FORMAL_PARAMETER}, <seealso cref="THROWS" />, <seealso cref="LOCAL_VARIABLE" />, {@link
-        ///     #RESOURCE_VARIABLE}, <seealso cref="EXCEPTION_PARAMETER" />, <seealso cref="INSTANCEOF" />, <seealso cref="NEW" />,
-        ///     <seealso cref="CONSTRUCTOR_REFERENCE" />, <seealso cref="METHOD_REFERENCE" />, <seealso cref="CAST" />, {@link
-        ///     #CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT}, <seealso cref="METHOD_INVOCATION_TYPE_ARGUMENT" />, {@link
-        ///     #CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT}, or <seealso cref="METHOD_REFERENCE_TYPE_ARGUMENT" />.
+        ///     one of <seealso cref="Class_Type_Parameter" />, <seealso cref="Method_Type_Parameter" />, {@link
+        ///     #CLASS_EXTENDS}, <seealso cref="Class_Type_Parameter_Bound" />, <seealso cref="Method_Type_Parameter_Bound" />,
+        ///     <seealso cref="Field" />, <seealso cref="Method_Return" />, <seealso cref="Method_Receiver" />, {@link
+        ///     #METHOD_FORMAL_PARAMETER}, <seealso cref="Throws" />, <seealso cref="Local_Variable" />, {@link
+        ///     #RESOURCE_VARIABLE}, <seealso cref="Exception_Parameter" />, <seealso cref="Instanceof" />, <seealso cref="New" />,
+        ///     <seealso cref="Constructor_Reference" />, <seealso cref="Method_Reference" />, <seealso cref="Cast" />, {@link
+        ///     #CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT}, <seealso cref="Method_Invocation_Type_Argument" />, {@link
+        ///     #CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT}, or <seealso cref="Method_Reference_Type_Argument" />.
         /// </returns>
-        public virtual int Sort => (int)((uint)targetTypeAndInfo >> 24);
+        public virtual int Sort => (int)((uint)_targetTypeAndInfo >> 24);
 
         /// <summary>
         ///     Returns the index of the type parameter referenced by this type reference. This method must
-        ///     only be used for type references whose sort is <seealso cref="CLASS_TYPE_PARAMETER" />, {@link
-        ///     #METHOD_TYPE_PARAMETER}, <seealso cref="CLASS_TYPE_PARAMETER_BOUND" /> or {@link
+        ///     only be used for type references whose sort is <seealso cref="Class_Type_Parameter" />, {@link
+        ///     #METHOD_TYPE_PARAMETER}, <seealso cref="Class_Type_Parameter_Bound" /> or {@link
         ///     #METHOD_TYPE_PARAMETER_BOUND}.
         /// </summary>
         /// <returns> a type parameter index. </returns>
-        public virtual int TypeParameterIndex => (targetTypeAndInfo & 0x00FF0000) >> 16;
+        public virtual int TypeParameterIndex => (_targetTypeAndInfo & 0x00FF0000) >> 16;
 
         /// <summary>
         ///     Returns the index of the type parameter bound, within the type parameter {@link
         ///     #getTypeParameterIndex}, referenced by this type reference. This method must only be used for
-        ///     type references whose sort is <seealso cref="CLASS_TYPE_PARAMETER_BOUND" /> or {@link
+        ///     type references whose sort is <seealso cref="Class_Type_Parameter_Bound" /> or {@link
         ///     #METHOD_TYPE_PARAMETER_BOUND}.
         /// </summary>
         /// <returns> a type parameter bound index. </returns>
-        public virtual int TypeParameterBoundIndex => (targetTypeAndInfo & 0x0000FF00) >> 8;
+        public virtual int TypeParameterBoundIndex => (_targetTypeAndInfo & 0x0000FF00) >> 8;
 
         /// <summary>
         ///     Returns the index of the "super type" of a class that is referenced by this type reference.
-        ///     This method must only be used for type references whose sort is <seealso cref="CLASS_EXTENDS" />.
+        ///     This method must only be used for type references whose sort is <seealso cref="Class_Extends" />.
         /// </summary>
         /// <returns>
         ///     the index of an interface in the 'implements' clause of a class, or -1 if this type
         ///     reference references the type of the super class.
         /// </returns>
-        public virtual int SuperTypeIndex => (short)((targetTypeAndInfo & 0x00FFFF00) >> 8);
+        public virtual int SuperTypeIndex => (short)((_targetTypeAndInfo & 0x00FFFF00) >> 8);
 
         /// <summary>
         ///     Returns the index of the formal parameter whose type is referenced by this type reference. This
-        ///     method must only be used for type references whose sort is <seealso cref="METHOD_FORMAL_PARAMETER" />.
+        ///     method must only be used for type references whose sort is <seealso cref="Method_Formal_Parameter" />.
         /// </summary>
         /// <returns> a formal parameter index. </returns>
-        public virtual int FormalParameterIndex => (targetTypeAndInfo & 0x00FF0000) >> 16;
+        public virtual int FormalParameterIndex => (_targetTypeAndInfo & 0x00FF0000) >> 16;
 
         /// <summary>
         ///     Returns the index of the exception, in a 'throws' clause of a method, whose type is referenced
@@ -265,43 +265,43 @@ namespace ObjectWeb.Asm
         ///     #THROWS}.
         /// </summary>
         /// <returns> the index of an exception in the 'throws' clause of a method. </returns>
-        public virtual int ExceptionIndex => (targetTypeAndInfo & 0x00FFFF00) >> 8;
+        public virtual int ExceptionIndex => (_targetTypeAndInfo & 0x00FFFF00) >> 8;
 
         /// <summary>
         ///     Returns the index of the try catch block (using the order in which they are visited with
         ///     visitTryCatchBlock), whose 'catch' type is referenced by this type reference. This method must
-        ///     only be used for type references whose sort is <seealso cref="EXCEPTION_PARAMETER" /> .
+        ///     only be used for type references whose sort is <seealso cref="Exception_Parameter" /> .
         /// </summary>
         /// <returns> the index of an exception in the 'throws' clause of a method. </returns>
-        public virtual int TryCatchBlockIndex => (targetTypeAndInfo & 0x00FFFF00) >> 8;
+        public virtual int TryCatchBlockIndex => (_targetTypeAndInfo & 0x00FFFF00) >> 8;
 
         /// <summary>
         ///     Returns the index of the type argument referenced by this type reference. This method must only
-        ///     be used for type references whose sort is <seealso cref="CAST" />, {@link
-        ///     #CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT}, <seealso cref="METHOD_INVOCATION_TYPE_ARGUMENT" />, {@link
-        ///     #CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT}, or <seealso cref="METHOD_REFERENCE_TYPE_ARGUMENT" />.
+        ///     be used for type references whose sort is <seealso cref="Cast" />, {@link
+        ///     #CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT}, <seealso cref="Method_Invocation_Type_Argument" />, {@link
+        ///     #CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT}, or <seealso cref="Method_Reference_Type_Argument" />.
         /// </summary>
         /// <returns> a type parameter index. </returns>
-        public virtual int TypeArgumentIndex => targetTypeAndInfo & 0xFF;
+        public virtual int TypeArgumentIndex => _targetTypeAndInfo & 0xFF;
 
         /// <summary>
         ///     Returns the int encoded value of this type reference, suitable for use in visit methods related
         ///     to type annotations, like visitTypeAnnotation.
         /// </summary>
         /// <returns> the int encoded value of this type reference. </returns>
-        public virtual int Value => targetTypeAndInfo;
+        public virtual int Value => _targetTypeAndInfo;
 
         /// <summary>
         ///     Returns a type reference of the given sort.
         /// </summary>
         /// <param name="sort">
-        ///     one of <seealso cref="FIELD" />, <seealso cref="METHOD_RETURN" />, <seealso cref="METHOD_RECEIVER" />, {@link
-        ///     #LOCAL_VARIABLE}, <seealso cref="RESOURCE_VARIABLE" />, <seealso cref="INSTANCEOF" />, <seealso cref="NEW" />,
+        ///     one of <seealso cref="Field" />, <seealso cref="Method_Return" />, <seealso cref="Method_Receiver" />, {@link
+        ///     #LOCAL_VARIABLE}, <seealso cref="Resource_Variable" />, <seealso cref="Instanceof" />, <seealso cref="New" />,
         ///     {@link
-        ///     #CONSTRUCTOR_REFERENCE}, or <seealso cref="METHOD_REFERENCE" />.
+        ///     #CONSTRUCTOR_REFERENCE}, or <seealso cref="Method_Reference" />.
         /// </param>
         /// <returns> a type reference of the given sort. </returns>
-        public static TypeReference newTypeReference(int sort)
+        public static TypeReference NewTypeReference(int sort)
         {
             return new TypeReference(sort << 24);
         }
@@ -309,10 +309,10 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     Returns a reference to a type parameter of a generic class or method.
         /// </summary>
-        /// <param name="sort"> one of <seealso cref="CLASS_TYPE_PARAMETER" /> or <seealso cref="METHOD_TYPE_PARAMETER" />. </param>
+        /// <param name="sort"> one of <seealso cref="Class_Type_Parameter" /> or <seealso cref="Method_Type_Parameter" />. </param>
         /// <param name="paramIndex"> the type parameter index. </param>
         /// <returns> a reference to the given generic class or method type parameter. </returns>
-        public static TypeReference newTypeParameterReference(int sort, int paramIndex)
+        public static TypeReference NewTypeParameterReference(int sort, int paramIndex)
         {
             return new TypeReference((sort << 24) | (paramIndex << 16));
         }
@@ -320,11 +320,11 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     Returns a reference to a type parameter bound of a generic class or method.
         /// </summary>
-        /// <param name="sort"> one of <seealso cref="CLASS_TYPE_PARAMETER" /> or <seealso cref="METHOD_TYPE_PARAMETER" />. </param>
+        /// <param name="sort"> one of <seealso cref="Class_Type_Parameter" /> or <seealso cref="Method_Type_Parameter" />. </param>
         /// <param name="paramIndex"> the type parameter index. </param>
         /// <param name="boundIndex"> the type bound index within the above type parameters. </param>
         /// <returns> a reference to the given generic class or method type parameter bound. </returns>
-        public static TypeReference newTypeParameterBoundReference(int sort, int paramIndex, int boundIndex)
+        public static TypeReference NewTypeParameterBoundReference(int sort, int paramIndex, int boundIndex)
         {
             return new TypeReference((sort << 24) | (paramIndex << 16) | (boundIndex << 8));
         }
@@ -338,9 +338,9 @@ namespace ObjectWeb.Asm
         ///     reference the super class of the class.
         /// </param>
         /// <returns> a reference to the given super type of a class. </returns>
-        public static TypeReference newSuperTypeReference(int itfIndex)
+        public static TypeReference NewSuperTypeReference(int itfIndex)
         {
-            return new TypeReference((CLASS_EXTENDS << 24) | ((itfIndex & 0xFFFF) << 8));
+            return new TypeReference((Class_Extends << 24) | ((itfIndex & 0xFFFF) << 8));
         }
 
         /// <summary>
@@ -348,9 +348,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="paramIndex"> the formal parameter index. </param>
         /// <returns> a reference to the type of the given method formal parameter. </returns>
-        public static TypeReference newFormalParameterReference(int paramIndex)
+        public static TypeReference NewFormalParameterReference(int paramIndex)
         {
-            return new TypeReference((METHOD_FORMAL_PARAMETER << 24) | (paramIndex << 16));
+            return new TypeReference((Method_Formal_Parameter << 24) | (paramIndex << 16));
         }
 
         /// <summary>
@@ -358,9 +358,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="exceptionIndex"> the index of an exception in a 'throws' clause of a method. </param>
         /// <returns> a reference to the type of the given exception. </returns>
-        public static TypeReference newExceptionReference(int exceptionIndex)
+        public static TypeReference NewExceptionReference(int exceptionIndex)
         {
-            return new TypeReference((THROWS << 24) | (exceptionIndex << 8));
+            return new TypeReference((Throws << 24) | (exceptionIndex << 8));
         }
 
         /// <summary>
@@ -371,9 +371,9 @@ namespace ObjectWeb.Asm
         ///     visited with visitTryCatchBlock).
         /// </param>
         /// <returns> a reference to the type of the given exception. </returns>
-        public static TypeReference newTryCatchReference(int tryCatchBlockIndex)
+        public static TypeReference NewTryCatchReference(int tryCatchBlockIndex)
         {
-            return new TypeReference((EXCEPTION_PARAMETER << 24) | (tryCatchBlockIndex << 8));
+            return new TypeReference((Exception_Parameter << 24) | (tryCatchBlockIndex << 8));
         }
 
         /// <summary>
@@ -381,13 +381,13 @@ namespace ObjectWeb.Asm
         ///     reference.
         /// </summary>
         /// <param name="sort">
-        ///     one of <seealso cref="CAST" />, <seealso cref="CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT" />, {@link
-        ///     #METHOD_INVOCATION_TYPE_ARGUMENT}, <seealso cref="CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT" />, or {@link
+        ///     one of <seealso cref="Cast" />, <seealso cref="Constructor_Invocation_Type_Argument" />, {@link
+        ///     #METHOD_INVOCATION_TYPE_ARGUMENT}, <seealso cref="Constructor_Reference_Type_Argument" />, or {@link
         ///     #METHOD_REFERENCE_TYPE_ARGUMENT}.
         /// </param>
         /// <param name="argIndex"> the type argument index. </param>
         /// <returns> a reference to the type of the given type argument. </returns>
-        public static TypeReference newTypeArgumentReference(int sort, int argIndex)
+        public static TypeReference NewTypeArgumentReference(int sort, int argIndex)
         {
             return new TypeReference((sort << 24) | argIndex);
         }
@@ -400,37 +400,37 @@ namespace ObjectWeb.Asm
         ///     #targetTypeAndInfo}. LOCAL_VARIABLE and RESOURCE_VARIABLE target types are not supported.
         /// </param>
         /// <param name="output"> where the type reference must be put. </param>
-        internal static void putTarget(int targetTypeAndInfo, ByteVector output)
+        internal static void PutTarget(int targetTypeAndInfo, ByteVector output)
         {
             switch ((int)((uint)targetTypeAndInfo >> 24))
             {
-                case CLASS_TYPE_PARAMETER:
-                case METHOD_TYPE_PARAMETER:
-                case METHOD_FORMAL_PARAMETER:
-                    output.putShort((int)((uint)targetTypeAndInfo >> 16));
+                case Class_Type_Parameter:
+                case Method_Type_Parameter:
+                case Method_Formal_Parameter:
+                    output.PutShort((int)((uint)targetTypeAndInfo >> 16));
                     break;
-                case FIELD:
-                case METHOD_RETURN:
-                case METHOD_RECEIVER:
-                    output.putByte((int)((uint)targetTypeAndInfo >> 24));
+                case Field:
+                case Method_Return:
+                case Method_Receiver:
+                    output.PutByte((int)((uint)targetTypeAndInfo >> 24));
                     break;
-                case CAST:
-                case CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT:
-                case METHOD_INVOCATION_TYPE_ARGUMENT:
-                case CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT:
-                case METHOD_REFERENCE_TYPE_ARGUMENT:
-                    output.putInt(targetTypeAndInfo);
+                case Cast:
+                case Constructor_Invocation_Type_Argument:
+                case Method_Invocation_Type_Argument:
+                case Constructor_Reference_Type_Argument:
+                case Method_Reference_Type_Argument:
+                    output.PutInt(targetTypeAndInfo);
                     break;
-                case CLASS_EXTENDS:
-                case CLASS_TYPE_PARAMETER_BOUND:
-                case METHOD_TYPE_PARAMETER_BOUND:
-                case THROWS:
-                case EXCEPTION_PARAMETER:
-                case INSTANCEOF:
-                case NEW:
-                case CONSTRUCTOR_REFERENCE:
-                case METHOD_REFERENCE:
-                    output.put12((int)((uint)targetTypeAndInfo >> 24), (targetTypeAndInfo & 0xFFFF00) >> 8);
+                case Class_Extends:
+                case Class_Type_Parameter_Bound:
+                case Method_Type_Parameter_Bound:
+                case Throws:
+                case Exception_Parameter:
+                case Instanceof:
+                case New:
+                case Constructor_Reference:
+                case Method_Reference:
+                    output.Put12((int)((uint)targetTypeAndInfo >> 24), (targetTypeAndInfo & 0xFFFF00) >> 8);
                     break;
                 default:
                     throw new ArgumentException();

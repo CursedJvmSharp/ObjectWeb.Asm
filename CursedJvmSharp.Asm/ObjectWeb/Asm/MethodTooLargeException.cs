@@ -37,7 +37,7 @@ namespace ObjectWeb.Asm
     /// </summary>
     public sealed class MethodTooLargeException : Exception
     {
-        private const long serialVersionUID = 6807380416709738314L;
+        private const long SerialVersionUid = 6807380416709738314L;
 
         /// <summary>
         ///     Constructs a new <seealso cref="MethodTooLargeException" />.

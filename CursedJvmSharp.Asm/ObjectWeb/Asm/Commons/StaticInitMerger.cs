@@ -42,19 +42,19 @@ namespace ObjectWeb.Asm.Commons
 
 	  /// <summary>
 	  /// The internal name of the visited class. </summary>
-	  private string owner;
+	  private string _owner;
 
 	  /// <summary>
 	  /// The prefix to use to rename the existing &lt;clinit&gt; methods. </summary>
-	  private readonly string renamedClinitMethodPrefix;
+	  private readonly string _renamedClinitMethodPrefix;
 
 	  /// <summary>
 	  /// The number of &lt;clinit&gt; methods visited so far. </summary>
-	  private int numClinitMethods;
+	  private int _numClinitMethods;
 
 	  /// <summary>
 	  /// The MethodVisitor for the merged &lt;clinit&gt; method. </summary>
-	  private MethodVisitor mergedClinitVisitor;
+	  private MethodVisitor _mergedClinitVisitor;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="StaticInitMerger"/>. <i>Subclasses must not use this constructor</i>.
@@ -63,7 +63,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="prefix"> the prefix to use to rename the existing &lt;clinit&gt; methods. </param>
 	  /// <param name="classVisitor"> the class visitor to which this visitor must delegate method calls. May be
 	  ///     null. </param>
-	  public StaticInitMerger(string prefix, ClassVisitor classVisitor) : this(Opcodes.ASM9, prefix, classVisitor)
+	  public StaticInitMerger(string prefix, ClassVisitor classVisitor) : this(IOpcodes.Asm9, prefix, classVisitor)
 	  {
 	  }
 
@@ -71,51 +71,51 @@ namespace ObjectWeb.Asm.Commons
 	  /// Constructs a new <seealso cref="StaticInitMerger"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="prefix"> the prefix to use to rename the existing &lt;clinit&gt; methods. </param>
 	  /// <param name="classVisitor"> the class visitor to which this visitor must delegate method calls. May be
 	  ///     null. </param>
 	  public StaticInitMerger(int api, string prefix, ClassVisitor classVisitor) : base(api, classVisitor)
 	  {
-		this.renamedClinitMethodPrefix = prefix;
+		this._renamedClinitMethodPrefix = prefix;
 	  }
 
-	  public override void visit(int version, int access, string name, string signature, string superName, string[] interfaces)
+	  public override void Visit(int version, int access, string name, string signature, string superName, string[] interfaces)
 	  {
-		base.visit(version, access, name, signature, superName, interfaces);
-		this.owner = name;
+		base.Visit(version, access, name, signature, superName, interfaces);
+		this._owner = name;
 	  }
 
-	  public override MethodVisitor visitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
+	  public override MethodVisitor VisitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
 	  {
 		MethodVisitor methodVisitor;
 		if ("<clinit>".Equals(name))
 		{
-		  int newAccess = Opcodes.ACC_PRIVATE + Opcodes.ACC_STATIC;
-		  string newName = renamedClinitMethodPrefix + numClinitMethods++;
-		  methodVisitor = base.visitMethod(newAccess, newName, descriptor, signature, exceptions);
+		  int newAccess = IOpcodes.Acc_Private + IOpcodes.Acc_Static;
+		  string newName = _renamedClinitMethodPrefix + _numClinitMethods++;
+		  methodVisitor = base.VisitMethod(newAccess, newName, descriptor, signature, exceptions);
 
-		  if (mergedClinitVisitor == null)
+		  if (_mergedClinitVisitor == null)
 		  {
-			mergedClinitVisitor = base.visitMethod(newAccess, name, descriptor, null, null);
+			_mergedClinitVisitor = base.VisitMethod(newAccess, name, descriptor, null, null);
 		  }
-		  mergedClinitVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, owner, newName, descriptor, false);
+		  _mergedClinitVisitor.VisitMethodInsn(IOpcodes.Invokestatic, _owner, newName, descriptor, false);
 		}
 		else
 		{
-		  methodVisitor = base.visitMethod(access, name, descriptor, signature, exceptions);
+		  methodVisitor = base.VisitMethod(access, name, descriptor, signature, exceptions);
 		}
 		return methodVisitor;
 	  }
 
-	  public override void visitEnd()
+	  public override void VisitEnd()
 	  {
-		if (mergedClinitVisitor != null)
+		if (_mergedClinitVisitor != null)
 		{
-		  mergedClinitVisitor.visitInsn(Opcodes.RETURN);
-		  mergedClinitVisitor.visitMaxs(0, 0);
+		  _mergedClinitVisitor.VisitInsn(IOpcodes.Return);
+		  _mergedClinitVisitor.VisitMaxs(0, 0);
 		}
-		base.visitEnd();
+		base.VisitEnd();
 	  }
 	}
 

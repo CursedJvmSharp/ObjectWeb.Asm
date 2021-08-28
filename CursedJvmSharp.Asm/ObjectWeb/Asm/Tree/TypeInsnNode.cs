@@ -74,19 +74,19 @@ namespace ObjectWeb.Asm.Tree
 	  {
 		  get
 		  {
-			return TYPE_INSN;
+			return Type_Insn;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitTypeInsn(opcode, desc);
-		acceptAnnotations(methodVisitor);
+		methodVisitor.VisitTypeInsn(opcode, desc);
+		AcceptAnnotations(methodVisitor);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return (new TypeInsnNode(opcode, desc)).cloneAnnotations(this);
+		return (new TypeInsnNode(opcode, desc)).CloneAnnotations(this);
 	  }
 	}
 

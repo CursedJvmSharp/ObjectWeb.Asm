@@ -43,27 +43,27 @@ namespace ObjectWeb.Asm
         ///     of a basic block, the target of a jump instruction, or an exception handler. It can be safely
         ///     ignored in control flow graph analysis algorithms (for optimization purposes).
         /// </summary>
-        internal const int FLAG_DEBUG_ONLY = 1;
+        internal const int Flag_Debug_Only = 1;
 
         /// <summary>
         ///     A flag indicating that a label is the target of a jump instruction, or the start of an
         ///     exception handler.
         /// </summary>
-        internal const int FLAG_JUMP_TARGET = 2;
+        internal const int Flag_Jump_Target = 2;
 
         /// <summary>
         ///     A flag indicating that the bytecode offset of a label is known.
         /// </summary>
-        internal const int FLAG_RESOLVED = 4;
+        internal const int Flag_Resolved = 4;
 
         /// <summary>
         ///     A flag indicating that a label corresponds to a reachable basic block.
         /// </summary>
-        internal const int FLAG_REACHABLE = 8;
+        internal const int Flag_Reachable = 8;
 
         /// <summary>
         ///     A flag indicating that the basic block corresponding to a label ends with a subroutine call. By
-        ///     construction in <seealso cref="MethodWriter.visitJumpInsn" />, labels with this flag set have at least two
+        ///     construction in <seealso cref="MethodWriter.VisitJumpInsn" />, labels with this flag set have at least two
         ///     outgoing edges:
         ///     <ul>
         ///         <li>
@@ -72,80 +72,80 @@ namespace ObjectWeb.Asm
         ///             virtual control flow edge, since execution never goes directly from the jsr to the next
         ///             instruction. Instead, it goes to the subroutine and eventually returns to the instruction
         ///             following the jsr. This virtual edge is used to compute the real outgoing edges of the
-        ///             basic blocks ending with a ret instruction, in <seealso cref="addSubroutineRetSuccessors" />.
+        ///             basic blocks ending with a ret instruction, in <seealso cref="AddSubroutineRetSuccessors" />.
         ///             <li>the second one corresponds to the target of the jsr instruction,
         ///     </ul>
         /// </summary>
-        internal const int FLAG_SUBROUTINE_CALLER = 16;
+        internal const int Flag_Subroutine_Caller = 16;
 
         /// <summary>
         ///     A flag indicating that the basic block corresponding to a label is the start of a subroutine.
         /// </summary>
-        internal const int FLAG_SUBROUTINE_START = 32;
+        internal const int Flag_Subroutine_Start = 32;
 
         /// <summary>
         ///     A flag indicating that the basic block corresponding to a label is the end of a subroutine.
         /// </summary>
-        internal const int FLAG_SUBROUTINE_END = 64;
+        internal const int Flag_Subroutine_End = 64;
 
         /// <summary>
-        ///     The number of elements to add to the <seealso cref="otherLineNumbers" /> array when it needs to be
+        ///     The number of elements to add to the <seealso cref="_otherLineNumbers" /> array when it needs to be
         ///     resized to store a new source line number.
         /// </summary>
-        internal const int LINE_NUMBERS_CAPACITY_INCREMENT = 4;
+        internal const int Line_Numbers_Capacity_Increment = 4;
 
         /// <summary>
-        ///     The number of elements to add to the <seealso cref="forwardReferences" /> array when it needs to be
+        ///     The number of elements to add to the <seealso cref="_forwardReferences" /> array when it needs to be
         ///     resized to store a new forward reference.
         /// </summary>
-        internal const int FORWARD_REFERENCES_CAPACITY_INCREMENT = 6;
+        internal const int Forward_References_Capacity_Increment = 6;
 
         /// <summary>
         ///     The bit mask to extract the type of a forward reference to this label. The extracted type is
-        ///     either <seealso cref="FORWARD_REFERENCE_TYPE_SHORT" /> or <seealso cref="FORWARD_REFERENCE_TYPE_WIDE" />.
+        ///     either <seealso cref="Forward_Reference_Type_Short" /> or <seealso cref="Forward_Reference_Type_Wide" />.
         /// </summary>
         /// <seealso cref= # forwardReferences
         /// </seealso>
-        internal const int FORWARD_REFERENCE_TYPE_MASK = unchecked((int)0xF0000000);
+        internal const int Forward_Reference_Type_Mask = unchecked((int)0xF0000000);
 
         /// <summary>
         ///     The type of forward references stored with two bytes in the bytecode. This is the case, for
         ///     instance, of a forward reference from an ifnull instruction.
         /// </summary>
-        internal const int FORWARD_REFERENCE_TYPE_SHORT = 0x10000000;
+        internal const int Forward_Reference_Type_Short = 0x10000000;
 
         /// <summary>
         ///     The type of forward references stored in four bytes in the bytecode. This is the case, for
         ///     instance, of a forward reference from a lookupswitch instruction.
         /// </summary>
-        internal const int FORWARD_REFERENCE_TYPE_WIDE = 0x20000000;
+        internal const int Forward_Reference_Type_Wide = 0x20000000;
 
         /// <summary>
         ///     The bit mask to extract the 'handle' of a forward reference to this label. The extracted handle
         ///     is the bytecode offset where the forward reference value is stored (using either 2 or 4 bytes,
-        ///     as indicated by the <seealso cref="FORWARD_REFERENCE_TYPE_MASK" />).
+        ///     as indicated by the <seealso cref="Forward_Reference_Type_Mask" />).
         /// </summary>
         /// <seealso cref= # forwardReferences
         /// </seealso>
-        internal const int FORWARD_REFERENCE_HANDLE_MASK = 0x0FFFFFFF;
+        internal const int Forward_Reference_Handle_Mask = 0x0FFFFFFF;
 
         /// <summary>
         ///     A sentinel element used to indicate the end of a list of labels.
         /// </summary>
         /// <seealso cref= # nextListElement
         /// </seealso>
-        internal static readonly Label EMPTY_LIST = new();
+        internal static readonly Label EmptyList = new();
 
         /// <summary>
         ///     The offset of this label in the bytecode of its method, in bytes. This value is set if and only
-        ///     if the <seealso cref="FLAG_RESOLVED" /> flag is set.
+        ///     if the <seealso cref="Flag_Resolved" /> flag is set.
         /// </summary>
         internal int bytecodeOffset;
 
         /// <summary>
         ///     The type and status of this label or its corresponding basic block. Must be zero or more of
-        ///     <seealso cref="FLAG_DEBUG_ONLY" />, <seealso cref="FLAG_JUMP_TARGET" />, <seealso cref="FLAG_RESOLVED" />, {@link
-        ///     #FLAG_REACHABLE}, <seealso cref="FLAG_SUBROUTINE_CALLER" />, <seealso cref="FLAG_SUBROUTINE_START" />, {@link
+        ///     <seealso cref="Flag_Debug_Only" />, <seealso cref="Flag_Jump_Target" />, <seealso cref="Flag_Resolved" />, {@link
+        ///     #FLAG_REACHABLE}, <seealso cref="Flag_Subroutine_Caller" />, <seealso cref="Flag_Subroutine_Start" />, {@link
         ///     #FLAG_SUBROUTINE_END}.
         /// </summary>
         internal short flags;
@@ -161,12 +161,12 @@ namespace ObjectWeb.Asm
         ///             forward reference,
         ///             <li>
         ///                 'reference' contains the type and the offset in the bytecode where the forward reference
-        ///                 value must be stored, which can be extracted with <seealso cref="FORWARD_REFERENCE_TYPE_MASK" />
-        ///                 and <seealso cref="FORWARD_REFERENCE_HANDLE_MASK" />.
+        ///                 value must be stored, which can be extracted with <seealso cref="Forward_Reference_Type_Mask" />
+        ///                 and <seealso cref="Forward_Reference_Handle_Mask" />.
         ///     </ul>
         ///     <para>
         ///         For instance, for an ifnull instruction at bytecode offset x, 'sourceInsnBytecodeOffset' is
-        ///         equal to x, and 'reference' is of type <seealso cref="FORWARD_REFERENCE_TYPE_SHORT" /> with value x + 1
+        ///         equal to x, and 'reference' is of type <seealso cref="Forward_Reference_Type_Short" /> with value x + 1
         ///         (because the ifnull instruction uses a 2 bytes bytecode offset operand stored one byte after
         ///         the start of the instruction itself). For the default case of a lookupswitch instruction at
         ///         bytecode offset x, 'sourceInsnBytecodeOffset' is equal to x, and 'reference' is of type {@link
@@ -175,11 +175,11 @@ namespace ObjectWeb.Asm
         ///         the instruction itself).
         ///     </para>
         /// </summary>
-        private int[] forwardReferences;
+        private int[] _forwardReferences;
 
         /// <summary>
         ///     The input and output stack map frames of the basic block corresponding to this label. This
-        ///     field is only used when the <seealso cref="MethodWriter.COMPUTE_ALL_FRAMES" /> or {@link
+        ///     field is only used when the <seealso cref="MethodWriter.Compute_All_Frames" /> or {@link
         ///     MethodWriter#COMPUTE_INSERTED_FRAMES} option is used.
         /// </summary>
         internal Frame frame;
@@ -217,21 +217,21 @@ namespace ObjectWeb.Asm
 
         /// <summary>
         ///     The number of elements in the input stack of the basic block corresponding to this label. This
-        ///     field is computed in <seealso cref="MethodWriter.computeMaxStackAndLocal" />.
+        ///     field is computed in <seealso cref="MethodWriter.ComputeMaxStackAndLocal" />.
         /// </summary>
         internal short inputStackSize;
 
         /// <summary>
         ///     The source line number corresponding to this label, or 0. If there are several source line
         ///     numbers corresponding to this label, the first one is stored in this field, and the remaining
-        ///     ones are stored in <seealso cref="otherLineNumbers" />.
+        ///     ones are stored in <seealso cref="_otherLineNumbers" />.
         /// </summary>
-        private short lineNumber;
+        private short _lineNumber;
 
         /// <summary>
-        ///     The successor of this label, in the order they are visited in <seealso cref="MethodVisitor.visitLabel" />.
+        ///     The successor of this label, in the order they are visited in <seealso cref="MethodVisitor.VisitLabel" />.
         ///     This linked list does not include labels used for debug info only. If the {@link
-        ///     MethodWriter#COMPUTE_ALL_FRAMES} or <seealso cref="MethodWriter.COMPUTE_INSERTED_FRAMES" /> option is used
+        ///     MethodWriter#COMPUTE_ALL_FRAMES} or <seealso cref="MethodWriter.Compute_Inserted_Frames" /> option is used
         ///     then it does not contain either successive labels that denote the same bytecode offset (in this
         ///     case only the first label appears in this list).
         /// </summary>
@@ -239,15 +239,15 @@ namespace ObjectWeb.Asm
 
         /// <summary>
         ///     The next element in the list of labels to which this label belongs, or {@literal null} if it
-        ///     does not belong to any list. All lists of labels must end with the <seealso cref="EMPTY_LIST" />
+        ///     does not belong to any list. All lists of labels must end with the <seealso cref="EmptyList" />
         ///     sentinel, in order to ensure that this field is null if and only if this label does not belong
         ///     to a list of labels. Note that there can be several lists of labels at the same time, but that
         ///     a label can belong to at most one list at a time (unless some lists share a common tail, but
         ///     this is not used in practice).
         ///     <para>
-        ///         List of labels are used in <seealso cref="MethodWriter.computeAllFrames" /> and {@link
+        ///         List of labels are used in <seealso cref="MethodWriter.ComputeAllFrames" /> and {@link
         ///         MethodWriter#computeMaxStackAndLocal} to compute stack map frames and the maximum stack size,
-        ///         respectively, as well as in <seealso cref="markSubroutine" /> and <seealso cref="addSubroutineRetSuccessors" />
+        ///         respectively, as well as in <seealso cref="MarkSubroutine" /> and <seealso cref="AddSubroutineRetSuccessors" />
         ///         to
         ///         compute the basic blocks belonging to subroutines and their outgoing edges. Outside of these
         ///         methods, this field should be null (this property is a precondition and a postcondition of
@@ -257,11 +257,11 @@ namespace ObjectWeb.Asm
         internal Label nextListElement;
 
         /// <summary>
-        ///     The source line numbers corresponding to this label, in addition to <seealso cref="lineNumber" />, or
+        ///     The source line numbers corresponding to this label, in addition to <seealso cref="_lineNumber" />, or
         ///     null. The first element of this array is the number n of source line numbers it contains, which
         ///     are stored between indices 1 and n (inclusive).
         /// </summary>
-        private int[] otherLineNumbers;
+        private int[] _otherLineNumbers;
 
         /// <summary>
         ///     The outgoing edges of the basic block corresponding to this label, in the control flow graph of
@@ -287,7 +287,7 @@ namespace ObjectWeb.Asm
         ///     The id of the subroutine to which this basic block belongs, or 0. If the basic block belongs to
         ///     several subroutines, this is the id of the "oldest" subroutine that contains it (with the
         ///     convention that a subroutine calling another one is "older" than the callee). This field is
-        ///     computed in <seealso cref="MethodWriter.computeMaxStackAndLocal" />, if the method contains JSR
+        ///     computed in <seealso cref="MethodWriter.ComputeMaxStackAndLocal" />, if the method contains JSR
         ///     instructions.
         /// </summary>
         internal short subroutineId;
@@ -310,7 +310,7 @@ namespace ObjectWeb.Asm
         {
             get
             {
-                if ((flags & FLAG_RESOLVED) == 0)
+                if ((flags & Flag_Resolved) == 0)
                     throw new InvalidOperationException("Label offset position has not been resolved yet");
                 return bytecodeOffset;
             }
@@ -319,11 +319,11 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     Returns the "canonical" <seealso cref="Label" /> instance corresponding to this label's bytecode offset,
         ///     if known, otherwise the label itself. The canonical instance is the first label (in the order
-        ///     of their visit by <seealso cref="MethodVisitor.visitLabel" />) corresponding to this bytecode offset. It
+        ///     of their visit by <seealso cref="MethodVisitor.VisitLabel" />) corresponding to this bytecode offset. It
         ///     cannot be known for labels which have not been visited yet.
         ///     <para>
         ///         <i>
-        ///             This method should only be used when the <seealso cref="MethodWriter.COMPUTE_ALL_FRAMES" /> option
+        ///             This method should only be used when the <seealso cref="MethodWriter.Compute_All_Frames" /> option
         ///             is used.
         ///         </i>
         ///     </para>
@@ -331,7 +331,7 @@ namespace ObjectWeb.Asm
         /// <returns>
         ///     the label itself if <seealso cref="frame" /> is null, otherwise the Label's frame owner. This
         ///     corresponds to the "canonical" label instance described above thanks to the way the label
-        ///     frame is set in <seealso cref="MethodWriter.visitLabel" />.
+        ///     frame is set in <seealso cref="MethodWriter.VisitLabel" />.
         /// </returns>
         public Label CanonicalInstance => frame == null ? this : frame.owner;
 
@@ -343,24 +343,24 @@ namespace ObjectWeb.Asm
         ///     Adds a source line number corresponding to this label.
         /// </summary>
         /// <param name="lineNumber"> a source line number (which should be strictly positive). </param>
-        public void addLineNumber(int lineNumber)
+        public void AddLineNumber(int lineNumber)
         {
-            if (this.lineNumber == 0)
+            if (this._lineNumber == 0)
             {
-                this.lineNumber = (short)lineNumber;
+                this._lineNumber = (short)lineNumber;
             }
             else
             {
-                if (otherLineNumbers == null) otherLineNumbers = new int[LINE_NUMBERS_CAPACITY_INCREMENT];
-                var otherLineNumberIndex = ++otherLineNumbers[0];
-                if (otherLineNumberIndex >= otherLineNumbers.Length)
+                if (_otherLineNumbers == null) _otherLineNumbers = new int[Line_Numbers_Capacity_Increment];
+                var otherLineNumberIndex = ++_otherLineNumbers[0];
+                if (otherLineNumberIndex >= _otherLineNumbers.Length)
                 {
-                    var newLineNumbers = new int[otherLineNumbers.Length + LINE_NUMBERS_CAPACITY_INCREMENT];
-                    Array.Copy(otherLineNumbers, 0, newLineNumbers, 0, otherLineNumbers.Length);
-                    otherLineNumbers = newLineNumbers;
+                    var newLineNumbers = new int[_otherLineNumbers.Length + Line_Numbers_Capacity_Increment];
+                    Array.Copy(_otherLineNumbers, 0, newLineNumbers, 0, _otherLineNumbers.Length);
+                    _otherLineNumbers = newLineNumbers;
                 }
 
-                otherLineNumbers[otherLineNumberIndex] = lineNumber;
+                _otherLineNumbers[otherLineNumberIndex] = lineNumber;
             }
         }
 
@@ -369,15 +369,15 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="methodVisitor"> a method visitor. </param>
         /// <param name="visitLineNumbers"> whether to visit of the label's source line numbers, if any. </param>
-        public void accept(MethodVisitor methodVisitor, bool visitLineNumbers)
+        public void Accept(MethodVisitor methodVisitor, bool visitLineNumbers)
         {
-            methodVisitor.visitLabel(this);
-            if (visitLineNumbers && lineNumber != 0)
+            methodVisitor.VisitLabel(this);
+            if (visitLineNumbers && _lineNumber != 0)
             {
-                methodVisitor.visitLineNumber(lineNumber & 0xFFFF, this);
-                if (otherLineNumbers != null)
-                    for (var i = 1; i <= otherLineNumbers[0]; ++i)
-                        methodVisitor.visitLineNumber(otherLineNumbers[i], this);
+                methodVisitor.VisitLineNumber(_lineNumber & 0xFFFF, this);
+                if (_otherLineNumbers != null)
+                    for (var i = 1; i <= _otherLineNumbers[0]; ++i)
+                        methodVisitor.VisitLineNumber(_otherLineNumbers[i], this);
             }
         }
 
@@ -397,27 +397,27 @@ namespace ObjectWeb.Asm
         ///     reference to be appended.
         /// </param>
         /// <param name="wideReference"> whether the reference must be stored in 4 bytes (instead of 2 bytes). </param>
-        public void put(ByteVector code, int sourceInsnBytecodeOffset, bool wideReference)
+        public void Put(ByteVector code, int sourceInsnBytecodeOffset, bool wideReference)
         {
-            if ((flags & FLAG_RESOLVED) == 0)
+            if ((flags & Flag_Resolved) == 0)
             {
                 if (wideReference)
                 {
-                    addForwardReference(sourceInsnBytecodeOffset, FORWARD_REFERENCE_TYPE_WIDE, code.length);
-                    code.putInt(-1);
+                    AddForwardReference(sourceInsnBytecodeOffset, Forward_Reference_Type_Wide, code.length);
+                    code.PutInt(-1);
                 }
                 else
                 {
-                    addForwardReference(sourceInsnBytecodeOffset, FORWARD_REFERENCE_TYPE_SHORT, code.length);
-                    code.putShort(-1);
+                    AddForwardReference(sourceInsnBytecodeOffset, Forward_Reference_Type_Short, code.length);
+                    code.PutShort(-1);
                 }
             }
             else
             {
                 if (wideReference)
-                    code.putInt(bytecodeOffset - sourceInsnBytecodeOffset);
+                    code.PutInt(bytecodeOffset - sourceInsnBytecodeOffset);
                 else
-                    code.putShort(bytecodeOffset - sourceInsnBytecodeOffset);
+                    code.PutShort(bytecodeOffset - sourceInsnBytecodeOffset);
             }
         }
 
@@ -431,27 +431,27 @@ namespace ObjectWeb.Asm
         ///     reference stored at referenceHandle.
         /// </param>
         /// <param name="referenceType">
-        ///     either <seealso cref="FORWARD_REFERENCE_TYPE_SHORT" /> or {@link
+        ///     either <seealso cref="Forward_Reference_Type_Short" /> or {@link
         ///     #FORWARD_REFERENCE_TYPE_WIDE}.
         /// </param>
         /// <param name="referenceHandle">
         ///     the offset in the bytecode where the forward reference value must be
         ///     stored.
         /// </param>
-        private void addForwardReference(int sourceInsnBytecodeOffset, int referenceType, int referenceHandle)
+        private void AddForwardReference(int sourceInsnBytecodeOffset, int referenceType, int referenceHandle)
         {
-            if (forwardReferences == null) forwardReferences = new int[FORWARD_REFERENCES_CAPACITY_INCREMENT];
-            var lastElementIndex = forwardReferences[0];
-            if (lastElementIndex + 2 >= forwardReferences.Length)
+            if (_forwardReferences == null) _forwardReferences = new int[Forward_References_Capacity_Increment];
+            var lastElementIndex = _forwardReferences[0];
+            if (lastElementIndex + 2 >= _forwardReferences.Length)
             {
-                var newValues = new int[forwardReferences.Length + FORWARD_REFERENCES_CAPACITY_INCREMENT];
-                Array.Copy(forwardReferences, 0, newValues, 0, forwardReferences.Length);
-                forwardReferences = newValues;
+                var newValues = new int[_forwardReferences.Length + Forward_References_Capacity_Increment];
+                Array.Copy(_forwardReferences, 0, newValues, 0, _forwardReferences.Length);
+                _forwardReferences = newValues;
             }
 
-            forwardReferences[++lastElementIndex] = sourceInsnBytecodeOffset;
-            forwardReferences[++lastElementIndex] = referenceType | referenceHandle;
-            forwardReferences[0] = lastElementIndex;
+            _forwardReferences[++lastElementIndex] = sourceInsnBytecodeOffset;
+            _forwardReferences[++lastElementIndex] = referenceType | referenceHandle;
+            _forwardReferences[0] = lastElementIndex;
         }
 
         /// <summary>
@@ -469,19 +469,19 @@ namespace ObjectWeb.Asm
         ///     instructions are later replaced with standard bytecode instructions with wider offsets (4
         ///     bytes instead of 2), in ClassReader.
         /// </returns>
-        public bool resolve(sbyte[] code, int bytecodeOffset)
+        public bool Resolve(sbyte[] code, int bytecodeOffset)
         {
-            flags |= FLAG_RESOLVED;
+            flags |= Flag_Resolved;
             this.bytecodeOffset = bytecodeOffset;
-            if (forwardReferences == null) return false;
+            if (_forwardReferences == null) return false;
             var hasAsmInstructions = false;
-            for (var i = forwardReferences[0]; i > 0; i -= 2)
+            for (var i = _forwardReferences[0]; i > 0; i -= 2)
             {
-                var sourceInsnBytecodeOffset = forwardReferences[i - 1];
-                var reference = forwardReferences[i];
+                var sourceInsnBytecodeOffset = _forwardReferences[i - 1];
+                var reference = _forwardReferences[i];
                 var relativeOffset = bytecodeOffset - sourceInsnBytecodeOffset;
-                var handle = reference & FORWARD_REFERENCE_HANDLE_MASK;
-                if ((reference & FORWARD_REFERENCE_TYPE_MASK) == FORWARD_REFERENCE_TYPE_SHORT)
+                var handle = reference & Forward_Reference_Handle_Mask;
+                if ((reference & Forward_Reference_Type_Mask) == Forward_Reference_Type_Short)
                 {
                     if (relativeOffset < short.MinValue || relativeOffset > short.MaxValue)
                     {
@@ -490,12 +490,12 @@ namespace ObjectWeb.Asm
                         // that the 2 bytes offset is unsigned (and can therefore represent values from 0 to
                         // 65535, which is sufficient since the size of a method is limited to 65535 bytes).
                         var opcode = code[sourceInsnBytecodeOffset] & 0xFF;
-                        if (opcode < Opcodes.IFNULL)
+                        if (opcode < IOpcodes.Ifnull)
                             // Change IFEQ ... JSR to ASM_IFEQ ... ASM_JSR.
-                            code[sourceInsnBytecodeOffset] = (sbyte)(opcode + Constants.ASM_OPCODE_DELTA);
+                            code[sourceInsnBytecodeOffset] = (sbyte)(opcode + Constants.Asm_Opcode_Delta);
                         else
                             // Change IFNULL and IFNONNULL to ASM_IFNULL and ASM_IFNONNULL.
-                            code[sourceInsnBytecodeOffset] = (sbyte)(opcode + Constants.ASM_IFNULL_OPCODE_DELTA);
+                            code[sourceInsnBytecodeOffset] = (sbyte)(opcode + Constants.Asm_Ifnull_Opcode_Delta);
                         hasAsmInstructions = true;
                     }
 
@@ -532,15 +532,15 @@ namespace ObjectWeb.Asm
         ///     the id of the subroutine starting with the basic block corresponding to
         ///     this label.
         /// </param>
-        public void markSubroutine(short subroutineId)
+        public void MarkSubroutine(short subroutineId)
         {
             // Data flow algorithm: put this basic block in a list of blocks to process (which are blocks
             // belonging to subroutine subroutineId) and, while there are blocks to process, remove one from
             // the list, mark it as belonging to the subroutine, and add its successor basic blocks in the
             // control flow graph to the list of blocks to process (if not already done).
             var listOfBlocksToProcess = this;
-            listOfBlocksToProcess.nextListElement = EMPTY_LIST;
-            while (listOfBlocksToProcess != EMPTY_LIST)
+            listOfBlocksToProcess.nextListElement = EmptyList;
+            while (listOfBlocksToProcess != EmptyList)
             {
                 // Remove a basic block from the list of blocks to process.
                 var basicBlock = listOfBlocksToProcess;
@@ -552,7 +552,7 @@ namespace ObjectWeb.Asm
                 if (basicBlock.subroutineId == 0)
                 {
                     basicBlock.subroutineId = subroutineId;
-                    listOfBlocksToProcess = basicBlock.pushSuccessors(listOfBlocksToProcess);
+                    listOfBlocksToProcess = basicBlock.PushSuccessors(listOfBlocksToProcess);
                 }
             }
         }
@@ -572,17 +572,17 @@ namespace ObjectWeb.Asm
         ///     a basic block that ends with a jsr to the basic block corresponding to
         ///     this label. This label is supposed to correspond to the start of a subroutine.
         /// </param>
-        public void addSubroutineRetSuccessors(Label subroutineCaller)
+        public void AddSubroutineRetSuccessors(Label subroutineCaller)
         {
             // Data flow algorithm: put this basic block in a list blocks to process (which are blocks
             // belonging to a subroutine starting with this label) and, while there are blocks to process,
             // remove one from the list, put it in a list of blocks that have been processed, add a return
             // edge to the successor of subroutineCaller if applicable, and add its successor basic blocks
             // in the control flow graph to the list of blocks to process (if not already done).
-            var listOfProcessedBlocks = EMPTY_LIST;
+            var listOfProcessedBlocks = EmptyList;
             var listOfBlocksToProcess = this;
-            listOfBlocksToProcess.nextListElement = EMPTY_LIST;
-            while (listOfBlocksToProcess != EMPTY_LIST)
+            listOfBlocksToProcess.nextListElement = EmptyList;
+            while (listOfBlocksToProcess != EmptyList)
             {
                 // Move a basic block from the list of blocks to process to the list of processed blocks.
                 var basicBlock = listOfBlocksToProcess;
@@ -593,7 +593,7 @@ namespace ObjectWeb.Asm
                 // Add an edge from this block to the successor of the caller basic block, if this block is
                 // the end of a subroutine and if this block and subroutineCaller do not belong to the same
                 // subroutine.
-                if ((basicBlock.flags & FLAG_SUBROUTINE_END) != 0 &&
+                if ((basicBlock.flags & Flag_Subroutine_End) != 0 &&
                     basicBlock.subroutineId != subroutineCaller.subroutineId)
                     basicBlock.outgoingEdges = new Edge(basicBlock.outputStackSize,
                         subroutineCaller.outgoingEdges.successor, basicBlock.outgoingEdges);
@@ -601,12 +601,12 @@ namespace ObjectWeb.Asm
                 // not push basic blocks which are already in a list. Here this means either in the list of
                 // blocks to process, or in the list of already processed blocks. This second list is
                 // important to make sure we don't reprocess an already processed block.
-                listOfBlocksToProcess = basicBlock.pushSuccessors(listOfBlocksToProcess);
+                listOfBlocksToProcess = basicBlock.PushSuccessors(listOfBlocksToProcess);
             }
 
             // Reset the {@link #nextListElement} of all the basic blocks that have been processed to null,
             // so that this method can be called again with a different subroutine or subroutine caller.
-            while (listOfProcessedBlocks != EMPTY_LIST)
+            while (listOfProcessedBlocks != EmptyList)
             {
                 var newListOfProcessedBlocks = listOfProcessedBlocks.nextListElement;
                 listOfProcessedBlocks.nextListElement = null;
@@ -624,7 +624,7 @@ namespace ObjectWeb.Asm
         ///     <seealso cref="nextListElement" /> field.
         /// </param>
         /// <returns> the new list of blocks to process. </returns>
-        private Label pushSuccessors(Label listOfLabelsToProcess)
+        private Label PushSuccessors(Label listOfLabelsToProcess)
         {
             var newListOfLabelsToProcess = listOfLabelsToProcess;
             var outgoingEdge = outgoingEdges;
@@ -632,7 +632,7 @@ namespace ObjectWeb.Asm
             {
                 // By construction, the second outgoing edge of a basic block that ends with a jsr instruction
                 // leads to the jsr target (see {@link #FLAG_SUBROUTINE_CALLER}).
-                var isJsrTarget = (flags & FLAG_SUBROUTINE_CALLER) != 0 && outgoingEdge == outgoingEdges.nextEdge;
+                var isJsrTarget = (flags & Flag_Subroutine_Caller) != 0 && outgoingEdge == outgoingEdges.nextEdge;
                 if (!isJsrTarget && outgoingEdge.successor.nextListElement == null)
                 {
                     // Add this successor to the list of blocks to process, if it does not already belong to a

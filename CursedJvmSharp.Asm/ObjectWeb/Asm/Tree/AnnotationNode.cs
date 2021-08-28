@@ -60,7 +60,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
 	  /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
-	  public AnnotationNode(string descriptor) : this(Opcodes.ASM9, descriptor)
+	  public AnnotationNode(string descriptor) : this(IOpcodes.Asm9, descriptor)
 	  {
 		if (this.GetType() != typeof(AnnotationNode))
 		{
@@ -72,7 +72,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Constructs a new <seealso cref="AnnotationNode"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
 	  public AnnotationNode(int api, string descriptor) : base(api)
 	  {
@@ -83,7 +83,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Constructs a new <seealso cref="AnnotationNode"/> to visit an array value.
 	  /// </summary>
 	  /// <param name="values"> where the visited values must be stored. </param>
-	  public AnnotationNode(List<object> values) : base(Opcodes.ASM9)
+	  public AnnotationNode(List<object> values) : base(IOpcodes.Asm9)
 	  {
 		this.values = values;
 	  }
@@ -92,7 +92,7 @@ namespace ObjectWeb.Asm.Tree
 	  // Implementation of the AnnotationVisitor abstract class
 	  // ------------------------------------------------------------------------
 
-	  public override void visit(string name, object value)
+	  public override void Visit(string name, object value)
 	  {
 		if (values == null)
 		{
@@ -104,35 +104,35 @@ namespace ObjectWeb.Asm.Tree
 		}
 		if (value is sbyte[])
 		{
-		  values.Add(Util.asArrayList((sbyte[]) value));
+		  values.Add(Util.AsArrayList((sbyte[]) value));
 		}
 		else if (value is bool[])
 		{
-		  values.Add(Util.asArrayList((bool[]) value));
+		  values.Add(Util.AsArrayList((bool[]) value));
 		}
 		else if (value is short[])
 		{
-		  values.Add(Util.asArrayList((short[]) value));
+		  values.Add(Util.AsArrayList((short[]) value));
 		}
 		else if (value is char[])
 		{
-		  values.Add(Util.asArrayList((char[]) value));
+		  values.Add(Util.AsArrayList((char[]) value));
 		}
 		else if (value is int[])
 		{
-		  values.Add(Util.asArrayList((int[]) value));
+		  values.Add(Util.AsArrayList((int[]) value));
 		}
 		else if (value is long[])
 		{
-		  values.Add(Util.asArrayList((long[]) value));
+		  values.Add(Util.AsArrayList((long[]) value));
 		}
 		else if (value is float[])
 		{
-		  values.Add(Util.asArrayList((float[]) value));
+		  values.Add(Util.AsArrayList((float[]) value));
 		}
 		else if (value is double[])
 		{
-		  values.Add(Util.asArrayList((double[]) value));
+		  values.Add(Util.AsArrayList((double[]) value));
 		}
 		else
 		{
@@ -140,7 +140,7 @@ namespace ObjectWeb.Asm.Tree
 		}
 	  }
 
-	  public override void visitEnum(string name, string descriptor, string value)
+	  public override void VisitEnum(string name, string descriptor, string value)
 	  {
 		if (values == null)
 		{
@@ -153,7 +153,7 @@ namespace ObjectWeb.Asm.Tree
 		values.Add(new string[] {descriptor, value});
 	  }
 
-	  public override AnnotationVisitor visitAnnotation(string name, string descriptor)
+	  public override AnnotationVisitor VisitAnnotation(string name, string descriptor)
 	  {
 		if (values == null)
 		{
@@ -168,7 +168,7 @@ namespace ObjectWeb.Asm.Tree
 		return annotation;
 	  }
 
-	  public override AnnotationVisitor visitArray(string name)
+	  public override AnnotationVisitor VisitArray(string name)
 	  {
 		if (values == null)
 		{
@@ -183,7 +183,7 @@ namespace ObjectWeb.Asm.Tree
 		return new AnnotationNode(array);
 	  }
 
-	  public override void visitEnd()
+	  public override void VisitEnd()
 	  {
 		// Nothing to do.
 	  }
@@ -199,7 +199,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="api"> an ASM API version. Must be one of the {@code ASM}<i>x</i> values in {@link
 	  ///     Opcodes}. </param>
-	  public virtual void check(int api)
+	  public virtual void Check(int api)
 	  {
 		// nothing to do
 	  }
@@ -208,7 +208,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given visitor visit this annotation.
 	  /// </summary>
 	  /// <param name="annotationVisitor"> an annotation visitor. Maybe {@literal null}. </param>
-	  public virtual void accept(AnnotationVisitor annotationVisitor)
+	  public virtual void Accept(AnnotationVisitor annotationVisitor)
 	  {
 		if (annotationVisitor != null)
 		{
@@ -218,10 +218,10 @@ namespace ObjectWeb.Asm.Tree
 			{
 			  string name = (string) values[i];
 			  object value = values[i + 1];
-			  accept(annotationVisitor, name, value);
+			  Accept(annotationVisitor, name, value);
 			}
 		  }
-		  annotationVisitor.visitEnd();
+		  annotationVisitor.VisitEnd();
 		}
 	  }
 
@@ -231,36 +231,36 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="annotationVisitor"> an annotation visitor. Maybe {@literal null}. </param>
 	  /// <param name="name"> the value name. </param>
 	  /// <param name="value"> the actual value. </param>
-	  internal static void accept(AnnotationVisitor annotationVisitor, string name, object value)
+	  internal static void Accept(AnnotationVisitor annotationVisitor, string name, object value)
 	  {
 		if (annotationVisitor != null)
 		{
 		  if (value is string[])
 		  {
 			string[] typeValue = (string[]) value;
-			annotationVisitor.visitEnum(name, typeValue[0], typeValue[1]);
+			annotationVisitor.VisitEnum(name, typeValue[0], typeValue[1]);
 		  }
 		  else if (value is AnnotationNode)
 		  {
 			AnnotationNode annotationValue = (AnnotationNode) value;
-			annotationValue.accept(annotationVisitor.visitAnnotation(name, annotationValue.desc));
+			annotationValue.Accept(annotationVisitor.VisitAnnotation(name, annotationValue.desc));
 		  }
 		  else if (value is System.Collections.IList)
 		  {
-			AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.visitArray(name);
+			AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.VisitArray(name);
 			if (arrayAnnotationVisitor != null)
 			{
 			  var arrayValue = (IList) value;
 			  for (int i = 0, n = arrayValue.Count; i < n; ++i)
 			  {
-				accept(arrayAnnotationVisitor, null, arrayValue[i]);
+				Accept(arrayAnnotationVisitor, null, arrayValue[i]);
 			  }
-			  arrayAnnotationVisitor.visitEnd();
+			  arrayAnnotationVisitor.VisitEnd();
 			}
 		  }
 		  else
 		  {
-			annotationVisitor.visit(name, value);
+			annotationVisitor.Visit(name, value);
 		  }
 		}
 	  }

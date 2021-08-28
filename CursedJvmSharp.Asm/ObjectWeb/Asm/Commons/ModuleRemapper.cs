@@ -49,7 +49,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// </summary>
 	  /// <param name="moduleVisitor"> the module visitor this remapper must delegate to. </param>
 	  /// <param name="remapper"> the remapper to use to remap the types in the visited module. </param>
-	  public ModuleRemapper(ModuleVisitor moduleVisitor, Remapper remapper) : this(Opcodes.ASM9, moduleVisitor, remapper)
+	  public ModuleRemapper(ModuleVisitor moduleVisitor, Remapper remapper) : this(IOpcodes.Asm9, moduleVisitor, remapper)
 	  {
 	  }
 
@@ -57,7 +57,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// Constructs a new <seealso cref="ModuleRemapper"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version supported by this remapper. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="Opcodes"/>. </param>
+	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="moduleVisitor"> the module visitor this remapper must delegate to. </param>
 	  /// <param name="remapper"> the remapper to use to remap the types in the visited module. </param>
 	  public ModuleRemapper(int api, ModuleVisitor moduleVisitor, Remapper remapper) : base(api, moduleVisitor)
@@ -65,36 +65,22 @@ namespace ObjectWeb.Asm.Commons
 		this.remapper = remapper;
 	  }
 
-	  public override void visitMainClass(string mainClass)
+	  public override void VisitMainClass(string mainClass)
 	  {
-		base.visitMainClass(remapper.mapType(mainClass));
+		base.VisitMainClass(remapper.MapType(mainClass));
 	  }
 
-	  public override void visitPackage(string packaze)
+	  public override void VisitPackage(string packaze)
 	  {
-		base.visitPackage(remapper.mapPackageName(packaze));
+		base.VisitPackage(remapper.MapPackageName(packaze));
 	  }
 
-	  public override void visitRequire(string module, int access, string version)
+	  public override void VisitRequire(string module, int access, string version)
 	  {
-		base.visitRequire(remapper.mapModuleName(module), access, version);
+		base.VisitRequire(remapper.MapModuleName(module), access, version);
 	  }
 
-	  public override void visitExport(string packaze, int access, params string[] modules)
-	  {
-		string[] remappedModules = null;
-		if (modules != null)
-		{
-		  remappedModules = new string[modules.Length];
-		  for (int i = 0; i < modules.Length; ++i)
-		  {
-			remappedModules[i] = remapper.mapModuleName(modules[i]);
-		  }
-		}
-		base.visitExport(remapper.mapPackageName(packaze), access, remappedModules);
-	  }
-
-	  public override void visitOpen(string packaze, int access, params string[] modules)
+	  public override void VisitExport(string packaze, int access, params string[] modules)
 	  {
 		string[] remappedModules = null;
 		if (modules != null)
@@ -102,25 +88,39 @@ namespace ObjectWeb.Asm.Commons
 		  remappedModules = new string[modules.Length];
 		  for (int i = 0; i < modules.Length; ++i)
 		  {
-			remappedModules[i] = remapper.mapModuleName(modules[i]);
+			remappedModules[i] = remapper.MapModuleName(modules[i]);
 		  }
 		}
-		base.visitOpen(remapper.mapPackageName(packaze), access, remappedModules);
+		base.VisitExport(remapper.MapPackageName(packaze), access, remappedModules);
 	  }
 
-	  public override void visitUse(string service)
+	  public override void VisitOpen(string packaze, int access, params string[] modules)
 	  {
-		base.visitUse(remapper.mapType(service));
+		string[] remappedModules = null;
+		if (modules != null)
+		{
+		  remappedModules = new string[modules.Length];
+		  for (int i = 0; i < modules.Length; ++i)
+		  {
+			remappedModules[i] = remapper.MapModuleName(modules[i]);
+		  }
+		}
+		base.VisitOpen(remapper.MapPackageName(packaze), access, remappedModules);
 	  }
 
-	  public override void visitProvide(string service, params string[] providers)
+	  public override void VisitUse(string service)
+	  {
+		base.VisitUse(remapper.MapType(service));
+	  }
+
+	  public override void VisitProvide(string service, params string[] providers)
 	  {
 		string[] remappedProviders = new string[providers.Length];
 		for (int i = 0; i < providers.Length; ++i)
 		{
-		  remappedProviders[i] = remapper.mapType(providers[i]);
+		  remappedProviders[i] = remapper.MapType(providers[i]);
 		}
-		base.visitProvide(remapper.mapType(service), remappedProviders);
+		base.VisitProvide(remapper.MapType(service), remappedProviders);
 	  }
 	}
 

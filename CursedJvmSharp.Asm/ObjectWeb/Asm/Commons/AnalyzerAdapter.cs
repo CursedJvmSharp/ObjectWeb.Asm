@@ -50,13 +50,13 @@ namespace ObjectWeb.Asm.Commons
         /// <summary>
         ///     The labels that designate the next instruction to be visited. May be {@literal null}.
         /// </summary>
-        private List<Label> labels;
+        private List<Label> _labels;
 
         /// <summary>
         ///     The local variable slots for the current execution frame. Primitive types are represented by
-        ///     <seealso cref="Opcodes.TOP" />, <seealso cref="Opcodes.INTEGER" />, <seealso cref="Opcodes.FLOAT" />,
-        ///     <seealso cref="Opcodes.LONG" />,
-        ///     <seealso cref="Opcodes.DOUBLE" />,<seealso cref="Opcodes.NULL" /> or <seealso cref="Opcodes.UNINITIALIZED_THIS" />
+        ///     <seealso cref="IIOpcodes.top />, <seealso cref="IIOpcodes.integer />, <seealso cref="IIOpcodes.float />,
+        ///     <seealso cref="IIOpcodes.long />,
+        ///     <seealso cref="IIOpcodes.double />,<seealso cref="IIOpcodes.null /> or <seealso cref="IIOpcodes.uninitializedThis />
         ///     (long and
         ///     double are represented by two elements, the second one being TOP). Reference types are
         ///     represented by String objects (representing internal names), and uninitialized types by Label
@@ -68,23 +68,23 @@ namespace ObjectWeb.Asm.Commons
         /// <summary>
         ///     The maximum number of local variables of this method.
         /// </summary>
-        private int maxLocals;
+        private int _maxLocals;
 
         /// <summary>
         ///     The maximum stack size of this method.
         /// </summary>
-        private int maxStack;
+        private int _maxStack;
 
         /// <summary>
         ///     The owner's class name.
         /// </summary>
-        private readonly string owner;
+        private readonly string _owner;
 
         /// <summary>
         ///     The operand stack slots for the current execution frame. Primitive types are represented by
-        ///     <seealso cref="Opcodes.TOP" />, <seealso cref="Opcodes.INTEGER" />, <seealso cref="Opcodes.FLOAT" />,
-        ///     <seealso cref="Opcodes.LONG" />,
-        ///     <seealso cref="Opcodes.DOUBLE" />,<seealso cref="Opcodes.NULL" /> or <seealso cref="Opcodes.UNINITIALIZED_THIS" />
+        ///     <seealso cref="IIOpcodes.top />, <seealso cref="IIOpcodes.integer />, <seealso cref="IIOpcodes.float />,
+        ///     <seealso cref="IIOpcodes.long />,
+        ///     <seealso cref="IIOpcodes.double />,<seealso cref="IIOpcodes.null /> or <seealso cref="IIOpcodes.uninitializedThis />
         ///     (long and
         ///     double are represented by two elements, the second one being TOP). Reference types are
         ///     represented by String objects (representing internal names), and uninitialized types by Label
@@ -107,7 +107,7 @@ namespace ObjectWeb.Asm.Commons
         ///     MethodVisitor)} version.
         /// </summary>
         /// <param name="owner"> the owner's class name. </param>
-        /// <param name="access"> the method's access flags (see <seealso cref="Opcodes" />). </param>
+        /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes" />). </param>
         /// <param name="name"> the method's name. </param>
         /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type" />). </param>
         /// <param name="methodVisitor">
@@ -116,7 +116,7 @@ namespace ObjectWeb.Asm.Commons
         /// </param>
         /// <exception cref="IllegalStateException"> If a subclass calls this constructor. </exception>
         public AnalyzerAdapter(string owner, int access, string name, string descriptor, MethodVisitor methodVisitor) :
-            this(Opcodes.ASM9, owner, access, name, descriptor, methodVisitor)
+            this(IOpcodes.Asm9, owner, access, name, descriptor, methodVisitor)
         {
             if (GetType() != typeof(AnalyzerAdapter)) throw new InvalidOperationException();
         }
@@ -126,10 +126,10 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="api">
         ///     the ASM API version implemented by this visitor. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="Opcodes" />.
+        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
         /// </param>
         /// <param name="owner"> the owner's class name. </param>
-        /// <param name="access"> the method's access flags (see <seealso cref="Opcodes" />). </param>
+        /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes" />). </param>
         /// <param name="name"> the method's name. </param>
         /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type" />). </param>
         /// <param name="methodVisitor">
@@ -139,61 +139,61 @@ namespace ObjectWeb.Asm.Commons
         public AnalyzerAdapter(int api, string owner, int access, string name, string descriptor,
             MethodVisitor methodVisitor) : base(api, methodVisitor)
         {
-            this.owner = owner;
+            this._owner = owner;
             locals = new List<object>();
             stack = new List<object>();
             uninitializedTypes = new Dictionary<object, object>();
 
-            if ((access & Opcodes.ACC_STATIC) == 0)
+            if ((access & IOpcodes.Acc_Static) == 0)
             {
                 if ("<init>".Equals(name))
-                    locals.Add(Opcodes.UNINITIALIZED_THIS);
+                    locals.Add(IOpcodes.uninitializedThis);
                 else
                     locals.Add(owner);
             }
 
-            foreach (var argumentType in JType.getArgumentTypes(descriptor))
+            foreach (var argumentType in JType.GetArgumentTypes(descriptor))
                 switch (argumentType.Sort)
                 {
-                    case JType.BOOLEAN:
-                    case JType.CHAR:
-                    case JType.BYTE:
-                    case JType.SHORT:
-                    case JType.INT:
-                        locals.Add(Opcodes.INTEGER);
+                    case JType.Boolean:
+                    case JType.Char:
+                    case JType.Byte:
+                    case JType.Short:
+                    case JType.Int:
+                        locals.Add(IOpcodes.integer);
                         break;
-                    case JType.FLOAT:
-                        locals.Add(Opcodes.FLOAT);
+                    case JType.Float:
+                        locals.Add(IOpcodes.@float);
                         break;
-                    case JType.LONG:
-                        locals.Add(Opcodes.LONG);
-                        locals.Add(Opcodes.TOP);
+                    case JType.Long:
+                        locals.Add(IOpcodes.@long);
+                        locals.Add(IOpcodes.top);
                         break;
-                    case JType.DOUBLE:
-                        locals.Add(Opcodes.DOUBLE);
-                        locals.Add(Opcodes.TOP);
+                    case JType.Double:
+                        locals.Add(IOpcodes.@double);
+                        locals.Add(IOpcodes.top);
                         break;
-                    case JType.ARRAY:
+                    case JType.Array:
                         locals.Add(argumentType.Descriptor);
                         break;
-                    case JType.OBJECT:
+                    case JType.Object:
                         locals.Add(argumentType.InternalName);
                         break;
                     default:
                         throw new Exception();
                 }
 
-            maxLocals = locals.Count;
+            _maxLocals = locals.Count;
         }
 
-        public override void visitFrame(int type, int numLocal, object[] local, int numStack, object[] stack)
+        public override void VisitFrame(int type, int numLocal, object[] local, int numStack, object[] stack)
         {
-            if (type != Opcodes.F_NEW)
+            if (type != IOpcodes.F_New)
                 // Uncompressed frame.
                 throw new ArgumentException(
                     "AnalyzerAdapter only accepts expanded frames (see ClassReader.EXPAND_FRAMES)");
 
-            base.visitFrame(type, numLocal, local, numStack, stack);
+            base.VisitFrame(type, numLocal, local, numStack, stack);
 
             if (locals != null)
             {
@@ -206,101 +206,101 @@ namespace ObjectWeb.Asm.Commons
                 this.stack = new List<object>();
             }
 
-            visitFrameTypes(numLocal, local, locals);
-            visitFrameTypes(numStack, stack, this.stack);
-            maxLocals = Math.Max(maxLocals, locals.Count);
-            maxStack = Math.Max(maxStack, this.stack.Count);
+            VisitFrameTypes(numLocal, local, locals);
+            VisitFrameTypes(numStack, stack, this.stack);
+            _maxLocals = Math.Max(_maxLocals, locals.Count);
+            _maxStack = Math.Max(_maxStack, this.stack.Count);
         }
 
-        private static void visitFrameTypes(int numTypes, object[] frameTypes, List<object> result)
+        private static void VisitFrameTypes(int numTypes, object[] frameTypes, List<object> result)
         {
             for (var i = 0; i < numTypes; ++i)
             {
                 var frameType = frameTypes[i];
                 result.Add(frameType);
-                if (Equals(frameType, Opcodes.LONG) || Equals(frameType, Opcodes.DOUBLE)) result.Add(Opcodes.TOP);
+                if (Equals(frameType, IOpcodes.@long) || Equals(frameType, IOpcodes.@double)) result.Add(IOpcodes.top);
             }
         }
 
-        public override void visitInsn(int opcode)
+        public override void VisitInsn(int opcode)
         {
-            base.visitInsn(opcode);
-            execute(opcode, 0, null);
-            if (opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN || opcode == Opcodes.ATHROW)
+            base.VisitInsn(opcode);
+            Execute(opcode, 0, null);
+            if (opcode >= IOpcodes.Ireturn && opcode <= IOpcodes.Return || opcode == IOpcodes.Athrow)
             {
                 locals = null;
                 stack = null;
             }
         }
 
-        public override void visitIntInsn(int opcode, int operand)
+        public override void VisitIntInsn(int opcode, int operand)
         {
-            base.visitIntInsn(opcode, operand);
-            execute(opcode, operand, null);
+            base.VisitIntInsn(opcode, operand);
+            Execute(opcode, operand, null);
         }
 
-        public override void visitVarInsn(int opcode, int var)
+        public override void VisitVarInsn(int opcode, int var)
         {
-            base.visitVarInsn(opcode, var);
-            var isLongOrDouble = opcode == Opcodes.LLOAD || opcode == Opcodes.DLOAD || opcode == Opcodes.LSTORE ||
-                                 opcode == Opcodes.DSTORE;
-            maxLocals = Math.Max(maxLocals, var + (isLongOrDouble ? 2 : 1));
-            execute(opcode, var, null);
+            base.VisitVarInsn(opcode, var);
+            var isLongOrDouble = opcode == IOpcodes.Lload || opcode == IOpcodes.Dload || opcode == IOpcodes.Lstore ||
+                                 opcode == IOpcodes.Dstore;
+            _maxLocals = Math.Max(_maxLocals, var + (isLongOrDouble ? 2 : 1));
+            Execute(opcode, var, null);
         }
 
-        public override void visitTypeInsn(int opcode, string type)
+        public override void VisitTypeInsn(int opcode, string type)
         {
-            if (opcode == Opcodes.NEW)
+            if (opcode == IOpcodes.New)
             {
-                if (labels == null)
+                if (_labels == null)
                 {
                     var label = new Label();
-                    labels = new List<Label>(3);
-                    labels.Add(label);
-                    if (mv != null) mv.visitLabel(label);
+                    _labels = new List<Label>(3);
+                    _labels.Add(label);
+                    if (mv != null) mv.VisitLabel(label);
                 }
 
-                foreach (var label in labels) uninitializedTypes[label] = type;
+                foreach (var label in _labels) uninitializedTypes[label] = type;
             }
 
-            base.visitTypeInsn(opcode, type);
-            execute(opcode, 0, type);
+            base.VisitTypeInsn(opcode, type);
+            Execute(opcode, 0, type);
         }
 
-        public override void visitFieldInsn(int opcode, string owner, string name, string descriptor)
+        public override void VisitFieldInsn(int opcode, string owner, string name, string descriptor)
         {
-            base.visitFieldInsn(opcode, owner, name, descriptor);
-            execute(opcode, 0, descriptor);
+            base.VisitFieldInsn(opcode, owner, name, descriptor);
+            Execute(opcode, 0, descriptor);
         }
 
-        public override void visitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor,
+        public override void VisitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor,
             bool isInterface)
         {
-            if (api < Opcodes.ASM5 && (opcodeAndSource & Opcodes.SOURCE_DEPRECATED) == 0)
+            if (api < IOpcodes.Asm5 && (opcodeAndSource & IOpcodes.Source_Deprecated) == 0)
             {
                 // Redirect the call to the deprecated version of this method.
-                base.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
+                base.VisitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
                 return;
             }
 
-            base.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
-            var opcode = opcodeAndSource & ~Opcodes.SOURCE_MASK;
+            base.VisitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
+            var opcode = opcodeAndSource & ~IOpcodes.Source_Mask;
 
             if (locals == null)
             {
-                labels = null;
+                _labels = null;
                 return;
             }
 
-            pop(descriptor);
-            if (opcode != Opcodes.INVOKESTATIC)
+            Pop(descriptor);
+            if (opcode != IOpcodes.Invokestatic)
             {
-                var value = pop();
-                if (opcode == Opcodes.INVOKESPECIAL && name.Equals("<init>"))
+                var value = Pop();
+                if (opcode == IOpcodes.Invokespecial && name.Equals("<init>"))
                 {
                     object initializedValue;
-                    if (Equals(value, Opcodes.UNINITIALIZED_THIS))
-                        initializedValue = this.owner;
+                    if (Equals(value, IOpcodes.uninitializedThis))
+                        initializedValue = this._owner;
                     else
                         initializedValue = uninitializedTypes.GetValueOrNull(value);
                     for (var i = 0; i < locals.Count; ++i)
@@ -312,172 +312,172 @@ namespace ObjectWeb.Asm.Commons
                 }
             }
 
-            pushDescriptor(descriptor);
-            labels = null;
+            PushDescriptor(descriptor);
+            _labels = null;
         }
 
-        public override void visitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle,
+        public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle,
             params object[] bootstrapMethodArguments)
         {
-            base.visitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
+            base.VisitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
             if (locals == null)
             {
-                labels = null;
+                _labels = null;
                 return;
             }
 
-            pop(descriptor);
-            pushDescriptor(descriptor);
-            labels = null;
+            Pop(descriptor);
+            PushDescriptor(descriptor);
+            _labels = null;
         }
 
-        public override void visitJumpInsn(int opcode, Label label)
+        public override void VisitJumpInsn(int opcode, Label label)
         {
-            base.visitJumpInsn(opcode, label);
-            execute(opcode, 0, null);
-            if (opcode == Opcodes.GOTO)
+            base.VisitJumpInsn(opcode, label);
+            Execute(opcode, 0, null);
+            if (opcode == IOpcodes.Goto)
             {
                 locals = null;
                 stack = null;
             }
         }
 
-        public override void visitLabel(Label label)
+        public override void VisitLabel(Label label)
         {
-            base.visitLabel(label);
-            if (labels == null) labels = new List<Label>(3);
-            labels.Add(label);
+            base.VisitLabel(label);
+            if (_labels == null) _labels = new List<Label>(3);
+            _labels.Add(label);
         }
 
-        public override void visitLdcInsn(object value)
+        public override void VisitLdcInsn(object value)
         {
-            base.visitLdcInsn(value);
+            base.VisitLdcInsn(value);
             if (locals == null)
             {
-                labels = null;
+                _labels = null;
                 return;
             }
 
             if (value is int)
             {
-                push(Opcodes.INTEGER);
+                Push(IOpcodes.integer);
             }
             else if (value is long)
             {
-                push(Opcodes.LONG);
-                push(Opcodes.TOP);
+                Push(IOpcodes.@long);
+                Push(IOpcodes.top);
             }
             else if (value is float)
             {
-                push(Opcodes.FLOAT);
+                Push(IOpcodes.@float);
             }
             else if (value is double)
             {
-                push(Opcodes.DOUBLE);
-                push(Opcodes.TOP);
+                Push(IOpcodes.@double);
+                Push(IOpcodes.top);
             }
             else if (value is string)
             {
-                push("java/lang/String");
+                Push("java/lang/String");
             }
             else if (value is JType)
             {
                 var sort = ((JType)value).Sort;
-                if (sort == JType.OBJECT || sort == JType.ARRAY)
-                    push("java/lang/Class");
-                else if (sort == JType.METHOD)
-                    push("java/lang/invoke/MethodType");
+                if (sort == JType.Object || sort == JType.Array)
+                    Push("java/lang/Class");
+                else if (sort == JType.Method)
+                    Push("java/lang/invoke/MethodType");
                 else
                     throw new ArgumentException();
             }
             else if (value is Handle)
             {
-                push("java/lang/invoke/MethodHandle");
+                Push("java/lang/invoke/MethodHandle");
             }
             else if (value is ConstantDynamic)
             {
-                pushDescriptor(((ConstantDynamic)value).Descriptor);
+                PushDescriptor(((ConstantDynamic)value).Descriptor);
             }
             else
             {
                 throw new ArgumentException();
             }
 
-            labels = null;
+            _labels = null;
         }
 
-        public override void visitIincInsn(int var, int increment)
+        public override void VisitIincInsn(int var, int increment)
         {
-            base.visitIincInsn(var, increment);
-            maxLocals = Math.Max(maxLocals, var + 1);
-            execute(Opcodes.IINC, var, null);
+            base.VisitIincInsn(var, increment);
+            _maxLocals = Math.Max(_maxLocals, var + 1);
+            Execute(IOpcodes.Iinc, var, null);
         }
 
-        public override void visitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)
+        public override void VisitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)
         {
-            base.visitTableSwitchInsn(min, max, dflt, labels);
-            execute(Opcodes.TABLESWITCH, 0, null);
+            base.VisitTableSwitchInsn(min, max, dflt, labels);
+            Execute(IOpcodes.Tableswitch, 0, null);
             locals = null;
             stack = null;
         }
 
-        public override void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
+        public override void VisitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
         {
-            base.visitLookupSwitchInsn(dflt, keys, labels);
-            execute(Opcodes.LOOKUPSWITCH, 0, null);
+            base.VisitLookupSwitchInsn(dflt, keys, labels);
+            Execute(IOpcodes.Lookupswitch, 0, null);
             locals = null;
             stack = null;
         }
 
-        public override void visitMultiANewArrayInsn(string descriptor, int numDimensions)
+        public override void VisitMultiANewArrayInsn(string descriptor, int numDimensions)
         {
-            base.visitMultiANewArrayInsn(descriptor, numDimensions);
-            execute(Opcodes.MULTIANEWARRAY, numDimensions, descriptor);
+            base.VisitMultiANewArrayInsn(descriptor, numDimensions);
+            Execute(IOpcodes.Multianewarray, numDimensions, descriptor);
         }
 
-        public override void visitLocalVariable(string name, string descriptor, string signature, Label start,
+        public override void VisitLocalVariable(string name, string descriptor, string signature, Label start,
             Label end, int index)
         {
             var firstDescriptorChar = descriptor[0];
-            maxLocals = Math.Max(maxLocals, index + (firstDescriptorChar == 'J' || firstDescriptorChar == 'D' ? 2 : 1));
-            base.visitLocalVariable(name, descriptor, signature, start, end, index);
+            _maxLocals = Math.Max(_maxLocals, index + (firstDescriptorChar == 'J' || firstDescriptorChar == 'D' ? 2 : 1));
+            base.VisitLocalVariable(name, descriptor, signature, start, end, index);
         }
 
-        public override void visitMaxs(int maxStack, int maxLocals)
+        public override void VisitMaxs(int maxStack, int maxLocals)
         {
             if (mv != null)
             {
-                this.maxStack = Math.Max(this.maxStack, maxStack);
-                this.maxLocals = Math.Max(this.maxLocals, maxLocals);
-                mv.visitMaxs(this.maxStack, this.maxLocals);
+                this._maxStack = Math.Max(this._maxStack, maxStack);
+                this._maxLocals = Math.Max(this._maxLocals, maxLocals);
+                mv.VisitMaxs(this._maxStack, this._maxLocals);
             }
         }
 
         // -----------------------------------------------------------------------------------------------
 
-        private object get(int local)
+        private object Get(int local)
         {
-            maxLocals = Math.Max(maxLocals, local + 1);
-            return local < locals.Count ? locals[local] : Opcodes.TOP;
+            _maxLocals = Math.Max(_maxLocals, local + 1);
+            return local < locals.Count ? locals[local] : IOpcodes.top;
         }
 
-        private void set(int local, object type)
+        private void Set(int local, object type)
         {
-            maxLocals = Math.Max(maxLocals, local + 1);
-            while (local >= locals.Count) locals.Add(Opcodes.TOP);
+            _maxLocals = Math.Max(_maxLocals, local + 1);
+            while (local >= locals.Count) locals.Add(IOpcodes.top);
             locals[local] = type;
         }
 
-        private void push(object type)
+        private void Push(object type)
         {
             stack.Add(type);
-            maxStack = Math.Max(maxStack, stack.Count);
+            _maxStack = Math.Max(_maxStack, stack.Count);
         }
 
-        private void pushDescriptor(string fieldOrMethodDescriptor)
+        private void PushDescriptor(string fieldOrMethodDescriptor)
         {
             var descriptor = fieldOrMethodDescriptor[0] == '('
-                ? JType.getReturnType(fieldOrMethodDescriptor).Descriptor
+                ? JType.GetReturnType(fieldOrMethodDescriptor).Descriptor
                 : fieldOrMethodDescriptor;
             switch (descriptor[0])
             {
@@ -488,31 +488,31 @@ namespace ObjectWeb.Asm.Commons
                 case 'B':
                 case 'S':
                 case 'I':
-                    push(Opcodes.INTEGER);
+                    Push(IOpcodes.integer);
                     return;
                 case 'F':
-                    push(Opcodes.FLOAT);
+                    Push(IOpcodes.@float);
                     return;
                 case 'J':
-                    push(Opcodes.LONG);
-                    push(Opcodes.TOP);
+                    Push(IOpcodes.@long);
+                    Push(IOpcodes.top);
                     return;
                 case 'D':
-                    push(Opcodes.DOUBLE);
-                    push(Opcodes.TOP);
+                    Push(IOpcodes.@double);
+                    Push(IOpcodes.top);
                     return;
                 case '[':
-                    push(descriptor);
+                    Push(descriptor);
                     break;
                 case 'L':
-                    push(descriptor.Substring(1, descriptor.Length - 1 - 1));
+                    Push(descriptor.Substring(1, descriptor.Length - 1 - 1));
                     break;
                 default:
                     throw new Exception();
             }
         }
 
-        private object pop()
+        private object Pop()
         {
             var stackCount = stack.Count - 1;
             var current = stack[stackCount];
@@ -520,40 +520,40 @@ namespace ObjectWeb.Asm.Commons
             return current;
         }
 
-        private void pop(int numSlots)
+        private void Pop(int numSlots)
         {
             var size = stack.Count;
             var end = size - numSlots;
             for (var i = size - 1; i >= end; --i) stack.RemoveAt(i);
         }
 
-        private void pop(string descriptor)
+        private void Pop(string descriptor)
         {
             var firstDescriptorChar = descriptor[0];
             if (firstDescriptorChar == '(')
             {
                 var numSlots = 0;
-                var types = JType.getArgumentTypes(descriptor);
+                var types = JType.GetArgumentTypes(descriptor);
                 foreach (var type in types) numSlots += type.Size;
-                pop(numSlots);
+                Pop(numSlots);
             }
             else if (firstDescriptorChar == 'J' || firstDescriptorChar == 'D')
             {
-                pop(2);
+                Pop(2);
             }
             else
             {
-                pop(1);
+                Pop(1);
             }
         }
 
-        private void execute(int opcode, int intArg, string stringArg)
+        private void Execute(int opcode, int intArg, string stringArg)
         {
-            if (opcode == Opcodes.JSR || opcode == Opcodes.RET)
+            if (opcode == IOpcodes.Jsr || opcode == IOpcodes.Ret)
                 throw new ArgumentException("JSR/RET are not supported");
             if (locals == null)
             {
-                labels = null;
+                _labels = null;
                 return;
             }
 
@@ -563,365 +563,365 @@ namespace ObjectWeb.Asm.Commons
             object t4;
             switch (opcode)
             {
-                case Opcodes.NOP:
-                case Opcodes.INEG:
-                case Opcodes.LNEG:
-                case Opcodes.FNEG:
-                case Opcodes.DNEG:
-                case Opcodes.I2B:
-                case Opcodes.I2C:
-                case Opcodes.I2S:
-                case Opcodes.GOTO:
-                case Opcodes.RETURN:
+                case IOpcodes.Nop:
+                case IOpcodes.Ineg:
+                case IOpcodes.Lneg:
+                case IOpcodes.Fneg:
+                case IOpcodes.Dneg:
+                case IOpcodes.I2B:
+                case IOpcodes.I2C:
+                case IOpcodes.I2S:
+                case IOpcodes.Goto:
+                case IOpcodes.Return:
                     break;
-                case Opcodes.ACONST_NULL:
-                    push(Opcodes.NULL);
+                case IOpcodes.Aconst_Null:
+                    Push(IOpcodes.@null);
                     break;
-                case Opcodes.ICONST_M1:
-                case Opcodes.ICONST_0:
-                case Opcodes.ICONST_1:
-                case Opcodes.ICONST_2:
-                case Opcodes.ICONST_3:
-                case Opcodes.ICONST_4:
-                case Opcodes.ICONST_5:
-                case Opcodes.BIPUSH:
-                case Opcodes.SIPUSH:
-                    push(Opcodes.INTEGER);
+                case IOpcodes.Iconst_M1:
+                case IOpcodes.Iconst_0:
+                case IOpcodes.Iconst_1:
+                case IOpcodes.Iconst_2:
+                case IOpcodes.Iconst_3:
+                case IOpcodes.Iconst_4:
+                case IOpcodes.Iconst_5:
+                case IOpcodes.Bipush:
+                case IOpcodes.Sipush:
+                    Push(IOpcodes.integer);
                     break;
-                case Opcodes.LCONST_0:
-                case Opcodes.LCONST_1:
-                    push(Opcodes.LONG);
-                    push(Opcodes.TOP);
+                case IOpcodes.Lconst_0:
+                case IOpcodes.Lconst_1:
+                    Push(IOpcodes.@long);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.FCONST_0:
-                case Opcodes.FCONST_1:
-                case Opcodes.FCONST_2:
-                    push(Opcodes.FLOAT);
+                case IOpcodes.Fconst_0:
+                case IOpcodes.Fconst_1:
+                case IOpcodes.Fconst_2:
+                    Push(IOpcodes.@float);
                     break;
-                case Opcodes.DCONST_0:
-                case Opcodes.DCONST_1:
-                    push(Opcodes.DOUBLE);
-                    push(Opcodes.TOP);
+                case IOpcodes.Dconst_0:
+                case IOpcodes.Dconst_1:
+                    Push(IOpcodes.@double);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.ILOAD:
-                case Opcodes.FLOAD:
-                case Opcodes.ALOAD:
-                    push(get(intArg));
+                case IOpcodes.Iload:
+                case IOpcodes.Fload:
+                case IOpcodes.Aload:
+                    Push(Get(intArg));
                     break;
-                case Opcodes.LLOAD:
-                case Opcodes.DLOAD:
-                    push(get(intArg));
-                    push(Opcodes.TOP);
+                case IOpcodes.Lload:
+                case IOpcodes.Dload:
+                    Push(Get(intArg));
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.LALOAD:
-                case Opcodes.D2L:
-                    pop(2);
-                    push(Opcodes.LONG);
-                    push(Opcodes.TOP);
+                case IOpcodes.Laload:
+                case IOpcodes.D2L:
+                    Pop(2);
+                    Push(IOpcodes.@long);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.DALOAD:
-                case Opcodes.L2D:
-                    pop(2);
-                    push(Opcodes.DOUBLE);
-                    push(Opcodes.TOP);
+                case IOpcodes.Daload:
+                case IOpcodes.L2D:
+                    Pop(2);
+                    Push(IOpcodes.@double);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.AALOAD:
-                    pop(1);
-                    value1 = pop();
+                case IOpcodes.Aaload:
+                    Pop(1);
+                    value1 = Pop();
                     if (value1 is string)
-                        pushDescriptor(((string)value1).Substring(1));
-                    else if (Equals(value1, Opcodes.NULL))
-                        push(value1);
+                        PushDescriptor(((string)value1).Substring(1));
+                    else if (Equals(value1, IOpcodes.@null))
+                        Push(value1);
                     else
-                        push("java/lang/Object");
+                        Push("java/lang/Object");
                     break;
-                case Opcodes.ISTORE:
-                case Opcodes.FSTORE:
-                case Opcodes.ASTORE:
-                    value1 = pop();
-                    set(intArg, value1);
+                case IOpcodes.Istore:
+                case IOpcodes.Fstore:
+                case IOpcodes.Astore:
+                    value1 = Pop();
+                    Set(intArg, value1);
                     if (intArg > 0)
                     {
-                        value2 = get(intArg - 1);
-                        if (Equals(value2, Opcodes.LONG) || Equals(value2, Opcodes.DOUBLE))
-                            set(intArg - 1, Opcodes.TOP);
+                        value2 = Get(intArg - 1);
+                        if (Equals(value2, IOpcodes.@long) || Equals(value2, IOpcodes.@double))
+                            Set(intArg - 1, IOpcodes.top);
                     }
 
                     break;
-                case Opcodes.LSTORE:
-                case Opcodes.DSTORE:
-                    pop(1);
-                    value1 = pop();
-                    set(intArg, value1);
-                    set(intArg + 1, Opcodes.TOP);
+                case IOpcodes.Lstore:
+                case IOpcodes.Dstore:
+                    Pop(1);
+                    value1 = Pop();
+                    Set(intArg, value1);
+                    Set(intArg + 1, IOpcodes.top);
                     if (intArg > 0)
                     {
-                        value2 = get(intArg - 1);
-                        if (Equals(value2, Opcodes.LONG) || Equals(value2, Opcodes.DOUBLE))
-                            set(intArg - 1, Opcodes.TOP);
+                        value2 = Get(intArg - 1);
+                        if (Equals(value2, IOpcodes.@long) || Equals(value2, IOpcodes.@double))
+                            Set(intArg - 1, IOpcodes.top);
                     }
 
                     break;
-                case Opcodes.IASTORE:
-                case Opcodes.BASTORE:
-                case Opcodes.CASTORE:
-                case Opcodes.SASTORE:
-                case Opcodes.FASTORE:
-                case Opcodes.AASTORE:
-                    pop(3);
+                case IOpcodes.Iastore:
+                case IOpcodes.Bastore:
+                case IOpcodes.Castore:
+                case IOpcodes.Sastore:
+                case IOpcodes.Fastore:
+                case IOpcodes.Aastore:
+                    Pop(3);
                     break;
-                case Opcodes.LASTORE:
-                case Opcodes.DASTORE:
-                    pop(4);
+                case IOpcodes.Lastore:
+                case IOpcodes.Dastore:
+                    Pop(4);
                     break;
-                case Opcodes.POP:
-                case Opcodes.IFEQ:
-                case Opcodes.IFNE:
-                case Opcodes.IFLT:
-                case Opcodes.IFGE:
-                case Opcodes.IFGT:
-                case Opcodes.IFLE:
-                case Opcodes.IRETURN:
-                case Opcodes.FRETURN:
-                case Opcodes.ARETURN:
-                case Opcodes.TABLESWITCH:
-                case Opcodes.LOOKUPSWITCH:
-                case Opcodes.ATHROW:
-                case Opcodes.MONITORENTER:
-                case Opcodes.MONITOREXIT:
-                case Opcodes.IFNULL:
-                case Opcodes.IFNONNULL:
-                    pop(1);
+                case IOpcodes.Pop:
+                case IOpcodes.Ifeq:
+                case IOpcodes.Ifne:
+                case IOpcodes.Iflt:
+                case IOpcodes.Ifge:
+                case IOpcodes.Ifgt:
+                case IOpcodes.Ifle:
+                case IOpcodes.Ireturn:
+                case IOpcodes.Freturn:
+                case IOpcodes.Areturn:
+                case IOpcodes.Tableswitch:
+                case IOpcodes.Lookupswitch:
+                case IOpcodes.Athrow:
+                case IOpcodes.Monitorenter:
+                case IOpcodes.Monitorexit:
+                case IOpcodes.Ifnull:
+                case IOpcodes.Ifnonnull:
+                    Pop(1);
                     break;
-                case Opcodes.POP2:
-                case Opcodes.IF_ICMPEQ:
-                case Opcodes.IF_ICMPNE:
-                case Opcodes.IF_ICMPLT:
-                case Opcodes.IF_ICMPGE:
-                case Opcodes.IF_ICMPGT:
-                case Opcodes.IF_ICMPLE:
-                case Opcodes.IF_ACMPEQ:
-                case Opcodes.IF_ACMPNE:
-                case Opcodes.LRETURN:
-                case Opcodes.DRETURN:
-                    pop(2);
+                case IOpcodes.Pop2:
+                case IOpcodes.If_Icmpeq:
+                case IOpcodes.If_Icmpne:
+                case IOpcodes.If_Icmplt:
+                case IOpcodes.If_Icmpge:
+                case IOpcodes.If_Icmpgt:
+                case IOpcodes.If_Icmple:
+                case IOpcodes.If_Acmpeq:
+                case IOpcodes.If_Acmpne:
+                case IOpcodes.Lreturn:
+                case IOpcodes.Dreturn:
+                    Pop(2);
                     break;
-                case Opcodes.DUP:
-                    value1 = pop();
-                    push(value1);
-                    push(value1);
+                case IOpcodes.Dup:
+                    value1 = Pop();
+                    Push(value1);
+                    Push(value1);
                     break;
-                case Opcodes.DUP_X1:
-                    value1 = pop();
-                    value2 = pop();
-                    push(value1);
-                    push(value2);
-                    push(value1);
+                case IOpcodes.Dup_X1:
+                    value1 = Pop();
+                    value2 = Pop();
+                    Push(value1);
+                    Push(value2);
+                    Push(value1);
                     break;
-                case Opcodes.DUP_X2:
-                    value1 = pop();
-                    value2 = pop();
-                    value3 = pop();
-                    push(value1);
-                    push(value3);
-                    push(value2);
-                    push(value1);
+                case IOpcodes.Dup_X2:
+                    value1 = Pop();
+                    value2 = Pop();
+                    value3 = Pop();
+                    Push(value1);
+                    Push(value3);
+                    Push(value2);
+                    Push(value1);
                     break;
-                case Opcodes.DUP2:
-                    value1 = pop();
-                    value2 = pop();
-                    push(value2);
-                    push(value1);
-                    push(value2);
-                    push(value1);
+                case IOpcodes.Dup2:
+                    value1 = Pop();
+                    value2 = Pop();
+                    Push(value2);
+                    Push(value1);
+                    Push(value2);
+                    Push(value1);
                     break;
-                case Opcodes.DUP2_X1:
-                    value1 = pop();
-                    value2 = pop();
-                    value3 = pop();
-                    push(value2);
-                    push(value1);
-                    push(value3);
-                    push(value2);
-                    push(value1);
+                case IOpcodes.Dup2_X1:
+                    value1 = Pop();
+                    value2 = Pop();
+                    value3 = Pop();
+                    Push(value2);
+                    Push(value1);
+                    Push(value3);
+                    Push(value2);
+                    Push(value1);
                     break;
-                case Opcodes.DUP2_X2:
-                    value1 = pop();
-                    value2 = pop();
-                    value3 = pop();
-                    t4 = pop();
-                    push(value2);
-                    push(value1);
-                    push(t4);
-                    push(value3);
-                    push(value2);
-                    push(value1);
+                case IOpcodes.Dup2_X2:
+                    value1 = Pop();
+                    value2 = Pop();
+                    value3 = Pop();
+                    t4 = Pop();
+                    Push(value2);
+                    Push(value1);
+                    Push(t4);
+                    Push(value3);
+                    Push(value2);
+                    Push(value1);
                     break;
-                case Opcodes.SWAP:
-                    value1 = pop();
-                    value2 = pop();
-                    push(value1);
-                    push(value2);
+                case IOpcodes.Swap:
+                    value1 = Pop();
+                    value2 = Pop();
+                    Push(value1);
+                    Push(value2);
                     break;
-                case Opcodes.IALOAD:
-                case Opcodes.BALOAD:
-                case Opcodes.CALOAD:
-                case Opcodes.SALOAD:
-                case Opcodes.IADD:
-                case Opcodes.ISUB:
-                case Opcodes.IMUL:
-                case Opcodes.IDIV:
-                case Opcodes.IREM:
-                case Opcodes.IAND:
-                case Opcodes.IOR:
-                case Opcodes.IXOR:
-                case Opcodes.ISHL:
-                case Opcodes.ISHR:
-                case Opcodes.IUSHR:
-                case Opcodes.L2I:
-                case Opcodes.D2I:
-                case Opcodes.FCMPL:
-                case Opcodes.FCMPG:
-                    pop(2);
-                    push(Opcodes.INTEGER);
+                case IOpcodes.Iaload:
+                case IOpcodes.Baload:
+                case IOpcodes.Caload:
+                case IOpcodes.Saload:
+                case IOpcodes.Iadd:
+                case IOpcodes.Isub:
+                case IOpcodes.Imul:
+                case IOpcodes.Idiv:
+                case IOpcodes.Irem:
+                case IOpcodes.Iand:
+                case IOpcodes.Ior:
+                case IOpcodes.Ixor:
+                case IOpcodes.Ishl:
+                case IOpcodes.Ishr:
+                case IOpcodes.Iushr:
+                case IOpcodes.L2I:
+                case IOpcodes.D2I:
+                case IOpcodes.Fcmpl:
+                case IOpcodes.Fcmpg:
+                    Pop(2);
+                    Push(IOpcodes.integer);
                     break;
-                case Opcodes.LADD:
-                case Opcodes.LSUB:
-                case Opcodes.LMUL:
-                case Opcodes.LDIV:
-                case Opcodes.LREM:
-                case Opcodes.LAND:
-                case Opcodes.LOR:
-                case Opcodes.LXOR:
-                    pop(4);
-                    push(Opcodes.LONG);
-                    push(Opcodes.TOP);
+                case IOpcodes.Ladd:
+                case IOpcodes.Lsub:
+                case IOpcodes.Lmul:
+                case IOpcodes.Ldiv:
+                case IOpcodes.Lrem:
+                case IOpcodes.Land:
+                case IOpcodes.Lor:
+                case IOpcodes.Lxor:
+                    Pop(4);
+                    Push(IOpcodes.@long);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.FALOAD:
-                case Opcodes.FADD:
-                case Opcodes.FSUB:
-                case Opcodes.FMUL:
-                case Opcodes.FDIV:
-                case Opcodes.FREM:
-                case Opcodes.L2F:
-                case Opcodes.D2F:
-                    pop(2);
-                    push(Opcodes.FLOAT);
+                case IOpcodes.Faload:
+                case IOpcodes.Fadd:
+                case IOpcodes.Fsub:
+                case IOpcodes.Fmul:
+                case IOpcodes.Fdiv:
+                case IOpcodes.Frem:
+                case IOpcodes.L2F:
+                case IOpcodes.D2F:
+                    Pop(2);
+                    Push(IOpcodes.@float);
                     break;
-                case Opcodes.DADD:
-                case Opcodes.DSUB:
-                case Opcodes.DMUL:
-                case Opcodes.DDIV:
-                case Opcodes.DREM:
-                    pop(4);
-                    push(Opcodes.DOUBLE);
-                    push(Opcodes.TOP);
+                case IOpcodes.Dadd:
+                case IOpcodes.Dsub:
+                case IOpcodes.Dmul:
+                case IOpcodes.Ddiv:
+                case IOpcodes.Drem:
+                    Pop(4);
+                    Push(IOpcodes.@double);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.LSHL:
-                case Opcodes.LSHR:
-                case Opcodes.LUSHR:
-                    pop(3);
-                    push(Opcodes.LONG);
-                    push(Opcodes.TOP);
+                case IOpcodes.Lshl:
+                case IOpcodes.Lshr:
+                case IOpcodes.Lushr:
+                    Pop(3);
+                    Push(IOpcodes.@long);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.IINC:
-                    set(intArg, Opcodes.INTEGER);
+                case IOpcodes.Iinc:
+                    Set(intArg, IOpcodes.integer);
                     break;
-                case Opcodes.I2L:
-                case Opcodes.F2L:
-                    pop(1);
-                    push(Opcodes.LONG);
-                    push(Opcodes.TOP);
+                case IOpcodes.I2L:
+                case IOpcodes.F2L:
+                    Pop(1);
+                    Push(IOpcodes.@long);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.I2F:
-                    pop(1);
-                    push(Opcodes.FLOAT);
+                case IOpcodes.I2F:
+                    Pop(1);
+                    Push(IOpcodes.@float);
                     break;
-                case Opcodes.I2D:
-                case Opcodes.F2D:
-                    pop(1);
-                    push(Opcodes.DOUBLE);
-                    push(Opcodes.TOP);
+                case IOpcodes.I2D:
+                case IOpcodes.F2D:
+                    Pop(1);
+                    Push(IOpcodes.@double);
+                    Push(IOpcodes.top);
                     break;
-                case Opcodes.F2I:
-                case Opcodes.ARRAYLENGTH:
-                case Opcodes.INSTANCEOF:
-                    pop(1);
-                    push(Opcodes.INTEGER);
+                case IOpcodes.F2I:
+                case IOpcodes.Arraylength:
+                case IOpcodes.Instanceof:
+                    Pop(1);
+                    Push(IOpcodes.integer);
                     break;
-                case Opcodes.LCMP:
-                case Opcodes.DCMPL:
-                case Opcodes.DCMPG:
-                    pop(4);
-                    push(Opcodes.INTEGER);
+                case IOpcodes.Lcmp:
+                case IOpcodes.Dcmpl:
+                case IOpcodes.Dcmpg:
+                    Pop(4);
+                    Push(IOpcodes.integer);
                     break;
-                case Opcodes.GETSTATIC:
-                    pushDescriptor(stringArg);
+                case IOpcodes.Getstatic:
+                    PushDescriptor(stringArg);
                     break;
-                case Opcodes.PUTSTATIC:
-                    pop(stringArg);
+                case IOpcodes.Putstatic:
+                    Pop(stringArg);
                     break;
-                case Opcodes.GETFIELD:
-                    pop(1);
-                    pushDescriptor(stringArg);
+                case IOpcodes.Getfield:
+                    Pop(1);
+                    PushDescriptor(stringArg);
                     break;
-                case Opcodes.PUTFIELD:
-                    pop(stringArg);
-                    pop();
+                case IOpcodes.Putfield:
+                    Pop(stringArg);
+                    Pop();
                     break;
-                case Opcodes.NEW:
-                    push(labels[0]);
+                case IOpcodes.New:
+                    Push(_labels[0]);
                     break;
-                case Opcodes.NEWARRAY:
-                    pop();
+                case IOpcodes.Newarray:
+                    Pop();
                     switch (intArg)
                     {
-                        case Opcodes.T_BOOLEAN:
-                            pushDescriptor("[Z");
+                        case IOpcodes.Boolean:
+                            PushDescriptor("[Z");
                             break;
-                        case Opcodes.T_CHAR:
-                            pushDescriptor("[C");
+                        case IOpcodes.Char:
+                            PushDescriptor("[C");
                             break;
-                        case Opcodes.T_BYTE:
-                            pushDescriptor("[B");
+                        case IOpcodes.Byte:
+                            PushDescriptor("[B");
                             break;
-                        case Opcodes.T_SHORT:
-                            pushDescriptor("[S");
+                        case IOpcodes.Short:
+                            PushDescriptor("[S");
                             break;
-                        case Opcodes.T_INT:
-                            pushDescriptor("[I");
+                        case IOpcodes.Int:
+                            PushDescriptor("[I");
                             break;
-                        case Opcodes.T_FLOAT:
-                            pushDescriptor("[F");
+                        case IOpcodes.Float:
+                            PushDescriptor("[F");
                             break;
-                        case Opcodes.T_DOUBLE:
-                            pushDescriptor("[D");
+                        case IOpcodes.Double:
+                            PushDescriptor("[D");
                             break;
-                        case Opcodes.T_LONG:
-                            pushDescriptor("[J");
+                        case IOpcodes.Long:
+                            PushDescriptor("[J");
                             break;
                         default:
                             throw new ArgumentException("Invalid array type " + intArg);
                     }
 
                     break;
-                case Opcodes.ANEWARRAY:
-                    pop();
-                    pushDescriptor("[" + JType.getObjectType(stringArg));
+                case IOpcodes.Anewarray:
+                    Pop();
+                    PushDescriptor("[" + JType.GetObjectType(stringArg));
                     break;
-                case Opcodes.CHECKCAST:
-                    pop();
-                    pushDescriptor(JType.getObjectType(stringArg).Descriptor);
+                case IOpcodes.Checkcast:
+                    Pop();
+                    PushDescriptor(JType.GetObjectType(stringArg).Descriptor);
                     break;
-                case Opcodes.MULTIANEWARRAY:
-                    pop(intArg);
-                    pushDescriptor(stringArg);
+                case IOpcodes.Multianewarray:
+                    Pop(intArg);
+                    PushDescriptor(stringArg);
                     break;
                 default:
                     throw new ArgumentException("Invalid opcode " + opcode);
             }
 
-            labels = null;
+            _labels = null;
         }
     }
 }

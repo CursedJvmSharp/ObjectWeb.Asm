@@ -48,24 +48,24 @@ namespace ObjectWeb.Asm
 	  /// A flag to skip the Code attributes. If this flag is set the Code attributes are neither parsed
 	  /// nor visited.
 	  /// </summary>
-	  public const int SKIP_CODE = 1;
+	  public const int Skip_Code = 1;
 
 	  /// <summary>
 	  /// A flag to skip the SourceFile, SourceDebugExtension, LocalVariableTable,
 	  /// LocalVariableTypeTable, LineNumberTable and MethodParameters attributes. If this flag is set
-	  /// these attributes are neither parsed nor visited (i.e. <seealso cref="ClassVisitor.visitSource"/>, {@link
-	  /// MethodVisitor#visitLocalVariable}, <seealso cref="MethodVisitor.visitLineNumber"/> and {@link
+	  /// these attributes are neither parsed nor visited (i.e. <seealso cref="ClassVisitor.VisitSource"/>, {@link
+	  /// MethodVisitor#visitLocalVariable}, <seealso cref="MethodVisitor.VisitLineNumber"/> and {@link
 	  /// MethodVisitor#visitParameter} are not called).
 	  /// </summary>
-	  public const int SKIP_DEBUG = 2;
+	  public const int Skip_Debug = 2;
 
 	  /// <summary>
 	  /// A flag to skip the StackMap and StackMapTable attributes. If this flag is set these attributes
-	  /// are neither parsed nor visited (i.e. <seealso cref="MethodVisitor.visitFrame"/> is not called). This flag
-	  /// is useful when the <seealso cref="ClassWriter.COMPUTE_FRAMES"/> option is used: it avoids visiting frames
+	  /// are neither parsed nor visited (i.e. <seealso cref="MethodVisitor.VisitFrame"/> is not called). This flag
+	  /// is useful when the <seealso cref="ClassWriter.Compute_Frames"/> option is used: it avoids visiting frames
 	  /// that will be ignored and recomputed from scratch.
 	  /// </summary>
-	  public const int SKIP_FRAMES = 4;
+	  public const int Skip_Frames = 4;
 
 	  /// <summary>
 	  /// A flag to expand the stack map frames. By default stack map frames are visited in their
@@ -74,33 +74,33 @@ namespace ObjectWeb.Asm
 	  /// format (this option adds a decompression/compression step in ClassReader and ClassWriter which
 	  /// degrades performance quite a lot).
 	  /// </summary>
-	  public const int EXPAND_FRAMES = 8;
+	  public const int Expand_Frames = 8;
 
 	  /// <summary>
 	  /// A flag to expand the ASM specific instructions into an equivalent sequence of standard bytecode
 	  /// instructions. When resolving a forward jump it may happen that the signed 2 bytes offset
 	  /// reserved for it is not sufficient to store the bytecode offset. In this case the jump
 	  /// instruction is replaced with a temporary ASM specific instruction using an unsigned 2 bytes
-	  /// offset (see <seealso cref="Label.resolve"/>). This internal flag is used to re-read classes containing
+	  /// offset (see <seealso cref="Label.Resolve"/>). This internal flag is used to re-read classes containing
 	  /// such instructions, in order to replace them with standard instructions. In addition, when this
 	  /// flag is used, goto_w and jsr_w are <i>not</i> converted into goto and jsr, to make sure that
 	  /// infinite loops where a goto_w is replaced with a goto in ClassReader and converted back to a
 	  /// goto_w in ClassWriter cannot occur.
 	  /// </summary>
-	  internal const int EXPAND_ASM_INSNS = 256;
+	  internal const int Expand_Asm_Insns = 256;
 
 	  /// <summary>
 	  /// The maximum size of array to allocate. </summary>
-	  private const int MAX_BUFFER_SIZE = 1024 * 1024;
+	  private const int MaxBufferSize = 1024 * 1024;
 
 	  /// <summary>
 	  /// The size of the temporary byte array used to read class input streams chunk by chunk. </summary>
-	  private const int INPUT_STREAM_DATA_CHUNK_SIZE = 4096;
+	  private const int InputStreamDataChunkSize = 4096;
 
 	  /// <summary>
 	  /// A byte array containing the JVMS ClassFile structure to be parsed.
 	  /// </summary>
-	  /// @deprecated Use <seealso cref="readByte(int)"/> and the other read methods instead. This field will
+	  /// @deprecated Use <seealso cref="ReadByte"/> and the other read methods instead. This field will
 	  ///     eventually be deleted. 
 	  [Obsolete("Use <seealso cref=\"readByte(int)\"/> and the other read methods instead. This field will")]
 	  public readonly sbyte[] b;
@@ -115,7 +115,7 @@ namespace ObjectWeb.Asm
 	  /// not needed by class visitors.</i>
 	  /// 
 	  /// <para>NOTE: the ClassFile structure can start at any offset within this array, i.e. it does not
-	  /// necessarily start at offset 0. Use <seealso cref="getItem"/> and <seealso cref="header"/> to get correct
+	  /// necessarily start at offset 0. Use <seealso cref="GetItem"/> and <seealso cref="header"/> to get correct
 	  /// ClassFile element offsets within this byte array.
 	  /// </para>
 	  /// </summary>
@@ -127,19 +127,19 @@ namespace ObjectWeb.Asm
 	  /// given by cpInfoOffsets[i] - 1, i.e. its cp_info's tag field is given by b[cpInfoOffsets[i] -
 	  /// 1].
 	  /// </summary>
-	  private readonly int[] cpInfoOffsets;
+	  private readonly int[] _cpInfoOffsets;
 
 	  /// <summary>
 	  /// The String objects corresponding to the CONSTANT_Utf8 constant pool items. This cache avoids
 	  /// multiple parsing of a given CONSTANT_Utf8 constant pool item.
 	  /// </summary>
-	  private readonly string[] constantUtf8Values;
+	  private readonly string[] _constantUtf8Values;
 
 	  /// <summary>
 	  /// The ConstantDynamic objects corresponding to the CONSTANT_Dynamic constant pool items. This
 	  /// cache avoids multiple parsing of a given CONSTANT_Dynamic constant pool item.
 	  /// </summary>
-	  private readonly ConstantDynamic[] constantDynamicValues;
+	  private readonly ConstantDynamic[] _constantDynamicValues;
 
 	  /// <summary>
 	  /// The start offsets in <seealso cref="classFileBuffer"/> of each element of the bootstrap_methods array
@@ -147,13 +147,13 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <seealso cref= <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.23">JVMS
 	  ///     4.7.23</a> </seealso>
-	  private readonly int[] bootstrapMethodOffsets;
+	  private readonly int[] _bootstrapMethodOffsets;
 
 	  /// <summary>
 	  /// A conservative estimate of the maximum length of the strings contained in the constant pool of
 	  /// the class.
 	  /// </summary>
-	  private readonly int maxStringLength;
+	  private readonly int _maxStringLength;
 
 	  // -----------------------------------------------------------------------------------------------
 	  // Constructors
@@ -190,15 +190,15 @@ namespace ObjectWeb.Asm
 		this.b = classFileBuffer;
 		// Check the class' major_version. This field is after the magic and minor_version fields, which
 		// use 4 and 2 bytes respectively.
-		if (checkClassVersion && readShort(classFileOffset + 6) > Opcodes.V18)
+		if (checkClassVersion && ReadShort(classFileOffset + 6) > IOpcodes.V18)
 		{
-		  throw new System.ArgumentException("Unsupported class file major version " + readShort(classFileOffset + 6));
+		  throw new System.ArgumentException("Unsupported class file major version " + ReadShort(classFileOffset + 6));
 		}
 		// Create the constant pool arrays. The constant_pool_count field is after the magic,
 		// minor_version and major_version fields, which use 4, 2 and 2 bytes respectively.
-		int constantPoolCount = readUnsignedShort(classFileOffset + 8);
-		cpInfoOffsets = new int[constantPoolCount];
-		constantUtf8Values = new string[constantPoolCount];
+		int constantPoolCount = ReadUnsignedShort(classFileOffset + 8);
+		_cpInfoOffsets = new int[constantPoolCount];
+		_constantUtf8Values = new string[constantPoolCount];
 		// Compute the offset of each constant pool entry, as well as a conservative estimate of the
 		// maximum length of the constant pool strings. The first constant pool entry is after the
 		// magic, minor_version, major_version and constant_pool_count fields, which use 4, 2, 2 and 2
@@ -211,34 +211,34 @@ namespace ObjectWeb.Asm
 		// The offset of the other entries depend on the total size of all the previous entries.
 		while (currentCpInfoIndex < constantPoolCount)
 		{
-		  cpInfoOffsets[currentCpInfoIndex++] = currentCpInfoOffset + 1;
+		  _cpInfoOffsets[currentCpInfoIndex++] = currentCpInfoOffset + 1;
 		  int cpInfoSize;
 		  switch (classFileBuffer[currentCpInfoOffset])
 		  {
-			case Symbol.CONSTANT_FIELDREF_TAG:
-			case Symbol.CONSTANT_METHODREF_TAG:
-			case Symbol.CONSTANT_INTERFACE_METHODREF_TAG:
-			case Symbol.CONSTANT_INTEGER_TAG:
-			case Symbol.CONSTANT_FLOAT_TAG:
-			case Symbol.CONSTANT_NAME_AND_TYPE_TAG:
+			case Symbol.Constant_Fieldref_Tag:
+			case Symbol.Constant_Methodref_Tag:
+			case Symbol.Constant_Interface_Methodref_Tag:
+			case Symbol.Constant_Integer_Tag:
+			case Symbol.Constant_Float_Tag:
+			case Symbol.Constant_Name_And_Type_Tag:
 			  cpInfoSize = 5;
 			  break;
-			case Symbol.CONSTANT_DYNAMIC_TAG:
+			case Symbol.Constant_Dynamic_Tag:
 			  cpInfoSize = 5;
 			  hasBootstrapMethods = true;
 			  hasConstantDynamic = true;
 			  break;
-			case Symbol.CONSTANT_INVOKE_DYNAMIC_TAG:
+			case Symbol.Constant_Invoke_Dynamic_Tag:
 			  cpInfoSize = 5;
 			  hasBootstrapMethods = true;
 			  break;
-			case Symbol.CONSTANT_LONG_TAG:
-			case Symbol.CONSTANT_DOUBLE_TAG:
+			case Symbol.Constant_Long_Tag:
+			case Symbol.Constant_Double_Tag:
 			  cpInfoSize = 9;
 			  currentCpInfoIndex++;
 			  break;
-			case Symbol.CONSTANT_UTF8_TAG:
-			  cpInfoSize = 3 + readUnsignedShort(currentCpInfoOffset + 1);
+			case Symbol.Constant_Utf8_Tag:
+			  cpInfoSize = 3 + ReadUnsignedShort(currentCpInfoOffset + 1);
 			  if (cpInfoSize > currentMaxStringLength)
 			  {
 				// The size in bytes of this CONSTANT_Utf8 structure provides a conservative estimate
@@ -247,14 +247,14 @@ namespace ObjectWeb.Asm
 				currentMaxStringLength = cpInfoSize;
 			  }
 			  break;
-			case Symbol.CONSTANT_METHOD_HANDLE_TAG:
+			case Symbol.Constant_Method_Handle_Tag:
 			  cpInfoSize = 4;
 			  break;
-			case Symbol.CONSTANT_CLASS_TAG:
-			case Symbol.CONSTANT_STRING_TAG:
-			case Symbol.CONSTANT_METHOD_TYPE_TAG:
-			case Symbol.CONSTANT_PACKAGE_TAG:
-			case Symbol.CONSTANT_MODULE_TAG:
+			case Symbol.Constant_Class_Tag:
+			case Symbol.Constant_String_Tag:
+			case Symbol.Constant_Method_Type_Tag:
+			case Symbol.Constant_Package_Tag:
+			case Symbol.Constant_Module_Tag:
 			  cpInfoSize = 3;
 			  break;
 			default:
@@ -262,15 +262,15 @@ namespace ObjectWeb.Asm
 		  }
 		  currentCpInfoOffset += cpInfoSize;
 		}
-		maxStringLength = currentMaxStringLength;
+		_maxStringLength = currentMaxStringLength;
 		// The Classfile's access_flags field is just after the last constant pool entry.
 		header = currentCpInfoOffset;
 
 		// Allocate the cache of ConstantDynamic values, if there is at least one.
-		constantDynamicValues = hasConstantDynamic ? new ConstantDynamic[constantPoolCount] : null;
+		_constantDynamicValues = hasConstantDynamic ? new ConstantDynamic[constantPoolCount] : null;
 
 		// Read the BootstrapMethods attribute, if any (only get the offset of each method).
-		bootstrapMethodOffsets = hasBootstrapMethods ? readBootstrapMethodsAttribute(currentMaxStringLength) : null;
+		_bootstrapMethodOffsets = hasBootstrapMethods ? ReadBootstrapMethodsAttribute(currentMaxStringLength) : null;
 	  }
 
 	  /// <summary>
@@ -280,7 +280,7 @@ namespace ObjectWeb.Asm
 	  ///     stream must contain nothing more than the ClassFile structure itself. It is read from its
 	  ///     current position to its end. </param>
 	  /// <exception cref="IOException"> if a problem occurs during reading. </exception>
-	  public ClassReader(Stream inputStream) : this(readStream(inputStream, false))
+	  public ClassReader(Stream inputStream) : this(ReadStream(inputStream, false))
 	  {
 	  }
 
@@ -291,13 +291,13 @@ namespace ObjectWeb.Asm
 	  /// <param name="close"> true to close the input stream after reading. </param>
 	  /// <returns> the content of the given input stream. </returns>
 	  /// <exception cref="IOException"> if a problem occurs during reading. </exception>
-	  private static sbyte[] readStream(Stream inputStream, bool close)
+	  private static sbyte[] ReadStream(Stream inputStream, bool close)
 	  {
 		if (inputStream == null)
 		{
 		  throw new IOException("Class not found");
 		}
-		int bufferSize = calculateBufferSize(inputStream);
+		int bufferSize = CalculateBufferSize(inputStream);
 		try
 		{
 				using (MemoryStream outputStream = new MemoryStream())
@@ -327,7 +327,7 @@ namespace ObjectWeb.Asm
 		}
 	  }
 
-	  private static int calculateBufferSize(Stream inputStream)
+	  private static int CalculateBufferSize(Stream inputStream)
       {
           long expectedLength = inputStream.Length;
 		/*
@@ -338,9 +338,9 @@ namespace ObjectWeb.Asm
 		 */
 		if (expectedLength < 256)
 		{
-		  return INPUT_STREAM_DATA_CHUNK_SIZE;
+		  return InputStreamDataChunkSize;
 		}
-		return (int)Math.Min(expectedLength, MAX_BUFFER_SIZE);
+		return (int)Math.Min(expectedLength, MaxBufferSize);
 	  }
 
 	  // -----------------------------------------------------------------------------------------------
@@ -348,7 +348,7 @@ namespace ObjectWeb.Asm
 	  // -----------------------------------------------------------------------------------------------
 
 	  /// <summary>
-	  /// Returns the class's access flags (see <seealso cref="Opcodes"/>). This value may not reflect Deprecated
+	  /// Returns the class's access flags (see <seealso cref="IOpcodes"/>). This value may not reflect Deprecated
 	  /// and Synthetic flags when bytecode is before 1.5 and those flags are represented by attributes.
 	  /// </summary>
 	  /// <returns> the class access flags. </returns>
@@ -357,7 +357,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return readUnsignedShort(header);
+			return ReadUnsignedShort(header);
 		  }
 	  }
 
@@ -371,7 +371,7 @@ namespace ObjectWeb.Asm
 		  get
 		  {
 			// this_class is just after the access_flags field (using 2 bytes).
-			return readClass(header + 2, new char[maxStringLength]);
+			return ReadClass(header + 2, new char[_maxStringLength]);
 		  }
 	  }
 
@@ -386,7 +386,7 @@ namespace ObjectWeb.Asm
 		  get
 		  {
 			// super_class is after the access_flags and this_class fields (2 bytes each).
-			return readClass(header + 4, new char[maxStringLength]);
+			return ReadClass(header + 4, new char[_maxStringLength]);
 		  }
 	  }
 
@@ -402,15 +402,15 @@ namespace ObjectWeb.Asm
 		  {
 			// interfaces_count is after the access_flags, this_class and super_class fields (2 bytes each).
 			int currentOffset = header + 6;
-			int interfacesCount = readUnsignedShort(currentOffset);
+			int interfacesCount = ReadUnsignedShort(currentOffset);
 			string[] interfaces = new string[interfacesCount];
 			if (interfacesCount > 0)
 			{
-			  char[] charBuffer = new char[maxStringLength];
+			  char[] charBuffer = new char[_maxStringLength];
 			  for (int i = 0; i < interfacesCount; ++i)
 			  {
 				currentOffset += 2;
-				interfaces[i] = readClass(currentOffset, charBuffer);
+				interfaces[i] = ReadClass(currentOffset, charBuffer);
 			  }
 			}
 			return interfaces;
@@ -427,10 +427,10 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="classVisitor"> the visitor that must visit this class. </param>
 	  /// <param name="parsingOptions"> the options to use to parse this class. One or more of {@link
-	  ///     #SKIP_CODE}, <seealso cref="SKIP_DEBUG"/>, <seealso cref="SKIP_FRAMES"/> or <seealso cref="EXPAND_FRAMES"/>. </param>
-	  public virtual void accept(ClassVisitor classVisitor, int parsingOptions)
+	  ///     #SKIP_CODE}, <seealso cref="Skip_Debug"/>, <seealso cref="Skip_Frames"/> or <seealso cref="Expand_Frames"/>. </param>
+	  public virtual void Accept(ClassVisitor classVisitor, int parsingOptions)
 	  {
-		accept(classVisitor, new Attribute[0], parsingOptions);
+		Accept(classVisitor, new Attribute[0], parsingOptions);
 	  }
 
 	  /// <summary>
@@ -445,25 +445,25 @@ namespace ObjectWeb.Asm
 	  ///     semantic links with a class element that has been transformed by a class adapter between
 	  ///     the reader and the writer</i>. </param>
 	  /// <param name="parsingOptions"> the options to use to parse this class. One or more of {@link
-	  ///     #SKIP_CODE}, <seealso cref="SKIP_DEBUG"/>, <seealso cref="SKIP_FRAMES"/> or <seealso cref="EXPAND_FRAMES"/>. </param>
-	  public virtual void accept(ClassVisitor classVisitor, Attribute[] attributePrototypes, int parsingOptions)
+	  ///     #SKIP_CODE}, <seealso cref="Skip_Debug"/>, <seealso cref="Skip_Frames"/> or <seealso cref="Expand_Frames"/>. </param>
+	  public virtual void Accept(ClassVisitor classVisitor, Attribute[] attributePrototypes, int parsingOptions)
 	  {
 		Context context = new Context();
 		context.attributePrototypes = attributePrototypes;
 		context.parsingOptions = parsingOptions;
-		context.charBuffer = new char[maxStringLength];
+		context.charBuffer = new char[_maxStringLength];
 
 		// Read the access_flags, this_class, super_class, interface_count and interfaces fields.
 		char[] charBuffer = context.charBuffer;
 		int currentOffset = header;
-		int accessFlags = readUnsignedShort(currentOffset);
-		string thisClass = readClass(currentOffset + 2, charBuffer);
-		string superClass = readClass(currentOffset + 4, charBuffer);
-		string[] interfaces = new string[readUnsignedShort(currentOffset + 6)];
+		int accessFlags = ReadUnsignedShort(currentOffset);
+		string thisClass = ReadClass(currentOffset + 2, charBuffer);
+		string superClass = ReadClass(currentOffset + 4, charBuffer);
+		string[] interfaces = new string[ReadUnsignedShort(currentOffset + 6)];
 		currentOffset += 8;
 		for (int i = 0; i < interfaces.Length; ++i)
 		{
-		  interfaces[i] = readClass(currentOffset, charBuffer);
+		  interfaces[i] = ReadClass(currentOffset, charBuffer);
 		  currentOffset += 2;
 		}
 
@@ -506,95 +506,95 @@ namespace ObjectWeb.Asm
 		Attribute attributes = null;
 
 		int currentAttributeOffset = FirstAttributeOffset;
-		for (int i = readUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
+		for (int i = ReadUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = readUTF8(currentAttributeOffset, charBuffer);
-		  int attributeLength = readInt(currentAttributeOffset + 2);
+		  string attributeName = ReadUtf8(currentAttributeOffset, charBuffer);
+		  int attributeLength = ReadInt(currentAttributeOffset + 2);
 		  currentAttributeOffset += 6;
 		  // The tests are sorted in decreasing frequency order (based on frequencies observed on
 		  // typical classes).
-		  if (Constants.SOURCE_FILE.Equals(attributeName))
+		  if (Constants.Source_File.Equals(attributeName))
 		  {
-			sourceFile = readUTF8(currentAttributeOffset, charBuffer);
+			sourceFile = ReadUtf8(currentAttributeOffset, charBuffer);
 		  }
-		  else if (Constants.INNER_CLASSES.Equals(attributeName))
+		  else if (Constants.Inner_Classes.Equals(attributeName))
 		  {
 			innerClassesOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.ENCLOSING_METHOD.Equals(attributeName))
+		  else if (Constants.Enclosing_Method.Equals(attributeName))
 		  {
 			enclosingMethodOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.NEST_HOST.Equals(attributeName))
+		  else if (Constants.Nest_Host.Equals(attributeName))
 		  {
-			nestHostClass = readClass(currentAttributeOffset, charBuffer);
+			nestHostClass = ReadClass(currentAttributeOffset, charBuffer);
 		  }
-		  else if (Constants.NEST_MEMBERS.Equals(attributeName))
+		  else if (Constants.Nest_Members.Equals(attributeName))
 		  {
 			nestMembersOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.PERMITTED_SUBCLASSES.Equals(attributeName))
+		  else if (Constants.Permitted_Subclasses.Equals(attributeName))
 		  {
 			permittedSubclassesOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.SIGNATURE.Equals(attributeName))
+		  else if (Constants.Signature.Equals(attributeName))
 		  {
-			signature = readUTF8(currentAttributeOffset, charBuffer);
+			signature = ReadUtf8(currentAttributeOffset, charBuffer);
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleAnnotationsOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Type_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleTypeAnnotationsOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.DEPRECATED.Equals(attributeName))
+		  else if (Constants.Deprecated.Equals(attributeName))
 		  {
-			accessFlags |= Opcodes.ACC_DEPRECATED;
+			accessFlags |= IOpcodes.Acc_Deprecated;
 		  }
-		  else if (Constants.SYNTHETIC.Equals(attributeName))
+		  else if (Constants.Synthetic.Equals(attributeName))
 		  {
-			accessFlags |= Opcodes.ACC_SYNTHETIC;
+			accessFlags |= IOpcodes.Acc_Synthetic;
 		  }
-		  else if (Constants.SOURCE_DEBUG_EXTENSION.Equals(attributeName))
+		  else if (Constants.Source_Debug_Extension.Equals(attributeName))
 		  {
 			if (attributeLength > classFileBuffer.Length - currentAttributeOffset)
 			{
 			  throw new System.ArgumentException();
 			}
-			sourceDebugExtension = readUtf(currentAttributeOffset, attributeLength, new char[attributeLength]);
+			sourceDebugExtension = ReadUtf(currentAttributeOffset, attributeLength, new char[attributeLength]);
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleAnnotationsOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Type_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleTypeAnnotationsOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.RECORD.Equals(attributeName))
+		  else if (Constants.Record.Equals(attributeName))
 		  {
 			recordOffset = currentAttributeOffset;
-			accessFlags |= Opcodes.ACC_RECORD;
+			accessFlags |= IOpcodes.Acc_Record;
 		  }
-		  else if (Constants.MODULE.Equals(attributeName))
+		  else if (Constants.Module.Equals(attributeName))
 		  {
 			moduleOffset = currentAttributeOffset;
 		  }
-		  else if (Constants.MODULE_MAIN_CLASS.Equals(attributeName))
+		  else if (Constants.Module_Main_Class.Equals(attributeName))
 		  {
-			moduleMainClass = readClass(currentAttributeOffset, charBuffer);
+			moduleMainClass = ReadClass(currentAttributeOffset, charBuffer);
 		  }
-		  else if (Constants.MODULE_PACKAGES.Equals(attributeName))
+		  else if (Constants.Module_Packages.Equals(attributeName))
 		  {
 			modulePackagesOffset = currentAttributeOffset;
 		  }
-		  else if (!Constants.BOOTSTRAP_METHODS.Equals(attributeName))
+		  else if (!Constants.Bootstrap_Methods.Equals(attributeName))
 		  {
 			// The BootstrapMethods attribute is read in the constructor.
-			Attribute attribute = readAttribute(attributePrototypes, attributeName, currentAttributeOffset, attributeLength, charBuffer, -1, null);
+			Attribute attribute = ReadAttribute(attributePrototypes, attributeName, currentAttributeOffset, attributeLength, charBuffer, -1, null);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
@@ -603,97 +603,97 @@ namespace ObjectWeb.Asm
 
 		// Visit the class declaration. The minor_version and major_version fields start 6 bytes before
 		// the first constant pool entry, which itself starts at cpInfoOffsets[1] - 1 (by definition).
-		classVisitor.visit(readInt(cpInfoOffsets[1] - 7), accessFlags, thisClass, signature, superClass, interfaces);
+		classVisitor.Visit(ReadInt(_cpInfoOffsets[1] - 7), accessFlags, thisClass, signature, superClass, interfaces);
 
 		// Visit the SourceFile and SourceDebugExtenstion attributes.
-		if ((parsingOptions & SKIP_DEBUG) == 0 && (!string.ReferenceEquals(sourceFile, null) || !string.ReferenceEquals(sourceDebugExtension, null)))
+		if ((parsingOptions & Skip_Debug) == 0 && (!string.ReferenceEquals(sourceFile, null) || !string.ReferenceEquals(sourceDebugExtension, null)))
 		{
-		  classVisitor.visitSource(sourceFile, sourceDebugExtension);
+		  classVisitor.VisitSource(sourceFile, sourceDebugExtension);
 		}
 
 		// Visit the Module, ModulePackages and ModuleMainClass attributes.
 		if (moduleOffset != 0)
 		{
-		  readModuleAttributes(classVisitor, context, moduleOffset, modulePackagesOffset, moduleMainClass);
+		  ReadModuleAttributes(classVisitor, context, moduleOffset, modulePackagesOffset, moduleMainClass);
 		}
 
 		// Visit the NestHost attribute.
 		if (!string.ReferenceEquals(nestHostClass, null))
 		{
-		  classVisitor.visitNestHost(nestHostClass);
+		  classVisitor.VisitNestHost(nestHostClass);
 		}
 
 		// Visit the EnclosingMethod attribute.
 		if (enclosingMethodOffset != 0)
 		{
-		  string className = readClass(enclosingMethodOffset, charBuffer);
-		  int methodIndex = readUnsignedShort(enclosingMethodOffset + 2);
-		  string name = methodIndex == 0 ? null : readUTF8(cpInfoOffsets[methodIndex], charBuffer);
-		  string type = methodIndex == 0 ? null : readUTF8(cpInfoOffsets[methodIndex] + 2, charBuffer);
-		  classVisitor.visitOuterClass(className, name, type);
+		  string className = ReadClass(enclosingMethodOffset, charBuffer);
+		  int methodIndex = ReadUnsignedShort(enclosingMethodOffset + 2);
+		  string name = methodIndex == 0 ? null : ReadUtf8(_cpInfoOffsets[methodIndex], charBuffer);
+		  string type = methodIndex == 0 ? null : ReadUtf8(_cpInfoOffsets[methodIndex] + 2, charBuffer);
+		  classVisitor.VisitOuterClass(className, name, type);
 		}
 
 		// Visit the RuntimeVisibleAnnotations attribute.
 		if (runtimeVisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeVisibleAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(classVisitor.visitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(classVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeInvisibleAnnotations attribute.
 		if (runtimeInvisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeInvisibleAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(classVisitor.visitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(classVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeVisibleTypeAnnotations attribute.
 		if (runtimeVisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
-			currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
+			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(classVisitor.visitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(classVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeInvisibleTypeAnnotations attribute.
 		if (runtimeInvisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
-			currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
+			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(classVisitor.visitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(classVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
@@ -703,18 +703,18 @@ namespace ObjectWeb.Asm
 		  // Copy and reset the nextAttribute field so that it can also be used in ClassWriter.
 		  Attribute nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
-		  classVisitor.visitAttribute(attributes);
+		  classVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
 		}
 
 		// Visit the NestedMembers attribute.
 		if (nestMembersOffset != 0)
 		{
-		  int numberOfNestMembers = readUnsignedShort(nestMembersOffset);
+		  int numberOfNestMembers = ReadUnsignedShort(nestMembersOffset);
 		  int currentNestMemberOffset = nestMembersOffset + 2;
 		  while (numberOfNestMembers-- > 0)
 		  {
-			classVisitor.visitNestMember(readClass(currentNestMemberOffset, charBuffer));
+			classVisitor.VisitNestMember(ReadClass(currentNestMemberOffset, charBuffer));
 			currentNestMemberOffset += 2;
 		  }
 		}
@@ -722,11 +722,11 @@ namespace ObjectWeb.Asm
 		// Visit the PermittedSubclasses attribute.
 		if (permittedSubclassesOffset != 0)
 		{
-		  int numberOfPermittedSubclasses = readUnsignedShort(permittedSubclassesOffset);
+		  int numberOfPermittedSubclasses = ReadUnsignedShort(permittedSubclassesOffset);
 		  int currentPermittedSubclassesOffset = permittedSubclassesOffset + 2;
 		  while (numberOfPermittedSubclasses-- > 0)
 		  {
-			classVisitor.visitPermittedSubclass(readClass(currentPermittedSubclassesOffset, charBuffer));
+			classVisitor.VisitPermittedSubclass(ReadClass(currentPermittedSubclassesOffset, charBuffer));
 			currentPermittedSubclassesOffset += 2;
 		  }
 		}
@@ -734,11 +734,11 @@ namespace ObjectWeb.Asm
 		// Visit the InnerClasses attribute.
 		if (innerClassesOffset != 0)
 		{
-		  int numberOfClasses = readUnsignedShort(innerClassesOffset);
+		  int numberOfClasses = ReadUnsignedShort(innerClassesOffset);
 		  int currentClassesOffset = innerClassesOffset + 2;
 		  while (numberOfClasses-- > 0)
 		  {
-			classVisitor.visitInnerClass(readClass(currentClassesOffset, charBuffer), readClass(currentClassesOffset + 2, charBuffer), readUTF8(currentClassesOffset + 4, charBuffer), readUnsignedShort(currentClassesOffset + 6));
+			classVisitor.VisitInnerClass(ReadClass(currentClassesOffset, charBuffer), ReadClass(currentClassesOffset + 2, charBuffer), ReadUtf8(currentClassesOffset + 4, charBuffer), ReadUnsignedShort(currentClassesOffset + 6));
 			currentClassesOffset += 8;
 		  }
 		}
@@ -746,30 +746,30 @@ namespace ObjectWeb.Asm
 		// Visit Record components.
 		if (recordOffset != 0)
 		{
-		  int recordComponentsCount = readUnsignedShort(recordOffset);
+		  int recordComponentsCount = ReadUnsignedShort(recordOffset);
 		  recordOffset += 2;
 		  while (recordComponentsCount-- > 0)
 		  {
-			recordOffset = readRecordComponent(classVisitor, context, recordOffset);
+			recordOffset = ReadRecordComponent(classVisitor, context, recordOffset);
 		  }
 		}
 
 		// Visit the fields and methods.
-		int fieldsCount = readUnsignedShort(currentOffset);
+		int fieldsCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (fieldsCount-- > 0)
 		{
-		  currentOffset = readField(classVisitor, context, currentOffset);
+		  currentOffset = ReadField(classVisitor, context, currentOffset);
 		}
-		int methodsCount = readUnsignedShort(currentOffset);
+		int methodsCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (methodsCount-- > 0)
 		{
-		  currentOffset = readMethod(classVisitor, context, currentOffset);
+		  currentOffset = ReadMethod(classVisitor, context, currentOffset);
 		}
 
 		// Visit the end of the class.
-		classVisitor.visitEnd();
+		classVisitor.VisitEnd();
 	  }
 
 	  // ----------------------------------------------------------------------------------------------
@@ -787,17 +787,17 @@ namespace ObjectWeb.Asm
 	  ///     attribute_info's attribute_name_index and attribute_length fields), or 0. </param>
 	  /// <param name="moduleMainClass"> the string corresponding to the ModuleMainClass attribute, or {@literal
 	  ///     null}. </param>
-	  private void readModuleAttributes(ClassVisitor classVisitor, Context context, int moduleOffset, int modulePackagesOffset, string moduleMainClass)
+	  private void ReadModuleAttributes(ClassVisitor classVisitor, Context context, int moduleOffset, int modulePackagesOffset, string moduleMainClass)
 	  {
 		char[] buffer = context.charBuffer;
 
 		// Read the module_name_index, module_flags and module_version_index fields and visit them.
 		int currentOffset = moduleOffset;
-		string moduleName = readModule(currentOffset, buffer);
-		int moduleFlags = readUnsignedShort(currentOffset + 2);
-		string moduleVersion = readUTF8(currentOffset + 4, buffer);
+		string moduleName = ReadModule(currentOffset, buffer);
+		int moduleFlags = ReadUnsignedShort(currentOffset + 2);
+		string moduleVersion = ReadUtf8(currentOffset + 4, buffer);
 		currentOffset += 6;
-		ModuleVisitor moduleVisitor = classVisitor.visitModule(moduleName, moduleFlags, moduleVersion);
+		ModuleVisitor moduleVisitor = classVisitor.VisitModule(moduleName, moduleFlags, moduleVersion);
 		if (moduleVisitor == null)
 		{
 		  return;
@@ -806,44 +806,44 @@ namespace ObjectWeb.Asm
 		// Visit the ModuleMainClass attribute.
 		if (!string.ReferenceEquals(moduleMainClass, null))
 		{
-		  moduleVisitor.visitMainClass(moduleMainClass);
+		  moduleVisitor.VisitMainClass(moduleMainClass);
 		}
 
 		// Visit the ModulePackages attribute.
 		if (modulePackagesOffset != 0)
 		{
-		  int packageCount = readUnsignedShort(modulePackagesOffset);
+		  int packageCount = ReadUnsignedShort(modulePackagesOffset);
 		  int currentPackageOffset = modulePackagesOffset + 2;
 		  while (packageCount-- > 0)
 		  {
-			moduleVisitor.visitPackage(readPackage(currentPackageOffset, buffer));
+			moduleVisitor.VisitPackage(ReadPackage(currentPackageOffset, buffer));
 			currentPackageOffset += 2;
 		  }
 		}
 
 		// Read the 'requires_count' and 'requires' fields.
-		int requiresCount = readUnsignedShort(currentOffset);
+		int requiresCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (requiresCount-- > 0)
 		{
 		  // Read the requires_index, requires_flags and requires_version fields and visit them.
-		  string requires = readModule(currentOffset, buffer);
-		  int requiresFlags = readUnsignedShort(currentOffset + 2);
-		  string requiresVersion = readUTF8(currentOffset + 4, buffer);
+		  string requires = ReadModule(currentOffset, buffer);
+		  int requiresFlags = ReadUnsignedShort(currentOffset + 2);
+		  string requiresVersion = ReadUtf8(currentOffset + 4, buffer);
 		  currentOffset += 6;
-		  moduleVisitor.visitRequire(requires, requiresFlags, requiresVersion);
+		  moduleVisitor.VisitRequire(requires, requiresFlags, requiresVersion);
 		}
 
 		// Read the 'exports_count' and 'exports' fields.
-		int exportsCount = readUnsignedShort(currentOffset);
+		int exportsCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (exportsCount-- > 0)
 		{
 		  // Read the exports_index, exports_flags, exports_to_count and exports_to_index fields
 		  // and visit them.
-		  string exports = readPackage(currentOffset, buffer);
-		  int exportsFlags = readUnsignedShort(currentOffset + 2);
-		  int exportsToCount = readUnsignedShort(currentOffset + 4);
+		  string exports = ReadPackage(currentOffset, buffer);
+		  int exportsFlags = ReadUnsignedShort(currentOffset + 2);
+		  int exportsToCount = ReadUnsignedShort(currentOffset + 4);
 		  currentOffset += 6;
 		  string[] exportsTo = null;
 		  if (exportsToCount != 0)
@@ -851,22 +851,22 @@ namespace ObjectWeb.Asm
 			exportsTo = new string[exportsToCount];
 			for (int i = 0; i < exportsToCount; ++i)
 			{
-			  exportsTo[i] = readModule(currentOffset, buffer);
+			  exportsTo[i] = ReadModule(currentOffset, buffer);
 			  currentOffset += 2;
 			}
 		  }
-		  moduleVisitor.visitExport(exports, exportsFlags, exportsTo);
+		  moduleVisitor.VisitExport(exports, exportsFlags, exportsTo);
 		}
 
 		// Reads the 'opens_count' and 'opens' fields.
-		int opensCount = readUnsignedShort(currentOffset);
+		int opensCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (opensCount-- > 0)
 		{
 		  // Read the opens_index, opens_flags, opens_to_count and opens_to_index fields and visit them.
-		  string opens = readPackage(currentOffset, buffer);
-		  int opensFlags = readUnsignedShort(currentOffset + 2);
-		  int opensToCount = readUnsignedShort(currentOffset + 4);
+		  string opens = ReadPackage(currentOffset, buffer);
+		  int opensFlags = ReadUnsignedShort(currentOffset + 2);
+		  int opensToCount = ReadUnsignedShort(currentOffset + 4);
 		  currentOffset += 6;
 		  string[] opensTo = null;
 		  if (opensToCount != 0)
@@ -874,42 +874,42 @@ namespace ObjectWeb.Asm
 			opensTo = new string[opensToCount];
 			for (int i = 0; i < opensToCount; ++i)
 			{
-			  opensTo[i] = readModule(currentOffset, buffer);
+			  opensTo[i] = ReadModule(currentOffset, buffer);
 			  currentOffset += 2;
 			}
 		  }
-		  moduleVisitor.visitOpen(opens, opensFlags, opensTo);
+		  moduleVisitor.VisitOpen(opens, opensFlags, opensTo);
 		}
 
 		// Read the 'uses_count' and 'uses' fields.
-		int usesCount = readUnsignedShort(currentOffset);
+		int usesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (usesCount-- > 0)
 		{
-		  moduleVisitor.visitUse(readClass(currentOffset, buffer));
+		  moduleVisitor.VisitUse(ReadClass(currentOffset, buffer));
 		  currentOffset += 2;
 		}
 
 		// Read the  'provides_count' and 'provides' fields.
-		int providesCount = readUnsignedShort(currentOffset);
+		int providesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (providesCount-- > 0)
 		{
 		  // Read the provides_index, provides_with_count and provides_with_index fields and visit them.
-		  string provides = readClass(currentOffset, buffer);
-		  int providesWithCount = readUnsignedShort(currentOffset + 2);
+		  string provides = ReadClass(currentOffset, buffer);
+		  int providesWithCount = ReadUnsignedShort(currentOffset + 2);
 		  currentOffset += 4;
 		  string[] providesWith = new string[providesWithCount];
 		  for (int i = 0; i < providesWithCount; ++i)
 		  {
-			providesWith[i] = readClass(currentOffset, buffer);
+			providesWith[i] = ReadClass(currentOffset, buffer);
 			currentOffset += 2;
 		  }
-		  moduleVisitor.visitProvide(provides, providesWith);
+		  moduleVisitor.VisitProvide(provides, providesWith);
 		}
 
 		// Visit the end of the module attributes.
-		moduleVisitor.visitEnd();
+		moduleVisitor.VisitEnd();
 	  }
 
 	  /// <summary>
@@ -919,13 +919,13 @@ namespace ObjectWeb.Asm
 	  /// <param name="context"> information about the class being parsed. </param>
 	  /// <param name="recordComponentOffset"> the offset of the current record component. </param>
 	  /// <returns> the offset of the first byte following the record component. </returns>
-	  private int readRecordComponent(ClassVisitor classVisitor, Context context, int recordComponentOffset)
+	  private int ReadRecordComponent(ClassVisitor classVisitor, Context context, int recordComponentOffset)
 	  {
 		char[] charBuffer = context.charBuffer;
 
 		int currentOffset = recordComponentOffset;
-		string name = readUTF8(currentOffset, charBuffer);
-		string descriptor = readUTF8(currentOffset + 2, charBuffer);
+		string name = ReadUtf8(currentOffset, charBuffer);
+		string descriptor = ReadUtf8(currentOffset + 2, charBuffer);
 		currentOffset += 4;
 
 		// Read the record component attributes (the variables are ordered as in Section 4.7 of the
@@ -946,46 +946,46 @@ namespace ObjectWeb.Asm
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int attributesCount = readUnsignedShort(currentOffset);
+		int attributesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (attributesCount-- > 0)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = readUTF8(currentOffset, charBuffer);
-		  int attributeLength = readInt(currentOffset + 2);
+		  string attributeName = ReadUtf8(currentOffset, charBuffer);
+		  int attributeLength = ReadInt(currentOffset + 2);
 		  currentOffset += 6;
 		  // The tests are sorted in decreasing frequency order (based on frequencies observed on
 		  // typical classes).
-		  if (Constants.SIGNATURE.Equals(attributeName))
+		  if (Constants.Signature.Equals(attributeName))
 		  {
-			signature = readUTF8(currentOffset, charBuffer);
+			signature = ReadUtf8(currentOffset, charBuffer);
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Type_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleTypeAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Type_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleTypeAnnotationsOffset = currentOffset;
 		  }
 		  else
 		  {
-			Attribute attribute = readAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
+			Attribute attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
 		  currentOffset += attributeLength;
 		}
 
-		RecordComponentVisitor recordComponentVisitor = classVisitor.visitRecordComponent(name, descriptor, signature);
+		RecordComponentVisitor recordComponentVisitor = classVisitor.VisitRecordComponent(name, descriptor, signature);
 		if (recordComponentVisitor == null)
 		{
 		  return currentOffset;
@@ -994,64 +994,64 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleAnnotations attribute.
 		if (runtimeVisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeVisibleAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(recordComponentVisitor.visitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeInvisibleAnnotations attribute.
 		if (runtimeInvisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeInvisibleAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(recordComponentVisitor.visitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeVisibleTypeAnnotations attribute.
 		if (runtimeVisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
-			currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
+			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(recordComponentVisitor.visitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeInvisibleTypeAnnotations attribute.
 		if (runtimeInvisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
-			currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
+			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(recordComponentVisitor.visitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
@@ -1061,12 +1061,12 @@ namespace ObjectWeb.Asm
 		  // Copy and reset the nextAttribute field so that it can also be used in FieldWriter.
 		  Attribute nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
-		  recordComponentVisitor.visitAttribute(attributes);
+		  recordComponentVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
 		}
 
 		// Visit the end of the field.
-		recordComponentVisitor.visitEnd();
+		recordComponentVisitor.VisitEnd();
 		return currentOffset;
 	  }
 
@@ -1077,15 +1077,15 @@ namespace ObjectWeb.Asm
 	  /// <param name="context"> information about the class being parsed. </param>
 	  /// <param name="fieldInfoOffset"> the start offset of the field_info structure. </param>
 	  /// <returns> the offset of the first byte following the field_info structure. </returns>
-	  private int readField(ClassVisitor classVisitor, Context context, int fieldInfoOffset)
+	  private int ReadField(ClassVisitor classVisitor, Context context, int fieldInfoOffset)
 	  {
 		char[] charBuffer = context.charBuffer;
 
 		// Read the access_flags, name_index and descriptor_index fields.
 		int currentOffset = fieldInfoOffset;
-		int accessFlags = readUnsignedShort(currentOffset);
-		string name = readUTF8(currentOffset + 2, charBuffer);
-		string descriptor = readUTF8(currentOffset + 4, charBuffer);
+		int accessFlags = ReadUnsignedShort(currentOffset);
+		string name = ReadUtf8(currentOffset + 2, charBuffer);
+		string descriptor = ReadUtf8(currentOffset + 4, charBuffer);
 		currentOffset += 6;
 
 		// Read the field attributes (the variables are ordered as in Section 4.7 of the JVMS).
@@ -1106,52 +1106,52 @@ namespace ObjectWeb.Asm
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int attributesCount = readUnsignedShort(currentOffset);
+		int attributesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (attributesCount-- > 0)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = readUTF8(currentOffset, charBuffer);
-		  int attributeLength = readInt(currentOffset + 2);
+		  string attributeName = ReadUtf8(currentOffset, charBuffer);
+		  int attributeLength = ReadInt(currentOffset + 2);
 		  currentOffset += 6;
 		  // The tests are sorted in decreasing frequency order (based on frequencies observed on
 		  // typical classes).
-		  if (Constants.CONSTANT_VALUE.Equals(attributeName))
+		  if (Constants.Constant_Value.Equals(attributeName))
 		  {
-			int constantvalueIndex = readUnsignedShort(currentOffset);
-			constantValue = constantvalueIndex == 0 ? null : readConst(constantvalueIndex, charBuffer);
+			int constantvalueIndex = ReadUnsignedShort(currentOffset);
+			constantValue = constantvalueIndex == 0 ? null : ReadConst(constantvalueIndex, charBuffer);
 		  }
-		  else if (Constants.SIGNATURE.Equals(attributeName))
+		  else if (Constants.Signature.Equals(attributeName))
 		  {
-			signature = readUTF8(currentOffset, charBuffer);
+			signature = ReadUtf8(currentOffset, charBuffer);
 		  }
-		  else if (Constants.DEPRECATED.Equals(attributeName))
+		  else if (Constants.Deprecated.Equals(attributeName))
 		  {
-			accessFlags |= Opcodes.ACC_DEPRECATED;
+			accessFlags |= IOpcodes.Acc_Deprecated;
 		  }
-		  else if (Constants.SYNTHETIC.Equals(attributeName))
+		  else if (Constants.Synthetic.Equals(attributeName))
 		  {
-			accessFlags |= Opcodes.ACC_SYNTHETIC;
+			accessFlags |= IOpcodes.Acc_Synthetic;
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Type_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleTypeAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Type_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleTypeAnnotationsOffset = currentOffset;
 		  }
 		  else
 		  {
-			Attribute attribute = readAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
+			Attribute attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
@@ -1159,7 +1159,7 @@ namespace ObjectWeb.Asm
 		}
 
 		// Visit the field declaration.
-		FieldVisitor fieldVisitor = classVisitor.visitField(accessFlags, name, descriptor, signature, constantValue);
+		FieldVisitor fieldVisitor = classVisitor.VisitField(accessFlags, name, descriptor, signature, constantValue);
 		if (fieldVisitor == null)
 		{
 		  return currentOffset;
@@ -1168,64 +1168,64 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleAnnotations attribute.
 		if (runtimeVisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeVisibleAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(fieldVisitor.visitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeInvisibleAnnotations attribute.
 		if (runtimeInvisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeInvisibleAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(fieldVisitor.visitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeVisibleTypeAnnotations attribute.
 		if (runtimeVisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
-			currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
+			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(fieldVisitor.visitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeInvisibleTypeAnnotations attribute.
 		if (runtimeInvisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
-			currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
+			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(fieldVisitor.visitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
@@ -1235,12 +1235,12 @@ namespace ObjectWeb.Asm
 		  // Copy and reset the nextAttribute field so that it can also be used in FieldWriter.
 		  Attribute nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
-		  fieldVisitor.visitAttribute(attributes);
+		  fieldVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
 		}
 
 		// Visit the end of the field.
-		fieldVisitor.visitEnd();
+		fieldVisitor.VisitEnd();
 		return currentOffset;
 	  }
 
@@ -1251,15 +1251,15 @@ namespace ObjectWeb.Asm
 	  /// <param name="context"> information about the class being parsed. </param>
 	  /// <param name="methodInfoOffset"> the start offset of the method_info structure. </param>
 	  /// <returns> the offset of the first byte following the method_info structure. </returns>
-	  private int readMethod(ClassVisitor classVisitor, Context context, int methodInfoOffset)
+	  private int ReadMethod(ClassVisitor classVisitor, Context context, int methodInfoOffset)
 	  {
 		char[] charBuffer = context.charBuffer;
 
 		// Read the access_flags, name_index and descriptor_index fields.
 		int currentOffset = methodInfoOffset;
-		context.currentMethodAccessFlags = readUnsignedShort(currentOffset);
-		context.currentMethodName = readUTF8(currentOffset + 2, charBuffer);
-		context.currentMethodDescriptor = readUTF8(currentOffset + 4, charBuffer);
+		context.currentMethodAccessFlags = ReadUnsignedShort(currentOffset);
+		context.currentMethodName = ReadUtf8(currentOffset + 2, charBuffer);
+		context.currentMethodDescriptor = ReadUtf8(currentOffset + 4, charBuffer);
 		currentOffset += 6;
 
 		// Read the method attributes (the variables are ordered as in Section 4.7 of the JVMS).
@@ -1294,82 +1294,82 @@ namespace ObjectWeb.Asm
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int attributesCount = readUnsignedShort(currentOffset);
+		int attributesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (attributesCount-- > 0)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = readUTF8(currentOffset, charBuffer);
-		  int attributeLength = readInt(currentOffset + 2);
+		  string attributeName = ReadUtf8(currentOffset, charBuffer);
+		  int attributeLength = ReadInt(currentOffset + 2);
 		  currentOffset += 6;
 		  // The tests are sorted in decreasing frequency order (based on frequencies observed on
 		  // typical classes).
-		  if (Constants.CODE.Equals(attributeName))
+		  if (Constants.Code.Equals(attributeName))
 		  {
-			if ((context.parsingOptions & SKIP_CODE) == 0)
+			if ((context.parsingOptions & Skip_Code) == 0)
 			{
 			  codeOffset = currentOffset;
 			}
 		  }
-		  else if (Constants.EXCEPTIONS.Equals(attributeName))
+		  else if (Constants.Exceptions.Equals(attributeName))
 		  {
 			exceptionsOffset = currentOffset;
-			exceptions = new string[readUnsignedShort(exceptionsOffset)];
+			exceptions = new string[ReadUnsignedShort(exceptionsOffset)];
 			int currentExceptionOffset = exceptionsOffset + 2;
 			for (int i = 0; i < exceptions.Length; ++i)
 			{
-			  exceptions[i] = readClass(currentExceptionOffset, charBuffer);
+			  exceptions[i] = ReadClass(currentExceptionOffset, charBuffer);
 			  currentExceptionOffset += 2;
 			}
 		  }
-		  else if (Constants.SIGNATURE.Equals(attributeName))
+		  else if (Constants.Signature.Equals(attributeName))
 		  {
-			signatureIndex = readUnsignedShort(currentOffset);
+			signatureIndex = ReadUnsignedShort(currentOffset);
 		  }
-		  else if (Constants.DEPRECATED.Equals(attributeName))
+		  else if (Constants.Deprecated.Equals(attributeName))
 		  {
-			context.currentMethodAccessFlags |= Opcodes.ACC_DEPRECATED;
+			context.currentMethodAccessFlags |= IOpcodes.Acc_Deprecated;
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Type_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleTypeAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.ANNOTATION_DEFAULT.Equals(attributeName))
+		  else if (Constants.Annotation_Default.Equals(attributeName))
 		  {
 			annotationDefaultOffset = currentOffset;
 		  }
-		  else if (Constants.SYNTHETIC.Equals(attributeName))
+		  else if (Constants.Synthetic.Equals(attributeName))
 		  {
 			synthetic = true;
-			context.currentMethodAccessFlags |= Opcodes.ACC_SYNTHETIC;
+			context.currentMethodAccessFlags |= IOpcodes.Acc_Synthetic;
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Type_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleTypeAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Parameter_Annotations.Equals(attributeName))
 		  {
 			runtimeVisibleParameterAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Parameter_Annotations.Equals(attributeName))
 		  {
 			runtimeInvisibleParameterAnnotationsOffset = currentOffset;
 		  }
-		  else if (Constants.METHOD_PARAMETERS.Equals(attributeName))
+		  else if (Constants.Method_Parameters.Equals(attributeName))
 		  {
 			methodParametersOffset = currentOffset;
 		  }
 		  else
 		  {
-			Attribute attribute = readAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
+			Attribute attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
@@ -1377,7 +1377,7 @@ namespace ObjectWeb.Asm
 		}
 
 		// Visit the method declaration.
-		MethodVisitor methodVisitor = classVisitor.visitMethod(context.currentMethodAccessFlags, context.currentMethodName, context.currentMethodDescriptor, signatureIndex == 0 ? null : readUtf(signatureIndex, charBuffer), exceptions);
+		MethodVisitor methodVisitor = classVisitor.VisitMethod(context.currentMethodAccessFlags, context.currentMethodName, context.currentMethodDescriptor, signatureIndex == 0 ? null : ReadUtf(signatureIndex, charBuffer), exceptions);
 		if (methodVisitor == null)
 		{
 		  return currentOffset;
@@ -1390,22 +1390,22 @@ namespace ObjectWeb.Asm
 		if (methodVisitor is MethodWriter)
 		{
 		  MethodWriter methodWriter = (MethodWriter) methodVisitor;
-		  if (methodWriter.canCopyMethodAttributes(this, synthetic, (context.currentMethodAccessFlags & Opcodes.ACC_DEPRECATED) != 0, readUnsignedShort(methodInfoOffset + 4), signatureIndex, exceptionsOffset))
+		  if (methodWriter.CanCopyMethodAttributes(this, synthetic, (context.currentMethodAccessFlags & IOpcodes.Acc_Deprecated) != 0, ReadUnsignedShort(methodInfoOffset + 4), signatureIndex, exceptionsOffset))
 		  {
-			methodWriter.setMethodAttributesSource(methodInfoOffset, currentOffset - methodInfoOffset);
+			methodWriter.SetMethodAttributesSource(methodInfoOffset, currentOffset - methodInfoOffset);
 			return currentOffset;
 		  }
 		}
 
 		// Visit the MethodParameters attribute.
-		if (methodParametersOffset != 0 && (context.parsingOptions & SKIP_DEBUG) == 0)
+		if (methodParametersOffset != 0 && (context.parsingOptions & Skip_Debug) == 0)
 		{
-		  int parametersCount = readByte(methodParametersOffset);
+		  int parametersCount = ReadByte(methodParametersOffset);
 		  int currentParameterOffset = methodParametersOffset + 1;
 		  while (parametersCount-- > 0)
 		  {
 			// Read the name_index and access_flags fields and visit them.
-			methodVisitor.visitParameter(readUTF8(currentParameterOffset, charBuffer), readUnsignedShort(currentParameterOffset + 2));
+			methodVisitor.VisitParameter(ReadUtf8(currentParameterOffset, charBuffer), ReadUnsignedShort(currentParameterOffset + 2));
 			currentParameterOffset += 4;
 		  }
 		}
@@ -1413,88 +1413,88 @@ namespace ObjectWeb.Asm
 		// Visit the AnnotationDefault attribute.
 		if (annotationDefaultOffset != 0)
 		{
-		  AnnotationVisitor annotationVisitor = methodVisitor.visitAnnotationDefault();
-		  readElementValue(annotationVisitor, annotationDefaultOffset, null, charBuffer);
+		  AnnotationVisitor annotationVisitor = methodVisitor.VisitAnnotationDefault();
+		  ReadElementValue(annotationVisitor, annotationDefaultOffset, null, charBuffer);
 		  if (annotationVisitor != null)
 		  {
-			annotationVisitor.visitEnd();
+			annotationVisitor.VisitEnd();
 		  }
 		}
 
 		// Visit the RuntimeVisibleAnnotations attribute.
 		if (runtimeVisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeVisibleAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(methodVisitor.visitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeInvisibleAnnotations attribute.
 		if (runtimeInvisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeInvisibleAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(methodVisitor.visitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeVisibleTypeAnnotations attribute.
 		if (runtimeVisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
-			currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
+			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(methodVisitor.visitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeInvisibleTypeAnnotations attribute.
 		if (runtimeInvisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = readUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
+		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
 		  int currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
-			currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
+			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentAnnotationOffset = readElementValues(methodVisitor.visitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
 
 		// Visit the RuntimeVisibleParameterAnnotations attribute.
 		if (runtimeVisibleParameterAnnotationsOffset != 0)
 		{
-		  readParameterAnnotations(methodVisitor, context, runtimeVisibleParameterAnnotationsOffset, true);
+		  ReadParameterAnnotations(methodVisitor, context, runtimeVisibleParameterAnnotationsOffset, true);
 		}
 
 		// Visit the RuntimeInvisibleParameterAnnotations attribute.
 		if (runtimeInvisibleParameterAnnotationsOffset != 0)
 		{
-		  readParameterAnnotations(methodVisitor, context, runtimeInvisibleParameterAnnotationsOffset, false);
+		  ReadParameterAnnotations(methodVisitor, context, runtimeInvisibleParameterAnnotationsOffset, false);
 		}
 
 		// Visit the non standard attributes.
@@ -1503,19 +1503,19 @@ namespace ObjectWeb.Asm
 		  // Copy and reset the nextAttribute field so that it can also be used in MethodWriter.
 		  Attribute nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
-		  methodVisitor.visitAttribute(attributes);
+		  methodVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
 		}
 
 		// Visit the Code attribute.
 		if (codeOffset != 0)
 		{
-		  methodVisitor.visitCode();
-		  readCode(methodVisitor, context, codeOffset);
+		  methodVisitor.VisitCode();
+		  ReadCode(methodVisitor, context, codeOffset);
 		}
 
 		// Visit the end of the method.
-		methodVisitor.visitEnd();
+		methodVisitor.VisitEnd();
 		return currentOffset;
 	  }
 
@@ -1530,16 +1530,16 @@ namespace ObjectWeb.Asm
 	  /// <param name="context"> information about the class being parsed. </param>
 	  /// <param name="codeOffset"> the start offset in <seealso cref="classFileBuffer"/> of the Code attribute, excluding
 	  ///     its attribute_name_index and attribute_length fields. </param>
-	  private void readCode(MethodVisitor methodVisitor, Context context, int codeOffset)
+	  private void ReadCode(MethodVisitor methodVisitor, Context context, int codeOffset)
 	  {
 		int currentOffset = codeOffset;
 
 		// Read the max_stack, max_locals and code_length fields.
 		sbyte[] classBuffer = classFileBuffer;
 		char[] charBuffer = context.charBuffer;
-		int maxStack = readUnsignedShort(currentOffset);
-		int maxLocals = readUnsignedShort(currentOffset + 2);
-		int codeLength = readInt(currentOffset + 4);
+		int maxStack = ReadUnsignedShort(currentOffset);
+		int maxLocals = ReadUnsignedShort(currentOffset + 2);
+		int codeLength = ReadInt(currentOffset + 4);
 		currentOffset += 8;
 		if (codeLength > classFileBuffer.Length - currentOffset)
 		{
@@ -1556,292 +1556,292 @@ namespace ObjectWeb.Asm
 		  int opcode = classBuffer[currentOffset] & 0xFF;
 		  switch (opcode)
 		  {
-			case Opcodes.NOP:
-			case Opcodes.ACONST_NULL:
-			case Opcodes.ICONST_M1:
-			case Opcodes.ICONST_0:
-			case Opcodes.ICONST_1:
-			case Opcodes.ICONST_2:
-			case Opcodes.ICONST_3:
-			case Opcodes.ICONST_4:
-			case Opcodes.ICONST_5:
-			case Opcodes.LCONST_0:
-			case Opcodes.LCONST_1:
-			case Opcodes.FCONST_0:
-			case Opcodes.FCONST_1:
-			case Opcodes.FCONST_2:
-			case Opcodes.DCONST_0:
-			case Opcodes.DCONST_1:
-			case Opcodes.IALOAD:
-			case Opcodes.LALOAD:
-			case Opcodes.FALOAD:
-			case Opcodes.DALOAD:
-			case Opcodes.AALOAD:
-			case Opcodes.BALOAD:
-			case Opcodes.CALOAD:
-			case Opcodes.SALOAD:
-			case Opcodes.IASTORE:
-			case Opcodes.LASTORE:
-			case Opcodes.FASTORE:
-			case Opcodes.DASTORE:
-			case Opcodes.AASTORE:
-			case Opcodes.BASTORE:
-			case Opcodes.CASTORE:
-			case Opcodes.SASTORE:
-			case Opcodes.POP:
-			case Opcodes.POP2:
-			case Opcodes.DUP:
-			case Opcodes.DUP_X1:
-			case Opcodes.DUP_X2:
-			case Opcodes.DUP2:
-			case Opcodes.DUP2_X1:
-			case Opcodes.DUP2_X2:
-			case Opcodes.SWAP:
-			case Opcodes.IADD:
-			case Opcodes.LADD:
-			case Opcodes.FADD:
-			case Opcodes.DADD:
-			case Opcodes.ISUB:
-			case Opcodes.LSUB:
-			case Opcodes.FSUB:
-			case Opcodes.DSUB:
-			case Opcodes.IMUL:
-			case Opcodes.LMUL:
-			case Opcodes.FMUL:
-			case Opcodes.DMUL:
-			case Opcodes.IDIV:
-			case Opcodes.LDIV:
-			case Opcodes.FDIV:
-			case Opcodes.DDIV:
-			case Opcodes.IREM:
-			case Opcodes.LREM:
-			case Opcodes.FREM:
-			case Opcodes.DREM:
-			case Opcodes.INEG:
-			case Opcodes.LNEG:
-			case Opcodes.FNEG:
-			case Opcodes.DNEG:
-			case Opcodes.ISHL:
-			case Opcodes.LSHL:
-			case Opcodes.ISHR:
-			case Opcodes.LSHR:
-			case Opcodes.IUSHR:
-			case Opcodes.LUSHR:
-			case Opcodes.IAND:
-			case Opcodes.LAND:
-			case Opcodes.IOR:
-			case Opcodes.LOR:
-			case Opcodes.IXOR:
-			case Opcodes.LXOR:
-			case Opcodes.I2L:
-			case Opcodes.I2F:
-			case Opcodes.I2D:
-			case Opcodes.L2I:
-			case Opcodes.L2F:
-			case Opcodes.L2D:
-			case Opcodes.F2I:
-			case Opcodes.F2L:
-			case Opcodes.F2D:
-			case Opcodes.D2I:
-			case Opcodes.D2L:
-			case Opcodes.D2F:
-			case Opcodes.I2B:
-			case Opcodes.I2C:
-			case Opcodes.I2S:
-			case Opcodes.LCMP:
-			case Opcodes.FCMPL:
-			case Opcodes.FCMPG:
-			case Opcodes.DCMPL:
-			case Opcodes.DCMPG:
-			case Opcodes.IRETURN:
-			case Opcodes.LRETURN:
-			case Opcodes.FRETURN:
-			case Opcodes.DRETURN:
-			case Opcodes.ARETURN:
-			case Opcodes.RETURN:
-			case Opcodes.ARRAYLENGTH:
-			case Opcodes.ATHROW:
-			case Opcodes.MONITORENTER:
-			case Opcodes.MONITOREXIT:
-			case Constants.ILOAD_0:
-			case Constants.ILOAD_1:
-			case Constants.ILOAD_2:
-			case Constants.ILOAD_3:
-			case Constants.LLOAD_0:
-			case Constants.LLOAD_1:
-			case Constants.LLOAD_2:
-			case Constants.LLOAD_3:
-			case Constants.FLOAD_0:
-			case Constants.FLOAD_1:
-			case Constants.FLOAD_2:
-			case Constants.FLOAD_3:
-			case Constants.DLOAD_0:
-			case Constants.DLOAD_1:
-			case Constants.DLOAD_2:
-			case Constants.DLOAD_3:
-			case Constants.ALOAD_0:
-			case Constants.ALOAD_1:
-			case Constants.ALOAD_2:
-			case Constants.ALOAD_3:
-			case Constants.ISTORE_0:
-			case Constants.ISTORE_1:
-			case Constants.ISTORE_2:
-			case Constants.ISTORE_3:
-			case Constants.LSTORE_0:
-			case Constants.LSTORE_1:
-			case Constants.LSTORE_2:
-			case Constants.LSTORE_3:
-			case Constants.FSTORE_0:
-			case Constants.FSTORE_1:
-			case Constants.FSTORE_2:
-			case Constants.FSTORE_3:
-			case Constants.DSTORE_0:
-			case Constants.DSTORE_1:
-			case Constants.DSTORE_2:
-			case Constants.DSTORE_3:
-			case Constants.ASTORE_0:
-			case Constants.ASTORE_1:
-			case Constants.ASTORE_2:
-			case Constants.ASTORE_3:
+			case IOpcodes.Nop:
+			case IOpcodes.Aconst_Null:
+			case IOpcodes.Iconst_M1:
+			case IOpcodes.Iconst_0:
+			case IOpcodes.Iconst_1:
+			case IOpcodes.Iconst_2:
+			case IOpcodes.Iconst_3:
+			case IOpcodes.Iconst_4:
+			case IOpcodes.Iconst_5:
+			case IOpcodes.Lconst_0:
+			case IOpcodes.Lconst_1:
+			case IOpcodes.Fconst_0:
+			case IOpcodes.Fconst_1:
+			case IOpcodes.Fconst_2:
+			case IOpcodes.Dconst_0:
+			case IOpcodes.Dconst_1:
+			case IOpcodes.Iaload:
+			case IOpcodes.Laload:
+			case IOpcodes.Faload:
+			case IOpcodes.Daload:
+			case IOpcodes.Aaload:
+			case IOpcodes.Baload:
+			case IOpcodes.Caload:
+			case IOpcodes.Saload:
+			case IOpcodes.Iastore:
+			case IOpcodes.Lastore:
+			case IOpcodes.Fastore:
+			case IOpcodes.Dastore:
+			case IOpcodes.Aastore:
+			case IOpcodes.Bastore:
+			case IOpcodes.Castore:
+			case IOpcodes.Sastore:
+			case IOpcodes.Pop:
+			case IOpcodes.Pop2:
+			case IOpcodes.Dup:
+			case IOpcodes.Dup_X1:
+			case IOpcodes.Dup_X2:
+			case IOpcodes.Dup2:
+			case IOpcodes.Dup2_X1:
+			case IOpcodes.Dup2_X2:
+			case IOpcodes.Swap:
+			case IOpcodes.Iadd:
+			case IOpcodes.Ladd:
+			case IOpcodes.Fadd:
+			case IOpcodes.Dadd:
+			case IOpcodes.Isub:
+			case IOpcodes.Lsub:
+			case IOpcodes.Fsub:
+			case IOpcodes.Dsub:
+			case IOpcodes.Imul:
+			case IOpcodes.Lmul:
+			case IOpcodes.Fmul:
+			case IOpcodes.Dmul:
+			case IOpcodes.Idiv:
+			case IOpcodes.Ldiv:
+			case IOpcodes.Fdiv:
+			case IOpcodes.Ddiv:
+			case IOpcodes.Irem:
+			case IOpcodes.Lrem:
+			case IOpcodes.Frem:
+			case IOpcodes.Drem:
+			case IOpcodes.Ineg:
+			case IOpcodes.Lneg:
+			case IOpcodes.Fneg:
+			case IOpcodes.Dneg:
+			case IOpcodes.Ishl:
+			case IOpcodes.Lshl:
+			case IOpcodes.Ishr:
+			case IOpcodes.Lshr:
+			case IOpcodes.Iushr:
+			case IOpcodes.Lushr:
+			case IOpcodes.Iand:
+			case IOpcodes.Land:
+			case IOpcodes.Ior:
+			case IOpcodes.Lor:
+			case IOpcodes.Ixor:
+			case IOpcodes.Lxor:
+			case IOpcodes.I2L:
+			case IOpcodes.I2F:
+			case IOpcodes.I2D:
+			case IOpcodes.L2I:
+			case IOpcodes.L2F:
+			case IOpcodes.L2D:
+			case IOpcodes.F2I:
+			case IOpcodes.F2L:
+			case IOpcodes.F2D:
+			case IOpcodes.D2I:
+			case IOpcodes.D2L:
+			case IOpcodes.D2F:
+			case IOpcodes.I2B:
+			case IOpcodes.I2C:
+			case IOpcodes.I2S:
+			case IOpcodes.Lcmp:
+			case IOpcodes.Fcmpl:
+			case IOpcodes.Fcmpg:
+			case IOpcodes.Dcmpl:
+			case IOpcodes.Dcmpg:
+			case IOpcodes.Ireturn:
+			case IOpcodes.Lreturn:
+			case IOpcodes.Freturn:
+			case IOpcodes.Dreturn:
+			case IOpcodes.Areturn:
+			case IOpcodes.Return:
+			case IOpcodes.Arraylength:
+			case IOpcodes.Athrow:
+			case IOpcodes.Monitorenter:
+			case IOpcodes.Monitorexit:
+			case Constants.Iload_0:
+			case Constants.Iload_1:
+			case Constants.Iload_2:
+			case Constants.Iload_3:
+			case Constants.Lload_0:
+			case Constants.Lload_1:
+			case Constants.Lload_2:
+			case Constants.Lload_3:
+			case Constants.Fload_0:
+			case Constants.Fload_1:
+			case Constants.Fload_2:
+			case Constants.Fload_3:
+			case Constants.Dload_0:
+			case Constants.Dload_1:
+			case Constants.Dload_2:
+			case Constants.Dload_3:
+			case Constants.Aload_0:
+			case Constants.Aload_1:
+			case Constants.Aload_2:
+			case Constants.Aload_3:
+			case Constants.Istore_0:
+			case Constants.Istore_1:
+			case Constants.Istore_2:
+			case Constants.Istore_3:
+			case Constants.Lstore_0:
+			case Constants.Lstore_1:
+			case Constants.Lstore_2:
+			case Constants.Lstore_3:
+			case Constants.Fstore_0:
+			case Constants.Fstore_1:
+			case Constants.Fstore_2:
+			case Constants.Fstore_3:
+			case Constants.Dstore_0:
+			case Constants.Dstore_1:
+			case Constants.Dstore_2:
+			case Constants.Dstore_3:
+			case Constants.Astore_0:
+			case Constants.Astore_1:
+			case Constants.Astore_2:
+			case Constants.Astore_3:
 			  currentOffset += 1;
 			  break;
-			case Opcodes.IFEQ:
-			case Opcodes.IFNE:
-			case Opcodes.IFLT:
-			case Opcodes.IFGE:
-			case Opcodes.IFGT:
-			case Opcodes.IFLE:
-			case Opcodes.IF_ICMPEQ:
-			case Opcodes.IF_ICMPNE:
-			case Opcodes.IF_ICMPLT:
-			case Opcodes.IF_ICMPGE:
-			case Opcodes.IF_ICMPGT:
-			case Opcodes.IF_ICMPLE:
-			case Opcodes.IF_ACMPEQ:
-			case Opcodes.IF_ACMPNE:
-			case Opcodes.GOTO:
-			case Opcodes.JSR:
-			case Opcodes.IFNULL:
-			case Opcodes.IFNONNULL:
-			  createLabel(bytecodeOffset + readShort(currentOffset + 1), labels);
+			case IOpcodes.Ifeq:
+			case IOpcodes.Ifne:
+			case IOpcodes.Iflt:
+			case IOpcodes.Ifge:
+			case IOpcodes.Ifgt:
+			case IOpcodes.Ifle:
+			case IOpcodes.If_Icmpeq:
+			case IOpcodes.If_Icmpne:
+			case IOpcodes.If_Icmplt:
+			case IOpcodes.If_Icmpge:
+			case IOpcodes.If_Icmpgt:
+			case IOpcodes.If_Icmple:
+			case IOpcodes.If_Acmpeq:
+			case IOpcodes.If_Acmpne:
+			case IOpcodes.Goto:
+			case IOpcodes.Jsr:
+			case IOpcodes.Ifnull:
+			case IOpcodes.Ifnonnull:
+			  CreateLabel(bytecodeOffset + ReadShort(currentOffset + 1), labels);
 			  currentOffset += 3;
 			  break;
-			case Constants.ASM_IFEQ:
-			case Constants.ASM_IFNE:
-			case Constants.ASM_IFLT:
-			case Constants.ASM_IFGE:
-			case Constants.ASM_IFGT:
-			case Constants.ASM_IFLE:
-			case Constants.ASM_IF_ICMPEQ:
-			case Constants.ASM_IF_ICMPNE:
-			case Constants.ASM_IF_ICMPLT:
-			case Constants.ASM_IF_ICMPGE:
-			case Constants.ASM_IF_ICMPGT:
-			case Constants.ASM_IF_ICMPLE:
-			case Constants.ASM_IF_ACMPEQ:
-			case Constants.ASM_IF_ACMPNE:
-			case Constants.ASM_GOTO:
-			case Constants.ASM_JSR:
-			case Constants.ASM_IFNULL:
-			case Constants.ASM_IFNONNULL:
-			  createLabel(bytecodeOffset + readUnsignedShort(currentOffset + 1), labels);
+			case Constants.Asm_Ifeq:
+			case Constants.Asm_Ifne:
+			case Constants.Asm_Iflt:
+			case Constants.Asm_Ifge:
+			case Constants.Asm_Ifgt:
+			case Constants.Asm_Ifle:
+			case Constants.Asm_If_Icmpeq:
+			case Constants.Asm_If_Icmpne:
+			case Constants.Asm_If_Icmplt:
+			case Constants.Asm_If_Icmpge:
+			case Constants.Asm_If_Icmpgt:
+			case Constants.Asm_If_Icmple:
+			case Constants.Asm_If_Acmpeq:
+			case Constants.Asm_If_Acmpne:
+			case Constants.Asm_Goto:
+			case Constants.Asm_Jsr:
+			case Constants.Asm_Ifnull:
+			case Constants.Asm_Ifnonnull:
+			  CreateLabel(bytecodeOffset + ReadUnsignedShort(currentOffset + 1), labels);
 			  currentOffset += 3;
 			  break;
-			case Constants.GOTO_W:
-			case Constants.JSR_W:
-			case Constants.ASM_GOTO_W:
-			  createLabel(bytecodeOffset + readInt(currentOffset + 1), labels);
+			case Constants.Goto_W:
+			case Constants.Jsr_W:
+			case Constants.Asm_Goto_W:
+			  CreateLabel(bytecodeOffset + ReadInt(currentOffset + 1), labels);
 			  currentOffset += 5;
 			  break;
-			case Constants.WIDE:
+			case Constants.Wide:
 			  switch (classBuffer[currentOffset + 1] & 0xFF)
 			  {
-				case Opcodes.ILOAD:
-				case Opcodes.FLOAD:
-				case Opcodes.ALOAD:
-				case Opcodes.LLOAD:
-				case Opcodes.DLOAD:
-				case Opcodes.ISTORE:
-				case Opcodes.FSTORE:
-				case Opcodes.ASTORE:
-				case Opcodes.LSTORE:
-				case Opcodes.DSTORE:
-				case Opcodes.RET:
+				case IOpcodes.Iload:
+				case IOpcodes.Fload:
+				case IOpcodes.Aload:
+				case IOpcodes.Lload:
+				case IOpcodes.Dload:
+				case IOpcodes.Istore:
+				case IOpcodes.Fstore:
+				case IOpcodes.Astore:
+				case IOpcodes.Lstore:
+				case IOpcodes.Dstore:
+				case IOpcodes.Ret:
 				  currentOffset += 4;
 				  break;
-				case Opcodes.IINC:
+				case IOpcodes.Iinc:
 				  currentOffset += 6;
 				  break;
 				default:
 				  throw new System.ArgumentException();
 			  }
 			  break;
-			case Opcodes.TABLESWITCH:
+			case IOpcodes.Tableswitch:
 			  // Skip 0 to 3 padding bytes.
 			  currentOffset += 4 - (bytecodeOffset & 3);
 			  // Read the default label and the number of table entries.
-			  createLabel(bytecodeOffset + readInt(currentOffset), labels);
-			  int numTableEntries = readInt(currentOffset + 8) - readInt(currentOffset + 4) + 1;
+			  CreateLabel(bytecodeOffset + ReadInt(currentOffset), labels);
+			  int numTableEntries = ReadInt(currentOffset + 8) - ReadInt(currentOffset + 4) + 1;
 			  currentOffset += 12;
 			  // Read the table labels.
 			  while (numTableEntries-- > 0)
 			  {
-				createLabel(bytecodeOffset + readInt(currentOffset), labels);
+				CreateLabel(bytecodeOffset + ReadInt(currentOffset), labels);
 				currentOffset += 4;
 			  }
 			  break;
-			case Opcodes.LOOKUPSWITCH:
+			case IOpcodes.Lookupswitch:
 			  // Skip 0 to 3 padding bytes.
 			  currentOffset += 4 - (bytecodeOffset & 3);
 			  // Read the default label and the number of switch cases.
-			  createLabel(bytecodeOffset + readInt(currentOffset), labels);
-			  int numSwitchCases = readInt(currentOffset + 4);
+			  CreateLabel(bytecodeOffset + ReadInt(currentOffset), labels);
+			  int numSwitchCases = ReadInt(currentOffset + 4);
 			  currentOffset += 8;
 			  // Read the switch labels.
 			  while (numSwitchCases-- > 0)
 			  {
-				createLabel(bytecodeOffset + readInt(currentOffset + 4), labels);
+				CreateLabel(bytecodeOffset + ReadInt(currentOffset + 4), labels);
 				currentOffset += 8;
 			  }
 			  break;
-			case Opcodes.ILOAD:
-			case Opcodes.LLOAD:
-			case Opcodes.FLOAD:
-			case Opcodes.DLOAD:
-			case Opcodes.ALOAD:
-			case Opcodes.ISTORE:
-			case Opcodes.LSTORE:
-			case Opcodes.FSTORE:
-			case Opcodes.DSTORE:
-			case Opcodes.ASTORE:
-			case Opcodes.RET:
-			case Opcodes.BIPUSH:
-			case Opcodes.NEWARRAY:
-			case Opcodes.LDC:
+			case IOpcodes.Iload:
+			case IOpcodes.Lload:
+			case IOpcodes.Fload:
+			case IOpcodes.Dload:
+			case IOpcodes.Aload:
+			case IOpcodes.Istore:
+			case IOpcodes.Lstore:
+			case IOpcodes.Fstore:
+			case IOpcodes.Dstore:
+			case IOpcodes.Astore:
+			case IOpcodes.Ret:
+			case IOpcodes.Bipush:
+			case IOpcodes.Newarray:
+			case IOpcodes.Ldc:
 			  currentOffset += 2;
 			  break;
-			case Opcodes.SIPUSH:
-			case Constants.LDC_W:
-			case Constants.LDC2_W:
-			case Opcodes.GETSTATIC:
-			case Opcodes.PUTSTATIC:
-			case Opcodes.GETFIELD:
-			case Opcodes.PUTFIELD:
-			case Opcodes.INVOKEVIRTUAL:
-			case Opcodes.INVOKESPECIAL:
-			case Opcodes.INVOKESTATIC:
-			case Opcodes.NEW:
-			case Opcodes.ANEWARRAY:
-			case Opcodes.CHECKCAST:
-			case Opcodes.INSTANCEOF:
-			case Opcodes.IINC:
+			case IOpcodes.Sipush:
+			case Constants.Ldc_W:
+			case Constants.Ldc2_W:
+			case IOpcodes.Getstatic:
+			case IOpcodes.Putstatic:
+			case IOpcodes.Getfield:
+			case IOpcodes.Putfield:
+			case IOpcodes.Invokevirtual:
+			case IOpcodes.Invokespecial:
+			case IOpcodes.Invokestatic:
+			case IOpcodes.New:
+			case IOpcodes.Anewarray:
+			case IOpcodes.Checkcast:
+			case IOpcodes.Instanceof:
+			case IOpcodes.Iinc:
 			  currentOffset += 3;
 			  break;
-			case Opcodes.INVOKEINTERFACE:
-			case Opcodes.INVOKEDYNAMIC:
+			case IOpcodes.Invokeinterface:
+			case IOpcodes.Invokedynamic:
 			  currentOffset += 5;
 			  break;
-			case Opcodes.MULTIANEWARRAY:
+			case IOpcodes.Multianewarray:
 			  currentOffset += 4;
 			  break;
 			default:
@@ -1851,16 +1851,16 @@ namespace ObjectWeb.Asm
 
 		// Read the 'exception_table_length' and 'exception_table' field to create a label for each
 		// referenced instruction, and to make methodVisitor visit the corresponding try catch blocks.
-		int exceptionTableLength = readUnsignedShort(currentOffset);
+		int exceptionTableLength = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (exceptionTableLength-- > 0)
 		{
-		  Label start = createLabel(readUnsignedShort(currentOffset), labels);
-		  Label end = createLabel(readUnsignedShort(currentOffset + 2), labels);
-		  Label handler = createLabel(readUnsignedShort(currentOffset + 4), labels);
-		  string catchType = readUTF8(cpInfoOffsets[readUnsignedShort(currentOffset + 6)], charBuffer);
+		  Label start = CreateLabel(ReadUnsignedShort(currentOffset), labels);
+		  Label end = CreateLabel(ReadUnsignedShort(currentOffset + 2), labels);
+		  Label handler = CreateLabel(ReadUnsignedShort(currentOffset + 4), labels);
+		  string catchType = ReadUtf8(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 6)], charBuffer);
 		  currentOffset += 8;
-		  methodVisitor.visitTryCatchBlock(start, end, handler, catchType);
+		  methodVisitor.VisitTryCatchBlock(start, end, handler, catchType);
 		}
 
 		// Read the Code attributes to create a label for each referenced instruction (the variables
@@ -1888,61 +1888,61 @@ namespace ObjectWeb.Asm
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int attributesCount = readUnsignedShort(currentOffset);
+		int attributesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (attributesCount-- > 0)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = readUTF8(currentOffset, charBuffer);
-		  int attributeLength = readInt(currentOffset + 2);
+		  string attributeName = ReadUtf8(currentOffset, charBuffer);
+		  int attributeLength = ReadInt(currentOffset + 2);
 		  currentOffset += 6;
-		  if (Constants.LOCAL_VARIABLE_TABLE.Equals(attributeName))
+		  if (Constants.Local_Variable_Table.Equals(attributeName))
 		  {
-			if ((context.parsingOptions & SKIP_DEBUG) == 0)
+			if ((context.parsingOptions & Skip_Debug) == 0)
 			{
 			  localVariableTableOffset = currentOffset;
 			  // Parse the attribute to find the corresponding (debug only) labels.
 			  int currentLocalVariableTableOffset = currentOffset;
-			  int localVariableTableLength = readUnsignedShort(currentLocalVariableTableOffset);
+			  int localVariableTableLength = ReadUnsignedShort(currentLocalVariableTableOffset);
 			  currentLocalVariableTableOffset += 2;
 			  while (localVariableTableLength-- > 0)
 			  {
-				int startPc = readUnsignedShort(currentLocalVariableTableOffset);
-				createDebugLabel(startPc, labels);
-				int length = readUnsignedShort(currentLocalVariableTableOffset + 2);
-				createDebugLabel(startPc + length, labels);
+				int startPc = ReadUnsignedShort(currentLocalVariableTableOffset);
+				CreateDebugLabel(startPc, labels);
+				int length = ReadUnsignedShort(currentLocalVariableTableOffset + 2);
+				CreateDebugLabel(startPc + length, labels);
 				// Skip the name_index, descriptor_index and index fields (2 bytes each).
 				currentLocalVariableTableOffset += 10;
 			  }
 			}
 		  }
-		  else if (Constants.LOCAL_VARIABLE_TYPE_TABLE.Equals(attributeName))
+		  else if (Constants.Local_Variable_Type_Table.Equals(attributeName))
 		  {
 			localVariableTypeTableOffset = currentOffset;
 			// Here we do not extract the labels corresponding to the attribute content. We assume they
 			// are the same or a subset of those of the LocalVariableTable attribute.
 		  }
-		  else if (Constants.LINE_NUMBER_TABLE.Equals(attributeName))
+		  else if (Constants.Line_Number_Table.Equals(attributeName))
 		  {
-			if ((context.parsingOptions & SKIP_DEBUG) == 0)
+			if ((context.parsingOptions & Skip_Debug) == 0)
 			{
 			  // Parse the attribute to find the corresponding (debug only) labels.
 			  int currentLineNumberTableOffset = currentOffset;
-			  int lineNumberTableLength = readUnsignedShort(currentLineNumberTableOffset);
+			  int lineNumberTableLength = ReadUnsignedShort(currentLineNumberTableOffset);
 			  currentLineNumberTableOffset += 2;
 			  while (lineNumberTableLength-- > 0)
 			  {
-				int startPc = readUnsignedShort(currentLineNumberTableOffset);
-				int lineNumber = readUnsignedShort(currentLineNumberTableOffset + 2);
+				int startPc = ReadUnsignedShort(currentLineNumberTableOffset);
+				int lineNumber = ReadUnsignedShort(currentLineNumberTableOffset + 2);
 				currentLineNumberTableOffset += 4;
-				createDebugLabel(startPc, labels);
-				labels[startPc].addLineNumber(lineNumber);
+				CreateDebugLabel(startPc, labels);
+				labels[startPc].AddLineNumber(lineNumber);
 			  }
 			}
 		  }
-		  else if (Constants.RUNTIME_VISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Visible_Type_Annotations.Equals(attributeName))
 		  {
-			visibleTypeAnnotationOffsets = readTypeAnnotations(methodVisitor, context, currentOffset, true);
+			visibleTypeAnnotationOffsets = ReadTypeAnnotations(methodVisitor, context, currentOffset, true);
 			// Here we do not extract the labels corresponding to the attribute content. This would
 			// require a full parsing of the attribute, which would need to be repeated when parsing
 			// the bytecode instructions (see below). Instead, the content of the attribute is read one
@@ -1950,14 +1950,14 @@ namespace ObjectWeb.Asm
 			// annotation is read), and the labels it contains are also extracted one annotation at a
 			// time. This assumes that type annotations are ordered by increasing bytecode offset.
 		  }
-		  else if (Constants.RUNTIME_INVISIBLE_TYPE_ANNOTATIONS.Equals(attributeName))
+		  else if (Constants.Runtime_Invisible_Type_Annotations.Equals(attributeName))
 		  {
-			invisibleTypeAnnotationOffsets = readTypeAnnotations(methodVisitor, context, currentOffset, false);
+			invisibleTypeAnnotationOffsets = ReadTypeAnnotations(methodVisitor, context, currentOffset, false);
 			// Same comment as above for the RuntimeVisibleTypeAnnotations attribute.
 		  }
-		  else if (Constants.STACK_MAP_TABLE.Equals(attributeName))
+		  else if (Constants.Stack_Map_Table.Equals(attributeName))
 		  {
-			if ((context.parsingOptions & SKIP_FRAMES) == 0)
+			if ((context.parsingOptions & Skip_Frames) == 0)
 			{
 			  stackMapFrameOffset = currentOffset + 2;
 			  stackMapTableEndOffset = currentOffset + attributeLength;
@@ -1974,7 +1974,7 @@ namespace ObjectWeb.Asm
 		  }
 		  else if ("StackMap".Equals(attributeName))
 		  {
-			if ((context.parsingOptions & SKIP_FRAMES) == 0)
+			if ((context.parsingOptions & Skip_Frames) == 0)
 			{
 			  stackMapFrameOffset = currentOffset + 2;
 			  stackMapTableEndOffset = currentOffset + attributeLength;
@@ -1987,7 +1987,7 @@ namespace ObjectWeb.Asm
 		  }
 		  else
 		  {
-			Attribute attribute = readAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, codeOffset, labels);
+			Attribute attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, codeOffset, labels);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
@@ -1996,7 +1996,7 @@ namespace ObjectWeb.Asm
 
 		// Initialize the context fields related to stack map frames, and generate the first
 		// (implicit) stack map frame, if needed.
-		bool expandFrames = (context.parsingOptions & EXPAND_FRAMES) != 0;
+		bool expandFrames = (context.parsingOptions & Expand_Frames) != 0;
 		if (stackMapFrameOffset != 0)
 		{
 		  // The bytecode offset of the first explicit frame is not offset_delta + 1 but only
@@ -2011,7 +2011,7 @@ namespace ObjectWeb.Asm
 		  context.currentFrameStackTypes = new object[maxStack];
 		  if (expandFrames)
 		  {
-			computeImplicitFrame(context);
+			ComputeImplicitFrame(context);
 		  }
 		  // Find the labels for UNINITIALIZED frame types. Instead of decoding each element of the
 		  // stack map table, we look for 3 consecutive bytes that "look like" an UNINITIALIZED type
@@ -2022,17 +2022,17 @@ namespace ObjectWeb.Asm
 		  // map table.
 		  for (int offset = stackMapFrameOffset; offset < stackMapTableEndOffset - 2; ++offset)
 		  {
-			if (classBuffer[offset] == Frame.ITEM_UNINITIALIZED)
+			if (classBuffer[offset] == Frame.Item_Uninitialized)
 			{
-			  int potentialBytecodeOffset = readUnsignedShort(offset + 1);
-			  if (potentialBytecodeOffset >= 0 && potentialBytecodeOffset < codeLength && (classBuffer[bytecodeStartOffset + potentialBytecodeOffset] & 0xFF) == Opcodes.NEW)
+			  int potentialBytecodeOffset = ReadUnsignedShort(offset + 1);
+			  if (potentialBytecodeOffset >= 0 && potentialBytecodeOffset < codeLength && (classBuffer[bytecodeStartOffset + potentialBytecodeOffset] & 0xFF) == IOpcodes.New)
 			  {
-				createLabel(potentialBytecodeOffset, labels);
+				CreateLabel(potentialBytecodeOffset, labels);
 			  }
 			}
 		  }
 		}
-		if (expandFrames && (context.parsingOptions & EXPAND_ASM_INSNS) != 0)
+		if (expandFrames && (context.parsingOptions & Expand_Asm_Insns) != 0)
 		{
 		  // Expanding the ASM specific instructions can introduce F_INSERT frames, even if the method
 		  // does not currently have any frame. These inserted frames must be computed by simulating the
@@ -2040,7 +2040,7 @@ namespace ObjectWeb.Asm
 		  // For this, MethodWriter needs to know maxLocals before the first instruction is visited. To
 		  // ensure this, we visit the implicit first frame here (passing only maxLocals - the rest is
 		  // computed in MethodWriter).
-		  methodVisitor.visitFrame(Opcodes.F_NEW, maxLocals, null, 0, null);
+		  methodVisitor.VisitFrame(IOpcodes.F_New, maxLocals, null, 0, null);
 		}
 
 		// Visit the bytecode instructions. First, introduce state variables for the incremental parsing
@@ -2050,12 +2050,12 @@ namespace ObjectWeb.Asm
 		// visibleTypeAnnotationOffsets array).
 		int currentVisibleTypeAnnotationIndex = 0;
 		// The bytecode offset of the next runtime visible type annotation to read, or -1.
-		int currentVisibleTypeAnnotationBytecodeOffset = getTypeAnnotationBytecodeOffset(visibleTypeAnnotationOffsets, 0);
+		int currentVisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(visibleTypeAnnotationOffsets, 0);
 		// Index of the next runtime invisible type annotation to read (in the
 		// invisibleTypeAnnotationOffsets array).
 		int currentInvisibleTypeAnnotationIndex = 0;
 		// The bytecode offset of the next runtime invisible type annotation to read, or -1.
-		int currentInvisibleTypeAnnotationBytecodeOffset = getTypeAnnotationBytecodeOffset(invisibleTypeAnnotationOffsets, 0);
+		int currentInvisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(invisibleTypeAnnotationOffsets, 0);
 
 		// Whether a F_INSERT stack map frame must be inserted before the current instruction.
 		bool insertFrame = false;
@@ -2063,7 +2063,7 @@ namespace ObjectWeb.Asm
 		// The delta to subtract from a goto_w or jsr_w opcode to get the corresponding goto or jsr
 		// opcode, or 0 if goto_w and jsr_w must be left unchanged (i.e. when expanding ASM specific
 		// instructions).
-		int wideJumpOpcodeDelta = (context.parsingOptions & EXPAND_ASM_INSNS) == 0 ? Constants.WIDE_JUMP_OPCODE_DELTA : 0;
+		int wideJumpOpcodeDelta = (context.parsingOptions & Expand_Asm_Insns) == 0 ? Constants.WideJumpOpcodeDelta : 0;
 
 		currentOffset = bytecodeStartOffset;
 		while (currentOffset < bytecodeEndOffset)
@@ -2074,7 +2074,7 @@ namespace ObjectWeb.Asm
 		  Label currentLabel = labels[currentBytecodeOffset];
 		  if (currentLabel != null)
 		  {
-			currentLabel.accept(methodVisitor, (context.parsingOptions & SKIP_DEBUG) == 0);
+			currentLabel.Accept(methodVisitor, (context.parsingOptions & Skip_Debug) == 0);
 		  }
 
 		  // Visit the stack map frame for this bytecode offset, if any.
@@ -2086,11 +2086,11 @@ namespace ObjectWeb.Asm
 			{
 			  if (!compressedFrames || expandFrames)
 			  {
-				methodVisitor.visitFrame(Opcodes.F_NEW, context.currentFrameLocalCount, context.currentFrameLocalTypes, context.currentFrameStackCount, context.currentFrameStackTypes);
+				methodVisitor.VisitFrame(IOpcodes.F_New, context.currentFrameLocalCount, context.currentFrameLocalTypes, context.currentFrameStackCount, context.currentFrameStackTypes);
 			  }
 			  else
 			  {
-				methodVisitor.visitFrame(context.currentFrameType, context.currentFrameLocalCountDelta, context.currentFrameLocalTypes, context.currentFrameStackCount, context.currentFrameStackTypes);
+				methodVisitor.VisitFrame(context.currentFrameType, context.currentFrameLocalCountDelta, context.currentFrameLocalTypes, context.currentFrameStackCount, context.currentFrameStackTypes);
 			  }
 			  // Since there is already a stack map frame for this bytecode offset, there is no need to
 			  // insert a new one.
@@ -2098,7 +2098,7 @@ namespace ObjectWeb.Asm
 			}
 			if (stackMapFrameOffset < stackMapTableEndOffset)
 			{
-			  stackMapFrameOffset = readStackMapFrame(stackMapFrameOffset, compressedFrames, expandFrames, context);
+			  stackMapFrameOffset = ReadStackMapFrame(stackMapFrameOffset, compressedFrames, expandFrames, context);
 			}
 			else
 			{
@@ -2110,9 +2110,9 @@ namespace ObjectWeb.Asm
 		  // true during the previous iteration. The actual frame content is computed in MethodWriter.
 		  if (insertFrame)
 		  {
-			if ((context.parsingOptions & EXPAND_FRAMES) != 0)
+			if ((context.parsingOptions & Expand_Frames) != 0)
 			{
-			  methodVisitor.visitFrame(Constants.F_INSERT, 0, null, 0, null);
+			  methodVisitor.VisitFrame(Constants.F_Insert, 0, null, 0, null);
 			}
 			insertFrame = false;
 		  }
@@ -2121,208 +2121,208 @@ namespace ObjectWeb.Asm
 		  int opcode = classBuffer[currentOffset] & 0xFF;
 		  switch (opcode)
 		  {
-			case Opcodes.NOP:
-			case Opcodes.ACONST_NULL:
-			case Opcodes.ICONST_M1:
-			case Opcodes.ICONST_0:
-			case Opcodes.ICONST_1:
-			case Opcodes.ICONST_2:
-			case Opcodes.ICONST_3:
-			case Opcodes.ICONST_4:
-			case Opcodes.ICONST_5:
-			case Opcodes.LCONST_0:
-			case Opcodes.LCONST_1:
-			case Opcodes.FCONST_0:
-			case Opcodes.FCONST_1:
-			case Opcodes.FCONST_2:
-			case Opcodes.DCONST_0:
-			case Opcodes.DCONST_1:
-			case Opcodes.IALOAD:
-			case Opcodes.LALOAD:
-			case Opcodes.FALOAD:
-			case Opcodes.DALOAD:
-			case Opcodes.AALOAD:
-			case Opcodes.BALOAD:
-			case Opcodes.CALOAD:
-			case Opcodes.SALOAD:
-			case Opcodes.IASTORE:
-			case Opcodes.LASTORE:
-			case Opcodes.FASTORE:
-			case Opcodes.DASTORE:
-			case Opcodes.AASTORE:
-			case Opcodes.BASTORE:
-			case Opcodes.CASTORE:
-			case Opcodes.SASTORE:
-			case Opcodes.POP:
-			case Opcodes.POP2:
-			case Opcodes.DUP:
-			case Opcodes.DUP_X1:
-			case Opcodes.DUP_X2:
-			case Opcodes.DUP2:
-			case Opcodes.DUP2_X1:
-			case Opcodes.DUP2_X2:
-			case Opcodes.SWAP:
-			case Opcodes.IADD:
-			case Opcodes.LADD:
-			case Opcodes.FADD:
-			case Opcodes.DADD:
-			case Opcodes.ISUB:
-			case Opcodes.LSUB:
-			case Opcodes.FSUB:
-			case Opcodes.DSUB:
-			case Opcodes.IMUL:
-			case Opcodes.LMUL:
-			case Opcodes.FMUL:
-			case Opcodes.DMUL:
-			case Opcodes.IDIV:
-			case Opcodes.LDIV:
-			case Opcodes.FDIV:
-			case Opcodes.DDIV:
-			case Opcodes.IREM:
-			case Opcodes.LREM:
-			case Opcodes.FREM:
-			case Opcodes.DREM:
-			case Opcodes.INEG:
-			case Opcodes.LNEG:
-			case Opcodes.FNEG:
-			case Opcodes.DNEG:
-			case Opcodes.ISHL:
-			case Opcodes.LSHL:
-			case Opcodes.ISHR:
-			case Opcodes.LSHR:
-			case Opcodes.IUSHR:
-			case Opcodes.LUSHR:
-			case Opcodes.IAND:
-			case Opcodes.LAND:
-			case Opcodes.IOR:
-			case Opcodes.LOR:
-			case Opcodes.IXOR:
-			case Opcodes.LXOR:
-			case Opcodes.I2L:
-			case Opcodes.I2F:
-			case Opcodes.I2D:
-			case Opcodes.L2I:
-			case Opcodes.L2F:
-			case Opcodes.L2D:
-			case Opcodes.F2I:
-			case Opcodes.F2L:
-			case Opcodes.F2D:
-			case Opcodes.D2I:
-			case Opcodes.D2L:
-			case Opcodes.D2F:
-			case Opcodes.I2B:
-			case Opcodes.I2C:
-			case Opcodes.I2S:
-			case Opcodes.LCMP:
-			case Opcodes.FCMPL:
-			case Opcodes.FCMPG:
-			case Opcodes.DCMPL:
-			case Opcodes.DCMPG:
-			case Opcodes.IRETURN:
-			case Opcodes.LRETURN:
-			case Opcodes.FRETURN:
-			case Opcodes.DRETURN:
-			case Opcodes.ARETURN:
-			case Opcodes.RETURN:
-			case Opcodes.ARRAYLENGTH:
-			case Opcodes.ATHROW:
-			case Opcodes.MONITORENTER:
-			case Opcodes.MONITOREXIT:
-			  methodVisitor.visitInsn(opcode);
+			case IOpcodes.Nop:
+			case IOpcodes.Aconst_Null:
+			case IOpcodes.Iconst_M1:
+			case IOpcodes.Iconst_0:
+			case IOpcodes.Iconst_1:
+			case IOpcodes.Iconst_2:
+			case IOpcodes.Iconst_3:
+			case IOpcodes.Iconst_4:
+			case IOpcodes.Iconst_5:
+			case IOpcodes.Lconst_0:
+			case IOpcodes.Lconst_1:
+			case IOpcodes.Fconst_0:
+			case IOpcodes.Fconst_1:
+			case IOpcodes.Fconst_2:
+			case IOpcodes.Dconst_0:
+			case IOpcodes.Dconst_1:
+			case IOpcodes.Iaload:
+			case IOpcodes.Laload:
+			case IOpcodes.Faload:
+			case IOpcodes.Daload:
+			case IOpcodes.Aaload:
+			case IOpcodes.Baload:
+			case IOpcodes.Caload:
+			case IOpcodes.Saload:
+			case IOpcodes.Iastore:
+			case IOpcodes.Lastore:
+			case IOpcodes.Fastore:
+			case IOpcodes.Dastore:
+			case IOpcodes.Aastore:
+			case IOpcodes.Bastore:
+			case IOpcodes.Castore:
+			case IOpcodes.Sastore:
+			case IOpcodes.Pop:
+			case IOpcodes.Pop2:
+			case IOpcodes.Dup:
+			case IOpcodes.Dup_X1:
+			case IOpcodes.Dup_X2:
+			case IOpcodes.Dup2:
+			case IOpcodes.Dup2_X1:
+			case IOpcodes.Dup2_X2:
+			case IOpcodes.Swap:
+			case IOpcodes.Iadd:
+			case IOpcodes.Ladd:
+			case IOpcodes.Fadd:
+			case IOpcodes.Dadd:
+			case IOpcodes.Isub:
+			case IOpcodes.Lsub:
+			case IOpcodes.Fsub:
+			case IOpcodes.Dsub:
+			case IOpcodes.Imul:
+			case IOpcodes.Lmul:
+			case IOpcodes.Fmul:
+			case IOpcodes.Dmul:
+			case IOpcodes.Idiv:
+			case IOpcodes.Ldiv:
+			case IOpcodes.Fdiv:
+			case IOpcodes.Ddiv:
+			case IOpcodes.Irem:
+			case IOpcodes.Lrem:
+			case IOpcodes.Frem:
+			case IOpcodes.Drem:
+			case IOpcodes.Ineg:
+			case IOpcodes.Lneg:
+			case IOpcodes.Fneg:
+			case IOpcodes.Dneg:
+			case IOpcodes.Ishl:
+			case IOpcodes.Lshl:
+			case IOpcodes.Ishr:
+			case IOpcodes.Lshr:
+			case IOpcodes.Iushr:
+			case IOpcodes.Lushr:
+			case IOpcodes.Iand:
+			case IOpcodes.Land:
+			case IOpcodes.Ior:
+			case IOpcodes.Lor:
+			case IOpcodes.Ixor:
+			case IOpcodes.Lxor:
+			case IOpcodes.I2L:
+			case IOpcodes.I2F:
+			case IOpcodes.I2D:
+			case IOpcodes.L2I:
+			case IOpcodes.L2F:
+			case IOpcodes.L2D:
+			case IOpcodes.F2I:
+			case IOpcodes.F2L:
+			case IOpcodes.F2D:
+			case IOpcodes.D2I:
+			case IOpcodes.D2L:
+			case IOpcodes.D2F:
+			case IOpcodes.I2B:
+			case IOpcodes.I2C:
+			case IOpcodes.I2S:
+			case IOpcodes.Lcmp:
+			case IOpcodes.Fcmpl:
+			case IOpcodes.Fcmpg:
+			case IOpcodes.Dcmpl:
+			case IOpcodes.Dcmpg:
+			case IOpcodes.Ireturn:
+			case IOpcodes.Lreturn:
+			case IOpcodes.Freturn:
+			case IOpcodes.Dreturn:
+			case IOpcodes.Areturn:
+			case IOpcodes.Return:
+			case IOpcodes.Arraylength:
+			case IOpcodes.Athrow:
+			case IOpcodes.Monitorenter:
+			case IOpcodes.Monitorexit:
+			  methodVisitor.VisitInsn(opcode);
 			  currentOffset += 1;
 			  break;
-			case Constants.ILOAD_0:
-			case Constants.ILOAD_1:
-			case Constants.ILOAD_2:
-			case Constants.ILOAD_3:
-			case Constants.LLOAD_0:
-			case Constants.LLOAD_1:
-			case Constants.LLOAD_2:
-			case Constants.LLOAD_3:
-			case Constants.FLOAD_0:
-			case Constants.FLOAD_1:
-			case Constants.FLOAD_2:
-			case Constants.FLOAD_3:
-			case Constants.DLOAD_0:
-			case Constants.DLOAD_1:
-			case Constants.DLOAD_2:
-			case Constants.DLOAD_3:
-			case Constants.ALOAD_0:
-			case Constants.ALOAD_1:
-			case Constants.ALOAD_2:
-			case Constants.ALOAD_3:
-			  opcode -= Constants.ILOAD_0;
-			  methodVisitor.visitVarInsn(Opcodes.ILOAD + (opcode >> 2), opcode & 0x3);
+			case Constants.Iload_0:
+			case Constants.Iload_1:
+			case Constants.Iload_2:
+			case Constants.Iload_3:
+			case Constants.Lload_0:
+			case Constants.Lload_1:
+			case Constants.Lload_2:
+			case Constants.Lload_3:
+			case Constants.Fload_0:
+			case Constants.Fload_1:
+			case Constants.Fload_2:
+			case Constants.Fload_3:
+			case Constants.Dload_0:
+			case Constants.Dload_1:
+			case Constants.Dload_2:
+			case Constants.Dload_3:
+			case Constants.Aload_0:
+			case Constants.Aload_1:
+			case Constants.Aload_2:
+			case Constants.Aload_3:
+			  opcode -= Constants.Iload_0;
+			  methodVisitor.VisitVarInsn(IOpcodes.Iload + (opcode >> 2), opcode & 0x3);
 			  currentOffset += 1;
 			  break;
-			case Constants.ISTORE_0:
-			case Constants.ISTORE_1:
-			case Constants.ISTORE_2:
-			case Constants.ISTORE_3:
-			case Constants.LSTORE_0:
-			case Constants.LSTORE_1:
-			case Constants.LSTORE_2:
-			case Constants.LSTORE_3:
-			case Constants.FSTORE_0:
-			case Constants.FSTORE_1:
-			case Constants.FSTORE_2:
-			case Constants.FSTORE_3:
-			case Constants.DSTORE_0:
-			case Constants.DSTORE_1:
-			case Constants.DSTORE_2:
-			case Constants.DSTORE_3:
-			case Constants.ASTORE_0:
-			case Constants.ASTORE_1:
-			case Constants.ASTORE_2:
-			case Constants.ASTORE_3:
-			  opcode -= Constants.ISTORE_0;
-			  methodVisitor.visitVarInsn(Opcodes.ISTORE + (opcode >> 2), opcode & 0x3);
+			case Constants.Istore_0:
+			case Constants.Istore_1:
+			case Constants.Istore_2:
+			case Constants.Istore_3:
+			case Constants.Lstore_0:
+			case Constants.Lstore_1:
+			case Constants.Lstore_2:
+			case Constants.Lstore_3:
+			case Constants.Fstore_0:
+			case Constants.Fstore_1:
+			case Constants.Fstore_2:
+			case Constants.Fstore_3:
+			case Constants.Dstore_0:
+			case Constants.Dstore_1:
+			case Constants.Dstore_2:
+			case Constants.Dstore_3:
+			case Constants.Astore_0:
+			case Constants.Astore_1:
+			case Constants.Astore_2:
+			case Constants.Astore_3:
+			  opcode -= Constants.Istore_0;
+			  methodVisitor.VisitVarInsn(IOpcodes.Istore + (opcode >> 2), opcode & 0x3);
 			  currentOffset += 1;
 			  break;
-			case Opcodes.IFEQ:
-			case Opcodes.IFNE:
-			case Opcodes.IFLT:
-			case Opcodes.IFGE:
-			case Opcodes.IFGT:
-			case Opcodes.IFLE:
-			case Opcodes.IF_ICMPEQ:
-			case Opcodes.IF_ICMPNE:
-			case Opcodes.IF_ICMPLT:
-			case Opcodes.IF_ICMPGE:
-			case Opcodes.IF_ICMPGT:
-			case Opcodes.IF_ICMPLE:
-			case Opcodes.IF_ACMPEQ:
-			case Opcodes.IF_ACMPNE:
-			case Opcodes.GOTO:
-			case Opcodes.JSR:
-			case Opcodes.IFNULL:
-			case Opcodes.IFNONNULL:
-			  methodVisitor.visitJumpInsn(opcode, labels[currentBytecodeOffset + readShort(currentOffset + 1)]);
+			case IOpcodes.Ifeq:
+			case IOpcodes.Ifne:
+			case IOpcodes.Iflt:
+			case IOpcodes.Ifge:
+			case IOpcodes.Ifgt:
+			case IOpcodes.Ifle:
+			case IOpcodes.If_Icmpeq:
+			case IOpcodes.If_Icmpne:
+			case IOpcodes.If_Icmplt:
+			case IOpcodes.If_Icmpge:
+			case IOpcodes.If_Icmpgt:
+			case IOpcodes.If_Icmple:
+			case IOpcodes.If_Acmpeq:
+			case IOpcodes.If_Acmpne:
+			case IOpcodes.Goto:
+			case IOpcodes.Jsr:
+			case IOpcodes.Ifnull:
+			case IOpcodes.Ifnonnull:
+			  methodVisitor.VisitJumpInsn(opcode, labels[currentBytecodeOffset + ReadShort(currentOffset + 1)]);
 			  currentOffset += 3;
 			  break;
-			case Constants.GOTO_W:
-			case Constants.JSR_W:
-			  methodVisitor.visitJumpInsn(opcode - wideJumpOpcodeDelta, labels[currentBytecodeOffset + readInt(currentOffset + 1)]);
+			case Constants.Goto_W:
+			case Constants.Jsr_W:
+			  methodVisitor.VisitJumpInsn(opcode - wideJumpOpcodeDelta, labels[currentBytecodeOffset + ReadInt(currentOffset + 1)]);
 			  currentOffset += 5;
 			  break;
-			case Constants.ASM_IFEQ:
-			case Constants.ASM_IFNE:
-			case Constants.ASM_IFLT:
-			case Constants.ASM_IFGE:
-			case Constants.ASM_IFGT:
-			case Constants.ASM_IFLE:
-			case Constants.ASM_IF_ICMPEQ:
-			case Constants.ASM_IF_ICMPNE:
-			case Constants.ASM_IF_ICMPLT:
-			case Constants.ASM_IF_ICMPGE:
-			case Constants.ASM_IF_ICMPGT:
-			case Constants.ASM_IF_ICMPLE:
-			case Constants.ASM_IF_ACMPEQ:
-			case Constants.ASM_IF_ACMPNE:
-			case Constants.ASM_GOTO:
-			case Constants.ASM_JSR:
-			case Constants.ASM_IFNULL:
-			case Constants.ASM_IFNONNULL:
+			case Constants.Asm_Ifeq:
+			case Constants.Asm_Ifne:
+			case Constants.Asm_Iflt:
+			case Constants.Asm_Ifge:
+			case Constants.Asm_Ifgt:
+			case Constants.Asm_Ifle:
+			case Constants.Asm_If_Icmpeq:
+			case Constants.Asm_If_Icmpne:
+			case Constants.Asm_If_Icmplt:
+			case Constants.Asm_If_Icmpge:
+			case Constants.Asm_If_Icmpgt:
+			case Constants.Asm_If_Icmple:
+			case Constants.Asm_If_Acmpeq:
+			case Constants.Asm_If_Acmpne:
+			case Constants.Asm_Goto:
+			case Constants.Asm_Jsr:
+			case Constants.Asm_Ifnull:
+			case Constants.Asm_Ifnonnull:
 			{
 				// A forward jump with an offset > 32767. In this case we automatically replace ASM_GOTO
 				// with GOTO_W, ASM_JSR with JSR_W and ASM_IFxxx <l> with IFNOTxxx <L> GOTO_W <l> L:...,
@@ -2330,22 +2330,22 @@ namespace ObjectWeb.Asm
 				// where <L> designates the instruction just after the GOTO_W.
 				// First, change the ASM specific opcodes ASM_IFEQ ... ASM_JSR, ASM_IFNULL and
 				// ASM_IFNONNULL to IFEQ ... JSR, IFNULL and IFNONNULL.
-				opcode = opcode < Constants.ASM_IFNULL ? opcode - Constants.ASM_OPCODE_DELTA : opcode - Constants.ASM_IFNULL_OPCODE_DELTA;
-				Label target = labels[currentBytecodeOffset + readUnsignedShort(currentOffset + 1)];
-				if (opcode == Opcodes.GOTO || opcode == Opcodes.JSR)
+				opcode = opcode < Constants.Asm_Ifnull ? opcode - Constants.Asm_Opcode_Delta : opcode - Constants.Asm_Ifnull_Opcode_Delta;
+				Label target = labels[currentBytecodeOffset + ReadUnsignedShort(currentOffset + 1)];
+				if (opcode == IOpcodes.Goto || opcode == IOpcodes.Jsr)
 				{
 				  // Replace GOTO with GOTO_W and JSR with JSR_W.
-				  methodVisitor.visitJumpInsn(opcode + Constants.WIDE_JUMP_OPCODE_DELTA, target);
+				  methodVisitor.VisitJumpInsn(opcode + Constants.WideJumpOpcodeDelta, target);
 				}
 				else
 				{
 				  // Compute the "opposite" of opcode. This can be done by flipping the least
 				  // significant bit for IFNULL and IFNONNULL, and similarly for IFEQ ... IF_ACMPEQ
 				  // (with a pre and post offset by 1).
-				  opcode = opcode < Opcodes.GOTO ? ((opcode + 1) ^ 1) - 1 : opcode ^ 1;
-				  Label endif = createLabel(currentBytecodeOffset + 3, labels);
-				  methodVisitor.visitJumpInsn(opcode, endif);
-				  methodVisitor.visitJumpInsn(Constants.GOTO_W, target);
+				  opcode = opcode < IOpcodes.Goto ? ((opcode + 1) ^ 1) - 1 : opcode ^ 1;
+				  Label endif = CreateLabel(currentBytecodeOffset + 3, labels);
+				  methodVisitor.VisitJumpInsn(opcode, endif);
+				  methodVisitor.VisitJumpInsn(Constants.Goto_W, target);
 				  // endif designates the instruction just after GOTO_W, and is visited as part of the
 				  // next instruction. Since it is a jump target, we need to insert a frame here.
 				  insertFrame = true;
@@ -2353,121 +2353,121 @@ namespace ObjectWeb.Asm
 				currentOffset += 3;
 				break;
 			}
-			case Constants.ASM_GOTO_W:
+			case Constants.Asm_Goto_W:
 			  // Replace ASM_GOTO_W with GOTO_W.
-			  methodVisitor.visitJumpInsn(Constants.GOTO_W, labels[currentBytecodeOffset + readInt(currentOffset + 1)]);
+			  methodVisitor.VisitJumpInsn(Constants.Goto_W, labels[currentBytecodeOffset + ReadInt(currentOffset + 1)]);
 			  // The instruction just after is a jump target (because ASM_GOTO_W is used in patterns
 			  // IFNOTxxx <L> ASM_GOTO_W <l> L:..., see MethodWriter), so we need to insert a frame
 			  // here.
 			  insertFrame = true;
 			  currentOffset += 5;
 			  break;
-			case Constants.WIDE:
+			case Constants.Wide:
 			  opcode = classBuffer[currentOffset + 1] & 0xFF;
-			  if (opcode == Opcodes.IINC)
+			  if (opcode == IOpcodes.Iinc)
 			  {
-				methodVisitor.visitIincInsn(readUnsignedShort(currentOffset + 2), readShort(currentOffset + 4));
+				methodVisitor.VisitIincInsn(ReadUnsignedShort(currentOffset + 2), ReadShort(currentOffset + 4));
 				currentOffset += 6;
 			  }
 			  else
 			  {
-				methodVisitor.visitVarInsn(opcode, readUnsignedShort(currentOffset + 2));
+				methodVisitor.VisitVarInsn(opcode, ReadUnsignedShort(currentOffset + 2));
 				currentOffset += 4;
 			  }
 			  break;
-			case Opcodes.TABLESWITCH:
+			case IOpcodes.Tableswitch:
 			{
 				// Skip 0 to 3 padding bytes.
 				currentOffset += 4 - (currentBytecodeOffset & 3);
 				// Read the instruction.
-				Label defaultLabel = labels[currentBytecodeOffset + readInt(currentOffset)];
-				int low = readInt(currentOffset + 4);
-				int high = readInt(currentOffset + 8);
+				Label defaultLabel = labels[currentBytecodeOffset + ReadInt(currentOffset)];
+				int low = ReadInt(currentOffset + 4);
+				int high = ReadInt(currentOffset + 8);
 				currentOffset += 12;
 				Label[] table = new Label[high - low + 1];
 				for (int i = 0; i < table.Length; ++i)
 				{
-				  table[i] = labels[currentBytecodeOffset + readInt(currentOffset)];
+				  table[i] = labels[currentBytecodeOffset + ReadInt(currentOffset)];
 				  currentOffset += 4;
 				}
-				methodVisitor.visitTableSwitchInsn(low, high, defaultLabel, table);
+				methodVisitor.VisitTableSwitchInsn(low, high, defaultLabel, table);
 				break;
 			}
-			case Opcodes.LOOKUPSWITCH:
+			case IOpcodes.Lookupswitch:
 			{
 				// Skip 0 to 3 padding bytes.
 				currentOffset += 4 - (currentBytecodeOffset & 3);
 				// Read the instruction.
-				Label defaultLabel = labels[currentBytecodeOffset + readInt(currentOffset)];
-				int numPairs = readInt(currentOffset + 4);
+				Label defaultLabel = labels[currentBytecodeOffset + ReadInt(currentOffset)];
+				int numPairs = ReadInt(currentOffset + 4);
 				currentOffset += 8;
 				int[] keys = new int[numPairs];
 				Label[] values = new Label[numPairs];
 				for (int i = 0; i < numPairs; ++i)
 				{
-				  keys[i] = readInt(currentOffset);
-				  values[i] = labels[currentBytecodeOffset + readInt(currentOffset + 4)];
+				  keys[i] = ReadInt(currentOffset);
+				  values[i] = labels[currentBytecodeOffset + ReadInt(currentOffset + 4)];
 				  currentOffset += 8;
 				}
-				methodVisitor.visitLookupSwitchInsn(defaultLabel, keys, values);
+				methodVisitor.VisitLookupSwitchInsn(defaultLabel, keys, values);
 				break;
 			}
-			case Opcodes.ILOAD:
-			case Opcodes.LLOAD:
-			case Opcodes.FLOAD:
-			case Opcodes.DLOAD:
-			case Opcodes.ALOAD:
-			case Opcodes.ISTORE:
-			case Opcodes.LSTORE:
-			case Opcodes.FSTORE:
-			case Opcodes.DSTORE:
-			case Opcodes.ASTORE:
-			case Opcodes.RET:
-			  methodVisitor.visitVarInsn(opcode, classBuffer[currentOffset + 1] & 0xFF);
+			case IOpcodes.Iload:
+			case IOpcodes.Lload:
+			case IOpcodes.Fload:
+			case IOpcodes.Dload:
+			case IOpcodes.Aload:
+			case IOpcodes.Istore:
+			case IOpcodes.Lstore:
+			case IOpcodes.Fstore:
+			case IOpcodes.Dstore:
+			case IOpcodes.Astore:
+			case IOpcodes.Ret:
+			  methodVisitor.VisitVarInsn(opcode, classBuffer[currentOffset + 1] & 0xFF);
 			  currentOffset += 2;
 			  break;
-			case Opcodes.BIPUSH:
-			case Opcodes.NEWARRAY:
-			  methodVisitor.visitIntInsn(opcode, classBuffer[currentOffset + 1]);
+			case IOpcodes.Bipush:
+			case IOpcodes.Newarray:
+			  methodVisitor.VisitIntInsn(opcode, classBuffer[currentOffset + 1]);
 			  currentOffset += 2;
 			  break;
-			case Opcodes.SIPUSH:
-			  methodVisitor.visitIntInsn(opcode, readShort(currentOffset + 1));
+			case IOpcodes.Sipush:
+			  methodVisitor.VisitIntInsn(opcode, ReadShort(currentOffset + 1));
 			  currentOffset += 3;
 			  break;
-			case Opcodes.LDC:
-			  methodVisitor.visitLdcInsn(readConst(classBuffer[currentOffset + 1] & 0xFF, charBuffer));
+			case IOpcodes.Ldc:
+			  methodVisitor.VisitLdcInsn(ReadConst(classBuffer[currentOffset + 1] & 0xFF, charBuffer));
 			  currentOffset += 2;
 			  break;
-			case Constants.LDC_W:
-			case Constants.LDC2_W:
-			  methodVisitor.visitLdcInsn(readConst(readUnsignedShort(currentOffset + 1), charBuffer));
+			case Constants.Ldc_W:
+			case Constants.Ldc2_W:
+			  methodVisitor.VisitLdcInsn(ReadConst(ReadUnsignedShort(currentOffset + 1), charBuffer));
 			  currentOffset += 3;
 			  break;
-			case Opcodes.GETSTATIC:
-			case Opcodes.PUTSTATIC:
-			case Opcodes.GETFIELD:
-			case Opcodes.PUTFIELD:
-			case Opcodes.INVOKEVIRTUAL:
-			case Opcodes.INVOKESPECIAL:
-			case Opcodes.INVOKESTATIC:
-			case Opcodes.INVOKEINTERFACE:
+			case IOpcodes.Getstatic:
+			case IOpcodes.Putstatic:
+			case IOpcodes.Getfield:
+			case IOpcodes.Putfield:
+			case IOpcodes.Invokevirtual:
+			case IOpcodes.Invokespecial:
+			case IOpcodes.Invokestatic:
+			case IOpcodes.Invokeinterface:
 			{
-				int cpInfoOffset = cpInfoOffsets[readUnsignedShort(currentOffset + 1)];
-				int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 2)];
-				string owner = readClass(cpInfoOffset, charBuffer);
-				string name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
-				string descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
-				if (opcode < Opcodes.INVOKEVIRTUAL)
+				int cpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)];
+				int nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
+				string owner = ReadClass(cpInfoOffset, charBuffer);
+				string name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
+				string descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
+				if (opcode < IOpcodes.Invokevirtual)
 				{
-				  methodVisitor.visitFieldInsn(opcode, owner, name, descriptor);
+				  methodVisitor.VisitFieldInsn(opcode, owner, name, descriptor);
 				}
 				else
 				{
-				  bool isInterface = classBuffer[cpInfoOffset - 1] == Symbol.CONSTANT_INTERFACE_METHODREF_TAG;
-				  methodVisitor.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+				  bool isInterface = classBuffer[cpInfoOffset - 1] == Symbol.Constant_Interface_Methodref_Tag;
+				  methodVisitor.VisitMethodInsn(opcode, owner, name, descriptor, isInterface);
 				}
-				if (opcode == Opcodes.INVOKEINTERFACE)
+				if (opcode == IOpcodes.Invokeinterface)
 				{
 				  currentOffset += 5;
 				}
@@ -2477,38 +2477,38 @@ namespace ObjectWeb.Asm
 				}
 				break;
 			}
-			case Opcodes.INVOKEDYNAMIC:
+			case IOpcodes.Invokedynamic:
 			{
-				int cpInfoOffset = cpInfoOffsets[readUnsignedShort(currentOffset + 1)];
-				int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 2)];
-				string name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
-				string descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
-				int bootstrapMethodOffset = bootstrapMethodOffsets[readUnsignedShort(cpInfoOffset)];
-				Handle handle = (Handle) readConst(readUnsignedShort(bootstrapMethodOffset), charBuffer);
-				object[] bootstrapMethodArguments = new object[readUnsignedShort(bootstrapMethodOffset + 2)];
+				int cpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)];
+				int nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
+				string name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
+				string descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
+				int bootstrapMethodOffset = _bootstrapMethodOffsets[ReadUnsignedShort(cpInfoOffset)];
+				Handle handle = (Handle) ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
+				object[] bootstrapMethodArguments = new object[ReadUnsignedShort(bootstrapMethodOffset + 2)];
 				bootstrapMethodOffset += 4;
 				for (int i = 0; i < bootstrapMethodArguments.Length; i++)
 				{
-				  bootstrapMethodArguments[i] = readConst(readUnsignedShort(bootstrapMethodOffset), charBuffer);
+				  bootstrapMethodArguments[i] = ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
 				  bootstrapMethodOffset += 2;
 				}
-				methodVisitor.visitInvokeDynamicInsn(name, descriptor, handle, bootstrapMethodArguments);
+				methodVisitor.VisitInvokeDynamicInsn(name, descriptor, handle, bootstrapMethodArguments);
 				currentOffset += 5;
 				break;
 			}
-			case Opcodes.NEW:
-			case Opcodes.ANEWARRAY:
-			case Opcodes.CHECKCAST:
-			case Opcodes.INSTANCEOF:
-			  methodVisitor.visitTypeInsn(opcode, readClass(currentOffset + 1, charBuffer));
+			case IOpcodes.New:
+			case IOpcodes.Anewarray:
+			case IOpcodes.Checkcast:
+			case IOpcodes.Instanceof:
+			  methodVisitor.VisitTypeInsn(opcode, ReadClass(currentOffset + 1, charBuffer));
 			  currentOffset += 3;
 			  break;
-			case Opcodes.IINC:
-			  methodVisitor.visitIincInsn(classBuffer[currentOffset + 1] & 0xFF, classBuffer[currentOffset + 2]);
+			case IOpcodes.Iinc:
+			  methodVisitor.VisitIincInsn(classBuffer[currentOffset + 1] & 0xFF, classBuffer[currentOffset + 2]);
 			  currentOffset += 3;
 			  break;
-			case Opcodes.MULTIANEWARRAY:
-			  methodVisitor.visitMultiANewArrayInsn(readClass(currentOffset + 1, charBuffer), classBuffer[currentOffset + 3] & 0xFF);
+			case IOpcodes.Multianewarray:
+			  methodVisitor.VisitMultiANewArrayInsn(ReadClass(currentOffset + 1, charBuffer), classBuffer[currentOffset + 3] & 0xFF);
 			  currentOffset += 4;
 			  break;
 			default:
@@ -2521,14 +2521,14 @@ namespace ObjectWeb.Asm
 			if (currentVisibleTypeAnnotationBytecodeOffset == currentBytecodeOffset)
 			{
 			  // Parse the target_type, target_info and target_path fields.
-			  int currentAnnotationOffset = readTypeAnnotationTarget(context, visibleTypeAnnotationOffsets[currentVisibleTypeAnnotationIndex]);
+			  int currentAnnotationOffset = ReadTypeAnnotationTarget(context, visibleTypeAnnotationOffsets[currentVisibleTypeAnnotationIndex]);
 			  // Parse the type_index field.
-			  string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			  string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			  currentAnnotationOffset += 2;
 			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
-			  readElementValues(methodVisitor.visitInsnAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
+			  ReadElementValues(methodVisitor.VisitInsnAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 			}
-			currentVisibleTypeAnnotationBytecodeOffset = getTypeAnnotationBytecodeOffset(visibleTypeAnnotationOffsets, ++currentVisibleTypeAnnotationIndex);
+			currentVisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(visibleTypeAnnotationOffsets, ++currentVisibleTypeAnnotationIndex);
 		  }
 
 		  // Visit the runtime invisible instruction annotations, if any.
@@ -2537,49 +2537,49 @@ namespace ObjectWeb.Asm
 			if (currentInvisibleTypeAnnotationBytecodeOffset == currentBytecodeOffset)
 			{
 			  // Parse the target_type, target_info and target_path fields.
-			  int currentAnnotationOffset = readTypeAnnotationTarget(context, invisibleTypeAnnotationOffsets[currentInvisibleTypeAnnotationIndex]);
+			  int currentAnnotationOffset = ReadTypeAnnotationTarget(context, invisibleTypeAnnotationOffsets[currentInvisibleTypeAnnotationIndex]);
 			  // Parse the type_index field.
-			  string annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+			  string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			  currentAnnotationOffset += 2;
 			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
-			  readElementValues(methodVisitor.visitInsnAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
+			  ReadElementValues(methodVisitor.VisitInsnAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 			}
-			currentInvisibleTypeAnnotationBytecodeOffset = getTypeAnnotationBytecodeOffset(invisibleTypeAnnotationOffsets, ++currentInvisibleTypeAnnotationIndex);
+			currentInvisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(invisibleTypeAnnotationOffsets, ++currentInvisibleTypeAnnotationIndex);
 		  }
 		}
 		if (labels[codeLength] != null)
 		{
-		  methodVisitor.visitLabel(labels[codeLength]);
+		  methodVisitor.VisitLabel(labels[codeLength]);
 		}
 
 		// Visit LocalVariableTable and LocalVariableTypeTable attributes.
-		if (localVariableTableOffset != 0 && (context.parsingOptions & SKIP_DEBUG) == 0)
+		if (localVariableTableOffset != 0 && (context.parsingOptions & Skip_Debug) == 0)
 		{
 		  // The (start_pc, index, signature_index) fields of each entry of the LocalVariableTypeTable.
 		  int[] typeTable = null;
 		  if (localVariableTypeTableOffset != 0)
 		  {
-			typeTable = new int[readUnsignedShort(localVariableTypeTableOffset) * 3];
+			typeTable = new int[ReadUnsignedShort(localVariableTypeTableOffset) * 3];
 			currentOffset = localVariableTypeTableOffset + 2;
 			int typeTableIndex = typeTable.Length;
 			while (typeTableIndex > 0)
 			{
 			  // Store the offset of 'signature_index', and the value of 'index' and 'start_pc'.
 			  typeTable[--typeTableIndex] = currentOffset + 6;
-			  typeTable[--typeTableIndex] = readUnsignedShort(currentOffset + 8);
-			  typeTable[--typeTableIndex] = readUnsignedShort(currentOffset);
+			  typeTable[--typeTableIndex] = ReadUnsignedShort(currentOffset + 8);
+			  typeTable[--typeTableIndex] = ReadUnsignedShort(currentOffset);
 			  currentOffset += 10;
 			}
 		  }
-		  int localVariableTableLength = readUnsignedShort(localVariableTableOffset);
+		  int localVariableTableLength = ReadUnsignedShort(localVariableTableOffset);
 		  currentOffset = localVariableTableOffset + 2;
 		  while (localVariableTableLength-- > 0)
 		  {
-			int startPc = readUnsignedShort(currentOffset);
-			int length = readUnsignedShort(currentOffset + 2);
-			string name = readUTF8(currentOffset + 4, charBuffer);
-			string descriptor = readUTF8(currentOffset + 6, charBuffer);
-			int index = readUnsignedShort(currentOffset + 8);
+			int startPc = ReadUnsignedShort(currentOffset);
+			int length = ReadUnsignedShort(currentOffset + 2);
+			string name = ReadUtf8(currentOffset + 4, charBuffer);
+			string descriptor = ReadUtf8(currentOffset + 6, charBuffer);
+			int index = ReadUnsignedShort(currentOffset + 8);
 			currentOffset += 10;
 			string signature = null;
 			if (typeTable != null)
@@ -2588,12 +2588,12 @@ namespace ObjectWeb.Asm
 			  {
 				if (typeTable[i] == startPc && typeTable[i + 1] == index)
 				{
-				  signature = readUTF8(typeTable[i + 2], charBuffer);
+				  signature = ReadUtf8(typeTable[i + 2], charBuffer);
 				  break;
 				}
 			  }
 			}
-			methodVisitor.visitLocalVariable(name, descriptor, signature, labels[startPc], labels[startPc + length], index);
+			methodVisitor.VisitLocalVariable(name, descriptor, signature, labels[startPc], labels[startPc + length], index);
 		  }
 		}
 
@@ -2602,16 +2602,16 @@ namespace ObjectWeb.Asm
 		{
 		  foreach (int typeAnnotationOffset in visibleTypeAnnotationOffsets)
 		  {
-			int targetType = readByte(typeAnnotationOffset);
-			if (targetType == TypeReference.LOCAL_VARIABLE || targetType == TypeReference.RESOURCE_VARIABLE)
+			int targetType = ReadByte(typeAnnotationOffset);
+			if (targetType == TypeReference.Local_Variable || targetType == TypeReference.Resource_Variable)
 			{
 			  // Parse the target_type, target_info and target_path fields.
-			  currentOffset = readTypeAnnotationTarget(context, typeAnnotationOffset);
+			  currentOffset = ReadTypeAnnotationTarget(context, typeAnnotationOffset);
 			  // Parse the type_index field.
-			  string annotationDescriptor = readUTF8(currentOffset, charBuffer);
+			  string annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			  currentOffset += 2;
 			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
-			  readElementValues(methodVisitor.visitLocalVariableAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, context.currentLocalVariableAnnotationRangeStarts, context.currentLocalVariableAnnotationRangeEnds, context.currentLocalVariableAnnotationRangeIndices, annotationDescriptor, true), currentOffset, true, charBuffer);
+			  ReadElementValues(methodVisitor.VisitLocalVariableAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, context.currentLocalVariableAnnotationRangeStarts, context.currentLocalVariableAnnotationRangeEnds, context.currentLocalVariableAnnotationRangeIndices, annotationDescriptor, true), currentOffset, true, charBuffer);
 			}
 		  }
 		}
@@ -2621,16 +2621,16 @@ namespace ObjectWeb.Asm
 		{
 		  foreach (int typeAnnotationOffset in invisibleTypeAnnotationOffsets)
 		  {
-			int targetType = readByte(typeAnnotationOffset);
-			if (targetType == TypeReference.LOCAL_VARIABLE || targetType == TypeReference.RESOURCE_VARIABLE)
+			int targetType = ReadByte(typeAnnotationOffset);
+			if (targetType == TypeReference.Local_Variable || targetType == TypeReference.Resource_Variable)
 			{
 			  // Parse the target_type, target_info and target_path fields.
-			  currentOffset = readTypeAnnotationTarget(context, typeAnnotationOffset);
+			  currentOffset = ReadTypeAnnotationTarget(context, typeAnnotationOffset);
 			  // Parse the type_index field.
-			  string annotationDescriptor = readUTF8(currentOffset, charBuffer);
+			  string annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			  currentOffset += 2;
 			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
-			  readElementValues(methodVisitor.visitLocalVariableAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, context.currentLocalVariableAnnotationRangeStarts, context.currentLocalVariableAnnotationRangeEnds, context.currentLocalVariableAnnotationRangeIndices, annotationDescriptor, false), currentOffset, true, charBuffer);
+			  ReadElementValues(methodVisitor.VisitLocalVariableAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, context.currentLocalVariableAnnotationRangeStarts, context.currentLocalVariableAnnotationRangeEnds, context.currentLocalVariableAnnotationRangeIndices, annotationDescriptor, false), currentOffset, true, charBuffer);
 			}
 		  }
 		}
@@ -2641,12 +2641,12 @@ namespace ObjectWeb.Asm
 		  // Copy and reset the nextAttribute field so that it can also be used in MethodWriter.
 		  Attribute nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
-		  methodVisitor.visitAttribute(attributes);
+		  methodVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
 		}
 
 		// Visit the max stack and max locals values.
-		methodVisitor.visitMaxs(maxStack, maxLocals);
+		methodVisitor.VisitMaxs(maxStack, maxLocals);
 	  }
 
 	  /// <summary>
@@ -2658,7 +2658,7 @@ namespace ObjectWeb.Asm
 	  ///     for bytecodeOffset this method must not create a new one. Otherwise it must store the new
 	  ///     label in this array. </param>
 	  /// <returns> a non null Label, which must be equal to labels[bytecodeOffset]. </returns>
-	  public virtual Label readLabel(int bytecodeOffset, Label[] labels)
+	  public virtual Label ReadLabel(int bytecodeOffset, Label[] labels)
 	  {
 		if (labels[bytecodeOffset] == null)
 		{
@@ -2668,32 +2668,32 @@ namespace ObjectWeb.Asm
 	  }
 
 	  /// <summary>
-	  /// Creates a label without the <seealso cref="Label.FLAG_DEBUG_ONLY"/> flag set, for the given bytecode
-	  /// offset. The label is created with a call to <seealso cref="readLabel"/> and its {@link
+	  /// Creates a label without the <seealso cref="Label.Flag_Debug_Only"/> flag set, for the given bytecode
+	  /// offset. The label is created with a call to <seealso cref="ReadLabel"/> and its {@link
 	  /// Label#FLAG_DEBUG_ONLY} flag is cleared.
 	  /// </summary>
 	  /// <param name="bytecodeOffset"> a bytecode offset in a method. </param>
 	  /// <param name="labels"> the already created labels, indexed by their offset. </param>
-	  /// <returns> a Label without the <seealso cref="Label.FLAG_DEBUG_ONLY"/> flag set. </returns>
-	  private Label createLabel(int bytecodeOffset, Label[] labels)
+	  /// <returns> a Label without the <seealso cref="Label.Flag_Debug_Only"/> flag set. </returns>
+	  private Label CreateLabel(int bytecodeOffset, Label[] labels)
 	  {
-		Label label = readLabel(bytecodeOffset, labels);
-		label.flags &= (short)(~Label.FLAG_DEBUG_ONLY);
+		Label label = ReadLabel(bytecodeOffset, labels);
+		label.flags &= (short)(~Label.Flag_Debug_Only);
 		return label;
 	  }
 
 	  /// <summary>
-	  /// Creates a label with the <seealso cref="Label.FLAG_DEBUG_ONLY"/> flag set, if there is no already
+	  /// Creates a label with the <seealso cref="Label.Flag_Debug_Only"/> flag set, if there is no already
 	  /// existing label for the given bytecode offset (otherwise does nothing). The label is created
-	  /// with a call to <seealso cref="readLabel"/>.
+	  /// with a call to <seealso cref="ReadLabel"/>.
 	  /// </summary>
 	  /// <param name="bytecodeOffset"> a bytecode offset in a method. </param>
 	  /// <param name="labels"> the already created labels, indexed by their offset. </param>
-	  private void createDebugLabel(int bytecodeOffset, Label[] labels)
+	  private void CreateDebugLabel(int bytecodeOffset, Label[] labels)
 	  {
 		if (labels[bytecodeOffset] == null)
 		{
-		  readLabel(bytecodeOffset, labels).flags |= (short)Label.FLAG_DEBUG_ONLY;
+		  ReadLabel(bytecodeOffset, labels).flags |= (short)Label.Flag_Debug_Only;
 		}
 	  }
 
@@ -2714,12 +2714,12 @@ namespace ObjectWeb.Asm
 	  ///     false it is a RuntimeInvisibleTypeAnnotations attribute. </param>
 	  /// <returns> the start offset of each entry of the Runtime[In]VisibleTypeAnnotations_attribute's
 	  ///     'annotations' array field. </returns>
-	  private int[] readTypeAnnotations(MethodVisitor methodVisitor, Context context, int runtimeTypeAnnotationsOffset, bool visible)
+	  private int[] ReadTypeAnnotations(MethodVisitor methodVisitor, Context context, int runtimeTypeAnnotationsOffset, bool visible)
 	  {
 		char[] charBuffer = context.charBuffer;
 		int currentOffset = runtimeTypeAnnotationsOffset;
 		// Read the num_annotations field and create an array to store the type_annotation offsets.
-		int[] typeAnnotationsOffsets = new int[readUnsignedShort(currentOffset)];
+		int[] typeAnnotationsOffsets = new int[ReadUnsignedShort(currentOffset)];
 		currentOffset += 2;
 		// Parse the 'annotations' array field.
 		for (int i = 0; i < typeAnnotationsOffsets.Length; ++i)
@@ -2727,66 +2727,66 @@ namespace ObjectWeb.Asm
 		  typeAnnotationsOffsets[i] = currentOffset;
 		  // Parse the type_annotation's target_type and the target_info fields. The size of the
 		  // target_info field depends on the value of target_type.
-		  int targetType = readInt(currentOffset);
+		  int targetType = ReadInt(currentOffset);
 		  switch ((int)((uint)targetType >> 24))
 		  {
-			case TypeReference.LOCAL_VARIABLE:
-			case TypeReference.RESOURCE_VARIABLE:
+			case TypeReference.Local_Variable:
+			case TypeReference.Resource_Variable:
 			  // A localvar_target has a variable size, which depends on the value of their table_length
 			  // field. It also references bytecode offsets, for which we need labels.
-			  int tableLength = readUnsignedShort(currentOffset + 1);
+			  int tableLength = ReadUnsignedShort(currentOffset + 1);
 			  currentOffset += 3;
 			  while (tableLength-- > 0)
 			  {
-				int startPc = readUnsignedShort(currentOffset);
-				int length = readUnsignedShort(currentOffset + 2);
+				int startPc = ReadUnsignedShort(currentOffset);
+				int length = ReadUnsignedShort(currentOffset + 2);
 				// Skip the index field (2 bytes).
 				currentOffset += 6;
-				createLabel(startPc, context.currentMethodLabels);
-				createLabel(startPc + length, context.currentMethodLabels);
+				CreateLabel(startPc, context.currentMethodLabels);
+				CreateLabel(startPc + length, context.currentMethodLabels);
 			  }
 			  break;
-			case TypeReference.CAST:
-			case TypeReference.CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT:
-			case TypeReference.METHOD_INVOCATION_TYPE_ARGUMENT:
-			case TypeReference.CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT:
-			case TypeReference.METHOD_REFERENCE_TYPE_ARGUMENT:
+			case TypeReference.Cast:
+			case TypeReference.Constructor_Invocation_Type_Argument:
+			case TypeReference.Method_Invocation_Type_Argument:
+			case TypeReference.Constructor_Reference_Type_Argument:
+			case TypeReference.Method_Reference_Type_Argument:
 			  currentOffset += 4;
 			  break;
-			case TypeReference.CLASS_EXTENDS:
-			case TypeReference.CLASS_TYPE_PARAMETER_BOUND:
-			case TypeReference.METHOD_TYPE_PARAMETER_BOUND:
-			case TypeReference.THROWS:
-			case TypeReference.EXCEPTION_PARAMETER:
-			case TypeReference.INSTANCEOF:
-			case TypeReference.NEW:
-			case TypeReference.CONSTRUCTOR_REFERENCE:
-			case TypeReference.METHOD_REFERENCE:
+			case TypeReference.Class_Extends:
+			case TypeReference.Class_Type_Parameter_Bound:
+			case TypeReference.Method_Type_Parameter_Bound:
+			case TypeReference.Throws:
+			case TypeReference.Exception_Parameter:
+			case TypeReference.Instanceof:
+			case TypeReference.New:
+			case TypeReference.Constructor_Reference:
+			case TypeReference.Method_Reference:
 			  currentOffset += 3;
 			  break;
-			case TypeReference.CLASS_TYPE_PARAMETER:
-			case TypeReference.METHOD_TYPE_PARAMETER:
-			case TypeReference.METHOD_FORMAL_PARAMETER:
-			case TypeReference.FIELD:
-			case TypeReference.METHOD_RETURN:
-			case TypeReference.METHOD_RECEIVER:
+			case TypeReference.Class_Type_Parameter:
+			case TypeReference.Method_Type_Parameter:
+			case TypeReference.Method_Formal_Parameter:
+			case TypeReference.Field:
+			case TypeReference.Method_Return:
+			case TypeReference.Method_Receiver:
 			default:
 			  // TypeReference type which can't be used in Code attribute, or which is unknown.
 			  throw new System.ArgumentException();
 		  }
 		  // Parse the rest of the type_annotation structure, starting with the target_path structure
 		  // (whose size depends on its path_length field).
-		  int pathLength = readByte(currentOffset);
-		  if (((int)((uint)targetType >> 24)) == TypeReference.EXCEPTION_PARAMETER)
+		  int pathLength = ReadByte(currentOffset);
+		  if (((int)((uint)targetType >> 24)) == TypeReference.Exception_Parameter)
 		  {
 			// Parse the target_path structure and create a corresponding TypePath.
 			TypePath path = pathLength == 0 ? null : new TypePath(classFileBuffer, currentOffset);
 			currentOffset += 1 + 2 * pathLength;
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			currentOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentOffset = readElementValues(methodVisitor.visitTryCatchAnnotation(targetType & unchecked((int)0xFFFFFF00), path, annotationDescriptor, visible), currentOffset, true, charBuffer);
+			currentOffset = ReadElementValues(methodVisitor.VisitTryCatchAnnotation(targetType & unchecked((int)0xFFFFFF00), path, annotationDescriptor, visible), currentOffset, true, charBuffer);
 		  }
 		  else
 		  {
@@ -2796,7 +2796,7 @@ namespace ObjectWeb.Asm
 			currentOffset += 3 + 2 * pathLength;
 			// Then skip the num_element_value_pairs and element_value_pairs fields (by reading them
 			// with a null AnnotationVisitor).
-			currentOffset = readElementValues(null, currentOffset, true, charBuffer);
+			currentOffset = ReadElementValues(null, currentOffset, true, charBuffer);
 		  }
 		}
 		return typeAnnotationsOffsets;
@@ -2811,13 +2811,13 @@ namespace ObjectWeb.Asm
 	  /// <param name="typeAnnotationIndex"> the index a 'type_annotation' entry in typeAnnotationOffsets. </param>
 	  /// <returns> bytecode offset corresponding to the specified JVMS 'type_annotation' structure, or -1
 	  ///     if there is no such type_annotation of if it does not have a bytecode offset. </returns>
-	  private int getTypeAnnotationBytecodeOffset(int[] typeAnnotationOffsets, int typeAnnotationIndex)
+	  private int GetTypeAnnotationBytecodeOffset(int[] typeAnnotationOffsets, int typeAnnotationIndex)
 	  {
-		if (typeAnnotationOffsets == null || typeAnnotationIndex >= typeAnnotationOffsets.Length || readByte(typeAnnotationOffsets[typeAnnotationIndex]) < TypeReference.INSTANCEOF)
+		if (typeAnnotationOffsets == null || typeAnnotationIndex >= typeAnnotationOffsets.Length || ReadByte(typeAnnotationOffsets[typeAnnotationIndex]) < TypeReference.Instanceof)
 		{
 		  return -1;
 		}
-		return readUnsignedShort(typeAnnotationOffsets[typeAnnotationIndex] + 1);
+		return ReadUnsignedShort(typeAnnotationOffsets[typeAnnotationIndex] + 1);
 	  }
 
 	  /// <summary>
@@ -2829,64 +2829,64 @@ namespace ObjectWeb.Asm
 	  ///     target_type and target_path must be stored. </param>
 	  /// <param name="typeAnnotationOffset"> the start offset of a type_annotation structure. </param>
 	  /// <returns> the start offset of the rest of the type_annotation structure. </returns>
-	  private int readTypeAnnotationTarget(Context context, int typeAnnotationOffset)
+	  private int ReadTypeAnnotationTarget(Context context, int typeAnnotationOffset)
 	  {
 		int currentOffset = typeAnnotationOffset;
 		// Parse and store the target_type structure.
-		int targetType = readInt(typeAnnotationOffset);
+		int targetType = ReadInt(typeAnnotationOffset);
 		switch ((int)((uint)targetType >> 24))
 		{
-		  case TypeReference.CLASS_TYPE_PARAMETER:
-		  case TypeReference.METHOD_TYPE_PARAMETER:
-		  case TypeReference.METHOD_FORMAL_PARAMETER:
+		  case TypeReference.Class_Type_Parameter:
+		  case TypeReference.Method_Type_Parameter:
+		  case TypeReference.Method_Formal_Parameter:
 			targetType &= unchecked((int)0xFFFF0000);
 			currentOffset += 2;
 			break;
-		  case TypeReference.FIELD:
-		  case TypeReference.METHOD_RETURN:
-		  case TypeReference.METHOD_RECEIVER:
+		  case TypeReference.Field:
+		  case TypeReference.Method_Return:
+		  case TypeReference.Method_Receiver:
 			targetType &= unchecked((int)0xFF000000);
 			currentOffset += 1;
 			break;
-		  case TypeReference.LOCAL_VARIABLE:
-		  case TypeReference.RESOURCE_VARIABLE:
+		  case TypeReference.Local_Variable:
+		  case TypeReference.Resource_Variable:
 			targetType &= unchecked((int)0xFF000000);
-			int tableLength = readUnsignedShort(currentOffset + 1);
+			int tableLength = ReadUnsignedShort(currentOffset + 1);
 			currentOffset += 3;
 			context.currentLocalVariableAnnotationRangeStarts = new Label[tableLength];
 			context.currentLocalVariableAnnotationRangeEnds = new Label[tableLength];
 			context.currentLocalVariableAnnotationRangeIndices = new int[tableLength];
 			for (int i = 0; i < tableLength; ++i)
 			{
-			  int startPc = readUnsignedShort(currentOffset);
-			  int length = readUnsignedShort(currentOffset + 2);
-			  int index = readUnsignedShort(currentOffset + 4);
+			  int startPc = ReadUnsignedShort(currentOffset);
+			  int length = ReadUnsignedShort(currentOffset + 2);
+			  int index = ReadUnsignedShort(currentOffset + 4);
 			  currentOffset += 6;
-			  context.currentLocalVariableAnnotationRangeStarts[i] = createLabel(startPc, context.currentMethodLabels);
-			  context.currentLocalVariableAnnotationRangeEnds[i] = createLabel(startPc + length, context.currentMethodLabels);
+			  context.currentLocalVariableAnnotationRangeStarts[i] = CreateLabel(startPc, context.currentMethodLabels);
+			  context.currentLocalVariableAnnotationRangeEnds[i] = CreateLabel(startPc + length, context.currentMethodLabels);
 			  context.currentLocalVariableAnnotationRangeIndices[i] = index;
 			}
 			break;
-		  case TypeReference.CAST:
-		  case TypeReference.CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT:
-		  case TypeReference.METHOD_INVOCATION_TYPE_ARGUMENT:
-		  case TypeReference.CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT:
-		  case TypeReference.METHOD_REFERENCE_TYPE_ARGUMENT:
+		  case TypeReference.Cast:
+		  case TypeReference.Constructor_Invocation_Type_Argument:
+		  case TypeReference.Method_Invocation_Type_Argument:
+		  case TypeReference.Constructor_Reference_Type_Argument:
+		  case TypeReference.Method_Reference_Type_Argument:
 			targetType &= unchecked((int)0xFF0000FF);
 			currentOffset += 4;
 			break;
-		  case TypeReference.CLASS_EXTENDS:
-		  case TypeReference.CLASS_TYPE_PARAMETER_BOUND:
-		  case TypeReference.METHOD_TYPE_PARAMETER_BOUND:
-		  case TypeReference.THROWS:
-		  case TypeReference.EXCEPTION_PARAMETER:
+		  case TypeReference.Class_Extends:
+		  case TypeReference.Class_Type_Parameter_Bound:
+		  case TypeReference.Method_Type_Parameter_Bound:
+		  case TypeReference.Throws:
+		  case TypeReference.Exception_Parameter:
 			targetType &= unchecked((int)0xFFFFFF00);
 			currentOffset += 3;
 			break;
-		  case TypeReference.INSTANCEOF:
-		  case TypeReference.NEW:
-		  case TypeReference.CONSTRUCTOR_REFERENCE:
-		  case TypeReference.METHOD_REFERENCE:
+		  case TypeReference.Instanceof:
+		  case TypeReference.New:
+		  case TypeReference.Constructor_Reference:
+		  case TypeReference.Method_Reference:
 			targetType &= unchecked((int)0xFF000000);
 			currentOffset += 3;
 			break;
@@ -2895,7 +2895,7 @@ namespace ObjectWeb.Asm
 		}
 		context.currentTypeAnnotationTarget = targetType;
 		// Parse and store the target_path structure.
-		int pathLength = readByte(currentOffset);
+		int pathLength = ReadByte(currentOffset);
 		context.currentTypeAnnotationTargetPath = pathLength == 0 ? null : new TypePath(classFileBuffer, currentOffset);
 		// Return the start offset of the rest of the type_annotation structure.
 		return currentOffset + 1 + 2 * pathLength;
@@ -2911,23 +2911,23 @@ namespace ObjectWeb.Asm
 	  ///     attribute_name_index and attribute_length fields. </param>
 	  /// <param name="visible"> true if the attribute to parse is a RuntimeVisibleParameterAnnotations
 	  ///     attribute, false it is a RuntimeInvisibleParameterAnnotations attribute. </param>
-	  private void readParameterAnnotations(MethodVisitor methodVisitor, Context context, int runtimeParameterAnnotationsOffset, bool visible)
+	  private void ReadParameterAnnotations(MethodVisitor methodVisitor, Context context, int runtimeParameterAnnotationsOffset, bool visible)
 	  {
 		int currentOffset = runtimeParameterAnnotationsOffset;
 		int numParameters = classFileBuffer[currentOffset++] & 0xFF;
-		methodVisitor.visitAnnotableParameterCount(numParameters, visible);
+		methodVisitor.VisitAnnotableParameterCount(numParameters, visible);
 		char[] charBuffer = context.charBuffer;
 		for (int i = 0; i < numParameters; ++i)
 		{
-		  int numAnnotations = readUnsignedShort(currentOffset);
+		  int numAnnotations = ReadUnsignedShort(currentOffset);
 		  currentOffset += 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = readUTF8(currentOffset, charBuffer);
+			string annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			currentOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
-			currentOffset = readElementValues(methodVisitor.visitParameterAnnotation(i, annotationDescriptor, visible), currentOffset, true, charBuffer);
+			currentOffset = ReadElementValues(methodVisitor.VisitParameterAnnotation(i, annotationDescriptor, visible), currentOffset, true, charBuffer);
 		  }
 		}
 	  }
@@ -2945,19 +2945,19 @@ namespace ObjectWeb.Asm
 	  ///     annotation's element_value. </param>
 	  /// <param name="charBuffer"> the buffer used to read strings in the constant pool. </param>
 	  /// <returns> the end offset of the JVMS 'annotation' or 'array_value' structure. </returns>
-	  private int readElementValues(AnnotationVisitor annotationVisitor, int annotationOffset, bool named, char[] charBuffer)
+	  private int ReadElementValues(AnnotationVisitor annotationVisitor, int annotationOffset, bool named, char[] charBuffer)
 	  {
 		int currentOffset = annotationOffset;
 		// Read the num_element_value_pairs field (or num_values field for an array_value).
-		int numElementValuePairs = readUnsignedShort(currentOffset);
+		int numElementValuePairs = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		if (named)
 		{
 		  // Parse the element_value_pairs array.
 		  while (numElementValuePairs-- > 0)
 		  {
-			string elementName = readUTF8(currentOffset, charBuffer);
-			currentOffset = readElementValue(annotationVisitor, currentOffset + 2, elementName, charBuffer);
+			string elementName = ReadUtf8(currentOffset, charBuffer);
+			currentOffset = ReadElementValue(annotationVisitor, currentOffset + 2, elementName, charBuffer);
 		  }
 		}
 		else
@@ -2965,12 +2965,12 @@ namespace ObjectWeb.Asm
 		  // Parse the array_value array.
 		  while (numElementValuePairs-- > 0)
 		  {
-			currentOffset = readElementValue(annotationVisitor, currentOffset, null, charBuffer);
+			currentOffset = ReadElementValue(annotationVisitor, currentOffset, null, charBuffer);
 		  }
 		}
 		if (annotationVisitor != null)
 		{
-		  annotationVisitor.visitEnd();
+		  annotationVisitor.VisitEnd();
 		}
 		return currentOffset;
 	  }
@@ -2984,7 +2984,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="elementName"> the name of the element_value structure to be read, or {@literal null}. </param>
 	  /// <param name="charBuffer"> the buffer used to read strings in the constant pool. </param>
 	  /// <returns> the end offset of the JVMS 'element_value' structure. </returns>
-	  private int readElementValue(AnnotationVisitor annotationVisitor, int elementValueOffset, string elementName, char[] charBuffer)
+	  private int ReadElementValue(AnnotationVisitor annotationVisitor, int elementValueOffset, string elementName, char[] charBuffer)
 	  {
 		int currentOffset = elementValueOffset;
 		if (annotationVisitor == null)
@@ -2994,9 +2994,9 @@ namespace ObjectWeb.Asm
 			case 'e': // enum_const_value
 			  return currentOffset + 5;
 			case '@': // annotation_value
-			  return readElementValues(null, currentOffset + 3, true, charBuffer);
+			  return ReadElementValues(null, currentOffset + 3, true, charBuffer);
 			case '[': // array_value
-			  return readElementValues(null, currentOffset + 1, false, charBuffer);
+			  return ReadElementValues(null, currentOffset + 1, false, charBuffer);
 			default:
 			  return currentOffset + 3;
 		  }
@@ -3004,50 +3004,50 @@ namespace ObjectWeb.Asm
 		switch (classFileBuffer[currentOffset++] & 0xFF)
 		{
 		  case 'B': // const_value_index, CONSTANT_Integer
-			annotationVisitor.visit(elementName, (sbyte) readInt(cpInfoOffsets[readUnsignedShort(currentOffset)]));
+			annotationVisitor.Visit(elementName, (sbyte) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset)]));
 			currentOffset += 2;
 			break;
 		  case 'C': // const_value_index, CONSTANT_Integer
-			annotationVisitor.visit(elementName, (char) readInt(cpInfoOffsets[readUnsignedShort(currentOffset)]));
+			annotationVisitor.Visit(elementName, (char) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset)]));
 			currentOffset += 2;
 			break;
 		  case 'D': // const_value_index, CONSTANT_Double
 		  case 'F': // const_value_index, CONSTANT_Float
 		  case 'I': // const_value_index, CONSTANT_Integer
 		  case 'J': // const_value_index, CONSTANT_Long
-			annotationVisitor.visit(elementName, readConst(readUnsignedShort(currentOffset), charBuffer));
+			annotationVisitor.Visit(elementName, ReadConst(ReadUnsignedShort(currentOffset), charBuffer));
 			currentOffset += 2;
 			break;
 		  case 'S': // const_value_index, CONSTANT_Integer
-			annotationVisitor.visit(elementName, (short) readInt(cpInfoOffsets[readUnsignedShort(currentOffset)]));
+			annotationVisitor.Visit(elementName, (short) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset)]));
 			currentOffset += 2;
 			break;
 
 		  case 'Z': // const_value_index, CONSTANT_Integer
-			annotationVisitor.visit(elementName, readInt(cpInfoOffsets[readUnsignedShort(currentOffset)]) == 0 ? false : true);
+			annotationVisitor.Visit(elementName, ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset)]) == 0 ? false : true);
 			currentOffset += 2;
 			break;
 		  case 's': // const_value_index, CONSTANT_Utf8
-			annotationVisitor.visit(elementName, readUTF8(currentOffset, charBuffer));
+			annotationVisitor.Visit(elementName, ReadUtf8(currentOffset, charBuffer));
 			currentOffset += 2;
 			break;
 		  case 'e': // enum_const_value
-			annotationVisitor.visitEnum(elementName, readUTF8(currentOffset, charBuffer), readUTF8(currentOffset + 2, charBuffer));
+			annotationVisitor.VisitEnum(elementName, ReadUtf8(currentOffset, charBuffer), ReadUtf8(currentOffset + 2, charBuffer));
 			currentOffset += 4;
 			break;
 		  case 'c': // class_info
-			annotationVisitor.visit(elementName, JType.getType(readUTF8(currentOffset, charBuffer)));
+			annotationVisitor.Visit(elementName, JType.GetType(ReadUtf8(currentOffset, charBuffer)));
 			currentOffset += 2;
 			break;
 		  case '@': // annotation_value
-			currentOffset = readElementValues(annotationVisitor.visitAnnotation(elementName, readUTF8(currentOffset, charBuffer)), currentOffset + 2, true, charBuffer);
+			currentOffset = ReadElementValues(annotationVisitor.VisitAnnotation(elementName, ReadUtf8(currentOffset, charBuffer)), currentOffset + 2, true, charBuffer);
 			break;
 		  case '[': // array_value
-			int numValues = readUnsignedShort(currentOffset);
+			int numValues = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			if (numValues == 0)
 			{
-			  return readElementValues(annotationVisitor.visitArray(elementName), currentOffset - 2, false, charBuffer);
+			  return ReadElementValues(annotationVisitor.VisitArray(elementName), currentOffset - 2, false, charBuffer);
 			}
 			switch (classFileBuffer[currentOffset] & 0xFF)
 			{
@@ -3055,76 +3055,76 @@ namespace ObjectWeb.Asm
 				sbyte[] byteValues = new sbyte[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  byteValues[i] = (sbyte) readInt(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]);
+				  byteValues[i] = (sbyte) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
 				}
-				annotationVisitor.visit(elementName, byteValues);
+				annotationVisitor.Visit(elementName, byteValues);
 				break;
 			  case 'Z':
 				bool[] booleanValues = new bool[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  booleanValues[i] = readInt(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]) != 0;
+				  booleanValues[i] = ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]) != 0;
 				  currentOffset += 3;
 				}
-				annotationVisitor.visit(elementName, booleanValues);
+				annotationVisitor.Visit(elementName, booleanValues);
 				break;
 			  case 'S':
 				short[] shortValues = new short[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  shortValues[i] = (short) readInt(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]);
+				  shortValues[i] = (short) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
 				}
-				annotationVisitor.visit(elementName, shortValues);
+				annotationVisitor.Visit(elementName, shortValues);
 				break;
 			  case 'C':
 				char[] charValues = new char[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  charValues[i] = (char) readInt(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]);
+				  charValues[i] = (char) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
 				}
-				annotationVisitor.visit(elementName, charValues);
+				annotationVisitor.Visit(elementName, charValues);
 				break;
 			  case 'I':
 				int[] intValues = new int[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  intValues[i] = readInt(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]);
+				  intValues[i] = ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
 				}
-				annotationVisitor.visit(elementName, intValues);
+				annotationVisitor.Visit(elementName, intValues);
 				break;
 			  case 'J':
 				long[] longValues = new long[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  longValues[i] = readLong(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]);
+				  longValues[i] = ReadLong(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
 				}
-				annotationVisitor.visit(elementName, longValues);
+				annotationVisitor.Visit(elementName, longValues);
 				break;
 			  case 'F':
 				float[] floatValues = new float[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  floatValues[i] = BitConverter.Int32BitsToSingle(readInt(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]));
+				  floatValues[i] = BitConverter.Int32BitsToSingle(ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]));
 				  currentOffset += 3;
 				}
-				annotationVisitor.visit(elementName, floatValues);
+				annotationVisitor.Visit(elementName, floatValues);
 				break;
 			  case 'D':
 				double[] doubleValues = new double[numValues];
 				for (int i = 0; i < numValues; i++)
 				{
-				  doubleValues[i] = BitConverter.Int64BitsToDouble(readLong(cpInfoOffsets[readUnsignedShort(currentOffset + 1)]));
+				  doubleValues[i] = BitConverter.Int64BitsToDouble(ReadLong(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]));
 				  currentOffset += 3;
 				}
-				annotationVisitor.visit(elementName, doubleValues);
+				annotationVisitor.Visit(elementName, doubleValues);
 				break;
 			  default:
-				currentOffset = readElementValues(annotationVisitor.visitArray(elementName), currentOffset - 2, false, charBuffer);
+				currentOffset = ReadElementValues(annotationVisitor.VisitArray(elementName), currentOffset - 2, false, charBuffer);
 				break;
 			}
 			break;
@@ -3143,20 +3143,20 @@ namespace ObjectWeb.Asm
 	  /// <seealso cref="Context"/>) and stores it in the given context.
 	  /// </summary>
 	  /// <param name="context"> information about the class being parsed. </param>
-	  private void computeImplicitFrame(Context context)
+	  private void ComputeImplicitFrame(Context context)
 	  {
 		string methodDescriptor = context.currentMethodDescriptor;
 		object[] locals = context.currentFrameLocalTypes;
 		int numLocal = 0;
-		if ((context.currentMethodAccessFlags & Opcodes.ACC_STATIC) == 0)
+		if ((context.currentMethodAccessFlags & IOpcodes.Acc_Static) == 0)
 		{
 		  if ("<init>".Equals(context.currentMethodName))
 		  {
-			locals[numLocal++] = Opcodes.UNINITIALIZED_THIS;
+			locals[numLocal++] = IOpcodes.uninitializedThis;
 		  }
 		  else
 		  {
-			locals[numLocal++] = readClass(header + 2, context.charBuffer);
+			locals[numLocal++] = ReadClass(header + 2, context.charBuffer);
 		  }
 		}
 		// Parse the method descriptor, one argument type descriptor at each iteration. Start by
@@ -3172,16 +3172,16 @@ namespace ObjectWeb.Asm
 			case 'B':
 			case 'S':
 			case 'I':
-			  locals[numLocal++] = Opcodes.INTEGER;
+			  locals[numLocal++] = IOpcodes.integer;
 			  break;
 			case 'F':
-			  locals[numLocal++] = Opcodes.FLOAT;
+			  locals[numLocal++] = IOpcodes.@float;
 			  break;
 			case 'J':
-			  locals[numLocal++] = Opcodes.LONG;
+			  locals[numLocal++] = IOpcodes.@long;
 			  break;
 			case 'D':
-			  locals[numLocal++] = Opcodes.DOUBLE;
+			  locals[numLocal++] = IOpcodes.@double;
 			  break;
 			case '[':
 			  while (methodDescriptor[currentMethodDescritorOffset] == '[')
@@ -3222,10 +3222,10 @@ namespace ObjectWeb.Asm
 	  ///     (excluding its frame_type field). </param>
 	  /// <param name="compressed"> true to read a 'stack_map_frame' structure, false to read a 'full_frame'
 	  ///     structure without its frame_type field. </param>
-	  /// <param name="expand"> if the stack map frame must be expanded. See <seealso cref="EXPAND_FRAMES"/>. </param>
+	  /// <param name="expand"> if the stack map frame must be expanded. See <seealso cref="Expand_Frames"/>. </param>
 	  /// <param name="context"> where the parsed stack map frame must be stored. </param>
 	  /// <returns> the end offset of the JVMS 'stack_map_frame' or 'full_frame' structure. </returns>
-	  private int readStackMapFrame(int stackMapFrameOffset, bool compressed, bool expand, Context context)
+	  private int ReadStackMapFrame(int stackMapFrameOffset, bool compressed, bool expand, Context context)
 	  {
 		int currentOffset = stackMapFrameOffset;
 		char[] charBuffer = context.charBuffer;
@@ -3238,75 +3238,75 @@ namespace ObjectWeb.Asm
 		}
 		else
 		{
-		  frameType = Frame.FULL_FRAME;
+		  frameType = Frame.Full_Frame;
 		  context.currentFrameOffset = -1;
 		}
 		int offsetDelta;
 		context.currentFrameLocalCountDelta = 0;
-		if (frameType < Frame.SAME_LOCALS_1_STACK_ITEM_FRAME)
+		if (frameType < Frame.Same_Locals_1_Stack_Item_Frame)
 		{
 		  offsetDelta = frameType;
-		  context.currentFrameType = Opcodes.F_SAME;
+		  context.currentFrameType = IOpcodes.F_Same;
 		  context.currentFrameStackCount = 0;
 		}
-		else if (frameType < Frame.RESERVED)
+		else if (frameType < Frame.Reserved)
 		{
-		  offsetDelta = frameType - Frame.SAME_LOCALS_1_STACK_ITEM_FRAME;
-		  currentOffset = readVerificationTypeInfo(currentOffset, context.currentFrameStackTypes, 0, charBuffer, labels);
-		  context.currentFrameType = Opcodes.F_SAME1;
+		  offsetDelta = frameType - Frame.Same_Locals_1_Stack_Item_Frame;
+		  currentOffset = ReadVerificationTypeInfo(currentOffset, context.currentFrameStackTypes, 0, charBuffer, labels);
+		  context.currentFrameType = IOpcodes.F_Same1;
 		  context.currentFrameStackCount = 1;
 		}
-		else if (frameType >= Frame.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED)
+		else if (frameType >= Frame.Same_Locals_1_Stack_Item_Frame_Extended)
 		{
-		  offsetDelta = readUnsignedShort(currentOffset);
+		  offsetDelta = ReadUnsignedShort(currentOffset);
 		  currentOffset += 2;
-		  if (frameType == Frame.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED)
+		  if (frameType == Frame.Same_Locals_1_Stack_Item_Frame_Extended)
 		  {
-			currentOffset = readVerificationTypeInfo(currentOffset, context.currentFrameStackTypes, 0, charBuffer, labels);
-			context.currentFrameType = Opcodes.F_SAME1;
+			currentOffset = ReadVerificationTypeInfo(currentOffset, context.currentFrameStackTypes, 0, charBuffer, labels);
+			context.currentFrameType = IOpcodes.F_Same1;
 			context.currentFrameStackCount = 1;
 		  }
-		  else if (frameType >= Frame.CHOP_FRAME && frameType < Frame.SAME_FRAME_EXTENDED)
+		  else if (frameType >= Frame.Chop_Frame && frameType < Frame.Same_Frame_Extended)
 		  {
-			context.currentFrameType = Opcodes.F_CHOP;
-			context.currentFrameLocalCountDelta = Frame.SAME_FRAME_EXTENDED - frameType;
+			context.currentFrameType = IOpcodes.F_Chop;
+			context.currentFrameLocalCountDelta = Frame.Same_Frame_Extended - frameType;
 			context.currentFrameLocalCount -= context.currentFrameLocalCountDelta;
 			context.currentFrameStackCount = 0;
 		  }
-		  else if (frameType == Frame.SAME_FRAME_EXTENDED)
+		  else if (frameType == Frame.Same_Frame_Extended)
 		  {
-			context.currentFrameType = Opcodes.F_SAME;
+			context.currentFrameType = IOpcodes.F_Same;
 			context.currentFrameStackCount = 0;
 		  }
-		  else if (frameType < Frame.FULL_FRAME)
+		  else if (frameType < Frame.Full_Frame)
 		  {
 			int local = expand ? context.currentFrameLocalCount : 0;
-			for (int k = frameType - Frame.SAME_FRAME_EXTENDED; k > 0; k--)
+			for (int k = frameType - Frame.Same_Frame_Extended; k > 0; k--)
 			{
-			  currentOffset = readVerificationTypeInfo(currentOffset, context.currentFrameLocalTypes, local++, charBuffer, labels);
+			  currentOffset = ReadVerificationTypeInfo(currentOffset, context.currentFrameLocalTypes, local++, charBuffer, labels);
 			}
-			context.currentFrameType = Opcodes.F_APPEND;
-			context.currentFrameLocalCountDelta = frameType - Frame.SAME_FRAME_EXTENDED;
+			context.currentFrameType = IOpcodes.F_Append;
+			context.currentFrameLocalCountDelta = frameType - Frame.Same_Frame_Extended;
 			context.currentFrameLocalCount += context.currentFrameLocalCountDelta;
 			context.currentFrameStackCount = 0;
 		  }
 		  else
 		  {
-			int numberOfLocals = readUnsignedShort(currentOffset);
+			int numberOfLocals = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
-			context.currentFrameType = Opcodes.F_FULL;
+			context.currentFrameType = IOpcodes.F_Full;
 			context.currentFrameLocalCountDelta = numberOfLocals;
 			context.currentFrameLocalCount = numberOfLocals;
 			for (int local = 0; local < numberOfLocals; ++local)
 			{
-			  currentOffset = readVerificationTypeInfo(currentOffset, context.currentFrameLocalTypes, local, charBuffer, labels);
+			  currentOffset = ReadVerificationTypeInfo(currentOffset, context.currentFrameLocalTypes, local, charBuffer, labels);
 			}
-			int numberOfStackItems = readUnsignedShort(currentOffset);
+			int numberOfStackItems = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			context.currentFrameStackCount = numberOfStackItems;
 			for (int stack = 0; stack < numberOfStackItems; ++stack)
 			{
-			  currentOffset = readVerificationTypeInfo(currentOffset, context.currentFrameStackTypes, stack, charBuffer, labels);
+			  currentOffset = ReadVerificationTypeInfo(currentOffset, context.currentFrameStackTypes, stack, charBuffer, labels);
 			}
 		  }
 		}
@@ -3315,7 +3315,7 @@ namespace ObjectWeb.Asm
 		  throw new System.ArgumentException();
 		}
 		context.currentFrameOffset += offsetDelta + 1;
-		createLabel(context.currentFrameOffset, labels);
+		CreateLabel(context.currentFrameOffset, labels);
 		return currentOffset;
 	  }
 
@@ -3332,39 +3332,39 @@ namespace ObjectWeb.Asm
 	  ///     parsed type is an ITEM_Uninitialized, a new label for the corresponding NEW instruction is
 	  ///     stored in this array if it does not already exist. </param>
 	  /// <returns> the end offset of the JVMS 'verification_type_info' structure. </returns>
-	  private int readVerificationTypeInfo(int verificationTypeInfoOffset, object[] frame, int index, char[] charBuffer, Label[] labels)
+	  private int ReadVerificationTypeInfo(int verificationTypeInfoOffset, object[] frame, int index, char[] charBuffer, Label[] labels)
 	  {
 		int currentOffset = verificationTypeInfoOffset;
 		int tag = classFileBuffer[currentOffset++] & 0xFF;
 		switch (tag)
 		{
-		  case Frame.ITEM_TOP:
-			frame[index] = Opcodes.TOP;
+		  case Frame.Item_Top:
+			frame[index] = IOpcodes.top;
 			break;
-		  case Frame.ITEM_INTEGER:
-			frame[index] = Opcodes.INTEGER;
+		  case Frame.Item_Integer:
+			frame[index] = IOpcodes.integer;
 			break;
-		  case Frame.ITEM_FLOAT:
-			frame[index] = Opcodes.FLOAT;
+		  case Frame.Item_Float:
+			frame[index] = IOpcodes.@float;
 			break;
-		  case Frame.ITEM_DOUBLE:
-			frame[index] = Opcodes.DOUBLE;
+		  case Frame.Item_Double:
+			frame[index] = IOpcodes.@double;
 			break;
-		  case Frame.ITEM_LONG:
-			frame[index] = Opcodes.LONG;
+		  case Frame.Item_Long:
+			frame[index] = IOpcodes.@long;
 			break;
-		  case Frame.ITEM_NULL:
-			frame[index] = Opcodes.NULL;
+		  case Frame.Item_Null:
+			frame[index] = IOpcodes.@null;
 			break;
-		  case Frame.ITEM_UNINITIALIZED_THIS:
-			frame[index] = Opcodes.UNINITIALIZED_THIS;
+		  case Frame.Item_Uninitialized_This:
+			frame[index] = IOpcodes.uninitializedThis;
 			break;
-		  case Frame.ITEM_OBJECT:
-			frame[index] = readClass(currentOffset, charBuffer);
+		  case Frame.Item_Object:
+			frame[index] = ReadClass(currentOffset, charBuffer);
 			currentOffset += 2;
 			break;
-		  case Frame.ITEM_UNINITIALIZED:
-			frame[index] = createLabel(readUnsignedShort(currentOffset), labels);
+		  case Frame.Item_Uninitialized:
+			frame[index] = CreateLabel(ReadUnsignedShort(currentOffset), labels);
 			currentOffset += 2;
 			break;
 		  default:
@@ -3389,10 +3389,10 @@ namespace ObjectWeb.Asm
 		  {
 			// Skip the access_flags, this_class, super_class, and interfaces_count fields (using 2 bytes
 			// each), as well as the interfaces array field (2 bytes per interface).
-			int currentOffset = header + 8 + readUnsignedShort(header + 6) * 2;
+			int currentOffset = header + 8 + ReadUnsignedShort(header + 6) * 2;
     
 			// Read the fields_count field.
-			int fieldsCount = readUnsignedShort(currentOffset);
+			int fieldsCount = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			// Skip the 'fields' array field.
 			while (fieldsCount-- > 0)
@@ -3400,7 +3400,7 @@ namespace ObjectWeb.Asm
 			  // Invariant: currentOffset is the offset of a field_info structure.
 			  // Skip the access_flags, name_index and descriptor_index fields (2 bytes each), and read the
 			  // attributes_count field.
-			  int attributesCount = readUnsignedShort(currentOffset + 6);
+			  int attributesCount = ReadUnsignedShort(currentOffset + 6);
 			  currentOffset += 8;
 			  // Skip the 'attributes' array field.
 			  while (attributesCount-- > 0)
@@ -3409,20 +3409,20 @@ namespace ObjectWeb.Asm
 				// Read the attribute_length field (2 bytes after the start of the attribute_info) and skip
 				// this many bytes, plus 6 for the attribute_name_index and attribute_length fields
 				// (yielding the total size of the attribute_info structure).
-				currentOffset += 6 + readInt(currentOffset + 2);
+				currentOffset += 6 + ReadInt(currentOffset + 2);
 			  }
 			}
     
 			// Skip the methods_count and 'methods' fields, using the same method as above.
-			int methodsCount = readUnsignedShort(currentOffset);
+			int methodsCount = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			while (methodsCount-- > 0)
 			{
-			  int attributesCount = readUnsignedShort(currentOffset + 6);
+			  int attributesCount = ReadUnsignedShort(currentOffset + 6);
 			  currentOffset += 8;
 			  while (attributesCount-- > 0)
 			  {
-				currentOffset += 6 + readInt(currentOffset + 2);
+				currentOffset += 6 + ReadInt(currentOffset + 2);
 			  }
 			}
     
@@ -3437,20 +3437,20 @@ namespace ObjectWeb.Asm
 	  /// <param name="maxStringLength"> a conservative estimate of the maximum length of the strings contained
 	  ///     in the constant pool of the class. </param>
 	  /// <returns> the offsets of the bootstrap methods. </returns>
-	  private int[] readBootstrapMethodsAttribute(int maxStringLength)
+	  private int[] ReadBootstrapMethodsAttribute(int maxStringLength)
 	  {
 		char[] charBuffer = new char[maxStringLength];
 		int currentAttributeOffset = FirstAttributeOffset;
-		for (int i = readUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
+		for (int i = ReadUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = readUTF8(currentAttributeOffset, charBuffer);
-		  int attributeLength = readInt(currentAttributeOffset + 2);
+		  string attributeName = ReadUtf8(currentAttributeOffset, charBuffer);
+		  int attributeLength = ReadInt(currentAttributeOffset + 2);
 		  currentAttributeOffset += 6;
-		  if (Constants.BOOTSTRAP_METHODS.Equals(attributeName))
+		  if (Constants.Bootstrap_Methods.Equals(attributeName))
 		  {
 			// Read the num_bootstrap_methods field and create an array of this size.
-			int[] result = new int[readUnsignedShort(currentAttributeOffset)];
+			int[] result = new int[ReadUnsignedShort(currentAttributeOffset)];
 			// Compute and store the offset of each 'bootstrap_methods' array field entry.
 			int currentBootstrapMethodOffset = currentAttributeOffset + 2;
 			for (int j = 0; j < result.Length; ++j)
@@ -3458,7 +3458,7 @@ namespace ObjectWeb.Asm
 			  result[j] = currentBootstrapMethodOffset;
 			  // Skip the bootstrap_method_ref and num_bootstrap_arguments fields (2 bytes each),
 			  // as well as the bootstrap_arguments array field (of size num_bootstrap_arguments * 2).
-			  currentBootstrapMethodOffset += 4 + readUnsignedShort(currentBootstrapMethodOffset + 2) * 2;
+			  currentBootstrapMethodOffset += 4 + ReadUnsignedShort(currentBootstrapMethodOffset + 2) * 2;
 			}
 			return result;
 		  }
@@ -3486,16 +3486,16 @@ namespace ObjectWeb.Asm
 	  /// <param name="labels"> the labels of the method's code, or {@literal null} if the attribute to be read
 	  ///     is not a code attribute. </param>
 	  /// <returns> the attribute that has been read. </returns>
-	  private Attribute readAttribute(Attribute[] attributePrototypes, string type, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
+	  private Attribute ReadAttribute(Attribute[] attributePrototypes, string type, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
 	  {
 		foreach (Attribute attributePrototype in attributePrototypes)
 		{
 		  if (attributePrototype.type.Equals(type))
 		  {
-			return attributePrototype.read(this, offset, length, charBuffer, codeAttributeOffset, labels);
+			return attributePrototype.Read(this, offset, length, charBuffer, codeAttributeOffset, labels);
 		  }
 		}
-		return (new Attribute(type)).read(this, offset, length, null, -1, null);
+		return (new Attribute(type)).Read(this, offset, length, null, -1, null);
 	  }
 
 	  // -----------------------------------------------------------------------------------------------
@@ -3510,7 +3510,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return cpInfoOffsets.Length;
+			return _cpInfoOffsets.Length;
 		  }
 	  }
 
@@ -3523,9 +3523,9 @@ namespace ObjectWeb.Asm
 	  ///     table. </param>
 	  /// <returns> the start offset in this <seealso cref="ClassReader"/> of the corresponding JVMS 'cp_info'
 	  ///     structure, plus one. </returns>
-	  public virtual int getItem(int constantPoolEntryIndex)
+	  public virtual int GetItem(int constantPoolEntryIndex)
 	  {
-		return cpInfoOffsets[constantPoolEntryIndex];
+		return _cpInfoOffsets[constantPoolEntryIndex];
 	  }
 
 	  /// <summary>
@@ -3538,7 +3538,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return maxStringLength;
+			return _maxStringLength;
 		  }
 	  }
 
@@ -3548,7 +3548,7 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="offset"> the start offset of the value to be read in this <seealso cref="ClassReader"/>. </param>
 	  /// <returns> the read value. </returns>
-	  public virtual int readByte(int offset)
+	  public virtual int ReadByte(int offset)
 	  {
 		return classFileBuffer[offset] & 0xFF;
 	  }
@@ -3559,7 +3559,7 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="offset"> the start index of the value to be read in this <seealso cref="ClassReader"/>. </param>
 	  /// <returns> the read value. </returns>
-	  public virtual int readUnsignedShort(int offset)
+	  public virtual int ReadUnsignedShort(int offset)
 	  {
 		sbyte[] classBuffer = classFileBuffer;
 		return ((classBuffer[offset] & 0xFF) << 8) | (classBuffer[offset + 1] & 0xFF);
@@ -3571,7 +3571,7 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="offset"> the start offset of the value to be read in this <seealso cref="ClassReader"/>. </param>
 	  /// <returns> the read value. </returns>
-	  public virtual short readShort(int offset)
+	  public virtual short ReadShort(int offset)
 	  {
 		sbyte[] classBuffer = classFileBuffer;
 		return (short)(((classBuffer[offset] & 0xFF) << 8) | (classBuffer[offset + 1] & 0xFF));
@@ -3583,7 +3583,7 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="offset"> the start offset of the value to be read in this <seealso cref="ClassReader"/>. </param>
 	  /// <returns> the read value. </returns>
-	  public virtual int readInt(int offset)
+	  public virtual int ReadInt(int offset)
 	  {
 		sbyte[] classBuffer = classFileBuffer;
 		return ((classBuffer[offset] & 0xFF) << 24) | ((classBuffer[offset + 1] & 0xFF) << 16) | ((classBuffer[offset + 2] & 0xFF) << 8) | (classBuffer[offset + 3] & 0xFF);
@@ -3595,10 +3595,10 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="offset"> the start offset of the value to be read in this <seealso cref="ClassReader"/>. </param>
 	  /// <returns> the read value. </returns>
-	  public virtual long readLong(int offset)
+	  public virtual long ReadLong(int offset)
 	  {
-		long l1 = readInt(offset);
-		long l0 = readInt(offset + 4) & 0xFFFFFFFFL;
+		long l1 = ReadInt(offset);
+		long l0 = ReadInt(offset + 4) & 0xFFFFFFFFL;
 		return (l1 << 32) | l0;
 	  }
 
@@ -3613,14 +3613,14 @@ namespace ObjectWeb.Asm
 	  ///     large. It is not automatically resized. </param>
 	  /// <returns> the String corresponding to the specified CONSTANT_Utf8 entry. </returns>
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-	  public virtual string readUTF8(int offset, char[] charBuffer)
+	  public virtual string ReadUtf8(int offset, char[] charBuffer)
 	  {
-		int constantPoolEntryIndex = readUnsignedShort(offset);
+		int constantPoolEntryIndex = ReadUnsignedShort(offset);
 		if (offset == 0 || constantPoolEntryIndex == 0)
 		{
 		  return null;
 		}
-		return readUtf(constantPoolEntryIndex, charBuffer);
+		return ReadUtf(constantPoolEntryIndex, charBuffer);
 	  }
 
 	  /// <summary>
@@ -3631,15 +3631,15 @@ namespace ObjectWeb.Asm
 	  /// <param name="charBuffer"> the buffer to be used to read the string. This buffer must be sufficiently
 	  ///     large. It is not automatically resized. </param>
 	  /// <returns> the String corresponding to the specified CONSTANT_Utf8 entry. </returns>
-	  public string readUtf(int constantPoolEntryIndex, char[] charBuffer)
+	  public string ReadUtf(int constantPoolEntryIndex, char[] charBuffer)
 	  {
-		string value = constantUtf8Values[constantPoolEntryIndex];
+		string value = _constantUtf8Values[constantPoolEntryIndex];
 		if (!string.ReferenceEquals(value, null))
 		{
 		  return value;
 		}
-		int cpInfoOffset = cpInfoOffsets[constantPoolEntryIndex];
-		return constantUtf8Values[constantPoolEntryIndex] = readUtf(cpInfoOffset + 2, readUnsignedShort(cpInfoOffset), charBuffer);
+		int cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
+		return _constantUtf8Values[constantPoolEntryIndex] = ReadUtf(cpInfoOffset + 2, ReadUnsignedShort(cpInfoOffset), charBuffer);
 	  }
 
 	  /// <summary>
@@ -3650,7 +3650,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="charBuffer"> the buffer to be used to read the string. This buffer must be sufficiently
 	  ///     large. It is not automatically resized. </param>
 	  /// <returns> the String corresponding to the specified UTF8 string. </returns>
-	  private string readUtf(int utfOffset, int utfLength, char[] charBuffer)
+	  private string ReadUtf(int utfOffset, int utfLength, char[] charBuffer)
 	  {
 		int currentOffset = utfOffset;
 		int endOffset = currentOffset + utfLength;
@@ -3687,11 +3687,11 @@ namespace ObjectWeb.Asm
 	  /// <param name="charBuffer"> the buffer to be used to read the item. This buffer must be sufficiently
 	  ///     large. It is not automatically resized. </param>
 	  /// <returns> the String corresponding to the specified constant pool entry. </returns>
-	  private string readStringish(int offset, char[] charBuffer)
+	  private string ReadStringish(int offset, char[] charBuffer)
 	  {
 		// Get the start offset of the cp_info structure (plus one), and read the CONSTANT_Utf8 entry
 		// designated by the first two bytes of this cp_info.
-		return readUTF8(cpInfoOffsets[readUnsignedShort(offset)], charBuffer);
+		return ReadUtf8(_cpInfoOffsets[ReadUnsignedShort(offset)], charBuffer);
 	  }
 
 	  /// <summary>
@@ -3704,9 +3704,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="charBuffer"> the buffer to be used to read the item. This buffer must be sufficiently
 	  ///     large. It is not automatically resized. </param>
 	  /// <returns> the String corresponding to the specified CONSTANT_Class entry. </returns>
-	  public virtual string readClass(int offset, char[] charBuffer)
+	  public virtual string ReadClass(int offset, char[] charBuffer)
 	  {
-		return readStringish(offset, charBuffer);
+		return ReadStringish(offset, charBuffer);
 	  }
 
 	  /// <summary>
@@ -3719,9 +3719,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="charBuffer"> the buffer to be used to read the item. This buffer must be sufficiently
 	  ///     large. It is not automatically resized. </param>
 	  /// <returns> the String corresponding to the specified CONSTANT_Module entry. </returns>
-	  public virtual string readModule(int offset, char[] charBuffer)
+	  public virtual string ReadModule(int offset, char[] charBuffer)
 	  {
-		return readStringish(offset, charBuffer);
+		return ReadStringish(offset, charBuffer);
 	  }
 
 	  /// <summary>
@@ -3734,9 +3734,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="charBuffer"> the buffer to be used to read the item. This buffer must be sufficiently
 	  ///     large. It is not automatically resized. </param>
 	  /// <returns> the String corresponding to the specified CONSTANT_Package entry. </returns>
-	  public virtual string readPackage(int offset, char[] charBuffer)
+	  public virtual string ReadPackage(int offset, char[] charBuffer)
 	  {
-		return readStringish(offset, charBuffer);
+		return ReadStringish(offset, charBuffer);
 	  }
 
 	  /// <summary>
@@ -3747,27 +3747,27 @@ namespace ObjectWeb.Asm
 	  /// <param name="charBuffer"> the buffer to be used to read the string. This buffer must be sufficiently
 	  ///     large. It is not automatically resized. </param>
 	  /// <returns> the ConstantDynamic corresponding to the specified CONSTANT_Dynamic entry. </returns>
-	  private ConstantDynamic readConstantDynamic(int constantPoolEntryIndex, char[] charBuffer)
+	  private ConstantDynamic ReadConstantDynamic(int constantPoolEntryIndex, char[] charBuffer)
 	  {
-		ConstantDynamic constantDynamic = constantDynamicValues[constantPoolEntryIndex];
+		ConstantDynamic constantDynamic = _constantDynamicValues[constantPoolEntryIndex];
 		if (constantDynamic != null)
 		{
 		  return constantDynamic;
 		}
-		int cpInfoOffset = cpInfoOffsets[constantPoolEntryIndex];
-		int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 2)];
-		string name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
-		string descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
-		int bootstrapMethodOffset = bootstrapMethodOffsets[readUnsignedShort(cpInfoOffset)];
-		Handle handle = (Handle) readConst(readUnsignedShort(bootstrapMethodOffset), charBuffer);
-		object[] bootstrapMethodArguments = new object[readUnsignedShort(bootstrapMethodOffset + 2)];
+		int cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
+		int nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
+		string name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
+		string descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
+		int bootstrapMethodOffset = _bootstrapMethodOffsets[ReadUnsignedShort(cpInfoOffset)];
+		Handle handle = (Handle) ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
+		object[] bootstrapMethodArguments = new object[ReadUnsignedShort(bootstrapMethodOffset + 2)];
 		bootstrapMethodOffset += 4;
 		for (int i = 0; i < bootstrapMethodArguments.Length; i++)
 		{
-		  bootstrapMethodArguments[i] = readConst(readUnsignedShort(bootstrapMethodOffset), charBuffer);
+		  bootstrapMethodArguments[i] = ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
 		  bootstrapMethodOffset += 2;
 		}
-		return constantDynamicValues[constantPoolEntryIndex] = new ConstantDynamic(name, descriptor, handle, bootstrapMethodArguments);
+		return _constantDynamicValues[constantPoolEntryIndex] = new ConstantDynamic(name, descriptor, handle, bootstrapMethodArguments);
 	  }
 
 	  /// <summary>
@@ -3783,36 +3783,36 @@ namespace ObjectWeb.Asm
 	  /// <returns> the <seealso cref="Integer"/>, <seealso cref="Float"/>, <seealso cref="Long"/>, <seealso cref="Double"/>, <seealso cref="string"/>,
 	  ///     <seealso cref="Type"/>, <seealso cref="Handle"/> or <seealso cref="ConstantDynamic"/> corresponding to the specified
 	  ///     constant pool entry. </returns>
-	  public virtual object readConst(int constantPoolEntryIndex, char[] charBuffer)
+	  public virtual object ReadConst(int constantPoolEntryIndex, char[] charBuffer)
 	  {
-		int cpInfoOffset = cpInfoOffsets[constantPoolEntryIndex];
+		int cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
 		switch (classFileBuffer[cpInfoOffset - 1])
 		{
-		  case Symbol.CONSTANT_INTEGER_TAG:
-			return readInt(cpInfoOffset);
-		  case Symbol.CONSTANT_FLOAT_TAG:
-			return BitConverter.Int32BitsToSingle(readInt(cpInfoOffset));
-		  case Symbol.CONSTANT_LONG_TAG:
-			return readLong(cpInfoOffset);
-		  case Symbol.CONSTANT_DOUBLE_TAG:
-			return BitConverter.Int64BitsToDouble(readLong(cpInfoOffset));
-		  case Symbol.CONSTANT_CLASS_TAG:
-			return JType.getObjectType(readUTF8(cpInfoOffset, charBuffer));
-		  case Symbol.CONSTANT_STRING_TAG:
-			return readUTF8(cpInfoOffset, charBuffer);
-		  case Symbol.CONSTANT_METHOD_TYPE_TAG:
-			return JType.getMethodType(readUTF8(cpInfoOffset, charBuffer));
-		  case Symbol.CONSTANT_METHOD_HANDLE_TAG:
-			int referenceKind = readByte(cpInfoOffset);
-			int referenceCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 1)];
-			int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(referenceCpInfoOffset + 2)];
-			string owner = readClass(referenceCpInfoOffset, charBuffer);
-			string name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
-			string descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
-			bool isInterface = classFileBuffer[referenceCpInfoOffset - 1] == Symbol.CONSTANT_INTERFACE_METHODREF_TAG;
+		  case Symbol.Constant_Integer_Tag:
+			return ReadInt(cpInfoOffset);
+		  case Symbol.Constant_Float_Tag:
+			return BitConverter.Int32BitsToSingle(ReadInt(cpInfoOffset));
+		  case Symbol.Constant_Long_Tag:
+			return ReadLong(cpInfoOffset);
+		  case Symbol.Constant_Double_Tag:
+			return BitConverter.Int64BitsToDouble(ReadLong(cpInfoOffset));
+		  case Symbol.Constant_Class_Tag:
+			return JType.GetObjectType(ReadUtf8(cpInfoOffset, charBuffer));
+		  case Symbol.Constant_String_Tag:
+			return ReadUtf8(cpInfoOffset, charBuffer);
+		  case Symbol.Constant_Method_Type_Tag:
+			return JType.GetMethodType(ReadUtf8(cpInfoOffset, charBuffer));
+		  case Symbol.Constant_Method_Handle_Tag:
+			int referenceKind = ReadByte(cpInfoOffset);
+			int referenceCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 1)];
+			int nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(referenceCpInfoOffset + 2)];
+			string owner = ReadClass(referenceCpInfoOffset, charBuffer);
+			string name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
+			string descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
+			bool isInterface = classFileBuffer[referenceCpInfoOffset - 1] == Symbol.Constant_Interface_Methodref_Tag;
 			return new Handle(referenceKind, owner, name, descriptor, isInterface);
-		  case Symbol.CONSTANT_DYNAMIC_TAG:
-			return readConstantDynamic(constantPoolEntryIndex, charBuffer);
+		  case Symbol.Constant_Dynamic_Tag:
+			return ReadConstantDynamic(constantPoolEntryIndex, charBuffer);
 		  default:
 			throw new System.ArgumentException();
 		}

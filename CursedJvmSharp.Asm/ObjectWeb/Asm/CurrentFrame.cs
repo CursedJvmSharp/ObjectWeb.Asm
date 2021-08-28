@@ -48,12 +48,12 @@ namespace ObjectWeb.Asm
 	  /// instruction just after the given one. It is assumed that the value of this object when this
 	  /// method is called is the stack map frame status just before the given instruction is executed.
 	  /// </summary>
-	  public override void execute(int opcode, int arg, Symbol symbolArg, SymbolTable symbolTable)
+	  public override void Execute(int opcode, int arg, Symbol symbolArg, SymbolTable symbolTable)
 	  {
-		base.execute(opcode, arg, symbolArg, symbolTable);
+		base.Execute(opcode, arg, symbolArg, symbolTable);
 		Frame successor = new Frame(null);
-		merge(symbolTable, successor, 0);
-		copyFrom(successor);
+		Merge(symbolTable, successor, 0);
+		CopyFrom(successor);
 	  }
 	}
 

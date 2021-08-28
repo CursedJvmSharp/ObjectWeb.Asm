@@ -87,7 +87,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// </summary>
 	  /// <param name="index"> the new index of this try catch block in the method's list of try catch block
 	  ///     nodes. </param>
-	  public virtual void updateIndex(int index)
+	  public virtual void UpdateIndex(int index)
 	  {
 		int newTypeRef = 0x42000000 | (index << 8);
 		if (visibleTypeAnnotations != null)
@@ -110,15 +110,15 @@ namespace ObjectWeb.Asm.Tree
 	  /// Makes the given visitor visit this try catch block.
 	  /// </summary>
 	  /// <param name="methodVisitor"> a method visitor. </param>
-	  public virtual void accept(MethodVisitor methodVisitor)
+	  public virtual void Accept(MethodVisitor methodVisitor)
 	  {
-		methodVisitor.visitTryCatchBlock(start.Label, end.Label, handler == null ? null : handler.Label, type);
+		methodVisitor.VisitTryCatchBlock(start.Label, end.Label, handler == null ? null : handler.Label, type);
 		if (visibleTypeAnnotations != null)
 		{
 		  for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
 		  {
 			TypeAnnotationNode typeAnnotation = visibleTypeAnnotations[i];
-			typeAnnotation.accept(methodVisitor.visitTryCatchAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
+			typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
 		  }
 		}
 		if (invisibleTypeAnnotations != null)
@@ -126,7 +126,7 @@ namespace ObjectWeb.Asm.Tree
 		  for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
 		  {
 			TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations[i];
-			typeAnnotation.accept(methodVisitor.visitTryCatchAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
+			typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
 		  }
 		}
 	  }

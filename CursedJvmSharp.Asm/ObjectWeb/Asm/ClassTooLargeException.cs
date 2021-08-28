@@ -37,10 +37,10 @@ namespace ObjectWeb.Asm
 	/// </summary>
 	public sealed class ClassTooLargeException : System.Exception
 	{
-	  private const long serialVersionUID = 160715609518896765L;
+	  private const long SerialVersionUid = 160715609518896765L;
 
-	  private readonly string className;
-	  private readonly int constantPoolCount;
+	  private readonly string _className;
+	  private readonly int _constantPoolCount;
 
 	  /// <summary>
 	  /// Constructs a new <seealso cref="ClassTooLargeException"/>.
@@ -49,8 +49,8 @@ namespace ObjectWeb.Asm
 	  /// <param name="constantPoolCount"> the number of constant pool items of the class. </param>
 	  public ClassTooLargeException(string className, int constantPoolCount) : base("Class too large: " + className)
 	  {
-		this.className = className;
-		this.constantPoolCount = constantPoolCount;
+		this._className = className;
+		this._constantPoolCount = constantPoolCount;
 	  }
 
 	  /// <summary>
@@ -61,7 +61,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return className;
+			return _className;
 		  }
 	  }
 
@@ -73,7 +73,7 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			return constantPoolCount;
+			return _constantPoolCount;
 		  }
 	  }
 	}

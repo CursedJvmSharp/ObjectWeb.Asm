@@ -49,11 +49,11 @@ namespace ObjectWeb.Asm
     /// </summary>
     public abstract class MethodVisitor
     {
-        private const string REQUIRES_ASM5 = "This feature requires ASM5";
+        private const string RequiresAsm5 = "This feature requires ASM5";
 
         /// <summary>
         ///     The ASM API version implemented by this visitor. The value of this field must be one of the
-        ///     {@code ASM}<i>x</i> values in <seealso cref="Opcodes" />.
+        ///     {@code ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
         /// </summary>
         protected internal readonly int api;
 
@@ -67,7 +67,7 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="api">
         ///     the ASM API version implemented by this visitor. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="Opcodes" />.
+        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
         /// </param>
         public MethodVisitor(int api) : this(api, null)
         {
@@ -78,7 +78,7 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="api">
         ///     the ASM API version implemented by this visitor. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="Opcodes" />.
+        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
         /// </param>
         /// <param name="methodVisitor">
         ///     the method visitor to which this visitor must delegate method calls. May
@@ -86,10 +86,10 @@ namespace ObjectWeb.Asm
         /// </param>
         public MethodVisitor(int api, MethodVisitor methodVisitor)
         {
-            if (api != Opcodes.ASM9 && api != Opcodes.ASM8 && api != Opcodes.ASM7 && api != Opcodes.ASM6 &&
-                api != Opcodes.ASM5 && api != Opcodes.ASM4 &&
-                api != Opcodes.ASM10_EXPERIMENTAL) throw new ArgumentException("Unsupported api " + api);
-            if (api == Opcodes.ASM10_EXPERIMENTAL) Constants.checkAsmExperimental(this);
+            if (api != IOpcodes.Asm9 && api != IOpcodes.Asm8 && api != IOpcodes.Asm7 && api != IOpcodes.Asm6 &&
+                api != IOpcodes.Asm5 && api != IOpcodes.Asm4 &&
+                api != IOpcodes.Asm10_Experimental) throw new ArgumentException("Unsupported api " + api);
+            if (api == IOpcodes.Asm10_Experimental) Constants.CheckAsmExperimental(this);
             this.api = api;
             mv = methodVisitor;
         }
@@ -104,12 +104,12 @@ namespace ObjectWeb.Asm
         /// <param name="name"> parameter name or {@literal null} if none is provided. </param>
         /// <param name="access">
         ///     the parameter's access flags, only {@code ACC_FINAL}, {@code ACC_SYNTHETIC}
-        ///     or/and {@code ACC_MANDATED} are allowed (see <seealso cref="Opcodes" />).
+        ///     or/and {@code ACC_MANDATED} are allowed (see <seealso cref="IOpcodes" />).
         /// </param>
-        public virtual void visitParameter(string name, int access)
+        public virtual void VisitParameter(string name, int access)
         {
-            if (api < Opcodes.ASM5) throw new NotSupportedException(REQUIRES_ASM5);
-            if (mv != null) mv.visitParameter(name, access);
+            if (api < IOpcodes.Asm5) throw new NotSupportedException(RequiresAsm5);
+            if (mv != null) mv.VisitParameter(name, access);
         }
 
         /// <summary>
@@ -121,9 +121,9 @@ namespace ObjectWeb.Asm
         ///     'name' parameters passed to the methods of this annotation visitor are ignored. Moreover,
         ///     exacly one visit method must be called on this annotation visitor, followed by visitEnd.
         /// </returns>
-        public virtual AnnotationVisitor visitAnnotationDefault()
+        public virtual AnnotationVisitor VisitAnnotationDefault()
         {
-            if (mv != null) return mv.visitAnnotationDefault();
+            if (mv != null) return mv.VisitAnnotationDefault();
             return null;
         }
 
@@ -136,9 +136,9 @@ namespace ObjectWeb.Asm
         ///     a visitor to visit the annotation values, or {@literal null} if this visitor is not
         ///     interested in visiting this annotation.
         /// </returns>
-        public virtual AnnotationVisitor visitAnnotation(string descriptor, bool visible)
+        public virtual AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
         {
-            if (mv != null) return mv.visitAnnotation(descriptor, visible);
+            if (mv != null) return mv.VisitAnnotation(descriptor, visible);
             return null;
         }
 
@@ -147,9 +147,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="typeRef">
         ///     a reference to the annotated type. The sort of this type reference must be
-        ///     <seealso cref="TypeReference.METHOD_TYPE_PARAMETER" />, {@link
-        ///     TypeReference#METHOD_TYPE_PARAMETER_BOUND}, <seealso cref="TypeReference.METHOD_RETURN" />, {@link
-        ///     TypeReference#METHOD_RECEIVER}, <seealso cref="TypeReference.METHOD_FORMAL_PARAMETER" /> or {@link
+        ///     <seealso cref="TypeReference.Method_Type_Parameter" />, {@link
+        ///     TypeReference#METHOD_TYPE_PARAMETER_BOUND}, <seealso cref="TypeReference.Method_Return" />, {@link
+        ///     TypeReference#METHOD_RECEIVER}, <seealso cref="TypeReference.Method_Formal_Parameter" /> or {@link
         ///     TypeReference#THROWS}. See <seealso cref="TypeReference" />.
         /// </param>
         /// <param name="typePath">
@@ -163,11 +163,11 @@ namespace ObjectWeb.Asm
         ///     a visitor to visit the annotation values, or {@literal null} if this visitor is not
         ///     interested in visiting this annotation.
         /// </returns>
-        public virtual AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+        public virtual AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
             bool visible)
         {
-            if (api < Opcodes.ASM5) throw new NotSupportedException(REQUIRES_ASM5);
-            if (mv != null) return mv.visitTypeAnnotation(typeRef, typePath, descriptor, visible);
+            if (api < IOpcodes.Asm5) throw new NotSupportedException(RequiresAsm5);
+            if (mv != null) return mv.VisitTypeAnnotation(typeRef, typePath, descriptor, visible);
             return null;
         }
 
@@ -188,9 +188,9 @@ namespace ObjectWeb.Asm
         ///     annotations visible at runtime, {@literal false} to define the number of method parameters
         ///     that can have annotations invisible at runtime.
         /// </param>
-        public virtual void visitAnnotableParameterCount(int parameterCount, bool visible)
+        public virtual void VisitAnnotableParameterCount(int parameterCount, bool visible)
         {
-            if (mv != null) mv.visitAnnotableParameterCount(parameterCount, visible);
+            if (mv != null) mv.VisitAnnotableParameterCount(parameterCount, visible);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace ObjectWeb.Asm
         /// <param name="parameter">
         ///     the parameter index. This index must be strictly smaller than the number of
         ///     parameters in the method descriptor, and strictly smaller than the parameter count
-        ///     specified in <seealso cref="visitAnnotableParameterCount" />. Important note:
+        ///     specified in <seealso cref="VisitAnnotableParameterCount" />. Important note:
         ///     <i>
         ///         a parameter index i
         ///         is not required to correspond to the i'th parameter descriptor in the method
@@ -214,9 +214,9 @@ namespace ObjectWeb.Asm
         ///     a visitor to visit the annotation values, or {@literal null} if this visitor is not
         ///     interested in visiting this annotation.
         /// </returns>
-        public virtual AnnotationVisitor visitParameterAnnotation(int parameter, string descriptor, bool visible)
+        public virtual AnnotationVisitor VisitParameterAnnotation(int parameter, string descriptor, bool visible)
         {
-            if (mv != null) return mv.visitParameterAnnotation(parameter, descriptor, visible);
+            if (mv != null) return mv.VisitParameterAnnotation(parameter, descriptor, visible);
             return null;
         }
 
@@ -224,17 +224,17 @@ namespace ObjectWeb.Asm
         ///     Visits a non standard attribute of this method.
         /// </summary>
         /// <param name="attribute"> an attribute. </param>
-        public virtual void visitAttribute(Attribute attribute)
+        public virtual void VisitAttribute(Attribute attribute)
         {
-            if (mv != null) mv.visitAttribute(attribute);
+            if (mv != null) mv.VisitAttribute(attribute);
         }
 
         /// <summary>
         ///     Starts the visit of the method's code, if any (i.e. non abstract method).
         /// </summary>
-        public virtual void visitCode()
+        public virtual void VisitCode()
         {
-            if (mv != null) mv.visitCode();
+            if (mv != null) mv.VisitCode();
         }
 
         /// <summary>
@@ -259,17 +259,17 @@ namespace ObjectWeb.Asm
         ///                                 In compressed form, frames are basically "deltas" from the state of the previous frame:
         ///                                 <ul>
         ///                                     <li>
-        ///                                         <seealso cref="Opcodes.F_SAME" /> representing frame with exactly the same
+        ///                                         <seealso cref="IIOpcodes.F_Same /> representing frame with exactly the same
         ///                                         locals as the
         ///                                         previous frame and with the empty stack.
         ///                                         <li>
-        ///                                             <seealso cref="Opcodes.F_SAME1" /> representing frame with exactly the same
+        ///                                             <seealso cref="IIOpcodes.F_Same1 /> representing frame with exactly the same
         ///                                             locals as the
         ///                                             previous frame and with single value on the stack ( <code>numStack</code>
         ///                                             is 1 and
         ///                                             <code>stack[0]</code> contains value for the type of the stack item).
         ///                                             <li>
-        ///                                                 <seealso cref="Opcodes.F_APPEND" /> representing frame with current
+        ///                                                 <seealso cref="IIOpcodes.F_Append /> representing frame with current
         ///                                                 locals are the same as the
         ///                                                 locals in the previous frame, except that additional locals are defined
         ///                                                 (
@@ -278,13 +278,13 @@ namespace ObjectWeb.Asm
         ///                                                 is 1, 2 or 3 and <code>local</code> elements contains values
         ///                                                 representing added types).
         ///                                                 <li>
-        ///                                                     <seealso cref="Opcodes.F_CHOP" /> representing frame with current
+        ///                                                     <seealso cref="IIOpcodes.F_Chop /> representing frame with current
         ///                                                     locals are the same as the
         ///                                                     locals in the previous frame, except that the last 1-3 locals are
         ///                                                     absent and with
         ///                                                     the empty stack (<code>numLocal</code> is 1, 2 or 3).
         ///                                                     <li>
-        ///                                                         <seealso cref="Opcodes.F_FULL" /> representing complete frame
+        ///                                                         <seealso cref="IIOpcodes.F_Full /> representing complete frame
         ///                                                         data.
         ///                                 </ul>
         ///                     </ul>
@@ -294,18 +294,18 @@ namespace ObjectWeb.Asm
         ///                         code location (i.e., at least one instruction must be visited between two calls to visitFrame).
         /// </summary>
         /// <param name="type">
-        ///     the type of this stack map frame. Must be <seealso cref="Opcodes.F_NEW" /> for expanded
-        ///     frames, or <seealso cref="Opcodes.F_FULL" />, <seealso cref="Opcodes.F_APPEND" />,
-        ///     <seealso cref="Opcodes.F_CHOP" />, {@link
-        ///     Opcodes#F_SAME} or <seealso cref="Opcodes.F_APPEND" />, <seealso cref="Opcodes.F_SAME1" /> for compressed frames.
+        ///     the type of this stack map frame. Must be <seealso cref="IIOpcodes.F_New /> for expanded
+        ///     frames, or <seealso cref="IIOpcodes.F_Full />, <seealso cref="IIOpcodes.F_Append />,
+        ///     <seealso cref="IIOpcodes.F_Chop />, {@link
+        ///     Opcodes#F_SAME} or <seealso cref="IIOpcodes.F_Append />, <seealso cref="IIOpcodes.F_Same1 /> for compressed frames.
         /// </param>
         /// <param name="numLocal"> the number of local variables in the visited frame. </param>
         /// <param name="local">
         ///     the local variable types in this frame. This array must not be modified. Primitive
-        ///     types are represented by <seealso cref="Opcodes.TOP" />, <seealso cref="Opcodes.INTEGER" />, {@link
-        ///     Opcodes#FLOAT}, <seealso cref="Opcodes.LONG" />, <seealso cref="Opcodes.DOUBLE" />, <seealso cref="Opcodes.NULL" />
+        ///     types are represented by <seealso cref="IIOpcodes.top />, <seealso cref="IIOpcodes.integer />, {@link
+        ///     Opcodes#FLOAT}, <seealso cref="IIOpcodes.long />, <seealso cref="IIOpcodes.double />, <seealso cref="IIOpcodes.null />
         ///     or
-        ///     <seealso cref="Opcodes.UNINITIALIZED_THIS" /> (long and double are represented by a single element).
+        ///     <seealso cref="IIOpcodes.uninitializedThis /> (long and double are represented by a single element).
         ///     Reference types are represented by String objects (representing internal names), and
         ///     uninitialized types by Label objects (this label designates the NEW instruction that
         ///     created this uninitialized value).
@@ -320,9 +320,9 @@ namespace ObjectWeb.Asm
         ///     instruction between the two (unless this frame is a Opcodes#F_SAME frame, in which case it
         ///     is silently ignored).
         /// </exception>
-        public virtual void visitFrame(int type, int numLocal, object[] local, int numStack, object[] stack)
+        public virtual void VisitFrame(int type, int numLocal, object[] local, int numStack, object[] stack)
         {
-            if (mv != null) mv.visitFrame(type, numLocal, local, numStack, stack);
+            if (mv != null) mv.VisitFrame(type, numLocal, local, numStack, stack);
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -344,9 +344,9 @@ namespace ObjectWeb.Asm
         ///     D2L, D2F, I2B, I2C, I2S, LCMP, FCMPL, FCMPG, DCMPL, DCMPG, IRETURN, LRETURN, FRETURN,
         ///     DRETURN, ARETURN, RETURN, ARRAYLENGTH, ATHROW, MONITORENTER, or MONITOREXIT.
         /// </param>
-        public virtual void visitInsn(int opcode)
+        public virtual void VisitInsn(int opcode)
         {
-            if (mv != null) mv.visitInsn(opcode);
+            if (mv != null) mv.VisitInsn(opcode);
         }
 
         /// <summary>
@@ -363,15 +363,15 @@ namespace ObjectWeb.Asm
         ///         <br>
         ///             When opcode is SIPUSH, operand value should be between Short.MIN_VALUE and Short.MAX_VALUE.
         ///             <br>
-        ///                 When opcode is NEWARRAY, operand value should be one of <seealso cref="Opcodes.T_BOOLEAN" />, {@link
-        ///                 Opcodes#T_CHAR}, <seealso cref="Opcodes.T_FLOAT" />, <seealso cref="Opcodes.T_DOUBLE" />,
-        ///                 <seealso cref="Opcodes.T_BYTE" />,
-        ///                 <seealso cref="Opcodes.T_SHORT" />, <seealso cref="Opcodes.T_INT" /> or
-        ///                 <seealso cref="Opcodes.T_LONG" />.
+        ///                 When opcode is NEWARRAY, operand value should be one of <seealso cref="IIOpcodes.Boolean />, {@link
+        ///                 Opcodes#T_CHAR}, <seealso cref="IIOpcodes.Float />, <seealso cref="IIOpcodes.Double />,
+        ///                 <seealso cref="IIOpcodes.Byte />,
+        ///                 <seealso cref="IIOpcodes.Short />, <seealso cref="IIOpcodes.Int /> or
+        ///                 <seealso cref="IIOpcodes.Long />.
         /// </param>
-        public virtual void visitIntInsn(int opcode, int operand)
+        public virtual void VisitIntInsn(int opcode, int operand)
         {
-            if (mv != null) mv.visitIntInsn(opcode, operand);
+            if (mv != null) mv.VisitIntInsn(opcode, operand);
         }
 
         /// <summary>
@@ -386,9 +386,9 @@ namespace ObjectWeb.Asm
         ///     the operand of the instruction to be visited. This operand is the index of a local
         ///     variable.
         /// </param>
-        public virtual void visitVarInsn(int opcode, int var)
+        public virtual void VisitVarInsn(int opcode, int var)
         {
-            if (mv != null) mv.visitVarInsn(opcode, var);
+            if (mv != null) mv.VisitVarInsn(opcode, var);
         }
 
         /// <summary>
@@ -403,9 +403,9 @@ namespace ObjectWeb.Asm
         ///     the operand of the instruction to be visited. This operand must be the internal
         ///     name of an object or array class (see <seealso cref="Type.InternalName" />).
         /// </param>
-        public virtual void visitTypeInsn(int opcode, string type)
+        public virtual void VisitTypeInsn(int opcode, string type)
         {
-            if (mv != null) mv.visitTypeInsn(opcode, type);
+            if (mv != null) mv.VisitTypeInsn(opcode, type);
         }
 
         /// <summary>
@@ -419,9 +419,9 @@ namespace ObjectWeb.Asm
         /// <param name="owner"> the internal name of the field's owner class (see <seealso cref="Type.InternalName" />). </param>
         /// <param name="name"> the field's name. </param>
         /// <param name="descriptor"> the field's descriptor (see <seealso cref="Type" />). </param>
-        public virtual void visitFieldInsn(int opcode, string owner, string name, string descriptor)
+        public virtual void VisitFieldInsn(int opcode, string owner, string name, string descriptor)
         {
-            if (mv != null) mv.visitFieldInsn(opcode, owner, name, descriptor);
+            if (mv != null) mv.VisitFieldInsn(opcode, owner, name, descriptor);
         }
 
         /// <summary>
@@ -438,13 +438,13 @@ namespace ObjectWeb.Asm
         /// <param name="name"> the method's name. </param>
         /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type" />). </param>
         /// @deprecated use
-        /// <seealso cref="visitMethodInsn(int, String, String, String, bool)" />
+        /// <seealso cref="VisitMethodInsn(int,string,string,string,bool)" />
         /// instead.
         [Obsolete("use <seealso cref=\"visitMethodInsn(int, String, String, String, bool)\"/> instead.")]
-        public virtual void visitMethodInsn(int opcode, string owner, string name, string descriptor)
+        public virtual void VisitMethodInsn(int opcode, string owner, string name, string descriptor)
         {
-            var opcodeAndSource = opcode | (api < Opcodes.ASM5 ? Opcodes.SOURCE_DEPRECATED : 0);
-            visitMethodInsn(opcodeAndSource, owner, name, descriptor, opcode == Opcodes.INVOKEINTERFACE);
+            var opcodeAndSource = opcode | (api < IOpcodes.Asm5 ? IOpcodes.Source_Deprecated : 0);
+            VisitMethodInsn(opcodeAndSource, owner, name, descriptor, opcode == IOpcodes.Invokeinterface);
         }
 
         /// <summary>
@@ -461,17 +461,17 @@ namespace ObjectWeb.Asm
         /// <param name="name"> the method's name. </param>
         /// <param name="descriptor"> the method's descriptor (see <seealso cref="Type" />). </param>
         /// <param name="isInterface"> if the method's owner class is an interface. </param>
-        public virtual void visitMethodInsn(int opcode, string owner, string name, string descriptor, bool isInterface)
+        public virtual void VisitMethodInsn(int opcode, string owner, string name, string descriptor, bool isInterface)
         {
-            if (api < Opcodes.ASM5 && (opcode & Opcodes.SOURCE_DEPRECATED) == 0)
+            if (api < IOpcodes.Asm5 && (opcode & IOpcodes.Source_Deprecated) == 0)
             {
-                if (isInterface != (opcode == Opcodes.INVOKEINTERFACE))
+                if (isInterface != (opcode == IOpcodes.Invokeinterface))
                     throw new NotSupportedException("INVOKESPECIAL/STATIC on interfaces requires ASM5");
-                visitMethodInsn(opcode, owner, name, descriptor);
+                VisitMethodInsn(opcode, owner, name, descriptor);
                 return;
             }
 
-            if (mv != null) mv.visitMethodInsn(opcode & ~Opcodes.SOURCE_MASK, owner, name, descriptor, isInterface);
+            if (mv != null) mv.VisitMethodInsn(opcode & ~IOpcodes.Source_Mask, owner, name, descriptor, isInterface);
         }
 
         /// <summary>
@@ -487,12 +487,12 @@ namespace ObjectWeb.Asm
         ///     Type}, <seealso cref="Handle" /> or <seealso cref="ConstantDynamic" /> value. This method is allowed to modify
         ///     the content of the array so a caller should expect that this array may change.
         /// </param>
-        public virtual void visitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle,
+        public virtual void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle,
             params object[] bootstrapMethodArguments)
         {
-            if (api < Opcodes.ASM5) throw new NotSupportedException(REQUIRES_ASM5);
+            if (api < IOpcodes.Asm5) throw new NotSupportedException(RequiresAsm5);
             if (mv != null)
-                mv.visitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
+                mv.VisitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
         }
 
         /// <summary>
@@ -508,18 +508,18 @@ namespace ObjectWeb.Asm
         ///     the operand of the instruction to be visited. This operand is a label that
         ///     designates the instruction to which the jump instruction may jump.
         /// </param>
-        public virtual void visitJumpInsn(int opcode, Label label)
+        public virtual void VisitJumpInsn(int opcode, Label label)
         {
-            if (mv != null) mv.visitJumpInsn(opcode, label);
+            if (mv != null) mv.VisitJumpInsn(opcode, label);
         }
 
         /// <summary>
         ///     Visits a label. A label designates the instruction that will be visited just after it.
         /// </summary>
         /// <param name="label"> a <seealso cref="Label" /> object. </param>
-        public virtual void visitLabel(Label label)
+        public virtual void VisitLabel(Label label)
         {
-            if (mv != null) mv.visitLabel(label);
+            if (mv != null) mv.VisitLabel(label);
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -570,13 +570,13 @@ namespace ObjectWeb.Asm
         ///     constants, for classes whose version is 51 or a <seealso cref="ConstantDynamic" /> for a constant
         ///     dynamic for classes whose version is 55.
         /// </param>
-        public virtual void visitLdcInsn(object value)
+        public virtual void VisitLdcInsn(object value)
         {
-            if (api < Opcodes.ASM5 && (value is Handle || value is JType && ((JType)value).Sort == JType.METHOD))
-                throw new NotSupportedException(REQUIRES_ASM5);
-            if (api < Opcodes.ASM7 && value is ConstantDynamic)
+            if (api < IOpcodes.Asm5 && (value is Handle || value is JType && ((JType)value).Sort == JType.Method))
+                throw new NotSupportedException(RequiresAsm5);
+            if (api < IOpcodes.Asm7 && value is ConstantDynamic)
                 throw new NotSupportedException("This feature requires ASM7");
-            if (mv != null) mv.visitLdcInsn(value);
+            if (mv != null) mv.VisitLdcInsn(value);
         }
 
         /// <summary>
@@ -584,9 +584,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="var"> index of the local variable to be incremented. </param>
         /// <param name="increment"> amount to increment the local variable by. </param>
-        public virtual void visitIincInsn(int var, int increment)
+        public virtual void VisitIincInsn(int var, int increment)
         {
-            if (mv != null) mv.visitIincInsn(var, increment);
+            if (mv != null) mv.VisitIincInsn(var, increment);
         }
 
         /// <summary>
@@ -599,9 +599,9 @@ namespace ObjectWeb.Asm
         ///     beginnings of the handler blocks. {@code labels[i]} is the beginning of the
         ///     handler block for the {@code min + i} key.
         /// </param>
-        public virtual void visitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)
+        public virtual void VisitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)
         {
-            if (mv != null) mv.visitTableSwitchInsn(min, max, dflt, labels);
+            if (mv != null) mv.VisitTableSwitchInsn(min, max, dflt, labels);
         }
 
         /// <summary>
@@ -613,9 +613,9 @@ namespace ObjectWeb.Asm
         ///     beginnings of the handler blocks. {@code labels[i]} is the beginning of the
         ///     handler block for the {@code keys[i]} key.
         /// </param>
-        public virtual void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
+        public virtual void VisitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
         {
-            if (mv != null) mv.visitLookupSwitchInsn(dflt, keys, labels);
+            if (mv != null) mv.VisitLookupSwitchInsn(dflt, keys, labels);
         }
 
         /// <summary>
@@ -623,9 +623,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="descriptor"> an array type descriptor (see <seealso cref="Type" />). </param>
         /// <param name="numDimensions"> the number of dimensions of the array to allocate. </param>
-        public virtual void visitMultiANewArrayInsn(string descriptor, int numDimensions)
+        public virtual void VisitMultiANewArrayInsn(string descriptor, int numDimensions)
         {
-            if (mv != null) mv.visitMultiANewArrayInsn(descriptor, numDimensions);
+            if (mv != null) mv.VisitMultiANewArrayInsn(descriptor, numDimensions);
         }
 
         /// <summary>
@@ -634,9 +634,9 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="typeRef">
         ///     a reference to the annotated type. The sort of this type reference must be
-        ///     <seealso cref="TypeReference.INSTANCEOF" />, <seealso cref="TypeReference.NEW" />, {@link
-        ///     TypeReference#CONSTRUCTOR_REFERENCE}, <seealso cref="TypeReference.METHOD_REFERENCE" />, {@link
-        ///     TypeReference#CAST}, <seealso cref="TypeReference.CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT" />, {@link
+        ///     <seealso cref="TypeReference.Instanceof" />, <seealso cref="TypeReference.New" />, {@link
+        ///     TypeReference#CONSTRUCTOR_REFERENCE}, <seealso cref="TypeReference.Method_Reference" />, {@link
+        ///     TypeReference#CAST}, <seealso cref="TypeReference.Constructor_Invocation_Type_Argument" />, {@link
         ///     TypeReference#METHOD_INVOCATION_TYPE_ARGUMENT}, {@link
         ///     TypeReference#CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT}, or {@link
         ///     TypeReference#METHOD_REFERENCE_TYPE_ARGUMENT}. See <seealso cref="TypeReference" />.
@@ -652,11 +652,11 @@ namespace ObjectWeb.Asm
         ///     a visitor to visit the annotation values, or {@literal null} if this visitor is not
         ///     interested in visiting this annotation.
         /// </returns>
-        public virtual AnnotationVisitor visitInsnAnnotation(int typeRef, TypePath typePath, string descriptor,
+        public virtual AnnotationVisitor VisitInsnAnnotation(int typeRef, TypePath typePath, string descriptor,
             bool visible)
         {
-            if (api < Opcodes.ASM5) throw new NotSupportedException(REQUIRES_ASM5);
-            if (mv != null) return mv.visitInsnAnnotation(typeRef, typePath, descriptor, visible);
+            if (api < IOpcodes.Asm5) throw new NotSupportedException(RequiresAsm5);
+            if (mv != null) return mv.VisitInsnAnnotation(typeRef, typePath, descriptor, visible);
             return null;
         }
 
@@ -676,21 +676,21 @@ namespace ObjectWeb.Asm
         /// </param>
         /// <exception cref="IllegalArgumentException">
         ///     if one of the labels has already been visited by this visitor
-        ///     (by the <seealso cref="visitLabel" /> method).
+        ///     (by the <seealso cref="VisitLabel" /> method).
         /// </exception>
-        public virtual void visitTryCatchBlock(Label start, Label end, Label handler, string type)
+        public virtual void VisitTryCatchBlock(Label start, Label end, Label handler, string type)
         {
-            if (mv != null) mv.visitTryCatchBlock(start, end, handler, type);
+            if (mv != null) mv.VisitTryCatchBlock(start, end, handler, type);
         }
 
         /// <summary>
         ///     Visits an annotation on an exception handler type. This method must be called <i>after</i> the
-        ///     <seealso cref="visitTryCatchBlock" /> for the annotated exception handler. It can be called several times
+        ///     <seealso cref="VisitTryCatchBlock" /> for the annotated exception handler. It can be called several times
         ///     for the same exception handler.
         /// </summary>
         /// <param name="typeRef">
         ///     a reference to the annotated type. The sort of this type reference must be
-        ///     <seealso cref="TypeReference.EXCEPTION_PARAMETER" />. See <seealso cref="TypeReference" />.
+        ///     <seealso cref="TypeReference.Exception_Parameter" />. See <seealso cref="TypeReference" />.
         /// </param>
         /// <param name="typePath">
         ///     the path to the annotated type argument, wildcard bound, array element type, or
@@ -703,11 +703,11 @@ namespace ObjectWeb.Asm
         ///     a visitor to visit the annotation values, or {@literal null} if this visitor is not
         ///     interested in visiting this annotation.
         /// </returns>
-        public virtual AnnotationVisitor visitTryCatchAnnotation(int typeRef, TypePath typePath, string descriptor,
+        public virtual AnnotationVisitor VisitTryCatchAnnotation(int typeRef, TypePath typePath, string descriptor,
             bool visible)
         {
-            if (api < Opcodes.ASM5) throw new NotSupportedException(REQUIRES_ASM5);
-            if (mv != null) return mv.visitTryCatchAnnotation(typeRef, typePath, descriptor, visible);
+            if (api < IOpcodes.Asm5) throw new NotSupportedException(RequiresAsm5);
+            if (mv != null) return mv.VisitTryCatchAnnotation(typeRef, typePath, descriptor, visible);
             return null;
         }
 
@@ -728,12 +728,12 @@ namespace ObjectWeb.Asm
         /// <param name="index"> the local variable's index. </param>
         /// <exception cref="IllegalArgumentException">
         ///     if one of the labels has not already been visited by this
-        ///     visitor (by the <seealso cref="visitLabel" /> method).
+        ///     visitor (by the <seealso cref="VisitLabel" /> method).
         /// </exception>
-        public virtual void visitLocalVariable(string name, string descriptor, string signature, Label start, Label end,
+        public virtual void VisitLocalVariable(string name, string descriptor, string signature, Label start, Label end,
             int index)
         {
-            if (mv != null) mv.visitLocalVariable(name, descriptor, signature, start, end, index);
+            if (mv != null) mv.VisitLocalVariable(name, descriptor, signature, start, end, index);
         }
 
         /// <summary>
@@ -741,7 +741,7 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="typeRef">
         ///     a reference to the annotated type. The sort of this type reference must be
-        ///     <seealso cref="TypeReference.LOCAL_VARIABLE" /> or <seealso cref="TypeReference.RESOURCE_VARIABLE" />. See {@link
+        ///     <seealso cref="TypeReference.Local_Variable" /> or <seealso cref="TypeReference.Resource_Variable" />. See {@link
         ///     TypeReference}.
         /// </param>
         /// <param name="typePath">
@@ -767,12 +767,12 @@ namespace ObjectWeb.Asm
         ///     a visitor to visit the annotation values, or {@literal null} if this visitor is not
         ///     interested in visiting this annotation.
         /// </returns>
-        public virtual AnnotationVisitor visitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start,
+        public virtual AnnotationVisitor VisitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start,
             Label[] end, int[] index, string descriptor, bool visible)
         {
-            if (api < Opcodes.ASM5) throw new NotSupportedException(REQUIRES_ASM5);
+            if (api < IOpcodes.Asm5) throw new NotSupportedException(RequiresAsm5);
             if (mv != null)
-                return mv.visitLocalVariableAnnotation(typeRef, typePath, start, end, index, descriptor, visible);
+                return mv.VisitLocalVariableAnnotation(typeRef, typePath, start, end, index, descriptor, visible);
             return null;
         }
 
@@ -786,11 +786,11 @@ namespace ObjectWeb.Asm
         /// <param name="start"> the first instruction corresponding to this line number. </param>
         /// <exception cref="IllegalArgumentException">
         ///     if {@code start} has not already been visited by this visitor
-        ///     (by the <seealso cref="visitLabel" /> method).
+        ///     (by the <seealso cref="VisitLabel" /> method).
         /// </exception>
-        public virtual void visitLineNumber(int line, Label start)
+        public virtual void VisitLineNumber(int line, Label start)
         {
-            if (mv != null) mv.visitLineNumber(line, start);
+            if (mv != null) mv.VisitLineNumber(line, start);
         }
 
         /// <summary>
@@ -798,18 +798,18 @@ namespace ObjectWeb.Asm
         /// </summary>
         /// <param name="maxStack"> maximum stack size of the method. </param>
         /// <param name="maxLocals"> maximum number of local variables for the method. </param>
-        public virtual void visitMaxs(int maxStack, int maxLocals)
+        public virtual void VisitMaxs(int maxStack, int maxLocals)
         {
-            if (mv != null) mv.visitMaxs(maxStack, maxLocals);
+            if (mv != null) mv.VisitMaxs(maxStack, maxLocals);
         }
 
         /// <summary>
         ///     Visits the end of the method. This method, which is the last one to be called, is used to
         ///     inform the visitor that all the annotations and attributes of the method have been visited.
         /// </summary>
-        public virtual void visitEnd()
+        public virtual void VisitEnd()
         {
-            if (mv != null) mv.visitEnd();
+            if (mv != null) mv.VisitEnd();
         }
     }
 }

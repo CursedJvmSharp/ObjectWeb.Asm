@@ -62,36 +62,36 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="dflt"> beginning of the default handler block. </param>
 	  /// <param name="labels"> beginnings of the handler blocks. {@code labels[i]} is the beginning of the
 	  ///     handler block for the {@code min + i} key. </param>
-	  public TableSwitchInsnNode(int min, int max, LabelNode dflt, params LabelNode[] labels) : base(Opcodes.TABLESWITCH)
+	  public TableSwitchInsnNode(int min, int max, LabelNode dflt, params LabelNode[] labels) : base(IOpcodes.Tableswitch)
 	  {
 		this.min = min;
 		this.max = max;
 		this.dflt = dflt;
-		this.labels = Util.asArrayList(labels);
+		this.labels = Util.AsArrayList(labels);
 	  }
 
 	  public override int Type
 	  {
 		  get
 		  {
-			return TABLESWITCH_INSN;
+			return Tableswitch_Insn;
 		  }
 	  }
 
-	  public override void accept(MethodVisitor methodVisitor)
+	  public override void Accept(MethodVisitor methodVisitor)
 	  {
 		Label[] labelsArray = new Label[this.labels.Count];
 		for (int i = 0, n = labelsArray.Length; i < n; ++i)
 		{
 		  labelsArray[i] = this.labels[i].Label;
 		}
-		methodVisitor.visitTableSwitchInsn(min, max, dflt.Label, labelsArray);
-		acceptAnnotations(methodVisitor);
+		methodVisitor.VisitTableSwitchInsn(min, max, dflt.Label, labelsArray);
+		AcceptAnnotations(methodVisitor);
 	  }
 
-	  public override AbstractInsnNode clone(IDictionary<LabelNode, LabelNode> clonedLabels)
+	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return (new TableSwitchInsnNode(min, max, clone(dflt, clonedLabels), clone(labels, clonedLabels))).cloneAnnotations(this);
+		return (new TableSwitchInsnNode(min, max, Clone(dflt, clonedLabels), Clone(labels, clonedLabels))).CloneAnnotations(this);
 	  }
 	}
 

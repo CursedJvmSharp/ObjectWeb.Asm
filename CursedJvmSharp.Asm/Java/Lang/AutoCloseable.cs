@@ -64,7 +64,7 @@ namespace Java.Lang
     /// </apiNote>
     /// <author>Josh Bloch</author>
     /// <since>1.7</since>
-    public interface AutoCloseable : IDisposable
+    public interface IAutoCloseable : IDisposable
     {
         /// <summary>Closes this resource, relinquishing any underlying resources.</summary>
         /// <remarks>
@@ -115,9 +115,9 @@ namespace Java.Lang
         ///                 method should not throw it.
         ///                 <p>
         ///                     Note that unlike the
-        ///                     <see cref="Closeable.Close">close</see>
+        ///                     <see cref="ICloseable.Close">close</see>
         ///                     method of
-        ///                     <see cref="Closeable" />
+        ///                     <see cref="ICloseable" />
         ///                     , this
         ///                     <c>close</c>
         ///                     method

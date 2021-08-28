@@ -51,7 +51,7 @@ namespace ObjectWeb.Asm
 	  /// The 6 header bytes of the attribute (attribute_name_index and attribute_length) are <i>not</i>
 	  /// included.
 	  /// </summary>
-	  private sbyte[] content;
+	  private sbyte[] _content;
 
 	  /// <summary>
 	  /// The next attribute in this attribute list (Attribute instances can be linked via this field to
@@ -129,11 +129,11 @@ namespace ObjectWeb.Asm
 	  /// <param name="labels"> the labels of the method's code, or {@literal null} if the attribute to be read
 	  ///     is not a Code attribute. </param>
 	  /// <returns> a <i>new</i> <seealso cref="Attribute"/> object corresponding to the specified bytes. </returns>
-	  public virtual Attribute read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
+	  public virtual Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
 	  {
 		Attribute attribute = new Attribute(type);
-		attribute.content = new sbyte[length];
-		Array.Copy(classReader.classFileBuffer, offset, attribute.content, 0, length);
+		attribute._content = new sbyte[length];
+		Array.Copy(classReader.classFileBuffer, offset, attribute._content, 0, length);
 		return attribute;
 	  }
 
@@ -155,9 +155,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="maxLocals"> the maximum number of local variables of the method corresponding to this code
 	  ///     attribute, or -1 if this attribute is not a Code attribute. </param>
 	  /// <returns> the byte array form of this attribute. </returns>
-	  public virtual ByteVector write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
+	  public virtual ByteVector Write(ClassWriter classWriter, sbyte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
-		return new ByteVector(content);
+		return new ByteVector(_content);
 	  }
 
 	  /// <summary>
@@ -187,13 +187,13 @@ namespace ObjectWeb.Asm
 	  /// <param name="symbolTable"> where the constants used in the attributes must be stored. </param>
 	  /// <returns> the size of all the attributes in this attribute list. This size includes the size of
 	  ///     the attribute headers. </returns>
-	  public int computeAttributesSize(SymbolTable symbolTable)
+	  public int ComputeAttributesSize(SymbolTable symbolTable)
 	  {
 		const sbyte[] code = null;
 		const int codeLength = 0;
 		const int maxStack = -1;
 		const int maxLocals = -1;
-		return computeAttributesSize(symbolTable, code, codeLength, maxStack, maxLocals);
+		return ComputeAttributesSize(symbolTable, code, codeLength, maxStack, maxLocals);
 	  }
 
 	  /// <summary>
@@ -214,15 +214,15 @@ namespace ObjectWeb.Asm
 	  ///     Code attributes, or -1 if they are not Code attribute. </param>
 	  /// <returns> the size of all the attributes in this attribute list. This size includes the size of
 	  ///     the attribute headers. </returns>
-	  public int computeAttributesSize(SymbolTable symbolTable, sbyte[] code, int codeLength, int maxStack, int maxLocals)
+	  public int ComputeAttributesSize(SymbolTable symbolTable, sbyte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
 		ClassWriter classWriter = symbolTable.classWriter;
 		int size = 0;
 		Attribute attribute = this;
 		while (attribute != null)
 		{
-		  symbolTable.addConstantUtf8(attribute.type);
-		  size += 6 + attribute.write(classWriter, code, codeLength, maxStack, maxLocals).length;
+		  symbolTable.AddConstantUtf8(attribute.type);
+		  size += 6 + attribute.Write(classWriter, code, codeLength, maxStack, maxLocals).length;
 		  attribute = attribute.nextAttribute;
 		}
 		return size;
@@ -239,27 +239,27 @@ namespace ObjectWeb.Asm
 	  /// <param name="signatureIndex"> the constant pool index of a field, method of class signature. </param>
 	  /// <returns> the size of all the attributes in bytes. This size includes the size of the attribute
 	  ///     headers. </returns>
-	  internal static int computeAttributesSize(SymbolTable symbolTable, int accessFlags, int signatureIndex)
+	  internal static int ComputeAttributesSize(SymbolTable symbolTable, int accessFlags, int signatureIndex)
 	  {
 		int size = 0;
 		// Before Java 1.5, synthetic fields are represented with a Synthetic attribute.
-		if ((accessFlags & Opcodes.ACC_SYNTHETIC) != 0 && symbolTable.MajorVersion < Opcodes.V1_5)
+		if ((accessFlags & IOpcodes.Acc_Synthetic) != 0 && symbolTable.MajorVersion < IOpcodes.V1_5)
 		{
 		  // Synthetic attributes always use 6 bytes.
-		  symbolTable.addConstantUtf8(Constants.SYNTHETIC);
+		  symbolTable.AddConstantUtf8(Constants.Synthetic);
 		  size += 6;
 		}
 		if (signatureIndex != 0)
 		{
 		  // Signature attributes always use 8 bytes.
-		  symbolTable.addConstantUtf8(Constants.SIGNATURE);
+		  symbolTable.AddConstantUtf8(Constants.Signature);
 		  size += 8;
 		}
 		// ACC_DEPRECATED is ASM specific, the ClassFile format uses a Deprecated attribute instead.
-		if ((accessFlags & Opcodes.ACC_DEPRECATED) != 0)
+		if ((accessFlags & IOpcodes.Acc_Deprecated) != 0)
 		{
 		  // Deprecated attributes always use 6 bytes.
-		  symbolTable.addConstantUtf8(Constants.DEPRECATED);
+		  symbolTable.AddConstantUtf8(Constants.Deprecated);
 		  size += 6;
 		}
 		return size;
@@ -272,13 +272,13 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="symbolTable"> where the constants used in the attributes must be stored. </param>
 	  /// <param name="output"> where the attributes must be written. </param>
-	  public void putAttributes(SymbolTable symbolTable, ByteVector output)
+	  public void PutAttributes(SymbolTable symbolTable, ByteVector output)
 	  {
 		const sbyte[] code = null;
 		const int codeLength = 0;
 		const int maxStack = -1;
 		const int maxLocals = -1;
-		putAttributes(symbolTable, code, codeLength, maxStack, maxLocals, output);
+		PutAttributes(symbolTable, code, codeLength, maxStack, maxLocals, output);
 	  }
 
 	  /// <summary>
@@ -298,16 +298,16 @@ namespace ObjectWeb.Asm
 	  /// <param name="maxLocals"> the maximum number of local variables of the method corresponding to these
 	  ///     Code attributes, or -1 if they are not Code attribute. </param>
 	  /// <param name="output"> where the attributes must be written. </param>
-	  public void putAttributes(SymbolTable symbolTable, sbyte[] code, int codeLength, int maxStack, int maxLocals, ByteVector output)
+	  public void PutAttributes(SymbolTable symbolTable, sbyte[] code, int codeLength, int maxStack, int maxLocals, ByteVector output)
 	  {
 		ClassWriter classWriter = symbolTable.classWriter;
 		Attribute attribute = this;
 		while (attribute != null)
 		{
-		  ByteVector attributeContent = attribute.write(classWriter, code, codeLength, maxStack, maxLocals);
+		  ByteVector attributeContent = attribute.Write(classWriter, code, codeLength, maxStack, maxLocals);
 		  // Put attribute_name_index and attribute_length.
-		  output.putShort(symbolTable.addConstantUtf8(attribute.type)).putInt(attributeContent.length);
-		  output.putByteArray(attributeContent.data, 0, attributeContent.length);
+		  output.PutShort(symbolTable.AddConstantUtf8(attribute.type)).PutInt(attributeContent.length);
+		  output.PutByteArray(attributeContent.data, 0, attributeContent.length);
 		  attribute = attribute.nextAttribute;
 		}
 	  }
@@ -321,20 +321,20 @@ namespace ObjectWeb.Asm
 	  /// <param name="accessFlags"> some field, method or class access flags. </param>
 	  /// <param name="signatureIndex"> the constant pool index of a field, method of class signature. </param>
 	  /// <param name="output"> where the attributes must be written. </param>
-	  internal static void putAttributes(SymbolTable symbolTable, int accessFlags, int signatureIndex, ByteVector output)
+	  internal static void PutAttributes(SymbolTable symbolTable, int accessFlags, int signatureIndex, ByteVector output)
 	  {
 		// Before Java 1.5, synthetic fields are represented with a Synthetic attribute.
-		if ((accessFlags & Opcodes.ACC_SYNTHETIC) != 0 && symbolTable.MajorVersion < Opcodes.V1_5)
+		if ((accessFlags & IOpcodes.Acc_Synthetic) != 0 && symbolTable.MajorVersion < IOpcodes.V1_5)
 		{
-		  output.putShort(symbolTable.addConstantUtf8(Constants.SYNTHETIC)).putInt(0);
+		  output.PutShort(symbolTable.AddConstantUtf8(Constants.Synthetic)).PutInt(0);
 		}
 		if (signatureIndex != 0)
 		{
-		  output.putShort(symbolTable.addConstantUtf8(Constants.SIGNATURE)).putInt(2).putShort(signatureIndex);
+		  output.PutShort(symbolTable.AddConstantUtf8(Constants.Signature)).PutInt(2).PutShort(signatureIndex);
 		}
-		if ((accessFlags & Opcodes.ACC_DEPRECATED) != 0)
+		if ((accessFlags & IOpcodes.Acc_Deprecated) != 0)
 		{
-		  output.putShort(symbolTable.addConstantUtf8(Constants.DEPRECATED)).putInt(0);
+		  output.PutShort(symbolTable.AddConstantUtf8(Constants.Deprecated)).PutInt(0);
 		}
 	  }
 
@@ -343,32 +343,32 @@ namespace ObjectWeb.Asm
 	  internal sealed class Set
 	  {
 
-		internal const int SIZE_INCREMENT = 6;
+		internal const int Size_Increment = 6;
 
 		internal int size;
-		internal Attribute[] data = new Attribute[SIZE_INCREMENT];
+		internal Attribute[] data = new Attribute[Size_Increment];
 
-		public void addAttributes(Attribute attributeList)
+		public void AddAttributes(Attribute attributeList)
 		{
 		  Attribute attribute = attributeList;
 		  while (attribute != null)
 		  {
-			if (!contains(attribute))
+			if (!Contains(attribute))
 			{
-			  add(attribute);
+			  Add(attribute);
 			}
 			attribute = attribute.nextAttribute;
 		  }
 		}
 
-		public Attribute[] toArray()
+		public Attribute[] ToArray()
 		{
 		  Attribute[] result = new Attribute[size];
 		  Array.Copy(data, 0, result, 0, size);
 		  return result;
 		}
 
-		public bool contains(Attribute attribute)
+		public bool Contains(Attribute attribute)
 		{
 		  for (int i = 0; i < size; ++i)
 		  {
@@ -380,11 +380,11 @@ namespace ObjectWeb.Asm
 		  return false;
 		}
 
-		public void add(Attribute attribute)
+		public void Add(Attribute attribute)
 		{
 		  if (size >= data.Length)
 		  {
-			Attribute[] newData = new Attribute[data.Length + SIZE_INCREMENT];
+			Attribute[] newData = new Attribute[data.Length + Size_Increment];
 			Array.Copy(data, 0, newData, 0, size);
 			data = newData;
 		  }
