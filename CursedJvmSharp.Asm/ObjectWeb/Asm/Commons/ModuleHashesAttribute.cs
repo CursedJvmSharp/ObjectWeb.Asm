@@ -101,19 +101,19 @@ namespace ObjectWeb.Asm.Commons
         public override ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack, int maxLocals)
         {
             var byteVector = new ByteVector();
-            byteVector.PutShort(classWriter.NewUtf8(algorithm));
-            if (modules == null)
+            byteVector.PutShort(classWriter.NewUtf8(Algorithm));
+            if (Modules == null)
             {
                 byteVector.PutShort(0);
             }
             else
             {
-                var numModules = modules.Count;
+                var numModules = Modules.Count;
                 byteVector.PutShort(numModules);
                 for (var i = 0; i < numModules; ++i)
                 {
-                    var module = modules[i];
-                    var hash = hashes[i];
+                    var module = Modules[i];
+                    var hash = Hashes[i];
                     byteVector.PutShort(classWriter.NewModule(module)).PutShort(hash.Length).PutByteArray(hash, 0, hash.Length);
                 }
             }

@@ -106,11 +106,11 @@ namespace ObjectWeb.Asm.Tree
             var annotation = new AnnotationNode(descriptor);
             if (visible)
             {
-                visibleAnnotations = Util.Add(visibleAnnotations, annotation);
+                VisibleAnnotations = Util.Add(VisibleAnnotations, annotation);
             }
             else
             {
-                invisibleAnnotations = Util.Add(invisibleAnnotations, annotation);
+                InvisibleAnnotations = Util.Add(InvisibleAnnotations, annotation);
             }
 
             return annotation;
@@ -121,11 +121,11 @@ namespace ObjectWeb.Asm.Tree
             var typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
             if (visible)
             {
-                visibleTypeAnnotations = Util.Add(visibleTypeAnnotations, typeAnnotation);
+                VisibleTypeAnnotations = Util.Add(VisibleTypeAnnotations, typeAnnotation);
             }
             else
             {
-                invisibleTypeAnnotations = Util.Add(invisibleTypeAnnotations, typeAnnotation);
+                InvisibleTypeAnnotations = Util.Add(InvisibleTypeAnnotations, typeAnnotation);
             }
 
             return typeAnnotation;
@@ -133,7 +133,7 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitAttribute(Attribute attribute)
         {
-            attrs = Util.Add(attrs, attribute);
+            Attrs = Util.Add(Attrs, attribute);
         }
 
         public override void VisitEnd()
@@ -164,55 +164,55 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "classVisitor"> a class visitor. </param>
         public virtual void Accept(ClassVisitor classVisitor)
         {
-            var recordComponentVisitor = classVisitor.VisitRecordComponent(name, descriptor, signature);
+            var recordComponentVisitor = classVisitor.VisitRecordComponent(Name, Descriptor, Signature);
             if (recordComponentVisitor == null)
             {
                 return;
             }
 
             // Visit the annotations.
-            if (visibleAnnotations != null)
+            if (VisibleAnnotations != null)
             {
-                for (int i = 0, n = visibleAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleAnnotations.Count; i < n; ++i)
                 {
-                    var annotation = visibleAnnotations[i];
+                    var annotation = VisibleAnnotations[i];
                     annotation.Accept(recordComponentVisitor.VisitAnnotation(annotation.Desc, true));
                 }
             }
 
-            if (invisibleAnnotations != null)
+            if (InvisibleAnnotations != null)
             {
-                for (int i = 0, n = invisibleAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleAnnotations.Count; i < n; ++i)
                 {
-                    var annotation = invisibleAnnotations[i];
+                    var annotation = InvisibleAnnotations[i];
                     annotation.Accept(recordComponentVisitor.VisitAnnotation(annotation.Desc, false));
                 }
             }
 
-            if (visibleTypeAnnotations != null)
+            if (VisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = visibleTypeAnnotations[i];
+                    var typeAnnotation = VisibleTypeAnnotations[i];
                     typeAnnotation.Accept(recordComponentVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
-            if (invisibleTypeAnnotations != null)
+            if (InvisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = invisibleTypeAnnotations[i];
+                    var typeAnnotation = InvisibleTypeAnnotations[i];
                     typeAnnotation.Accept(recordComponentVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }
 
             // Visit the non standard attributes.
-            if (attrs != null)
+            if (Attrs != null)
             {
-                for (int i = 0, n = attrs.Count; i < n; ++i)
+                for (int i = 0, n = Attrs.Count; i < n; ++i)
                 {
-                    recordComponentVisitor.VisitAttribute(attrs[i]);
+                    recordComponentVisitor.VisitAttribute(Attrs[i]);
                 }
             }
 

@@ -77,13 +77,13 @@ namespace ObjectWeb.Asm.Tree
                 labelsArray[i] = this.Labels[i].Label;
             }
 
-            methodVisitor.VisitTableSwitchInsn(min, max, dflt.Label, labelsArray);
+            methodVisitor.VisitTableSwitchInsn(Min, Max, Dflt.Label, labelsArray);
             AcceptAnnotations(methodVisitor);
         }
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return (new TableSwitchInsnNode(min, max, Clone(dflt, clonedLabels), Clone(labels, clonedLabels))).CloneAnnotations(this);
+            return (new TableSwitchInsnNode(Min, Max, Clone(Dflt, clonedLabels), Clone(Labels, clonedLabels))).CloneAnnotations(this);
         }
     }
 }

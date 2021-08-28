@@ -60,12 +60,12 @@ namespace ObjectWeb.Asm.Tree
         public override int Type => Line;
         public override void Accept(MethodVisitor methodVisitor)
         {
-            methodVisitor.VisitLineNumber(line, start.Label);
+            methodVisitor.VisitLineNumber(Line, Start.Label);
         }
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return new LineNumberNode(line, Clone(start, clonedLabels));
+            return new LineNumberNode(Line, Clone(Start, clonedLabels));
         }
     }
 }

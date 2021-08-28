@@ -50,14 +50,14 @@ namespace ObjectWeb.Asm
 	  private readonly SymbolTable _symbolTable;
 
 	  /// <summary>
-	  /// Whether values are named or not. AnnotationWriter instances used for annotation default and
-	  /// annotation arrays use unnamed values (i.e. they generate an 'element_value' structure for each
+	  /// Whether Values are named or not. AnnotationWriter instances used for annotation default and
+	  /// annotation arrays use unnamed Values (i.e. they generate an 'element_value' structure for each
 	  /// value, instead of an element_name_index followed by an element_value).
 	  /// </summary>
 	  private readonly bool _useNamedValues;
 
 	  /// <summary>
-	  /// The 'annotation' or 'type_annotation' JVMS structure corresponding to the annotation values
+	  /// The 'annotation' or 'type_annotation' JVMS structure corresponding to the annotation Values
 	  /// visited so far. All the fields of these structures, except the last one - the
 	  /// element_value_pairs array, must be set before this ByteVector is passed to the constructor
 	  /// (num_element_value_pairs can be set to 0, it is reset to the correct value in {@link
@@ -84,14 +84,14 @@ namespace ObjectWeb.Asm
 	  /// <summary>
 	  /// The previous AnnotationWriter. This field is used to store the list of annotations of a
 	  /// Runtime[In]Visible[Type]Annotations attribute. It is unused for nested or array annotations
-	  /// (annotation values of annotation type), or for AnnotationDefault attributes.
+	  /// (annotation Values of annotation type), or for AnnotationDefault attributes.
 	  /// </summary>
 	  private readonly AnnotationWriter _previousAnnotation;
 
 	  /// <summary>
 	  /// The next AnnotationWriter. This field is used to store the list of annotations of a
 	  /// Runtime[In]Visible[Type]Annotations attribute. It is unused for nested or array annotations
-	  /// (annotation values of annotation type), or for AnnotationDefault attributes.
+	  /// (annotation Values of annotation type), or for AnnotationDefault attributes.
 	  /// </summary>
 	  private AnnotationWriter _nextAnnotation;
 
@@ -103,8 +103,8 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="AnnotationWriter"/>.
 	  /// </summary>
 	  /// <param name="symbolTable"> where the constants used in this AnnotationWriter must be stored. </param>
-	  /// <param name="useNamedValues"> whether values are named or not. AnnotationDefault and annotation arrays
-	  ///     use unnamed values. </param>
+	  /// <param name="useNamedValues"> whether Values are named or not. AnnotationDefault and annotation arrays
+	  ///     use unnamed Values. </param>
 	  /// <param name="annotation"> where the 'annotation' or 'type_annotation' JVMS structure corresponding to
 	  ///     the visited content must be stored. This ByteVector must already contain all the fields of
 	  ///     the structure except the last one (the element_value_pairs array). </param>
@@ -126,7 +126,7 @@ namespace ObjectWeb.Asm
 	  }
 
 	  /// <summary>
-	  /// Creates a new <seealso cref="AnnotationWriter"/> using named values.
+	  /// Creates a new <seealso cref="AnnotationWriter"/> using named Values.
 	  /// </summary>
 	  /// <param name="symbolTable"> where the constants used in this AnnotationWriter must be stored. </param>
 	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
@@ -145,7 +145,7 @@ namespace ObjectWeb.Asm
 	  }
 
 	  /// <summary>
-	  /// Creates a new <seealso cref="AnnotationWriter"/> using named values.
+	  /// Creates a new <seealso cref="AnnotationWriter"/> using named Values.
 	  /// </summary>
 	  /// <param name="symbolTable"> where the constants used in this AnnotationWriter must be stored. </param>
 	  /// <param name="typeRef"> a reference to the annotated type. The sort of this type reference must be
@@ -329,7 +329,7 @@ namespace ObjectWeb.Asm
 		// end of an element_value of array type is similar to the end of an 'annotation' structure: an
 		// unsigned short num_values followed by num_values element_value, versus an unsigned short
 		// num_element_value_pairs, followed by num_element_value_pairs { element_name_index,
-		// element_value } tuples. This allows us to use an AnnotationWriter with unnamed values to
+		// element_value } tuples. This allows us to use an AnnotationWriter with unnamed Values to
 		// visit the array elements. Its num_element_value_pairs will correspond to the number of array
 		// elements and will be stored in what is in fact num_values.
 		_annotation.Put12('[', 0);

@@ -187,14 +187,14 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitSource(string file, string debug)
         {
-            sourceFile = file;
-            sourceDebug = debug;
+            SourceFile = file;
+            SourceDebug = debug;
         }
 
         public override ModuleVisitor VisitModule(string name, int access, string version)
         {
-            module = new ModuleNode(name, access, version);
-            return module;
+            Module = new ModuleNode(name, access, version);
+            return Module;
         }
 
         public override void VisitNestHost(string nestHost)
@@ -204,9 +204,9 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitOuterClass(string owner, string name, string descriptor)
         {
-            outerClass = owner;
-            outerMethod = name;
-            outerMethodDesc = descriptor;
+            OuterClass = owner;
+            OuterMethod = name;
+            OuterMethodDesc = descriptor;
         }
 
         public override AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
@@ -214,11 +214,11 @@ namespace ObjectWeb.Asm.Tree
             var annotation = new AnnotationNode(descriptor);
             if (visible)
             {
-                visibleAnnotations = Util.Add(visibleAnnotations, annotation);
+                VisibleAnnotations = Util.Add(VisibleAnnotations, annotation);
             }
             else
             {
-                invisibleAnnotations = Util.Add(invisibleAnnotations, annotation);
+                InvisibleAnnotations = Util.Add(InvisibleAnnotations, annotation);
             }
 
             return annotation;
@@ -229,11 +229,11 @@ namespace ObjectWeb.Asm.Tree
             var typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
             if (visible)
             {
-                visibleTypeAnnotations = Util.Add(visibleTypeAnnotations, typeAnnotation);
+                VisibleTypeAnnotations = Util.Add(VisibleTypeAnnotations, typeAnnotation);
             }
             else
             {
-                invisibleTypeAnnotations = Util.Add(invisibleTypeAnnotations, typeAnnotation);
+                InvisibleTypeAnnotations = Util.Add(InvisibleTypeAnnotations, typeAnnotation);
             }
 
             return typeAnnotation;
@@ -241,43 +241,43 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitAttribute(Attribute attribute)
         {
-            attrs = Util.Add(attrs, attribute);
+            Attrs = Util.Add(Attrs, attribute);
         }
 
         public override void VisitNestMember(string nestMember)
         {
-            nestMembers = Util.Add(nestMembers, nestMember);
+            NestMembers = Util.Add(NestMembers, nestMember);
         }
 
         public override void VisitPermittedSubclass(string permittedSubclass)
         {
-            permittedSubclasses = Util.Add(permittedSubclasses, permittedSubclass);
+            PermittedSubclasses = Util.Add(PermittedSubclasses, permittedSubclass);
         }
 
         public override void VisitInnerClass(string name, string outerName, string innerName, int access)
         {
             var innerClass = new InnerClassNode(name, outerName, innerName, access);
-            innerClasses.Add(innerClass);
+            InnerClasses.Add(innerClass);
         }
 
         public override RecordComponentVisitor VisitRecordComponent(string name, string descriptor, string signature)
         {
             var recordComponent = new RecordComponentNode(name, descriptor, signature);
-            recordComponents = Util.Add(recordComponents, recordComponent);
+            RecordComponents = Util.Add(RecordComponents, recordComponent);
             return recordComponent;
         }
 
         public override FieldVisitor VisitField(int access, string name, string descriptor, string signature, object value)
         {
             var field = new FieldNode(access, name, descriptor, signature, value);
-            fields.Add(field);
+            Fields.Add(field);
             return field;
         }
 
         public override MethodVisitor VisitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
         {
             var method = new MethodNode(access, name, descriptor, signature, exceptions);
-            methods.Add(method);
+            Methods.Add(method);
             return method;
         }
 
@@ -298,88 +298,88 @@ namespace ObjectWeb.Asm.Tree
         ///     Opcodes}. </param>
         public virtual void Check(int api)
         {
-            if (api < IOpcodes.Asm9 && permittedSubclasses != null)
+            if (api < IOpcodes.Asm9 && PermittedSubclasses != null)
             {
                 throw new UnsupportedClassVersionException();
             }
 
-            if (api < IOpcodes.Asm8 && ((access & IOpcodes.Acc_Record) != 0 || recordComponents != null))
+            if (api < IOpcodes.Asm8 && ((Access & IOpcodes.Acc_Record) != 0 || RecordComponents != null))
             {
                 throw new UnsupportedClassVersionException();
             }
 
-            if (api < IOpcodes.Asm7 && (!string.ReferenceEquals(nestHostClass, null) || nestMembers != null))
+            if (api < IOpcodes.Asm7 && (!string.ReferenceEquals(NestHostClass, null) || NestMembers != null))
             {
                 throw new UnsupportedClassVersionException();
             }
 
-            if (api < IOpcodes.Asm6 && module != null)
+            if (api < IOpcodes.Asm6 && Module != null)
             {
                 throw new UnsupportedClassVersionException();
             }
 
             if (api < IOpcodes.Asm5)
             {
-                if (visibleTypeAnnotations != null && visibleTypeAnnotations.Count > 0)
+                if (VisibleTypeAnnotations != null && VisibleTypeAnnotations.Count > 0)
                 {
                     throw new UnsupportedClassVersionException();
                 }
 
-                if (invisibleTypeAnnotations != null && invisibleTypeAnnotations.Count > 0)
+                if (InvisibleTypeAnnotations != null && InvisibleTypeAnnotations.Count > 0)
                 {
                     throw new UnsupportedClassVersionException();
                 }
             }
 
             // Check the annotations.
-            if (visibleAnnotations != null)
+            if (VisibleAnnotations != null)
             {
-                for (var i = visibleAnnotations.Count - 1; i >= 0; --i)
+                for (var i = VisibleAnnotations.Count - 1; i >= 0; --i)
                 {
-                    visibleAnnotations[i].Check(api);
+                    VisibleAnnotations[i].Check(api);
                 }
             }
 
-            if (invisibleAnnotations != null)
+            if (InvisibleAnnotations != null)
             {
-                for (var i = invisibleAnnotations.Count - 1; i >= 0; --i)
+                for (var i = InvisibleAnnotations.Count - 1; i >= 0; --i)
                 {
-                    invisibleAnnotations[i].Check(api);
+                    InvisibleAnnotations[i].Check(api);
                 }
             }
 
-            if (visibleTypeAnnotations != null)
+            if (VisibleTypeAnnotations != null)
             {
-                for (var i = visibleTypeAnnotations.Count - 1; i >= 0; --i)
+                for (var i = VisibleTypeAnnotations.Count - 1; i >= 0; --i)
                 {
-                    visibleTypeAnnotations[i].Check(api);
+                    VisibleTypeAnnotations[i].Check(api);
                 }
             }
 
-            if (invisibleTypeAnnotations != null)
+            if (InvisibleTypeAnnotations != null)
             {
-                for (var i = invisibleTypeAnnotations.Count - 1; i >= 0; --i)
+                for (var i = InvisibleTypeAnnotations.Count - 1; i >= 0; --i)
                 {
-                    invisibleTypeAnnotations[i].Check(api);
+                    InvisibleTypeAnnotations[i].Check(api);
                 }
             }
 
-            if (recordComponents != null)
+            if (RecordComponents != null)
             {
-                for (var i = recordComponents.Count - 1; i >= 0; --i)
+                for (var i = RecordComponents.Count - 1; i >= 0; --i)
                 {
-                    recordComponents[i].Check(api);
+                    RecordComponents[i].Check(api);
                 }
             }
 
-            for (var i = fields.Count - 1; i >= 0; --i)
+            for (var i = Fields.Count - 1; i >= 0; --i)
             {
-                fields[i].Check(api);
+                Fields[i].Check(api);
             }
 
-            for (var i = methods.Count - 1; i >= 0; --i)
+            for (var i = Methods.Count - 1; i >= 0; --i)
             {
-                methods[i].Check(api);
+                Methods[i].Check(api);
             }
         }
 
@@ -391,120 +391,120 @@ namespace ObjectWeb.Asm.Tree
         {
             // Visit the header.
             var interfacesArray = this.Interfaces.ToArray();
-            classVisitor.Visit(version, access, name, signature, superName, interfacesArray);
+            classVisitor.Visit(Version, Access, Name, Signature, SuperName, interfacesArray);
             // Visit the source.
-            if (!string.ReferenceEquals(sourceFile, null) || !string.ReferenceEquals(sourceDebug, null))
+            if (!string.ReferenceEquals(SourceFile, null) || !string.ReferenceEquals(SourceDebug, null))
             {
-                classVisitor.VisitSource(sourceFile, sourceDebug);
+                classVisitor.VisitSource(SourceFile, SourceDebug);
             }
 
             // Visit the module.
-            if (module != null)
+            if (Module != null)
             {
-                module.Accept(classVisitor);
+                Module.Accept(classVisitor);
             }
 
             // Visit the nest host class.
-            if (!string.ReferenceEquals(nestHostClass, null))
+            if (!string.ReferenceEquals(NestHostClass, null))
             {
-                classVisitor.VisitNestHost(nestHostClass);
+                classVisitor.VisitNestHost(NestHostClass);
             }
 
             // Visit the outer class.
-            if (!string.ReferenceEquals(outerClass, null))
+            if (!string.ReferenceEquals(OuterClass, null))
             {
-                classVisitor.VisitOuterClass(outerClass, outerMethod, outerMethodDesc);
+                classVisitor.VisitOuterClass(OuterClass, OuterMethod, OuterMethodDesc);
             }
 
             // Visit the annotations.
-            if (visibleAnnotations != null)
+            if (VisibleAnnotations != null)
             {
-                for (int i = 0, n = visibleAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleAnnotations.Count; i < n; ++i)
                 {
-                    var annotation = visibleAnnotations[i];
+                    var annotation = VisibleAnnotations[i];
                     annotation.Accept(classVisitor.VisitAnnotation(annotation.Desc, true));
                 }
             }
 
-            if (invisibleAnnotations != null)
+            if (InvisibleAnnotations != null)
             {
-                for (int i = 0, n = invisibleAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleAnnotations.Count; i < n; ++i)
                 {
-                    var annotation = invisibleAnnotations[i];
+                    var annotation = InvisibleAnnotations[i];
                     annotation.Accept(classVisitor.VisitAnnotation(annotation.Desc, false));
                 }
             }
 
-            if (visibleTypeAnnotations != null)
+            if (VisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = visibleTypeAnnotations[i];
+                    var typeAnnotation = VisibleTypeAnnotations[i];
                     typeAnnotation.Accept(classVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
-            if (invisibleTypeAnnotations != null)
+            if (InvisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = invisibleTypeAnnotations[i];
+                    var typeAnnotation = InvisibleTypeAnnotations[i];
                     typeAnnotation.Accept(classVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }
 
             // Visit the non standard attributes.
-            if (attrs != null)
+            if (Attrs != null)
             {
-                for (int i = 0, n = attrs.Count; i < n; ++i)
+                for (int i = 0, n = Attrs.Count; i < n; ++i)
                 {
-                    classVisitor.VisitAttribute(attrs[i]);
+                    classVisitor.VisitAttribute(Attrs[i]);
                 }
             }
 
             // Visit the nest members.
-            if (nestMembers != null)
+            if (NestMembers != null)
             {
-                for (int i = 0, n = nestMembers.Count; i < n; ++i)
+                for (int i = 0, n = NestMembers.Count; i < n; ++i)
                 {
-                    classVisitor.VisitNestMember(nestMembers[i]);
+                    classVisitor.VisitNestMember(NestMembers[i]);
                 }
             }
 
             // Visit the permitted subclasses.
-            if (permittedSubclasses != null)
+            if (PermittedSubclasses != null)
             {
-                for (int i = 0, n = permittedSubclasses.Count; i < n; ++i)
+                for (int i = 0, n = PermittedSubclasses.Count; i < n; ++i)
                 {
-                    classVisitor.VisitPermittedSubclass(permittedSubclasses[i]);
+                    classVisitor.VisitPermittedSubclass(PermittedSubclasses[i]);
                 }
             }
 
             // Visit the inner classes.
-            for (int i = 0, n = innerClasses.Count; i < n; ++i)
+            for (int i = 0, n = InnerClasses.Count; i < n; ++i)
             {
-                innerClasses[i].Accept(classVisitor);
+                InnerClasses[i].Accept(classVisitor);
             }
 
             // Visit the record components.
-            if (recordComponents != null)
+            if (RecordComponents != null)
             {
-                for (int i = 0, n = recordComponents.Count; i < n; ++i)
+                for (int i = 0, n = RecordComponents.Count; i < n; ++i)
                 {
-                    recordComponents[i].Accept(classVisitor);
+                    RecordComponents[i].Accept(classVisitor);
                 }
             }
 
             // Visit the fields.
-            for (int i = 0, n = fields.Count; i < n; ++i)
+            for (int i = 0, n = Fields.Count; i < n; ++i)
             {
-                fields[i].Accept(classVisitor);
+                Fields[i].Accept(classVisitor);
             }
 
             // Visit the methods.
-            for (int i = 0, n = methods.Count; i < n; ++i)
+            for (int i = 0, n = Methods.Count; i < n; ++i)
             {
-                methods[i].Accept(classVisitor);
+                Methods[i].Accept(classVisitor);
             }
 
             classVisitor.VisitEnd();

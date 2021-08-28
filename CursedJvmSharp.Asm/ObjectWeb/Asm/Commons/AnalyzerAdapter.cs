@@ -112,7 +112,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name = "api">
         ///     the ASM API version implemented by this visitor. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref = "IOpcodes"/>.
+        ///     ASM}<i>x</i> Values in <seealso cref = "IOpcodes"/>.
         /// </param>
         /// <param name = "owner"> the owner's class name. </param>
         /// <param name = "access"> the method's access flags (see <seealso cref = "IOpcodes"/>). </param>
@@ -125,15 +125,15 @@ namespace ObjectWeb.Asm.Commons
         public AnalyzerAdapter(int api, string owner, int access, string name, string descriptor, MethodVisitor methodVisitor): base(api, methodVisitor)
         {
             this._owner = owner;
-            locals = new List<object>();
-            stack = new List<object>();
-            uninitializedTypes = new Dictionary<object, object>();
+            Locals = new List<object>();
+            Stack = new List<object>();
+            UninitializedTypes = new Dictionary<object, object>();
             if ((access & IOpcodes.Acc_Static) == 0)
             {
                 if ("<init>".Equals(name))
-                    locals.Add(IOpcodes.uninitializedThis);
+                    Locals.Add(IOpcodes.uninitializedThis);
                 else
-                    locals.Add(owner);
+                    Locals.Add(owner);
             }
 
             foreach (var argumentType in JType.GetArgumentTypes(descriptor))
@@ -144,30 +144,30 @@ namespace ObjectWeb.Asm.Commons
                     case JType.Byte:
                     case JType.Short:
                     case JType.Int:
-                        locals.Add(IOpcodes.integer);
+                        Locals.Add(IOpcodes.integer);
                         break;
                     case JType.Float:
-                        locals.Add(IOpcodes.@float);
+                        Locals.Add(IOpcodes.@float);
                         break;
                     case JType.Long:
-                        locals.Add(IOpcodes.@long);
-                        locals.Add(IOpcodes.top);
+                        Locals.Add(IOpcodes.@long);
+                        Locals.Add(IOpcodes.top);
                         break;
                     case JType.Double:
-                        locals.Add(IOpcodes.@double);
-                        locals.Add(IOpcodes.top);
+                        Locals.Add(IOpcodes.@double);
+                        Locals.Add(IOpcodes.top);
                         break;
                     case JType.Array:
-                        locals.Add(argumentType.Descriptor);
+                        Locals.Add(argumentType.Descriptor);
                         break;
                     case JType.Object:
-                        locals.Add(argumentType.InternalName);
+                        Locals.Add(argumentType.InternalName);
                         break;
                     default:
                         throw new Exception();
                 }
 
-            _maxLocals = locals.Count;
+            _maxLocals = Locals.Count;
         }
 
         public override void VisitFrame(int type, int numLocal, object[] local, int numStack, object[] stack)
@@ -176,20 +176,20 @@ namespace ObjectWeb.Asm.Commons
                 // Uncompressed frame.
                 throw new ArgumentException("AnalyzerAdapter only accepts expanded frames (see ClassReader.EXPAND_FRAMES)");
             base.VisitFrame(type, numLocal, local, numStack, stack);
-            if (locals != null)
+            if (Locals != null)
             {
-                locals.Clear();
+                Locals.Clear();
                 this.Stack.Clear();
             }
             else
             {
-                locals = new List<object>();
+                Locals = new List<object>();
                 this.Stack = new List<object>();
             }
 
-            VisitFrameTypes(numLocal, local, locals);
+            VisitFrameTypes(numLocal, local, Locals);
             VisitFrameTypes(numStack, stack, this.Stack);
-            _maxLocals = Math.Max(_maxLocals, locals.Count);
+            _maxLocals = Math.Max(_maxLocals, Locals.Count);
             _maxStack = Math.Max(_maxStack, this.Stack.Count);
         }
 
@@ -210,8 +210,8 @@ namespace ObjectWeb.Asm.Commons
             Execute(opcode, 0, null);
             if (opcode >= IOpcodes.Ireturn && opcode <= IOpcodes.Return || opcode == IOpcodes.Athrow)
             {
-                locals = null;
-                stack = null;
+                Locals = null;
+                Stack = null;
             }
         }
 
@@ -243,7 +243,7 @@ namespace ObjectWeb.Asm.Commons
                 }
 
                 foreach (var label in _labels)
-                    uninitializedTypes[label] = type;
+                    UninitializedTypes[label] = type;
             }
 
             base.VisitTypeInsn(opcode, type);
@@ -267,7 +267,7 @@ namespace ObjectWeb.Asm.Commons
 
             base.VisitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
             var opcode = opcodeAndSource & ~IOpcodes.Source_Mask;
-            if (locals == null)
+            if (Locals == null)
             {
                 _labels = null;
                 return;
@@ -283,13 +283,13 @@ namespace ObjectWeb.Asm.Commons
                     if (Equals(value, IOpcodes.uninitializedThis))
                         initializedValue = this._owner;
                     else
-                        initializedValue = uninitializedTypes.GetValueOrNull(value);
-                    for (var i = 0; i < locals.Count; ++i)
-                        if (locals[i] == value)
-                            locals[i] = initializedValue;
-                    for (var i = 0; i < stack.Count; ++i)
-                        if (stack[i] == value)
-                            stack[i] = initializedValue;
+                        initializedValue = UninitializedTypes.GetValueOrNull(value);
+                    for (var i = 0; i < Locals.Count; ++i)
+                        if (Locals[i] == value)
+                            Locals[i] = initializedValue;
+                    for (var i = 0; i < Stack.Count; ++i)
+                        if (Stack[i] == value)
+                            Stack[i] = initializedValue;
                 }
             }
 
@@ -300,7 +300,7 @@ namespace ObjectWeb.Asm.Commons
         public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
         {
             base.VisitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
-            if (locals == null)
+            if (Locals == null)
             {
                 _labels = null;
                 return;
@@ -317,8 +317,8 @@ namespace ObjectWeb.Asm.Commons
             Execute(opcode, 0, null);
             if (opcode == IOpcodes.Goto)
             {
-                locals = null;
-                stack = null;
+                Locals = null;
+                Stack = null;
             }
         }
 
@@ -333,7 +333,7 @@ namespace ObjectWeb.Asm.Commons
         public override void VisitLdcInsn(object value)
         {
             base.VisitLdcInsn(value);
-            if (locals == null)
+            if (Locals == null)
             {
                 _labels = null;
                 return;
@@ -398,16 +398,16 @@ namespace ObjectWeb.Asm.Commons
         {
             base.VisitTableSwitchInsn(min, max, dflt, labels);
             Execute(IOpcodes.Tableswitch, 0, null);
-            locals = null;
-            stack = null;
+            Locals = null;
+            Stack = null;
         }
 
         public override void VisitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels)
         {
             base.VisitLookupSwitchInsn(dflt, keys, labels);
             Execute(IOpcodes.Lookupswitch, 0, null);
-            locals = null;
-            stack = null;
+            Locals = null;
+            Stack = null;
         }
 
         public override void VisitMultiANewArrayInsn(string descriptor, int numDimensions)
@@ -437,21 +437,21 @@ namespace ObjectWeb.Asm.Commons
         private object Get(int local)
         {
             _maxLocals = Math.Max(_maxLocals, local + 1);
-            return local < locals.Count ? locals[local] : IOpcodes.top;
+            return local < Locals.Count ? Locals[local] : IOpcodes.top;
         }
 
         private void Set(int local, object type)
         {
             _maxLocals = Math.Max(_maxLocals, local + 1);
-            while (local >= locals.Count)
-                locals.Add(IOpcodes.top);
-            locals[local] = type;
+            while (local >= Locals.Count)
+                Locals.Add(IOpcodes.top);
+            Locals[local] = type;
         }
 
         private void Push(object type)
         {
-            stack.Add(type);
-            _maxStack = Math.Max(_maxStack, stack.Count);
+            Stack.Add(type);
+            _maxStack = Math.Max(_maxStack, Stack.Count);
         }
 
         private void PushDescriptor(string fieldOrMethodDescriptor)
@@ -492,18 +492,18 @@ namespace ObjectWeb.Asm.Commons
 
         private object Pop()
         {
-            var stackCount = stack.Count - 1;
-            var current = stack[stackCount];
-            stack.RemoveAt(stackCount);
+            var stackCount = Stack.Count - 1;
+            var current = Stack[stackCount];
+            Stack.RemoveAt(stackCount);
             return current;
         }
 
         private void Pop(int numSlots)
         {
-            var size = stack.Count;
+            var size = Stack.Count;
             var end = size - numSlots;
             for (var i = size - 1; i >= end; --i)
-                stack.RemoveAt(i);
+                Stack.RemoveAt(i);
         }
 
         private void Pop(string descriptor)
@@ -531,7 +531,7 @@ namespace ObjectWeb.Asm.Commons
         {
             if (opcode == IOpcodes.Jsr || opcode == IOpcodes.Ret)
                 throw new ArgumentException("JSR/RET are not supported");
-            if (locals == null)
+            if (Locals == null)
             {
                 _labels = null;
                 return;

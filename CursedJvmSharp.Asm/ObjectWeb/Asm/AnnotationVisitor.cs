@@ -42,7 +42,7 @@ namespace ObjectWeb.Asm
 
 	  /// <summary>
 	  /// The ASM API version implemented by this visitor. The value of this field must be one of the
-	  /// {@code ASM}<i>x</i> values in <seealso cref="IOpcodes"/>.
+	  /// {@code ASM}<i>x</i> Values in <seealso cref="IOpcodes"/>.
 	  /// </summary>
 	  protected internal readonly int api;
 
@@ -56,7 +56,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="AnnotationVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
+	  ///     ASM}<i>x</i> Values in <seealso cref="IOpcodes"/>. </param>
 	  public AnnotationVisitor(int api) : this(api, null)
 	  {
 	  }
@@ -65,7 +65,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="AnnotationVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
+	  ///     ASM}<i>x</i> Values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="annotationVisitor"> the annotation visitor to which this visitor must delegate method
 	  ///     calls. May be {@literal null}. </param>
 	  public AnnotationVisitor(int api, AnnotationVisitor annotationVisitor)
@@ -89,7 +89,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="value"> the actual value, whose type must be <seealso cref="Byte"/>, <seealso cref="Boolean"/>, {@link
 	  ///     Character}, <seealso cref="Short"/>, <seealso cref="Integer"/> , <seealso cref="Long"/>, <seealso cref="Float"/>, <seealso cref="Double"/>,
 	  ///     <seealso cref="string"/> or <seealso cref="Type"/> of <seealso cref="Type.OBJECT"/> or <seealso cref="Type.ARRAY"/> sort. This
-	  ///     value can also be an array of byte, boolean, short, char, int, long, float or double values
+	  ///     value can also be an array of byte, boolean, short, char, int, long, float or double Values
 	  ///     (this is equivalent to using <seealso cref="VisitArray"/> and visiting each array element in turn,
 	  ///     but is more convenient). </param>
 	  public virtual void Visit(string name, object value)
@@ -132,14 +132,14 @@ namespace ObjectWeb.Asm
 	  }
 
 	  /// <summary>
-	  /// Visits an array value of the annotation. Note that arrays of primitive values (such as byte,
+	  /// Visits an array value of the annotation. Note that arrays of primitive Values (such as byte,
 	  /// boolean, short, char, int, long, float or double) can be passed as value to {@link #visit
-	  /// visit}. This is what <seealso cref="ClassReader"/> does for non empty arrays of primitive values.
+	  /// visit}. This is what <seealso cref="ClassReader"/> does for non empty arrays of primitive Values.
 	  /// </summary>
 	  /// <param name="name"> the value name. </param>
 	  /// <returns> a visitor to visit the actual array value elements, or {@literal null} if this visitor
-	  ///     is not interested in visiting these values. The 'name' parameters passed to the methods of
-	  ///     this visitor are ignored. <i>All the array values must be visited before calling other
+	  ///     is not interested in visiting these Values. The 'name' parameters passed to the methods of
+	  ///     this visitor are ignored. <i>All the array Values must be visited before calling other
 	  ///     methods on this annotation visitor</i>. </returns>
 	  public virtual AnnotationVisitor VisitArray(string name)
 	  {

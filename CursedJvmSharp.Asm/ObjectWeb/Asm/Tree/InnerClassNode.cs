@@ -79,7 +79,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "classVisitor"> a class visitor. </param>
         public virtual void Accept(ClassVisitor classVisitor)
         {
-            classVisitor.VisitInnerClass(name, outerName, innerName, access);
+            classVisitor.VisitInnerClass(Name, OuterName, InnerName, Access);
         }
     }
 }

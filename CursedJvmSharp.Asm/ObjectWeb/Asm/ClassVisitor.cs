@@ -44,7 +44,7 @@ namespace ObjectWeb.Asm
 
 	  /// <summary>
 	  /// The ASM API version implemented by this visitor. The value of this field must be one of the
-	  /// {@code ASM}<i>x</i> values in <seealso cref="IOpcodes"/>.
+	  /// {@code ASM}<i>x</i> Values in <seealso cref="IOpcodes"/>.
 	  /// </summary>
 	  protected internal readonly int api;
 
@@ -56,7 +56,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="ClassVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
+	  ///     ASM}<i>x</i> Values in <seealso cref="IOpcodes"/>. </param>
 	  public ClassVisitor(int api) : this(api, null)
 	  {
 	  }
@@ -65,7 +65,7 @@ namespace ObjectWeb.Asm
 	  /// Constructs a new <seealso cref="ClassVisitor"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
+	  ///     ASM}<i>x</i> Values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="classVisitor"> the class visitor to which this visitor must delegate method calls. May be
 	  ///     null. </param>
 	  public ClassVisitor(int api, ClassVisitor classVisitor)
@@ -132,7 +132,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="access"> the module access flags, among {@code ACC_OPEN}, {@code ACC_SYNTHETIC} and {@code
 	  ///     ACC_MANDATED}. </param>
 	  /// <param name="version"> the module version, or {@literal null}. </param>
-	  /// <returns> a visitor to visit the module values, or {@literal null} if this visitor is not
+	  /// <returns> a visitor to visit the module Values, or {@literal null} if this visitor is not
 	  ///     interested in visiting this module. </returns>
 	  public virtual ModuleVisitor VisitModule(string name, int access, string version)
 	  {
@@ -190,7 +190,7 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
 	  /// <param name="visible"> {@literal true} if the annotation is visible at runtime. </param>
-	  /// <returns> a visitor to visit the annotation values, or {@literal null} if this visitor is not
+	  /// <returns> a visitor to visit the annotation Values, or {@literal null} if this visitor is not
 	  ///     interested in visiting this annotation. </returns>
 	  public virtual AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
 	  {
@@ -213,7 +213,7 @@ namespace ObjectWeb.Asm
 	  ///     'typeRef' as a whole. </param>
 	  /// <param name="descriptor"> the class descriptor of the annotation class. </param>
 	  /// <param name="visible"> {@literal true} if the annotation is visible at runtime. </param>
-	  /// <returns> a visitor to visit the annotation values, or {@literal null} if this visitor is not
+	  /// <returns> a visitor to visit the annotation Values, or {@literal null} if this visitor is not
 	  ///     interested in visiting this annotation. </returns>
 	  public virtual AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
 	  {

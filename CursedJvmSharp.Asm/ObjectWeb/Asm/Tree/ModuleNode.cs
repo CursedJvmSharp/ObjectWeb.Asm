@@ -133,62 +133,62 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitPackage(string packaze)
         {
-            if (packages == null)
+            if (Packages == null)
             {
-                packages = new List<string>(5);
+                Packages = new List<string>(5);
             }
 
-            packages.Add(packaze);
+            Packages.Add(packaze);
         }
 
         public override void VisitRequire(string module, int access, string version)
         {
-            if (requires == null)
+            if (Requires == null)
             {
-                requires = new List<ModuleRequireNode>(5);
+                Requires = new List<ModuleRequireNode>(5);
             }
 
-            requires.Add(new ModuleRequireNode(module, access, version));
+            Requires.Add(new ModuleRequireNode(module, access, version));
         }
 
         public override void VisitExport(string packaze, int access, params string[] modules)
         {
-            if (exports == null)
+            if (Exports == null)
             {
-                exports = new List<ModuleExportNode>(5);
+                Exports = new List<ModuleExportNode>(5);
             }
 
-            exports.Add(new ModuleExportNode(packaze, access, Util.AsArrayList(modules)));
+            Exports.Add(new ModuleExportNode(packaze, access, Util.AsArrayList(modules)));
         }
 
         public override void VisitOpen(string packaze, int access, params string[] modules)
         {
-            if (opens == null)
+            if (Opens == null)
             {
-                opens = new List<ModuleOpenNode>(5);
+                Opens = new List<ModuleOpenNode>(5);
             }
 
-            opens.Add(new ModuleOpenNode(packaze, access, Util.AsArrayList(modules)));
+            Opens.Add(new ModuleOpenNode(packaze, access, Util.AsArrayList(modules)));
         }
 
         public override void VisitUse(string service)
         {
-            if (uses == null)
+            if (Uses == null)
             {
-                uses = new List<string>(5);
+                Uses = new List<string>(5);
             }
 
-            uses.Add(service);
+            Uses.Add(service);
         }
 
         public override void VisitProvide(string service, params string[] providers)
         {
-            if (provides == null)
+            if (Provides == null)
             {
-                provides = new List<ModuleProvideNode>(5);
+                Provides = new List<ModuleProvideNode>(5);
             }
 
-            provides.Add(new ModuleProvideNode(service, Util.AsArrayList(providers)));
+            Provides.Add(new ModuleProvideNode(service, Util.AsArrayList(providers)));
         }
 
         public override void VisitEnd()
@@ -202,62 +202,62 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "classVisitor"> a class visitor. </param>
         public virtual void Accept(ClassVisitor classVisitor)
         {
-            var moduleVisitor = classVisitor.VisitModule(name, access, version);
+            var moduleVisitor = classVisitor.VisitModule(Name, Access, Version);
             if (moduleVisitor == null)
             {
                 return;
             }
 
-            if (!string.ReferenceEquals(mainClass, null))
+            if (!string.ReferenceEquals(MainClass, null))
             {
-                moduleVisitor.VisitMainClass(mainClass);
+                moduleVisitor.VisitMainClass(MainClass);
             }
 
-            if (packages != null)
+            if (Packages != null)
             {
-                for (int i = 0, n = packages.Count; i < n; i++)
+                for (int i = 0, n = Packages.Count; i < n; i++)
                 {
-                    moduleVisitor.VisitPackage(packages[i]);
+                    moduleVisitor.VisitPackage(Packages[i]);
                 }
             }
 
-            if (requires != null)
+            if (Requires != null)
             {
-                for (int i = 0, n = requires.Count; i < n; i++)
+                for (int i = 0, n = Requires.Count; i < n; i++)
                 {
-                    requires[i].Accept(moduleVisitor);
+                    Requires[i].Accept(moduleVisitor);
                 }
             }
 
-            if (exports != null)
+            if (Exports != null)
             {
-                for (int i = 0, n = exports.Count; i < n; i++)
+                for (int i = 0, n = Exports.Count; i < n; i++)
                 {
-                    exports[i].Accept(moduleVisitor);
+                    Exports[i].Accept(moduleVisitor);
                 }
             }
 
-            if (opens != null)
+            if (Opens != null)
             {
-                for (int i = 0, n = opens.Count; i < n; i++)
+                for (int i = 0, n = Opens.Count; i < n; i++)
                 {
-                    opens[i].Accept(moduleVisitor);
+                    Opens[i].Accept(moduleVisitor);
                 }
             }
 
-            if (uses != null)
+            if (Uses != null)
             {
-                for (int i = 0, n = uses.Count; i < n; i++)
+                for (int i = 0, n = Uses.Count; i < n; i++)
                 {
-                    moduleVisitor.VisitUse(uses[i]);
+                    moduleVisitor.VisitUse(Uses[i]);
                 }
             }
 
-            if (provides != null)
+            if (Provides != null)
             {
-                for (int i = 0, n = provides.Count; i < n; i++)
+                for (int i = 0, n = Provides.Count; i < n; i++)
                 {
-                    provides[i].Accept(moduleVisitor);
+                    Provides[i].Accept(moduleVisitor);
                 }
             }
         }

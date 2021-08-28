@@ -115,7 +115,7 @@ namespace ObjectWeb.Asm.Tree
                 indices[i] = this.Index[i];
             }
 
-            Accept(methodVisitor.VisitLocalVariableAnnotation(typeRef, typePath, startLabels, endLabels, indices, desc, visible));
+            Accept(methodVisitor.VisitLocalVariableAnnotation(TypeRef, TypePath, startLabels, endLabels, indices, Desc, visible));
         }
     }
 }

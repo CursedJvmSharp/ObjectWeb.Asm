@@ -158,20 +158,20 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "methodVisitor"> a method visitor. </param>
         public void AcceptAnnotations(MethodVisitor methodVisitor)
         {
-            if (visibleTypeAnnotations != null)
+            if (VisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = visibleTypeAnnotations[i];
+                    var typeAnnotation = VisibleTypeAnnotations[i];
                     typeAnnotation.Accept(methodVisitor.VisitInsnAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
-            if (invisibleTypeAnnotations != null)
+            if (InvisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = invisibleTypeAnnotations[i];
+                    var typeAnnotation = InvisibleTypeAnnotations[i];
                     typeAnnotation.Accept(methodVisitor.VisitInsnAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }

@@ -56,7 +56,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="api">
         ///     the ASM API version supported by this remapper. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
+        ///     ASM}<i>x</i> Values in <seealso cref="IOpcodes" />.
         /// </param>
         /// <param name="fieldVisitor"> the field visitor this remapper must delegate to. </param>
         /// <param name="remapper"> the remapper to use to remap the types in the visited field. </param>

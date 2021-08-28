@@ -88,19 +88,19 @@ namespace ObjectWeb.Asm.Tree
         public virtual void UpdateIndex(int index)
         {
             var newTypeRef = 0x42000000 | (index << 8);
-            if (visibleTypeAnnotations != null)
+            if (VisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    visibleTypeAnnotations[i].TypeRef = newTypeRef;
+                    VisibleTypeAnnotations[i].TypeRef = newTypeRef;
                 }
             }
 
-            if (invisibleTypeAnnotations != null)
+            if (InvisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    invisibleTypeAnnotations[i].TypeRef = newTypeRef;
+                    InvisibleTypeAnnotations[i].TypeRef = newTypeRef;
                 }
             }
         }
@@ -111,21 +111,21 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "methodVisitor"> a method visitor. </param>
         public virtual void Accept(MethodVisitor methodVisitor)
         {
-            methodVisitor.VisitTryCatchBlock(start.Label, end.Label, handler == null ? null : handler.Label, type);
-            if (visibleTypeAnnotations != null)
+            methodVisitor.VisitTryCatchBlock(Start.Label, End.Label, Handler == null ? null : Handler.Label, Type);
+            if (VisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = visibleTypeAnnotations[i];
+                    var typeAnnotation = VisibleTypeAnnotations[i];
                     typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
-            if (invisibleTypeAnnotations != null)
+            if (InvisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = invisibleTypeAnnotations[i];
+                    var typeAnnotation = InvisibleTypeAnnotations[i];
                     typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }

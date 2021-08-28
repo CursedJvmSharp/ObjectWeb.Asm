@@ -61,7 +61,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// Constructs a new <seealso cref="InstructionAdapter"/>.
 	  /// </summary>
 	  /// <param name="api"> the ASM API version implemented by this visitor. Must be one of the {@code
-	  ///     ASM}<i>x</i> values in <seealso cref="IOpcodes"/>. </param>
+	  ///     ASM}<i>x</i> Values in <seealso cref="IOpcodes"/>. </param>
 	  /// <param name="methodVisitor"> the method visitor to which this adapter delegates calls. </param>
 	  public InstructionAdapter(int api, MethodVisitor methodVisitor) : base(api, methodVisitor)
 	  {

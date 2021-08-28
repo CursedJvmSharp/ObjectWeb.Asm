@@ -67,13 +67,13 @@ namespace ObjectWeb.Asm.Tree
         public override int Type => Jump_Insn;
         public override void Accept(MethodVisitor methodVisitor)
         {
-            methodVisitor.VisitJumpInsn(opcode, label.Label);
+            methodVisitor.VisitJumpInsn(opcode, Label.Label);
             AcceptAnnotations(methodVisitor);
         }
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return (new JumpInsnNode(opcode, Clone(label, clonedLabels))).CloneAnnotations(this);
+            return (new JumpInsnNode(opcode, Clone(Label, clonedLabels))).CloneAnnotations(this);
         }
     }
 }

@@ -266,7 +266,7 @@ namespace ObjectWeb.Asm
 		// The Classfile's access_flags field is just after the last constant pool entry.
 		header = currentCpInfoOffset;
 
-		// Allocate the cache of ConstantDynamic values, if there is at least one.
+		// Allocate the cache of ConstantDynamic Values, if there is at least one.
 		_constantDynamicValues = hasConstantDynamic ? new ConstantDynamic[constantPoolCount] : null;
 
 		// Read the BootstrapMethods attribute, if any (only get the offset of each method).
@@ -627,7 +627,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(classVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -642,7 +642,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(classVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -659,7 +659,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(classVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -676,7 +676,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(classVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -985,7 +985,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1000,7 +1000,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1017,7 +1017,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1034,7 +1034,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1159,7 +1159,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1174,7 +1174,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1191,7 +1191,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1208,7 +1208,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1415,7 +1415,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1430,7 +1430,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1447,7 +1447,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -1464,7 +1464,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 		  }
 		}
@@ -2386,14 +2386,14 @@ namespace ObjectWeb.Asm
 				var numPairs = ReadInt(currentOffset + 4);
 				currentOffset += 8;
 				var keys = new int[numPairs];
-				var values = new Label[numPairs];
+				var Values = new Label[numPairs];
 				for (var i = 0; i < numPairs; ++i)
 				{
 				  keys[i] = ReadInt(currentOffset);
-				  values[i] = labels[currentBytecodeOffset + ReadInt(currentOffset + 4)];
+				  Values[i] = labels[currentBytecodeOffset + ReadInt(currentOffset + 4)];
 				  currentOffset += 8;
 				}
-				methodVisitor.VisitLookupSwitchInsn(defaultLabel, keys, values);
+				methodVisitor.VisitLookupSwitchInsn(defaultLabel, keys, Values);
 				break;
 			}
 			case IOpcodes.Iload:
@@ -2509,7 +2509,7 @@ namespace ObjectWeb.Asm
 			  // Parse the type_index field.
 			  var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			  currentAnnotationOffset += 2;
-			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
+			  // Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			  ReadElementValues(methodVisitor.VisitInsnAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
 			}
 			currentVisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(visibleTypeAnnotationOffsets, ++currentVisibleTypeAnnotationIndex);
@@ -2525,7 +2525,7 @@ namespace ObjectWeb.Asm
 			  // Parse the type_index field.
 			  var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			  currentAnnotationOffset += 2;
-			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
+			  // Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			  ReadElementValues(methodVisitor.VisitInsnAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
 			}
 			currentInvisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(invisibleTypeAnnotationOffsets, ++currentInvisibleTypeAnnotationIndex);
@@ -2594,7 +2594,7 @@ namespace ObjectWeb.Asm
 			  // Parse the type_index field.
 			  var annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			  currentOffset += 2;
-			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
+			  // Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			  ReadElementValues(methodVisitor.VisitLocalVariableAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, context.currentLocalVariableAnnotationRangeStarts, context.currentLocalVariableAnnotationRangeEnds, context.currentLocalVariableAnnotationRangeIndices, annotationDescriptor, true), currentOffset, true, charBuffer);
 			}
 		  }
@@ -2613,7 +2613,7 @@ namespace ObjectWeb.Asm
 			  // Parse the type_index field.
 			  var annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			  currentOffset += 2;
-			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
+			  // Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			  ReadElementValues(methodVisitor.VisitLocalVariableAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, context.currentLocalVariableAnnotationRangeStarts, context.currentLocalVariableAnnotationRangeEnds, context.currentLocalVariableAnnotationRangeIndices, annotationDescriptor, false), currentOffset, true, charBuffer);
 			}
 		  }
@@ -2629,7 +2629,7 @@ namespace ObjectWeb.Asm
 		  attributes = nextAttribute;
 		}
 
-		// Visit the max stack and max locals values.
+		// Visit the max stack and max locals Values.
 		methodVisitor.VisitMaxs(maxStack, maxLocals);
 	  }
 
@@ -2769,7 +2769,7 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			currentOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentOffset = ReadElementValues(methodVisitor.VisitTryCatchAnnotation(targetType & unchecked((int)0xFFFFFF00), path, annotationDescriptor, visible), currentOffset, true, charBuffer);
 		  }
 		  else
@@ -2910,21 +2910,21 @@ namespace ObjectWeb.Asm
 			// Parse the type_index field.
 			var annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			currentOffset += 2;
-			// Parse num_element_value_pairs and element_value_pairs and visit these values.
+			// Parse num_element_value_pairs and element_value_pairs and visit these Values.
 			currentOffset = ReadElementValues(methodVisitor.VisitParameterAnnotation(i, annotationDescriptor, visible), currentOffset, true, charBuffer);
 		  }
 		}
 	  }
 
 	  /// <summary>
-	  /// Reads the element values of a JVMS 'annotation' structure and makes the given visitor visit
-	  /// them. This method can also be used to read the values of the JVMS 'array_value' field of an
+	  /// Reads the element Values of a JVMS 'annotation' structure and makes the given visitor visit
+	  /// them. This method can also be used to read the Values of the JVMS 'array_value' field of an
 	  /// annotation's 'element_value'.
 	  /// </summary>
-	  /// <param name="annotationVisitor"> the visitor that must visit the values. </param>
+	  /// <param name="annotationVisitor"> the visitor that must visit the Values. </param>
 	  /// <param name="annotationOffset"> the start offset of an 'annotation' structure (excluding its type_index
 	  ///     field) or of an 'array_value' structure. </param>
-	  /// <param name="named"> if the annotation values are named or not. This should be true to parse the values
+	  /// <param name="named"> if the annotation Values are named or not. This should be true to parse the Values
 	  ///     of a JVMS 'annotation' structure, and false to parse the JVMS 'array_value' of an
 	  ///     annotation's element_value. </param>
 	  /// <param name="charBuffer"> the buffer used to read strings in the constant pool. </param>

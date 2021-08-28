@@ -91,100 +91,100 @@ namespace ObjectWeb.Asm.Tree
         // ------------------------------------------------------------------------
         public override void Visit(string name, object value)
         {
-            if (values == null)
+            if (Values == null)
             {
-                values = new List<object>(!string.ReferenceEquals(this.Desc, null) ? 2 : 1);
+                Values = new List<object>(!string.ReferenceEquals(this.Desc, null) ? 2 : 1);
             }
 
             if (!string.ReferenceEquals(this.Desc, null))
             {
-                values.Add(name);
+                Values.Add(name);
             }
 
             if (value is byte[])
             {
-                values.Add(Util.AsArrayList((byte[])value));
+                Values.Add(Util.AsArrayList((byte[])value));
             }
             else if (value is bool[])
             {
-                values.Add(Util.AsArrayList((bool[])value));
+                Values.Add(Util.AsArrayList((bool[])value));
             }
             else if (value is short[])
             {
-                values.Add(Util.AsArrayList((short[])value));
+                Values.Add(Util.AsArrayList((short[])value));
             }
             else if (value is char[])
             {
-                values.Add(Util.AsArrayList((char[])value));
+                Values.Add(Util.AsArrayList((char[])value));
             }
             else if (value is int[])
             {
-                values.Add(Util.AsArrayList((int[])value));
+                Values.Add(Util.AsArrayList((int[])value));
             }
             else if (value is long[])
             {
-                values.Add(Util.AsArrayList((long[])value));
+                Values.Add(Util.AsArrayList((long[])value));
             }
             else if (value is float[])
             {
-                values.Add(Util.AsArrayList((float[])value));
+                Values.Add(Util.AsArrayList((float[])value));
             }
             else if (value is double[])
             {
-                values.Add(Util.AsArrayList((double[])value));
+                Values.Add(Util.AsArrayList((double[])value));
             }
             else
             {
-                values.Add(value);
+                Values.Add(value);
             }
         }
 
         public override void VisitEnum(string name, string descriptor, string value)
         {
-            if (values == null)
+            if (Values == null)
             {
-                values = new List<object>(!string.ReferenceEquals(this.Desc, null) ? 2 : 1);
+                Values = new List<object>(!string.ReferenceEquals(this.Desc, null) ? 2 : 1);
             }
 
             if (!string.ReferenceEquals(this.Desc, null))
             {
-                values.Add(name);
+                Values.Add(name);
             }
 
-            values.Add(new string[]{descriptor, value});
+            Values.Add(new string[]{descriptor, value});
         }
 
         public override AnnotationVisitor VisitAnnotation(string name, string descriptor)
         {
-            if (values == null)
+            if (Values == null)
             {
-                values = new List<object>(!string.ReferenceEquals(this.Desc, null) ? 2 : 1);
+                Values = new List<object>(!string.ReferenceEquals(this.Desc, null) ? 2 : 1);
             }
 
             if (!string.ReferenceEquals(this.Desc, null))
             {
-                values.Add(name);
+                Values.Add(name);
             }
 
             var annotation = new AnnotationNode(descriptor);
-            values.Add(annotation);
+            Values.Add(annotation);
             return annotation;
         }
 
         public override AnnotationVisitor VisitArray(string name)
         {
-            if (values == null)
+            if (Values == null)
             {
-                values = new List<object>(!string.ReferenceEquals(this.Desc, null) ? 2 : 1);
+                Values = new List<object>(!string.ReferenceEquals(this.Desc, null) ? 2 : 1);
             }
 
             if (!string.ReferenceEquals(this.Desc, null))
             {
-                values.Add(name);
+                Values.Add(name);
             }
 
             var array = new List<object>();
-            values.Add(array);
+            Values.Add(array);
             return new AnnotationNode(array);
         }
 
@@ -216,12 +216,12 @@ namespace ObjectWeb.Asm.Tree
         {
             if (annotationVisitor != null)
             {
-                if (values != null)
+                if (Values != null)
                 {
-                    for (int i = 0, n = values.Count; i < n; i += 2)
+                    for (int i = 0, n = Values.Count; i < n; i += 2)
                     {
-                        var name = (string)values[i];
-                        var value = values[i + 1];
+                        var name = (string)Values[i];
+                        var value = Values[i + 1];
                         Accept(annotationVisitor, name, value);
                     }
                 }

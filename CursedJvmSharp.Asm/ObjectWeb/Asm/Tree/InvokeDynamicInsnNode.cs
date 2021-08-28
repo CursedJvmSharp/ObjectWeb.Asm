@@ -73,13 +73,13 @@ namespace ObjectWeb.Asm.Tree
         public override int Type => Invoke_Dynamic_Insn;
         public override void Accept(MethodVisitor methodVisitor)
         {
-            methodVisitor.VisitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
+            methodVisitor.VisitInvokeDynamicInsn(Name, Desc, Bsm, BsmArgs);
             AcceptAnnotations(methodVisitor);
         }
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return (new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs)).CloneAnnotations(this);
+            return (new InvokeDynamicInsnNode(Name, Desc, Bsm, BsmArgs)).CloneAnnotations(this);
         }
     }
 }

@@ -63,13 +63,13 @@ namespace ObjectWeb.Asm.Tree
         public override int Type => Var_Insn;
         public override void Accept(MethodVisitor methodVisitor)
         {
-            methodVisitor.VisitVarInsn(opcode, var);
+            methodVisitor.VisitVarInsn(opcode, Var);
             AcceptAnnotations(methodVisitor);
         }
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return (new VarInsnNode(opcode, var)).CloneAnnotations(this);
+            return (new VarInsnNode(opcode, Var)).CloneAnnotations(this);
         }
     }
 }

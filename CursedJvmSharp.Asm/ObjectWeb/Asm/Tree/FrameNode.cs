@@ -48,7 +48,7 @@ namespace ObjectWeb.Asm.Tree
         /// The type of this frame. Must be <seealso cref = "IIOpcodes.F_New / > for  expanded  frames ,  or { @link  ///Opcodes # F_FULL } , <seealso cref = "IIOpcodes.F_Append / > , <seealso cref = "IIOpcodes.F_Chop / > , <seealso cref = "IIOpcodes.F_Same / > or
         /// <seealso cref = "IIOpcodes.F_Append / > , <seealso cref = "IIOpcodes.F_Same1 / > for  compressed  frames .
         /// </summary>
-        public int Type { get; set; }
+        public int FrameType { get; set; }
 
         /// <summary>
         /// The types of the local variables of this stack map frame. Elements of this list can be Integer,
@@ -83,7 +83,7 @@ namespace ObjectWeb.Asm.Tree
         ///     uninitialized types respectively - see <seealso cref = "MethodVisitor"/>). </param>
         public FrameNode(int type, int numLocal, object[] local, int numStack, object[] stack): base(-1)
         {
-            this.Type = type;
+            this.FrameType = type;
             switch (type)
             {
                 case IOpcodes.F_New:
@@ -110,23 +110,23 @@ namespace ObjectWeb.Asm.Tree
         public override int Type => Frame;
         public override void Accept(MethodVisitor methodVisitor)
         {
-            switch (type)
+            switch (FrameType)
             {
                 case IOpcodes.F_New:
                 case IOpcodes.F_Full:
-                    methodVisitor.VisitFrame(type, local.Count, AsArray(local), stack.Count, AsArray(stack));
+                    methodVisitor.VisitFrame(FrameType, Local.Count, AsArray(Local), Stack.Count, AsArray(Stack));
                     break;
                 case IOpcodes.F_Append:
-                    methodVisitor.VisitFrame(type, local.Count, AsArray(local), 0, null);
+                    methodVisitor.VisitFrame(FrameType, Local.Count, AsArray(Local), 0, null);
                     break;
                 case IOpcodes.F_Chop:
-                    methodVisitor.VisitFrame(type, local.Count, null, 0, null);
+                    methodVisitor.VisitFrame(FrameType, Local.Count, null, 0, null);
                     break;
                 case IOpcodes.F_Same:
-                    methodVisitor.VisitFrame(type, 0, null, 0, null);
+                    methodVisitor.VisitFrame(FrameType, 0, null, 0, null);
                     break;
                 case IOpcodes.F_Same1:
-                    methodVisitor.VisitFrame(type, 0, null, 1, AsArray(stack));
+                    methodVisitor.VisitFrame(FrameType, 0, null, 1, AsArray(Stack));
                     break;
                 default:
                     throw new System.ArgumentException();
@@ -136,13 +136,13 @@ namespace ObjectWeb.Asm.Tree
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
             var clone = new FrameNode();
-            clone.Type = type;
-            if (local != null)
+            clone.FrameType = FrameType;
+            if (Local != null)
             {
                 clone.Local = new List<object>();
-                for (int i = 0, n = local.Count; i < n; ++i)
+                for (int i = 0, n = Local.Count; i < n; ++i)
                 {
-                    var localElement = local[i];
+                    var localElement = Local[i];
                     if (localElement is LabelNode)
                     {
                         localElement = clonedLabels.GetValueOrNull((LabelNode)localElement);
@@ -152,12 +152,12 @@ namespace ObjectWeb.Asm.Tree
                 }
             }
 
-            if (stack != null)
+            if (Stack != null)
             {
                 clone.Stack = new List<object>();
-                for (int i = 0, n = stack.Count; i < n; ++i)
+                for (int i = 0, n = Stack.Count; i < n; ++i)
                 {
-                    var stackElement = stack[i];
+                    var stackElement = Stack[i];
                     if (stackElement is LabelNode)
                     {
                         stackElement = clonedLabels.GetValueOrNull((LabelNode)stackElement);

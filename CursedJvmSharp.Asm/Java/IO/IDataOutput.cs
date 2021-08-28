@@ -157,7 +157,7 @@ namespace Java.IO
         /// <remarks>
         ///     Writes two bytes to the output
         ///     stream to represent the value of the argument.
-        ///     The byte values to be written, in the  order
+        ///     The byte Values to be written, in the  order
         ///     shown, are:
         ///     <pre>
         ///         <c>
@@ -186,7 +186,7 @@ namespace Java.IO
         ///     Writes a <code>char</code> value, which
         ///     is comprised of two bytes, to the
         ///     output stream.
-        ///     The byte values to be written, in the  order
+        ///     The byte Values to be written, in the  order
         ///     shown, are:
         ///     <pre>
         ///         <c>
@@ -213,7 +213,7 @@ namespace Java.IO
         /// <remarks>
         ///     Writes an <code>int</code> value, which is
         ///     comprised of four bytes, to the output stream.
-        ///     The byte values to be written, in the  order
+        ///     The byte Values to be written, in the  order
         ///     shown, are:
         ///     <pre>
         ///         <c>
@@ -241,7 +241,7 @@ namespace Java.IO
         /// <remarks>
         ///     Writes a <code>long</code> value, which is
         ///     comprised of eight bytes, to the output stream.
-        ///     The byte values to be written, in the  order
+        ///     The byte Values to be written, in the  order
         ///     shown, are:
         ///     <pre>
         ///         <c>

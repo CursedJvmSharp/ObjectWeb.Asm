@@ -106,7 +106,7 @@ namespace ObjectWeb.Asm.Tree
         /// Constructs a new <seealso cref = "FieldNode"/>.
         /// </summary>
         /// <param name = "api"> the ASM API version implemented by this visitor. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref = "IOpcodes"/>. </param>
+        ///     ASM}<i>x</i> Values in <seealso cref = "IOpcodes"/>. </param>
         /// <param name = "access"> the field's access flags (see <seealso cref = "org.objectweb.asm.Opcodes"/>). This parameter
         ///     also indicates if the field is synthetic and/or deprecated. </param>
         /// <param name = "name"> the field's name. </param>
@@ -132,11 +132,11 @@ namespace ObjectWeb.Asm.Tree
             var annotation = new AnnotationNode(descriptor);
             if (visible)
             {
-                visibleAnnotations = Util.Add(visibleAnnotations, annotation);
+                VisibleAnnotations = Util.Add(VisibleAnnotations, annotation);
             }
             else
             {
-                invisibleAnnotations = Util.Add(invisibleAnnotations, annotation);
+                InvisibleAnnotations = Util.Add(InvisibleAnnotations, annotation);
             }
 
             return annotation;
@@ -147,11 +147,11 @@ namespace ObjectWeb.Asm.Tree
             var typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
             if (visible)
             {
-                visibleTypeAnnotations = Util.Add(visibleTypeAnnotations, typeAnnotation);
+                VisibleTypeAnnotations = Util.Add(VisibleTypeAnnotations, typeAnnotation);
             }
             else
             {
-                invisibleTypeAnnotations = Util.Add(invisibleTypeAnnotations, typeAnnotation);
+                InvisibleTypeAnnotations = Util.Add(InvisibleTypeAnnotations, typeAnnotation);
             }
 
             return typeAnnotation;
@@ -159,7 +159,7 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitAttribute(Attribute attribute)
         {
-            attrs = Util.Add(attrs, attribute);
+            Attrs = Util.Add(Attrs, attribute);
         }
 
         public override void VisitEnd()
@@ -175,18 +175,18 @@ namespace ObjectWeb.Asm.Tree
         /// that this node, and all its children recursively, do not contain elements that were introduced
         /// in more recent versions of the ASM API than the given version.
         /// </summary>
-        /// <param name = "api"> an ASM API version. Must be one of the {@code ASM}<i>x</i> values in {@link
+        /// <param name = "api"> an ASM API version. Must be one of the {@code ASM}<i>x</i> Values in {@link
         ///     Opcodes}. </param>
         public virtual void Check(int api)
         {
             if (api == IOpcodes.Asm4)
             {
-                if (visibleTypeAnnotations != null && visibleTypeAnnotations.Count > 0)
+                if (VisibleTypeAnnotations != null && VisibleTypeAnnotations.Count > 0)
                 {
                     throw new UnsupportedClassVersionException();
                 }
 
-                if (invisibleTypeAnnotations != null && invisibleTypeAnnotations.Count > 0)
+                if (InvisibleTypeAnnotations != null && InvisibleTypeAnnotations.Count > 0)
                 {
                     throw new UnsupportedClassVersionException();
                 }
@@ -199,55 +199,55 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "classVisitor"> a class visitor. </param>
         public virtual void Accept(ClassVisitor classVisitor)
         {
-            var fieldVisitor = classVisitor.VisitField(access, name, desc, signature, value);
+            var fieldVisitor = classVisitor.VisitField(Access, Name, Desc, Signature, Value);
             if (fieldVisitor == null)
             {
                 return;
             }
 
             // Visit the annotations.
-            if (visibleAnnotations != null)
+            if (VisibleAnnotations != null)
             {
-                for (int i = 0, n = visibleAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleAnnotations.Count; i < n; ++i)
                 {
-                    var annotation = visibleAnnotations[i];
+                    var annotation = VisibleAnnotations[i];
                     annotation.Accept(fieldVisitor.VisitAnnotation(annotation.Desc, true));
                 }
             }
 
-            if (invisibleAnnotations != null)
+            if (InvisibleAnnotations != null)
             {
-                for (int i = 0, n = invisibleAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleAnnotations.Count; i < n; ++i)
                 {
-                    var annotation = invisibleAnnotations[i];
+                    var annotation = InvisibleAnnotations[i];
                     annotation.Accept(fieldVisitor.VisitAnnotation(annotation.Desc, false));
                 }
             }
 
-            if (visibleTypeAnnotations != null)
+            if (VisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = visibleTypeAnnotations[i];
+                    var typeAnnotation = VisibleTypeAnnotations[i];
                     typeAnnotation.Accept(fieldVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
-            if (invisibleTypeAnnotations != null)
+            if (InvisibleTypeAnnotations != null)
             {
-                for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
+                for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
-                    var typeAnnotation = invisibleTypeAnnotations[i];
+                    var typeAnnotation = InvisibleTypeAnnotations[i];
                     typeAnnotation.Accept(fieldVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }
 
             // Visit the non standard attributes.
-            if (attrs != null)
+            if (Attrs != null)
             {
-                for (int i = 0, n = attrs.Count; i < n; ++i)
+                for (int i = 0, n = Attrs.Count; i < n; ++i)
                 {
-                    fieldVisitor.VisitAttribute(attrs[i]);
+                    fieldVisitor.VisitAttribute(Attrs[i]);
                 }
             }
 

@@ -74,11 +74,11 @@ namespace ObjectWeb.Asm.Commons
         public override void VisitEnd()
         {
             // Sort the TryCatchBlockNode elements by the length of their "try" block.
-            tryCatchBlocks.Sort(new ComparatorAnonymousInnerClass(this));
+            TryCatchBlocks.Sort(new ComparatorAnonymousInnerClass(this));
             // Update the 'target' of each try catch block annotation.
-            for (var i = 0; i < tryCatchBlocks.Count; ++i)
+            for (var i = 0; i < TryCatchBlocks.Count; ++i)
             {
-                tryCatchBlocks[i].UpdateIndex(i);
+                TryCatchBlocks[i].UpdateIndex(i);
             }
 
             if (mv != null)

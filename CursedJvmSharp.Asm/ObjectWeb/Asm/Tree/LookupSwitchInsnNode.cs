@@ -77,14 +77,14 @@ namespace ObjectWeb.Asm.Tree
                 labelsArray[i] = this.Labels[i].Label;
             }
 
-            methodVisitor.VisitLookupSwitchInsn(dflt.Label, keysArray, labelsArray);
+            methodVisitor.VisitLookupSwitchInsn(Dflt.Label, keysArray, labelsArray);
             AcceptAnnotations(methodVisitor);
         }
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            var clone = new LookupSwitchInsnNode(LookupSwitchInsnNode.Clone(dflt, clonedLabels), null, LookupSwitchInsnNode.Clone(labels, clonedLabels));
-            ((List<int>)clone.Keys).AddRange(keys);
+            var clone = new LookupSwitchInsnNode(LookupSwitchInsnNode.Clone(Dflt, clonedLabels), null, LookupSwitchInsnNode.Clone(Labels, clonedLabels));
+            ((List<int>)clone.Keys).AddRange(Keys);
             return clone.CloneAnnotations(this);
         }
     }

@@ -62,13 +62,13 @@ namespace ObjectWeb.Asm.Tree
         public override int Type => Ldc_Insn;
         public override void Accept(MethodVisitor methodVisitor)
         {
-            methodVisitor.VisitLdcInsn(cst);
+            methodVisitor.VisitLdcInsn(Cst);
             AcceptAnnotations(methodVisitor);
         }
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return (new LdcInsnNode(cst)).CloneAnnotations(this);
+            return (new LdcInsnNode(Cst)).CloneAnnotations(this);
         }
     }
 }

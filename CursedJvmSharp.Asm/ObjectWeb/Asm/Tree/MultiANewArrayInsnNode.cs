@@ -58,13 +58,13 @@ namespace ObjectWeb.Asm.Tree
         public override int Type => Multianewarray_Insn;
         public override void Accept(MethodVisitor methodVisitor)
         {
-            methodVisitor.VisitMultiANewArrayInsn(desc, dims);
+            methodVisitor.VisitMultiANewArrayInsn(Desc, Dims);
             AcceptAnnotations(methodVisitor);
         }
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return (new MultiANewArrayInsnNode(desc, dims)).CloneAnnotations(this);
+            return (new MultiANewArrayInsnNode(Desc, Dims)).CloneAnnotations(this);
         }
     }
 }

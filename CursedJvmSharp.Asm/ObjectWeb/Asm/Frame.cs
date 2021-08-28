@@ -53,7 +53,7 @@ namespace ObjectWeb.Asm
 	/// used in this class, explained below.
 	/// 
 	/// </para>
-	/// <para>The local variables and the operand stack of input and output frames contain values called
+	/// <para>The local variables and the operand stack of input and output frames contain Values called
 	/// "abstract types" hereafter. An abstract type is represented with 4 fields named DIM, KIND, FLAGS
 	/// and VALUE, packed in a single int value for better performance and memory efficiency:
 	/// 
@@ -165,7 +165,7 @@ namespace ObjectWeb.Asm
 	  /// The constant to be added to an abstract type to get one with one less array dimension. </summary>
 	  private const int ElementOf = -1 << DimShift;
 
-	  // Possible values for the KIND field of an abstract type.
+	  // Possible Values for the KIND field of an abstract type.
 
 	  private const int ConstantKind = 1 << KindShift;
 	  private const int ReferenceKind = 2 << KindShift;

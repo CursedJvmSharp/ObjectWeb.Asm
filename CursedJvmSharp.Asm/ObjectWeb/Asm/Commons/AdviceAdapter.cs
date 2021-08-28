@@ -71,7 +71,7 @@ namespace ObjectWeb.Asm.Commons
         private IDictionary<Label, List<object>> _forwardJumpStackFrames;
 
         /// <summary>
-        ///     The values on the current execution stack frame (long and double are represented by two
+        ///     The Values on the current execution stack frame (long and double are represented by two
         ///     elements). Each value is either <seealso cref="UNINITIALIZED_THIS" /> (for the uninitialized this value),
         ///     or <seealso cref="OTHER" /> (for any other value). This field is only maintained for constructors, in
         ///     branches where the super class constructor has not been called yet.
@@ -103,7 +103,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="api">
         ///     the ASM API version implemented by this visitor. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
+        ///     ASM}<i>x</i> Values in <seealso cref="IOpcodes" />.
         /// </param>
         /// <param name="methodVisitor"> the method visitor to which this adapter delegates calls. </param>
         /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes" />). </param>

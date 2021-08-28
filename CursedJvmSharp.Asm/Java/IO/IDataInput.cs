@@ -76,7 +76,7 @@ namespace Java.IO
     ///             far left-hand column.
     ///             <blockquote>
     ///                 &lt;table border="1" cellspacing="0" cellpadding="8"
-    ///                 summary="Bit values and bytes"&gt;
+    ///                 summary="Bit Values and bytes"&gt;
     ///                 <tr>
     ///                     <th colspan="9">
     ///                         <span style="font-weight:normal">
@@ -142,7 +142,7 @@ namespace Java.IO
     ///                     <th colspan="9">
     ///                         <span style="font-weight:normal">
     ///                             <c>char</c>
-    ///                             values in the range
+    ///                             Values in the range
     ///                             <c>'\u005Cu0800'</c>
     ///                             to
     ///                             <c>'\u005CuFFFF'</c>

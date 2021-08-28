@@ -62,7 +62,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "methodVisitor"> a method visitor. </param>
         public virtual void Accept(MethodVisitor methodVisitor)
         {
-            methodVisitor.VisitParameter(name, access);
+            methodVisitor.VisitParameter(Name, Access);
         }
     }
 }

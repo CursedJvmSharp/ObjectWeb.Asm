@@ -68,7 +68,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "moduleVisitor"> a module visitor. </param>
         public virtual void Accept(ModuleVisitor moduleVisitor)
         {
-            moduleVisitor.VisitRequire(module, access, version);
+            moduleVisitor.VisitRequire(Module, Access, Version);
         }
     }
 }

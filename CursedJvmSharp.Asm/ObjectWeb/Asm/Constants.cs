@@ -95,7 +95,7 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  internal const int F_Insert = 256;
 
-	  // The JVM opcode values which are not part of the ASM public API.
+	  // The JVM opcode Values which are not part of the ASM public API.
 	  // See https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-6.html.
 
 	  internal const int Ldc_W = 19;

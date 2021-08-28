@@ -234,7 +234,7 @@ namespace ObjectWeb.Asm.Commons
         /// </summary>
         /// <param name="api">
         ///     the ASM API version implemented by this visitor. Must be one of the {@code
-        ///     ASM}<i>x</i> values in <seealso cref="IOpcodes" />.
+        ///     ASM}<i>x</i> Values in <seealso cref="IOpcodes" />.
         /// </param>
         /// <param name="methodVisitor"> the method visitor to which this adapter delegates calls. </param>
         /// <param name="access"> the method's access flags (see <seealso cref="IOpcodes" />). </param>
@@ -725,7 +725,7 @@ namespace ObjectWeb.Asm.Commons
         }
 
         /// <summary>
-        ///     Generates the instructions to swap the top two stack values.
+        ///     Generates the instructions to swap the top two stack Values.
         /// </summary>
         /// <param name="prev"> type of the top - 1 stack value. </param>
         /// <param name="type"> type of the top stack value. </param>
@@ -977,10 +977,10 @@ namespace ObjectWeb.Asm.Commons
 
         /// <summary>
         ///     Generates the instructions to jump to a label based on the comparison of the top two stack
-        ///     values.
+        ///     Values.
         /// </summary>
-        /// <param name="type"> the type of the top two stack values. </param>
-        /// <param name="mode"> how these values must be compared. One of EQ, NE, LT, GE, GT, LE. </param>
+        /// <param name="type"> the type of the top two stack Values. </param>
+        /// <param name="mode"> how these Values must be compared. One of EQ, NE, LT, GE, GT, LE. </param>
         /// <param name="label"> where to jump if the comparison result is {@literal true}. </param>
         public virtual void IfCmp(JType type, int mode, Label label)
         {
@@ -1046,9 +1046,9 @@ namespace ObjectWeb.Asm.Commons
 
         /// <summary>
         ///     Generates the instructions to jump to a label based on the comparison of the top two integer
-        ///     stack values.
+        ///     stack Values.
         /// </summary>
-        /// <param name="mode"> how these values must be compared. One of EQ, NE, LT, GE, GT, LE. </param>
+        /// <param name="mode"> how these Values must be compared. One of EQ, NE, LT, GE, GT, LE. </param>
         /// <param name="label"> where to jump if the comparison result is {@literal true}. </param>
         public virtual void IfICmp(int mode, Label label)
         {
@@ -1059,7 +1059,7 @@ namespace ObjectWeb.Asm.Commons
         ///     Generates the instructions to jump to a label based on the comparison of the top integer stack
         ///     value with zero.
         /// </summary>
-        /// <param name="mode"> how these values must be compared. One of EQ, NE, LT, GE, GT, LE. </param>
+        /// <param name="mode"> how these Values must be compared. One of EQ, NE, LT, GE, GT, LE. </param>
         /// <param name="label"> where to jump if the comparison result is {@literal true}. </param>
         public virtual void IfZCmp(int mode, Label label)
         {

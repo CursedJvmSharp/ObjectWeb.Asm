@@ -73,7 +73,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "moduleVisitor"> a module visitor. </param>
         public virtual void Accept(ModuleVisitor moduleVisitor)
         {
-            moduleVisitor.VisitOpen(packaze, access, modules == null ? null : ((List<string>)modules).ToArray());
+            moduleVisitor.VisitOpen(Packaze, Access, Modules == null ? null : ((List<string>)Modules).ToArray());
         }
     }
 }
