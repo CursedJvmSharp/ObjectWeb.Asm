@@ -72,7 +72,7 @@ namespace org.objectweb.asm.commons
 	  /// <param name="newName"> the new method, field or internal name. </param>
 	  public SimpleRemapper(string oldName, string newName)
 	  {
-		this.mapping = Collections.singletonMap(oldName, newName);
+          this.mapping = new Dictionary<string, string> { { oldName, newName } };
 	  }
 
 	  public override string mapMethodName(string owner, string name, string descriptor)

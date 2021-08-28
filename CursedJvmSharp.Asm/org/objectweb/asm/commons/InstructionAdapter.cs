@@ -635,11 +635,11 @@ namespace org.objectweb.asm.commons
 		{
 		  iconst(((sbyte?) value).Value);
 		}
-		else if (value is Character)
+		else if (value is char)
 		{
 		  iconst(((char?) value).Value);
 		}
-		else if (value is Short)
+		else if (value is short)
 		{
 		  iconst(((short?) value).Value);
 		}
@@ -647,11 +647,11 @@ namespace org.objectweb.asm.commons
 		{
 		  iconst(((bool?) value).Value ? 1 : 0);
 		}
-		else if (value is Float)
+		else if (value is float)
 		{
 		  fconst(((float?) value).Value);
 		}
-		else if (value is Long)
+		else if (value is long)
 		{
 		  lconst(((long?) value).Value);
 		}

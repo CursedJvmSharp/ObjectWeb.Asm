@@ -208,7 +208,7 @@ namespace org.objectweb.asm
 			  result.Append(getStepArgument(i)).Append(';');
 			  break;
 			default:
-			  throw new AssertionError();
+			  throw new ();
 		  }
 		}
 		return result.ToString();

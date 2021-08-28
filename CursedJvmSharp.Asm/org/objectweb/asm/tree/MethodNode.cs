@@ -323,7 +323,7 @@ namespace org.objectweb.asm.tree
 		  if (visibleParameterAnnotations == null)
 		  {
 			int @params = org.objectweb.asm.JType.getArgumentTypes(desc).Length;
-			visibleParameterAnnotations = (List<AnnotationNode>[]) new List<object>[@params];
+			visibleParameterAnnotations = new List<AnnotationNode>[@params];
 		  }
 		  visibleParameterAnnotations[parameter] = Util.add(visibleParameterAnnotations[parameter], annotation);
 		}
@@ -332,7 +332,7 @@ namespace org.objectweb.asm.tree
 		  if (invisibleParameterAnnotations == null)
 		  {
 			int @params = org.objectweb.asm.JType.getArgumentTypes(desc).Length;
-			invisibleParameterAnnotations = (List<AnnotationNode>[]) new List<object>[@params];
+			invisibleParameterAnnotations = new List<AnnotationNode>[@params];
 		  }
 		  invisibleParameterAnnotations[parameter] = Util.add(invisibleParameterAnnotations[parameter], annotation);
 		}

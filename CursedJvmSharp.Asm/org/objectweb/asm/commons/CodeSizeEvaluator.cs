@@ -85,7 +85,7 @@ namespace org.objectweb.asm.commons
 
 	  public override void visitIntInsn(int opcode, int operand)
 	  {
-		if (opcode == SIPUSH)
+		if (opcode == Opcodes.SIPUSH)
 		{
 		  minSize += 3;
 		  maxSize += 3;
@@ -100,7 +100,7 @@ namespace org.objectweb.asm.commons
 
 	  public override void visitVarInsn(int opcode, int var)
 	  {
-		if (var < 4 && opcode != RET)
+		if (var < 4 && opcode != Opcodes.RET)
 		{
 		  minSize += 1;
 		  maxSize += 1;
@@ -142,7 +142,7 @@ namespace org.objectweb.asm.commons
 		}
 		int opcode = opcodeAndSource & ~Opcodes.SOURCE_MASK;
 
-		if (opcode == INVOKEINTERFACE)
+		if (opcode == Opcodes.INVOKEINTERFACE)
 		{
 		  minSize += 5;
 		  maxSize += 5;
@@ -165,7 +165,7 @@ namespace org.objectweb.asm.commons
 	  public override void visitJumpInsn(int opcode, Label label)
 	  {
 		minSize += 3;
-		if (opcode == GOTO || opcode == JSR)
+		if (opcode == Opcodes.GOTO || opcode == Opcodes.JSR)
 		{
 		  maxSize += 5;
 		}
@@ -178,7 +178,7 @@ namespace org.objectweb.asm.commons
 
 	  public override void visitLdcInsn(object value)
 	  {
-		if (value is long? || value is double? || (value is ConstantDynamic && ((ConstantDynamic) value).Count() == 2))
+		if (value is long? || value is double? || (value is ConstantDynamic && ((ConstantDynamic) value).Size == 2))
 		{
 		  minSize += 3;
 		  maxSize += 3;

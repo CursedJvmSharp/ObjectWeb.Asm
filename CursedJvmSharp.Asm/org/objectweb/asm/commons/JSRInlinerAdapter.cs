@@ -222,7 +222,7 @@ namespace org.objectweb.asm.commons
 		// unreachable and can be anything. In particular, it can seem to fall off the end of the
 		// method, so we must handle this case Opcodes.here (we could instead detect whether execution can
 		// return or not from a JSR, but this is more complicated).
-		while (currentInsnIndex < instructions.Count()())
+		while (currentInsnIndex < instructions.Count())
 		{
 		  // Visit each instruction at most once.
 		  if (subroutineInsns.Get(currentInsnIndex))
@@ -329,7 +329,7 @@ namespace org.objectweb.asm.commons
 	  private void emitInstantiation(Instantiation instantiation, LinkedList<Instantiation> worklist, InsnList newInstructions, List<TryCatchBlockNode> newTryCatchBlocks, List<LocalVariableNode> newLocalVariables)
 	  {
 		LabelNode previousLabelNode = null;
-		for (int i = 0; i < instructions.Count()(); ++i)
+		for (int i = 0; i < instructions.Count(); ++i)
 		{
 		  AbstractInsnNode insnNode = instructions.get(i);
 		  if (insnNode.Type == AbstractInsnNode.LABEL)
@@ -475,7 +475,7 @@ namespace org.objectweb.asm.commons
 		  // Create a clone of each label in the original code of the subroutine. Note that we collapse
 		  // labels which point at the same instruction into one.
 		  LabelNode clonedLabelNode = null;
-		  for (int insnIndex = 0; insnIndex < outerInstance.instructions.Count()(); insnIndex++)
+		  for (int insnIndex = 0; insnIndex < outerInstance.instructions.Count(); insnIndex++)
 		  {
 			AbstractInsnNode insnNode = outerInstance.instructions.get(insnIndex);
 			if (insnNode.Type == AbstractInsnNode.LABEL)

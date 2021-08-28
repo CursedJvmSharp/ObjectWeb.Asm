@@ -81,7 +81,8 @@ namespace org.objectweb.asm.commons
 
 	  public override void visitInnerClassType(string name)
 	  {
-		string outerClassName = classNames.RemoveAt(classNames.Count - 1);
+          var classNameIndex = classNames.Count - 1;
+          string outerClassName = classNames[classNameIndex];classNames.RemoveAt(classNameIndex);
 		string className = outerClassName + '$' + name;
 		classNames.Add(className);
 		string remappedOuter = remapper.mapType(outerClassName) + '$';

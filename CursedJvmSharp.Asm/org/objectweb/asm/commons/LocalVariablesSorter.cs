@@ -106,7 +106,7 @@ namespace org.objectweb.asm.commons
 		nextLocal = (Opcodes.ACC_STATIC & access) == 0 ? 1 : 0;
 		foreach (org.objectweb.asm.JType argumentType in org.objectweb.asm.JType.getArgumentTypes(descriptor))
 		{
-		  nextLocal += argumenttype.Size;
+		  nextLocal += argumentType.Size;
 		}
 		firstLocal = nextLocal;
 	  }
@@ -189,22 +189,22 @@ namespace org.objectweb.asm.commons
 		for (int i = 0; i < numLocal; ++i)
 		{
 		  object localType = local[i];
-		  if (localType != Opcodes.TOP)
+		  if (!Equals(localType, Opcodes.TOP))
 		  {
 			org.objectweb.asm.JType varType = OBJECT_TYPE;
-			if (localType == Opcodes.INTEGER)
+			if (Equals(localType, Opcodes.INTEGER))
 			{
 			  varType = org.objectweb.asm.JType.INT_TYPE;
 			}
-			else if (localType == Opcodes.FLOAT)
+			else if (Equals(localType, Opcodes.FLOAT))
 			{
 			  varType = org.objectweb.asm.JType.FLOAT_TYPE;
 			}
-			else if (localType == Opcodes.LONG)
+			else if (Equals(localType, Opcodes.LONG))
 			{
 			  varType = org.objectweb.asm.JType.LONG_TYPE;
 			}
-			else if (localType == Opcodes.DOUBLE)
+			else if (Equals(localType, Opcodes.DOUBLE))
 			{
 			  varType = org.objectweb.asm.JType.DOUBLE_TYPE;
 			}
@@ -214,7 +214,7 @@ namespace org.objectweb.asm.commons
 			}
 			setFrameLocal(remap(oldVar, varType), localType);
 		  }
-		  oldVar += localType == Opcodes.LONG || localType == Opcodes.DOUBLE ? 2 : 1;
+		  oldVar += Equals(localType, Opcodes.LONG) || Equals(localType, Opcodes.DOUBLE) ? 2 : 1;
 		}
 
 		// Remove TOP after long and double types as well as trailing TOPs.
@@ -224,8 +224,8 @@ namespace org.objectweb.asm.commons
 		while (oldVar < remappedLocalTypes.Length)
 		{
 		  object localType = remappedLocalTypes[oldVar];
-		  oldVar += localType == Opcodes.LONG || localType == Opcodes.DOUBLE ? 2 : 1;
-		  if (localType != null && localType != Opcodes.TOP)
+		  oldVar += Equals(localType, Opcodes.LONG) || Equals(localType, Opcodes.DOUBLE) ? 2 : 1;
+		  if (localType != null && localType != (object)Opcodes.TOP)
 		  {
 			remappedLocalTypes[newVar++] = localType;
 			remappedNumLocal = newVar;
@@ -278,7 +278,7 @@ namespace org.objectweb.asm.commons
 			localType = type.InternalName;
 			break;
 		  default:
-			throw new AssertionError();
+			throw new ("AssertionError");
 		}
 		int local = newLocalMapping(type);
 		setLocalType(local, type);

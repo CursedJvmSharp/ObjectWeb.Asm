@@ -1178,7 +1178,7 @@ namespace org.objectweb.asm
 	  ///     corresponding to the common super class of the given types. </returns>
 	  public int addMergedType(int typeTableIndex1, int typeTableIndex2)
 	  {
-		long data = typeTableIndex1 < typeTableIndex2 ? typeTableIndex1 | (((long) typeTableIndex2) << 32) : typeTableIndex2 | (((long) typeTableIndex1) << 32);
+		long data = typeTableIndex1 < typeTableIndex2 ? (uint)typeTableIndex1 | (((long) typeTableIndex2) << 32) : typeTableIndex2 | (((long) typeTableIndex1) << 32);
 		int hashCode = hash(Symbol.MERGED_TYPE_TAG, typeTableIndex1 + typeTableIndex2);
 		Entry entry = get(hashCode);
 		while (entry != null)

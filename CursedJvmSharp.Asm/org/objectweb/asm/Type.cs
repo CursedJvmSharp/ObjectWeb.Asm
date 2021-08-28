@@ -704,7 +704,7 @@ namespace org.objectweb.asm
 		while (currentClass.IsArray)
 		{
 		  stringBuilder.Append('[');
-		  currentClass = currentClass.ElementType;
+		  currentClass = currentClass.GetElementType();
 		}
 		if (currentClass.IsPrimitive)
 		{

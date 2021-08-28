@@ -180,7 +180,7 @@ namespace org.objectweb.asm.commons
 			  locals.Add(argumentType.InternalName);
 			  break;
 			default:
-			  throw new AssertionError();
+			  throw new ();
 		  }
 		}
 		maxLocals = locals.Count;
@@ -217,7 +217,7 @@ namespace org.objectweb.asm.commons
 		{
 		  object frameType = frameTypes[i];
 		  result.Add(frameType);
-		  if (frameType == Opcodes.LONG || frameType == Opcodes.DOUBLE)
+		  if (Equals(frameType, Opcodes.LONG) || Equals(frameType, Opcodes.DOUBLE))
 		  {
 			result.Add(Opcodes.TOP);
 		  }
@@ -301,7 +301,7 @@ namespace org.objectweb.asm.commons
 		  if (opcode == Opcodes.INVOKESPECIAL && name.Equals("<init>"))
 		  {
 			object initializedValue;
-			if (value == Opcodes.UNINITIALIZED_THIS)
+			if (Equals(value, Opcodes.UNINITIALIZED_THIS))
 			{
 			  initializedValue = this.owner;
 			}
@@ -375,12 +375,12 @@ namespace org.objectweb.asm.commons
 		{
 		  push(Opcodes.INTEGER);
 		}
-		else if (value is Long)
+		else if (value is long)
 		{
 		  push(Opcodes.LONG);
 		  push(Opcodes.TOP);
 		}
-		else if (value is Float)
+		else if (value is float)
 		{
 		  push(Opcodes.FLOAT);
 		}
@@ -393,7 +393,7 @@ namespace org.objectweb.asm.commons
 		{
 		  push("java/lang/String");
 		}
-		else if (value is Type)
+		else if (value is JType)
 		{
 		  int sort = ((org.objectweb.asm.JType) value).Sort;
 		  if (sort == org.objectweb.asm.JType.OBJECT || sort == org.objectweb.asm.JType.ARRAY)
@@ -526,14 +526,16 @@ namespace org.objectweb.asm.commons
 			push(descriptor.Substring(1, (descriptor.Length - 1) - 1));
 			break;
 		  default:
-			throw new AssertionError();
+			throw new ();
 		}
 	  }
 
 	  private object pop()
-	  {
-		return stack.RemoveAt(stack.Count - 1);
-	  }
+      {
+          var stackCount = stack.Count - 1;
+          var current = stack[stackCount];stack.RemoveAt(stackCount);
+          return current;
+      }
 
 	  private void pop(int numSlots)
 	  {
@@ -654,7 +656,7 @@ namespace org.objectweb.asm.commons
 			{
 			  pushDescriptor(((string) value1).Substring(1));
 			}
-			else if (value1 == Opcodes.NULL)
+			else if (Equals(value1, Opcodes.NULL))
 			{
 			  push(value1);
 			}
@@ -671,7 +673,7 @@ namespace org.objectweb.asm.commons
 			if (intArg > 0)
 			{
 			  value2 = get(intArg - 1);
-			  if (value2 == Opcodes.LONG || value2 == Opcodes.DOUBLE)
+			  if (Equals(value2, Opcodes.LONG) || Equals(value2, Opcodes.DOUBLE))
 			  {
 				set(intArg - 1, Opcodes.TOP);
 			  }
@@ -686,7 +688,7 @@ namespace org.objectweb.asm.commons
 			if (intArg > 0)
 			{
 			  value2 = get(intArg - 1);
-			  if (value2 == Opcodes.LONG || value2 == Opcodes.DOUBLE)
+			  if (Equals(value2, Opcodes.LONG) || Equals(value2, Opcodes.DOUBLE))
 			  {
 				set(intArg - 1, Opcodes.TOP);
 			  }
