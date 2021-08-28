@@ -561,12 +561,12 @@ namespace ObjectWeb.Asm
 
         // Standard stack map frame element types, used in {@link ClassVisitor#visitFrame}.
 
-        public static int top = Frame.Item_Top;
-        public static int integer = Frame.Item_Integer;
-        public static int @float = Frame.Item_Float;
-        public static int @double = Frame.Item_Double;
-        public static int @long = Frame.Item_Long;
-        public static int @null = Frame.Item_Null;
-        public static int uninitializedThis = Frame.Item_Uninitialized_This;
+        public const int top = Frame.Item_Top;
+        public const int integer = Frame.Item_Integer;
+        public const int @float = Frame.Item_Float;
+        public const int @double = Frame.Item_Double;
+        public const int @long = Frame.Item_Long;
+        public const int @null = Frame.Item_Null;
+        public const int uninitializedThis = Frame.Item_Uninitialized_This;
     }
 }
