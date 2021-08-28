@@ -79,12 +79,12 @@ namespace ObjectWeb.Asm.Commons
 	  public override void VisitInnerClassType(string name)
 	  {
           var classNameIndex = _classNames.Count - 1;
-          string outerClassName = _classNames[classNameIndex];_classNames.RemoveAt(classNameIndex);
-		string className = outerClassName + '$' + name;
+          var outerClassName = _classNames[classNameIndex];_classNames.RemoveAt(classNameIndex);
+		var className = outerClassName + '$' + name;
 		_classNames.Add(className);
-		string remappedOuter = _remapper.MapType(outerClassName) + '$';
-		string remappedName = _remapper.MapType(className);
-		int index = remappedName.StartsWith(remappedOuter, StringComparison.Ordinal) ? remappedOuter.Length : remappedName.LastIndexOf('$') + 1;
+		var remappedOuter = _remapper.MapType(outerClassName) + '$';
+		var remappedName = _remapper.MapType(className);
+		var index = remappedName.StartsWith(remappedOuter, StringComparison.Ordinal) ? remappedOuter.Length : remappedName.LastIndexOf('$') + 1;
 		_signatureVisitor.VisitInnerClassType(remappedName.Substring(index));
 	  }
 

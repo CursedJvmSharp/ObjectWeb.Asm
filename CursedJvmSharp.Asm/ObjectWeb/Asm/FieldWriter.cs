@@ -190,7 +190,7 @@ namespace ObjectWeb.Asm
 	  public int ComputeFieldInfoSize()
 	  {
 		// The access_flags, name_index, descriptor_index and attributes_count fields use 8 bytes.
-		int size = 8;
+		var size = 8;
 		// For ease of reference, we use here the same attribute order as in Section 4.7 of the JVMS.
 		if (_constantValueIndex != 0)
 		{
@@ -214,13 +214,13 @@ namespace ObjectWeb.Asm
 	  /// <param name="output"> where the field_info structure must be put. </param>
 	  public void PutFieldInfo(ByteVector output)
 	  {
-		bool useSyntheticAttribute = _symbolTable.MajorVersion < IOpcodes.V1_5;
+		var useSyntheticAttribute = _symbolTable.MajorVersion < IOpcodes.V1_5;
 		// Put the access_flags, name_index and descriptor_index fields.
-		int mask = useSyntheticAttribute ? IOpcodes.Acc_Synthetic : 0;
+		var mask = useSyntheticAttribute ? IOpcodes.Acc_Synthetic : 0;
 		output.PutShort(_accessFlags & ~mask).PutShort(_nameIndex).PutShort(_descriptorIndex);
 		// Compute and put the attributes_count field.
 		// For ease of reference, we use here the same attribute order as in Section 4.7 of the JVMS.
-		int attributesCount = 0;
+		var attributesCount = 0;
 		if (_constantValueIndex != 0)
 		{
 		  ++attributesCount;

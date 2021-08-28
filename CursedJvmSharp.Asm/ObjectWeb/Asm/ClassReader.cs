@@ -196,18 +196,18 @@ namespace ObjectWeb.Asm
 		}
 		// Create the constant pool arrays. The constant_pool_count field is after the magic,
 		// minor_version and major_version fields, which use 4, 2 and 2 bytes respectively.
-		int constantPoolCount = ReadUnsignedShort(classFileOffset + 8);
+		var constantPoolCount = ReadUnsignedShort(classFileOffset + 8);
 		_cpInfoOffsets = new int[constantPoolCount];
 		_constantUtf8Values = new string[constantPoolCount];
 		// Compute the offset of each constant pool entry, as well as a conservative estimate of the
 		// maximum length of the constant pool strings. The first constant pool entry is after the
 		// magic, minor_version, major_version and constant_pool_count fields, which use 4, 2, 2 and 2
 		// bytes respectively.
-		int currentCpInfoIndex = 1;
-		int currentCpInfoOffset = classFileOffset + 10;
-		int currentMaxStringLength = 0;
-		bool hasBootstrapMethods = false;
-		bool hasConstantDynamic = false;
+		var currentCpInfoIndex = 1;
+		var currentCpInfoOffset = classFileOffset + 10;
+		var currentMaxStringLength = 0;
+		var hasBootstrapMethods = false;
+		var hasConstantDynamic = false;
 		// The offset of the other entries depend on the total size of all the previous entries.
 		while (currentCpInfoIndex < constantPoolCount)
 		{
@@ -297,14 +297,14 @@ namespace ObjectWeb.Asm
 		{
 		  throw new IOException("Class not found");
 		}
-		int bufferSize = CalculateBufferSize(inputStream);
+		var bufferSize = CalculateBufferSize(inputStream);
 		try
 		{
-				using (MemoryStream outputStream = new MemoryStream())
+				using (var outputStream = new MemoryStream())
 				{
-			  byte[] data = new byte[bufferSize];
+			  var data = new byte[bufferSize];
 			  int bytesRead;
-			  int readCount = 0;
+			  var readCount = 0;
 			  while ((bytesRead = inputStream.Read(data, 0, bufferSize)) != -1)
 			  {
 				outputStream.Write(data, 0, bytesRead);
@@ -329,7 +329,7 @@ namespace ObjectWeb.Asm
 
 	  private static int CalculateBufferSize(Stream inputStream)
       {
-          long expectedLength = inputStream.Length;
+          var expectedLength = inputStream.Length;
 		/*
 		 * Some implementations can return 0 while holding available data
 		 * (e.g. new FileInputStream("/proc/a_file"))
@@ -385,13 +385,13 @@ namespace ObjectWeb.Asm
 		  get
 		  {
 			// interfaces_count is after the access_flags, this_class and super_class fields (2 bytes each).
-			int currentOffset = header + 6;
-			int interfacesCount = ReadUnsignedShort(currentOffset);
-			string[] interfaces = new string[interfacesCount];
+			var currentOffset = header + 6;
+			var interfacesCount = ReadUnsignedShort(currentOffset);
+			var interfaces = new string[interfacesCount];
 			if (interfacesCount > 0)
 			{
-			  char[] charBuffer = new char[_maxStringLength];
-			  for (int i = 0; i < interfacesCount; ++i)
+			  var charBuffer = new char[_maxStringLength];
+			  for (var i = 0; i < interfacesCount; ++i)
 			  {
 				currentOffset += 2;
 				interfaces[i] = ReadClass(currentOffset, charBuffer);
@@ -432,20 +432,20 @@ namespace ObjectWeb.Asm
 	  ///     #SKIP_CODE}, <seealso cref="Skip_Debug"/>, <seealso cref="Skip_Frames"/> or <seealso cref="Expand_Frames"/>. </param>
 	  public virtual void Accept(ClassVisitor classVisitor, Attribute[] attributePrototypes, int parsingOptions)
 	  {
-		Context context = new Context();
+		var context = new Context();
 		context.attributePrototypes = attributePrototypes;
 		context.parsingOptions = parsingOptions;
 		context.charBuffer = new char[_maxStringLength];
 
 		// Read the access_flags, this_class, super_class, interface_count and interfaces fields.
-		char[] charBuffer = context.charBuffer;
-		int currentOffset = header;
-		int accessFlags = ReadUnsignedShort(currentOffset);
-		string thisClass = ReadClass(currentOffset + 2, charBuffer);
-		string superClass = ReadClass(currentOffset + 4, charBuffer);
-		string[] interfaces = new string[ReadUnsignedShort(currentOffset + 6)];
+		var charBuffer = context.charBuffer;
+		var currentOffset = header;
+		var accessFlags = ReadUnsignedShort(currentOffset);
+		var thisClass = ReadClass(currentOffset + 2, charBuffer);
+		var superClass = ReadClass(currentOffset + 4, charBuffer);
+		var interfaces = new string[ReadUnsignedShort(currentOffset + 6)];
 		currentOffset += 8;
-		for (int i = 0; i < interfaces.Length; ++i)
+		for (var i = 0; i < interfaces.Length; ++i)
 		{
 		  interfaces[i] = ReadClass(currentOffset, charBuffer);
 		  currentOffset += 2;
@@ -454,9 +454,9 @@ namespace ObjectWeb.Asm
 		// Read the class attributes (the variables are ordered as in Section 4.7 of the JVMS).
 		// Attribute offsets exclude the attribute_name_index and attribute_length fields.
 		// - The offset of the InnerClasses attribute, or 0.
-		int innerClassesOffset = 0;
+		var innerClassesOffset = 0;
 		// - The offset of the EnclosingMethod attribute, or 0.
-		int enclosingMethodOffset = 0;
+		var enclosingMethodOffset = 0;
 		// - The string corresponding to the Signature attribute, or null.
 		string signature = null;
 		// - The string corresponding to the SourceFile attribute, or null.
@@ -464,37 +464,37 @@ namespace ObjectWeb.Asm
 		// - The string corresponding to the SourceDebugExtension attribute, or null.
 		string sourceDebugExtension = null;
 		// - The offset of the RuntimeVisibleAnnotations attribute, or 0.
-		int runtimeVisibleAnnotationsOffset = 0;
+		var runtimeVisibleAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleAnnotations attribute, or 0.
-		int runtimeInvisibleAnnotationsOffset = 0;
+		var runtimeInvisibleAnnotationsOffset = 0;
 		// - The offset of the RuntimeVisibleTypeAnnotations attribute, or 0.
-		int runtimeVisibleTypeAnnotationsOffset = 0;
+		var runtimeVisibleTypeAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleTypeAnnotations attribute, or 0.
-		int runtimeInvisibleTypeAnnotationsOffset = 0;
+		var runtimeInvisibleTypeAnnotationsOffset = 0;
 		// - The offset of the Module attribute, or 0.
-		int moduleOffset = 0;
+		var moduleOffset = 0;
 		// - The offset of the ModulePackages attribute, or 0.
-		int modulePackagesOffset = 0;
+		var modulePackagesOffset = 0;
 		// - The string corresponding to the ModuleMainClass attribute, or null.
 		string moduleMainClass = null;
 		// - The string corresponding to the NestHost attribute, or null.
 		string nestHostClass = null;
 		// - The offset of the NestMembers attribute, or 0.
-		int nestMembersOffset = 0;
+		var nestMembersOffset = 0;
 		// - The offset of the PermittedSubclasses attribute, or 0
-		int permittedSubclassesOffset = 0;
+		var permittedSubclassesOffset = 0;
 		// - The offset of the Record attribute, or 0.
-		int recordOffset = 0;
+		var recordOffset = 0;
 		// - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int currentAttributeOffset = FirstAttributeOffset;
-		for (int i = ReadUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
+		var currentAttributeOffset = FirstAttributeOffset;
+		for (var i = ReadUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = ReadUtf8(currentAttributeOffset, charBuffer);
-		  int attributeLength = ReadInt(currentAttributeOffset + 2);
+		  var attributeName = ReadUtf8(currentAttributeOffset, charBuffer);
+		  var attributeLength = ReadInt(currentAttributeOffset + 2);
 		  currentAttributeOffset += 6;
 		  // The tests are sorted in decreasing frequency order (based on frequencies observed on
 		  // typical classes).
@@ -578,7 +578,7 @@ namespace ObjectWeb.Asm
 		  else if (!Constants.Bootstrap_Methods.Equals(attributeName))
 		  {
 			// The BootstrapMethods attribute is read in the constructor.
-			Attribute attribute = ReadAttribute(attributePrototypes, attributeName, currentAttributeOffset, attributeLength, charBuffer, -1, null);
+			var attribute = ReadAttribute(attributePrototypes, attributeName, currentAttributeOffset, attributeLength, charBuffer, -1, null);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
@@ -610,22 +610,22 @@ namespace ObjectWeb.Asm
 		// Visit the EnclosingMethod attribute.
 		if (enclosingMethodOffset != 0)
 		{
-		  string className = ReadClass(enclosingMethodOffset, charBuffer);
-		  int methodIndex = ReadUnsignedShort(enclosingMethodOffset + 2);
-		  string name = methodIndex == 0 ? null : ReadUtf8(_cpInfoOffsets[methodIndex], charBuffer);
-		  string type = methodIndex == 0 ? null : ReadUtf8(_cpInfoOffsets[methodIndex] + 2, charBuffer);
+		  var className = ReadClass(enclosingMethodOffset, charBuffer);
+		  var methodIndex = ReadUnsignedShort(enclosingMethodOffset + 2);
+		  var name = methodIndex == 0 ? null : ReadUtf8(_cpInfoOffsets[methodIndex], charBuffer);
+		  var type = methodIndex == 0 ? null : ReadUtf8(_cpInfoOffsets[methodIndex] + 2, charBuffer);
 		  classVisitor.VisitOuterClass(className, name, type);
 		}
 
 		// Visit the RuntimeVisibleAnnotations attribute.
 		if (runtimeVisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(classVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -635,12 +635,12 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeInvisibleAnnotations attribute.
 		if (runtimeInvisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(classVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -650,14 +650,14 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleTypeAnnotations attribute.
 		if (runtimeVisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
 			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(classVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -667,14 +667,14 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeInvisibleTypeAnnotations attribute.
 		if (runtimeInvisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
 			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(classVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -685,7 +685,7 @@ namespace ObjectWeb.Asm
 		while (attributes != null)
 		{
 		  // Copy and reset the nextAttribute field so that it can also be used in ClassWriter.
-		  Attribute nextAttribute = attributes.nextAttribute;
+		  var nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
 		  classVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
@@ -694,8 +694,8 @@ namespace ObjectWeb.Asm
 		// Visit the NestedMembers attribute.
 		if (nestMembersOffset != 0)
 		{
-		  int numberOfNestMembers = ReadUnsignedShort(nestMembersOffset);
-		  int currentNestMemberOffset = nestMembersOffset + 2;
+		  var numberOfNestMembers = ReadUnsignedShort(nestMembersOffset);
+		  var currentNestMemberOffset = nestMembersOffset + 2;
 		  while (numberOfNestMembers-- > 0)
 		  {
 			classVisitor.VisitNestMember(ReadClass(currentNestMemberOffset, charBuffer));
@@ -706,8 +706,8 @@ namespace ObjectWeb.Asm
 		// Visit the PermittedSubclasses attribute.
 		if (permittedSubclassesOffset != 0)
 		{
-		  int numberOfPermittedSubclasses = ReadUnsignedShort(permittedSubclassesOffset);
-		  int currentPermittedSubclassesOffset = permittedSubclassesOffset + 2;
+		  var numberOfPermittedSubclasses = ReadUnsignedShort(permittedSubclassesOffset);
+		  var currentPermittedSubclassesOffset = permittedSubclassesOffset + 2;
 		  while (numberOfPermittedSubclasses-- > 0)
 		  {
 			classVisitor.VisitPermittedSubclass(ReadClass(currentPermittedSubclassesOffset, charBuffer));
@@ -718,8 +718,8 @@ namespace ObjectWeb.Asm
 		// Visit the InnerClasses attribute.
 		if (innerClassesOffset != 0)
 		{
-		  int numberOfClasses = ReadUnsignedShort(innerClassesOffset);
-		  int currentClassesOffset = innerClassesOffset + 2;
+		  var numberOfClasses = ReadUnsignedShort(innerClassesOffset);
+		  var currentClassesOffset = innerClassesOffset + 2;
 		  while (numberOfClasses-- > 0)
 		  {
 			classVisitor.VisitInnerClass(ReadClass(currentClassesOffset, charBuffer), ReadClass(currentClassesOffset + 2, charBuffer), ReadUtf8(currentClassesOffset + 4, charBuffer), ReadUnsignedShort(currentClassesOffset + 6));
@@ -730,7 +730,7 @@ namespace ObjectWeb.Asm
 		// Visit Record components.
 		if (recordOffset != 0)
 		{
-		  int recordComponentsCount = ReadUnsignedShort(recordOffset);
+		  var recordComponentsCount = ReadUnsignedShort(recordOffset);
 		  recordOffset += 2;
 		  while (recordComponentsCount-- > 0)
 		  {
@@ -739,13 +739,13 @@ namespace ObjectWeb.Asm
 		}
 
 		// Visit the fields and methods.
-		int fieldsCount = ReadUnsignedShort(currentOffset);
+		var fieldsCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (fieldsCount-- > 0)
 		{
 		  currentOffset = ReadField(classVisitor, context, currentOffset);
 		}
-		int methodsCount = ReadUnsignedShort(currentOffset);
+		var methodsCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (methodsCount-- > 0)
 		{
@@ -773,15 +773,15 @@ namespace ObjectWeb.Asm
 	  ///     null}. </param>
 	  private void ReadModuleAttributes(ClassVisitor classVisitor, Context context, int moduleOffset, int modulePackagesOffset, string moduleMainClass)
 	  {
-		char[] buffer = context.charBuffer;
+		var buffer = context.charBuffer;
 
 		// Read the module_name_index, module_flags and module_version_index fields and visit them.
-		int currentOffset = moduleOffset;
-		string moduleName = ReadModule(currentOffset, buffer);
-		int moduleFlags = ReadUnsignedShort(currentOffset + 2);
-		string moduleVersion = ReadUtf8(currentOffset + 4, buffer);
+		var currentOffset = moduleOffset;
+		var moduleName = ReadModule(currentOffset, buffer);
+		var moduleFlags = ReadUnsignedShort(currentOffset + 2);
+		var moduleVersion = ReadUtf8(currentOffset + 4, buffer);
 		currentOffset += 6;
-		ModuleVisitor moduleVisitor = classVisitor.VisitModule(moduleName, moduleFlags, moduleVersion);
+		var moduleVisitor = classVisitor.VisitModule(moduleName, moduleFlags, moduleVersion);
 		if (moduleVisitor == null)
 		{
 		  return;
@@ -796,8 +796,8 @@ namespace ObjectWeb.Asm
 		// Visit the ModulePackages attribute.
 		if (modulePackagesOffset != 0)
 		{
-		  int packageCount = ReadUnsignedShort(modulePackagesOffset);
-		  int currentPackageOffset = modulePackagesOffset + 2;
+		  var packageCount = ReadUnsignedShort(modulePackagesOffset);
+		  var currentPackageOffset = modulePackagesOffset + 2;
 		  while (packageCount-- > 0)
 		  {
 			moduleVisitor.VisitPackage(ReadPackage(currentPackageOffset, buffer));
@@ -806,34 +806,34 @@ namespace ObjectWeb.Asm
 		}
 
 		// Read the 'requires_count' and 'requires' fields.
-		int requiresCount = ReadUnsignedShort(currentOffset);
+		var requiresCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (requiresCount-- > 0)
 		{
 		  // Read the requires_index, requires_flags and requires_version fields and visit them.
-		  string requires = ReadModule(currentOffset, buffer);
-		  int requiresFlags = ReadUnsignedShort(currentOffset + 2);
-		  string requiresVersion = ReadUtf8(currentOffset + 4, buffer);
+		  var requires = ReadModule(currentOffset, buffer);
+		  var requiresFlags = ReadUnsignedShort(currentOffset + 2);
+		  var requiresVersion = ReadUtf8(currentOffset + 4, buffer);
 		  currentOffset += 6;
 		  moduleVisitor.VisitRequire(requires, requiresFlags, requiresVersion);
 		}
 
 		// Read the 'exports_count' and 'exports' fields.
-		int exportsCount = ReadUnsignedShort(currentOffset);
+		var exportsCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (exportsCount-- > 0)
 		{
 		  // Read the exports_index, exports_flags, exports_to_count and exports_to_index fields
 		  // and visit them.
-		  string exports = ReadPackage(currentOffset, buffer);
-		  int exportsFlags = ReadUnsignedShort(currentOffset + 2);
-		  int exportsToCount = ReadUnsignedShort(currentOffset + 4);
+		  var exports = ReadPackage(currentOffset, buffer);
+		  var exportsFlags = ReadUnsignedShort(currentOffset + 2);
+		  var exportsToCount = ReadUnsignedShort(currentOffset + 4);
 		  currentOffset += 6;
 		  string[] exportsTo = null;
 		  if (exportsToCount != 0)
 		  {
 			exportsTo = new string[exportsToCount];
-			for (int i = 0; i < exportsToCount; ++i)
+			for (var i = 0; i < exportsToCount; ++i)
 			{
 			  exportsTo[i] = ReadModule(currentOffset, buffer);
 			  currentOffset += 2;
@@ -843,20 +843,20 @@ namespace ObjectWeb.Asm
 		}
 
 		// Reads the 'opens_count' and 'opens' fields.
-		int opensCount = ReadUnsignedShort(currentOffset);
+		var opensCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (opensCount-- > 0)
 		{
 		  // Read the opens_index, opens_flags, opens_to_count and opens_to_index fields and visit them.
-		  string opens = ReadPackage(currentOffset, buffer);
-		  int opensFlags = ReadUnsignedShort(currentOffset + 2);
-		  int opensToCount = ReadUnsignedShort(currentOffset + 4);
+		  var opens = ReadPackage(currentOffset, buffer);
+		  var opensFlags = ReadUnsignedShort(currentOffset + 2);
+		  var opensToCount = ReadUnsignedShort(currentOffset + 4);
 		  currentOffset += 6;
 		  string[] opensTo = null;
 		  if (opensToCount != 0)
 		  {
 			opensTo = new string[opensToCount];
-			for (int i = 0; i < opensToCount; ++i)
+			for (var i = 0; i < opensToCount; ++i)
 			{
 			  opensTo[i] = ReadModule(currentOffset, buffer);
 			  currentOffset += 2;
@@ -866,7 +866,7 @@ namespace ObjectWeb.Asm
 		}
 
 		// Read the 'uses_count' and 'uses' fields.
-		int usesCount = ReadUnsignedShort(currentOffset);
+		var usesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (usesCount-- > 0)
 		{
@@ -875,16 +875,16 @@ namespace ObjectWeb.Asm
 		}
 
 		// Read the  'provides_count' and 'provides' fields.
-		int providesCount = ReadUnsignedShort(currentOffset);
+		var providesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (providesCount-- > 0)
 		{
 		  // Read the provides_index, provides_with_count and provides_with_index fields and visit them.
-		  string provides = ReadClass(currentOffset, buffer);
-		  int providesWithCount = ReadUnsignedShort(currentOffset + 2);
+		  var provides = ReadClass(currentOffset, buffer);
+		  var providesWithCount = ReadUnsignedShort(currentOffset + 2);
 		  currentOffset += 4;
-		  string[] providesWith = new string[providesWithCount];
-		  for (int i = 0; i < providesWithCount; ++i)
+		  var providesWith = new string[providesWithCount];
+		  for (var i = 0; i < providesWithCount; ++i)
 		  {
 			providesWith[i] = ReadClass(currentOffset, buffer);
 			currentOffset += 2;
@@ -905,11 +905,11 @@ namespace ObjectWeb.Asm
 	  /// <returns> the offset of the first byte following the record component. </returns>
 	  private int ReadRecordComponent(ClassVisitor classVisitor, Context context, int recordComponentOffset)
 	  {
-		char[] charBuffer = context.charBuffer;
+		var charBuffer = context.charBuffer;
 
-		int currentOffset = recordComponentOffset;
-		string name = ReadUtf8(currentOffset, charBuffer);
-		string descriptor = ReadUtf8(currentOffset + 2, charBuffer);
+		var currentOffset = recordComponentOffset;
+		var name = ReadUtf8(currentOffset, charBuffer);
+		var descriptor = ReadUtf8(currentOffset + 2, charBuffer);
 		currentOffset += 4;
 
 		// Read the record component attributes (the variables are ordered as in Section 4.7 of the
@@ -919,24 +919,24 @@ namespace ObjectWeb.Asm
 		// - The string corresponding to the Signature attribute, or null.
 		string signature = null;
 		// - The offset of the RuntimeVisibleAnnotations attribute, or 0.
-		int runtimeVisibleAnnotationsOffset = 0;
+		var runtimeVisibleAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleAnnotations attribute, or 0.
-		int runtimeInvisibleAnnotationsOffset = 0;
+		var runtimeInvisibleAnnotationsOffset = 0;
 		// - The offset of the RuntimeVisibleTypeAnnotations attribute, or 0.
-		int runtimeVisibleTypeAnnotationsOffset = 0;
+		var runtimeVisibleTypeAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleTypeAnnotations attribute, or 0.
-		int runtimeInvisibleTypeAnnotationsOffset = 0;
+		var runtimeInvisibleTypeAnnotationsOffset = 0;
 		// - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int attributesCount = ReadUnsignedShort(currentOffset);
+		var attributesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (attributesCount-- > 0)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = ReadUtf8(currentOffset, charBuffer);
-		  int attributeLength = ReadInt(currentOffset + 2);
+		  var attributeName = ReadUtf8(currentOffset, charBuffer);
+		  var attributeLength = ReadInt(currentOffset + 2);
 		  currentOffset += 6;
 		  // The tests are sorted in decreasing frequency order (based on frequencies observed on
 		  // typical classes).
@@ -962,14 +962,14 @@ namespace ObjectWeb.Asm
 		  }
 		  else
 		  {
-			Attribute attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
+			var attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
 		  currentOffset += attributeLength;
 		}
 
-		RecordComponentVisitor recordComponentVisitor = classVisitor.VisitRecordComponent(name, descriptor, signature);
+		var recordComponentVisitor = classVisitor.VisitRecordComponent(name, descriptor, signature);
 		if (recordComponentVisitor == null)
 		{
 		  return currentOffset;
@@ -978,12 +978,12 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleAnnotations attribute.
 		if (runtimeVisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -993,12 +993,12 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeInvisibleAnnotations attribute.
 		if (runtimeInvisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -1008,14 +1008,14 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleTypeAnnotations attribute.
 		if (runtimeVisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
 			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -1025,14 +1025,14 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeInvisibleTypeAnnotations attribute.
 		if (runtimeInvisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
 			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(recordComponentVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -1043,7 +1043,7 @@ namespace ObjectWeb.Asm
 		while (attributes != null)
 		{
 		  // Copy and reset the nextAttribute field so that it can also be used in FieldWriter.
-		  Attribute nextAttribute = attributes.nextAttribute;
+		  var nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
 		  recordComponentVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
@@ -1063,13 +1063,13 @@ namespace ObjectWeb.Asm
 	  /// <returns> the offset of the first byte following the field_info structure. </returns>
 	  private int ReadField(ClassVisitor classVisitor, Context context, int fieldInfoOffset)
 	  {
-		char[] charBuffer = context.charBuffer;
+		var charBuffer = context.charBuffer;
 
 		// Read the access_flags, name_index and descriptor_index fields.
-		int currentOffset = fieldInfoOffset;
-		int accessFlags = ReadUnsignedShort(currentOffset);
-		string name = ReadUtf8(currentOffset + 2, charBuffer);
-		string descriptor = ReadUtf8(currentOffset + 4, charBuffer);
+		var currentOffset = fieldInfoOffset;
+		var accessFlags = ReadUnsignedShort(currentOffset);
+		var name = ReadUtf8(currentOffset + 2, charBuffer);
+		var descriptor = ReadUtf8(currentOffset + 4, charBuffer);
 		currentOffset += 6;
 
 		// Read the field attributes (the variables are ordered as in Section 4.7 of the JVMS).
@@ -1079,30 +1079,30 @@ namespace ObjectWeb.Asm
 		// - The string corresponding to the Signature attribute, or null.
 		string signature = null;
 		// - The offset of the RuntimeVisibleAnnotations attribute, or 0.
-		int runtimeVisibleAnnotationsOffset = 0;
+		var runtimeVisibleAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleAnnotations attribute, or 0.
-		int runtimeInvisibleAnnotationsOffset = 0;
+		var runtimeInvisibleAnnotationsOffset = 0;
 		// - The offset of the RuntimeVisibleTypeAnnotations attribute, or 0.
-		int runtimeVisibleTypeAnnotationsOffset = 0;
+		var runtimeVisibleTypeAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleTypeAnnotations attribute, or 0.
-		int runtimeInvisibleTypeAnnotationsOffset = 0;
+		var runtimeInvisibleTypeAnnotationsOffset = 0;
 		// - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int attributesCount = ReadUnsignedShort(currentOffset);
+		var attributesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (attributesCount-- > 0)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = ReadUtf8(currentOffset, charBuffer);
-		  int attributeLength = ReadInt(currentOffset + 2);
+		  var attributeName = ReadUtf8(currentOffset, charBuffer);
+		  var attributeLength = ReadInt(currentOffset + 2);
 		  currentOffset += 6;
 		  // The tests are sorted in decreasing frequency order (based on frequencies observed on
 		  // typical classes).
 		  if (Constants.Constant_Value.Equals(attributeName))
 		  {
-			int constantvalueIndex = ReadUnsignedShort(currentOffset);
+			var constantvalueIndex = ReadUnsignedShort(currentOffset);
 			constantValue = constantvalueIndex == 0 ? null : ReadConst(constantvalueIndex, charBuffer);
 		  }
 		  else if (Constants.Signature.Equals(attributeName))
@@ -1135,7 +1135,7 @@ namespace ObjectWeb.Asm
 		  }
 		  else
 		  {
-			Attribute attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
+			var attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
@@ -1143,7 +1143,7 @@ namespace ObjectWeb.Asm
 		}
 
 		// Visit the field declaration.
-		FieldVisitor fieldVisitor = classVisitor.VisitField(accessFlags, name, descriptor, signature, constantValue);
+		var fieldVisitor = classVisitor.VisitField(accessFlags, name, descriptor, signature, constantValue);
 		if (fieldVisitor == null)
 		{
 		  return currentOffset;
@@ -1152,12 +1152,12 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleAnnotations attribute.
 		if (runtimeVisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -1167,12 +1167,12 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeInvisibleAnnotations attribute.
 		if (runtimeInvisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -1182,14 +1182,14 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleTypeAnnotations attribute.
 		if (runtimeVisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
 			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -1199,14 +1199,14 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeInvisibleTypeAnnotations attribute.
 		if (runtimeInvisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
 			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(fieldVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -1217,7 +1217,7 @@ namespace ObjectWeb.Asm
 		while (attributes != null)
 		{
 		  // Copy and reset the nextAttribute field so that it can also be used in FieldWriter.
-		  Attribute nextAttribute = attributes.nextAttribute;
+		  var nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
 		  fieldVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
@@ -1237,10 +1237,10 @@ namespace ObjectWeb.Asm
 	  /// <returns> the offset of the first byte following the method_info structure. </returns>
 	  private int ReadMethod(ClassVisitor classVisitor, Context context, int methodInfoOffset)
 	  {
-		char[] charBuffer = context.charBuffer;
+		var charBuffer = context.charBuffer;
 
 		// Read the access_flags, name_index and descriptor_index fields.
-		int currentOffset = methodInfoOffset;
+		var currentOffset = methodInfoOffset;
 		context.currentMethodAccessFlags = ReadUnsignedShort(currentOffset);
 		context.currentMethodName = ReadUtf8(currentOffset + 2, charBuffer);
 		context.currentMethodDescriptor = ReadUtf8(currentOffset + 4, charBuffer);
@@ -1249,42 +1249,42 @@ namespace ObjectWeb.Asm
 		// Read the method attributes (the variables are ordered as in Section 4.7 of the JVMS).
 		// Attribute offsets exclude the attribute_name_index and attribute_length fields.
 		// - The offset of the Code attribute, or 0.
-		int codeOffset = 0;
+		var codeOffset = 0;
 		// - The offset of the Exceptions attribute, or 0.
-		int exceptionsOffset = 0;
+		var exceptionsOffset = 0;
 		// - The strings corresponding to the Exceptions attribute, or null.
 		string[] exceptions = null;
 		// - Whether the method has a Synthetic attribute.
-		bool synthetic = false;
+		var synthetic = false;
 		// - The constant pool index contained in the Signature attribute, or 0.
-		int signatureIndex = 0;
+		var signatureIndex = 0;
 		// - The offset of the RuntimeVisibleAnnotations attribute, or 0.
-		int runtimeVisibleAnnotationsOffset = 0;
+		var runtimeVisibleAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleAnnotations attribute, or 0.
-		int runtimeInvisibleAnnotationsOffset = 0;
+		var runtimeInvisibleAnnotationsOffset = 0;
 		// - The offset of the RuntimeVisibleParameterAnnotations attribute, or 0.
-		int runtimeVisibleParameterAnnotationsOffset = 0;
+		var runtimeVisibleParameterAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleParameterAnnotations attribute, or 0.
-		int runtimeInvisibleParameterAnnotationsOffset = 0;
+		var runtimeInvisibleParameterAnnotationsOffset = 0;
 		// - The offset of the RuntimeVisibleTypeAnnotations attribute, or 0.
-		int runtimeVisibleTypeAnnotationsOffset = 0;
+		var runtimeVisibleTypeAnnotationsOffset = 0;
 		// - The offset of the RuntimeInvisibleTypeAnnotations attribute, or 0.
-		int runtimeInvisibleTypeAnnotationsOffset = 0;
+		var runtimeInvisibleTypeAnnotationsOffset = 0;
 		// - The offset of the AnnotationDefault attribute, or 0.
-		int annotationDefaultOffset = 0;
+		var annotationDefaultOffset = 0;
 		// - The offset of the MethodParameters attribute, or 0.
-		int methodParametersOffset = 0;
+		var methodParametersOffset = 0;
 		// - The non standard attributes (linked with their {@link Attribute#nextAttribute} field).
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int attributesCount = ReadUnsignedShort(currentOffset);
+		var attributesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (attributesCount-- > 0)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = ReadUtf8(currentOffset, charBuffer);
-		  int attributeLength = ReadInt(currentOffset + 2);
+		  var attributeName = ReadUtf8(currentOffset, charBuffer);
+		  var attributeLength = ReadInt(currentOffset + 2);
 		  currentOffset += 6;
 		  // The tests are sorted in decreasing frequency order (based on frequencies observed on
 		  // typical classes).
@@ -1299,8 +1299,8 @@ namespace ObjectWeb.Asm
 		  {
 			exceptionsOffset = currentOffset;
 			exceptions = new string[ReadUnsignedShort(exceptionsOffset)];
-			int currentExceptionOffset = exceptionsOffset + 2;
-			for (int i = 0; i < exceptions.Length; ++i)
+			var currentExceptionOffset = exceptionsOffset + 2;
+			for (var i = 0; i < exceptions.Length; ++i)
 			{
 			  exceptions[i] = ReadClass(currentExceptionOffset, charBuffer);
 			  currentExceptionOffset += 2;
@@ -1353,7 +1353,7 @@ namespace ObjectWeb.Asm
 		  }
 		  else
 		  {
-			Attribute attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
+			var attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, -1, null);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
@@ -1361,7 +1361,7 @@ namespace ObjectWeb.Asm
 		}
 
 		// Visit the method declaration.
-		MethodVisitor methodVisitor = classVisitor.VisitMethod(context.currentMethodAccessFlags, context.currentMethodName, context.currentMethodDescriptor, signatureIndex == 0 ? null : ReadUtf(signatureIndex, charBuffer), exceptions);
+		var methodVisitor = classVisitor.VisitMethod(context.currentMethodAccessFlags, context.currentMethodName, context.currentMethodDescriptor, signatureIndex == 0 ? null : ReadUtf(signatureIndex, charBuffer), exceptions);
 		if (methodVisitor == null)
 		{
 		  return currentOffset;
@@ -1373,7 +1373,7 @@ namespace ObjectWeb.Asm
 		// the content of these attributes.
 		if (methodVisitor is MethodWriter)
 		{
-		  MethodWriter methodWriter = (MethodWriter) methodVisitor;
+		  var methodWriter = (MethodWriter) methodVisitor;
 		  if (methodWriter.CanCopyMethodAttributes(this, synthetic, (context.currentMethodAccessFlags & IOpcodes.Acc_Deprecated) != 0, ReadUnsignedShort(methodInfoOffset + 4), signatureIndex, exceptionsOffset))
 		  {
 			methodWriter.SetMethodAttributesSource(methodInfoOffset, currentOffset - methodInfoOffset);
@@ -1384,8 +1384,8 @@ namespace ObjectWeb.Asm
 		// Visit the MethodParameters attribute.
 		if (methodParametersOffset != 0 && (context.parsingOptions & Skip_Debug) == 0)
 		{
-		  int parametersCount = ReadByte(methodParametersOffset);
-		  int currentParameterOffset = methodParametersOffset + 1;
+		  var parametersCount = ReadByte(methodParametersOffset);
+		  var currentParameterOffset = methodParametersOffset + 1;
 		  while (parametersCount-- > 0)
 		  {
 			// Read the name_index and access_flags fields and visit them.
@@ -1397,7 +1397,7 @@ namespace ObjectWeb.Asm
 		// Visit the AnnotationDefault attribute.
 		if (annotationDefaultOffset != 0)
 		{
-		  AnnotationVisitor annotationVisitor = methodVisitor.VisitAnnotationDefault();
+		  var annotationVisitor = methodVisitor.VisitAnnotationDefault();
 		  ReadElementValue(annotationVisitor, annotationDefaultOffset, null, charBuffer);
 		  if (annotationVisitor != null)
 		  {
@@ -1408,12 +1408,12 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleAnnotations attribute.
 		if (runtimeVisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeVisibleAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitAnnotation(annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -1423,12 +1423,12 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeInvisibleAnnotations attribute.
 		if (runtimeInvisibleAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeInvisibleAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitAnnotation(annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -1438,14 +1438,14 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeVisibleTypeAnnotations attribute.
 		if (runtimeVisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeVisibleTypeAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeVisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
 			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -1455,14 +1455,14 @@ namespace ObjectWeb.Asm
 		// Visit the RuntimeInvisibleTypeAnnotations attribute.
 		if (runtimeInvisibleTypeAnnotationsOffset != 0)
 		{
-		  int numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
-		  int currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
+		  var numAnnotations = ReadUnsignedShort(runtimeInvisibleTypeAnnotationsOffset);
+		  var currentAnnotationOffset = runtimeInvisibleTypeAnnotationsOffset + 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the target_type, target_info and target_path fields.
 			currentAnnotationOffset = ReadTypeAnnotationTarget(context, currentAnnotationOffset);
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			currentAnnotationOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentAnnotationOffset = ReadElementValues(methodVisitor.VisitTypeAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -1485,7 +1485,7 @@ namespace ObjectWeb.Asm
 		while (attributes != null)
 		{
 		  // Copy and reset the nextAttribute field so that it can also be used in MethodWriter.
-		  Attribute nextAttribute = attributes.nextAttribute;
+		  var nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
 		  methodVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
@@ -1516,14 +1516,14 @@ namespace ObjectWeb.Asm
 	  ///     its attribute_name_index and attribute_length fields. </param>
 	  private void ReadCode(MethodVisitor methodVisitor, Context context, int codeOffset)
 	  {
-		int currentOffset = codeOffset;
+		var currentOffset = codeOffset;
 
 		// Read the max_stack, max_locals and code_length fields.
-		byte[] classBuffer = classFileBuffer;
-		char[] charBuffer = context.charBuffer;
-		int maxStack = ReadUnsignedShort(currentOffset);
-		int maxLocals = ReadUnsignedShort(currentOffset + 2);
-		int codeLength = ReadInt(currentOffset + 4);
+		var classBuffer = classFileBuffer;
+		var charBuffer = context.charBuffer;
+		var maxStack = ReadUnsignedShort(currentOffset);
+		var maxLocals = ReadUnsignedShort(currentOffset + 2);
+		var codeLength = ReadInt(currentOffset + 4);
 		currentOffset += 8;
 		if (codeLength > classFileBuffer.Length - currentOffset)
 		{
@@ -1531,13 +1531,13 @@ namespace ObjectWeb.Asm
 		}
 
 		// Read the bytecode 'code' array to create a label for each referenced instruction.
-		int bytecodeStartOffset = currentOffset;
-		int bytecodeEndOffset = currentOffset + codeLength;
-		Label[] labels = context.currentMethodLabels = new Label[codeLength + 1];
+		var bytecodeStartOffset = currentOffset;
+		var bytecodeEndOffset = currentOffset + codeLength;
+		var labels = context.currentMethodLabels = new Label[codeLength + 1];
 		while (currentOffset < bytecodeEndOffset)
 		{
-		  int bytecodeOffset = currentOffset - bytecodeStartOffset;
-		  int opcode = classBuffer[currentOffset] & 0xFF;
+		  var bytecodeOffset = currentOffset - bytecodeStartOffset;
+		  var opcode = classBuffer[currentOffset] & 0xFF;
 		  switch (opcode)
 		  {
 			case IOpcodes.Nop:
@@ -1765,7 +1765,7 @@ namespace ObjectWeb.Asm
 			  currentOffset += 4 - (bytecodeOffset & 3);
 			  // Read the default label and the number of table entries.
 			  CreateLabel(bytecodeOffset + ReadInt(currentOffset), labels);
-			  int numTableEntries = ReadInt(currentOffset + 8) - ReadInt(currentOffset + 4) + 1;
+			  var numTableEntries = ReadInt(currentOffset + 8) - ReadInt(currentOffset + 4) + 1;
 			  currentOffset += 12;
 			  // Read the table labels.
 			  while (numTableEntries-- > 0)
@@ -1779,7 +1779,7 @@ namespace ObjectWeb.Asm
 			  currentOffset += 4 - (bytecodeOffset & 3);
 			  // Read the default label and the number of switch cases.
 			  CreateLabel(bytecodeOffset + ReadInt(currentOffset), labels);
-			  int numSwitchCases = ReadInt(currentOffset + 4);
+			  var numSwitchCases = ReadInt(currentOffset + 4);
 			  currentOffset += 8;
 			  // Read the switch labels.
 			  while (numSwitchCases-- > 0)
@@ -1835,14 +1835,14 @@ namespace ObjectWeb.Asm
 
 		// Read the 'exception_table_length' and 'exception_table' field to create a label for each
 		// referenced instruction, and to make methodVisitor visit the corresponding try catch blocks.
-		int exceptionTableLength = ReadUnsignedShort(currentOffset);
+		var exceptionTableLength = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (exceptionTableLength-- > 0)
 		{
-		  Label start = CreateLabel(ReadUnsignedShort(currentOffset), labels);
-		  Label end = CreateLabel(ReadUnsignedShort(currentOffset + 2), labels);
-		  Label handler = CreateLabel(ReadUnsignedShort(currentOffset + 4), labels);
-		  string catchType = ReadUtf8(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 6)], charBuffer);
+		  var start = CreateLabel(ReadUnsignedShort(currentOffset), labels);
+		  var end = CreateLabel(ReadUnsignedShort(currentOffset + 2), labels);
+		  var handler = CreateLabel(ReadUnsignedShort(currentOffset + 4), labels);
+		  var catchType = ReadUtf8(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 6)], charBuffer);
 		  currentOffset += 8;
 		  methodVisitor.VisitTryCatchBlock(start, end, handler, catchType);
 		}
@@ -1853,15 +1853,15 @@ namespace ObjectWeb.Asm
 		// - The offset of the current 'stack_map_frame' in the StackMap[Table] attribute, or 0.
 		// Initially, this is the offset of the first 'stack_map_frame' entry. Then this offset is
 		// updated after each stack_map_frame is read.
-		int stackMapFrameOffset = 0;
+		var stackMapFrameOffset = 0;
 		// - The end offset of the StackMap[Table] attribute, or 0.
-		int stackMapTableEndOffset = 0;
+		var stackMapTableEndOffset = 0;
 		// - Whether the stack map frames are compressed (i.e. in a StackMapTable) or not.
-		bool compressedFrames = true;
+		var compressedFrames = true;
 		// - The offset of the LocalVariableTable attribute, or 0.
-		int localVariableTableOffset = 0;
+		var localVariableTableOffset = 0;
 		// - The offset of the LocalVariableTypeTable attribute, or 0.
-		int localVariableTypeTableOffset = 0;
+		var localVariableTypeTableOffset = 0;
 		// - The offset of each 'type_annotation' entry in the RuntimeVisibleTypeAnnotations
 		// attribute, or null.
 		int[] visibleTypeAnnotationOffsets = null;
@@ -1872,13 +1872,13 @@ namespace ObjectWeb.Asm
 		//   This list in the <i>reverse order</i> or their order in the ClassFile structure.
 		Attribute attributes = null;
 
-		int attributesCount = ReadUnsignedShort(currentOffset);
+		var attributesCount = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		while (attributesCount-- > 0)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = ReadUtf8(currentOffset, charBuffer);
-		  int attributeLength = ReadInt(currentOffset + 2);
+		  var attributeName = ReadUtf8(currentOffset, charBuffer);
+		  var attributeLength = ReadInt(currentOffset + 2);
 		  currentOffset += 6;
 		  if (Constants.Local_Variable_Table.Equals(attributeName))
 		  {
@@ -1886,14 +1886,14 @@ namespace ObjectWeb.Asm
 			{
 			  localVariableTableOffset = currentOffset;
 			  // Parse the attribute to find the corresponding (debug only) labels.
-			  int currentLocalVariableTableOffset = currentOffset;
-			  int localVariableTableLength = ReadUnsignedShort(currentLocalVariableTableOffset);
+			  var currentLocalVariableTableOffset = currentOffset;
+			  var localVariableTableLength = ReadUnsignedShort(currentLocalVariableTableOffset);
 			  currentLocalVariableTableOffset += 2;
 			  while (localVariableTableLength-- > 0)
 			  {
-				int startPc = ReadUnsignedShort(currentLocalVariableTableOffset);
+				var startPc = ReadUnsignedShort(currentLocalVariableTableOffset);
 				CreateDebugLabel(startPc, labels);
-				int length = ReadUnsignedShort(currentLocalVariableTableOffset + 2);
+				var length = ReadUnsignedShort(currentLocalVariableTableOffset + 2);
 				CreateDebugLabel(startPc + length, labels);
 				// Skip the name_index, descriptor_index and index fields (2 bytes each).
 				currentLocalVariableTableOffset += 10;
@@ -1911,13 +1911,13 @@ namespace ObjectWeb.Asm
 			if ((context.parsingOptions & Skip_Debug) == 0)
 			{
 			  // Parse the attribute to find the corresponding (debug only) labels.
-			  int currentLineNumberTableOffset = currentOffset;
-			  int lineNumberTableLength = ReadUnsignedShort(currentLineNumberTableOffset);
+			  var currentLineNumberTableOffset = currentOffset;
+			  var lineNumberTableLength = ReadUnsignedShort(currentLineNumberTableOffset);
 			  currentLineNumberTableOffset += 2;
 			  while (lineNumberTableLength-- > 0)
 			  {
-				int startPc = ReadUnsignedShort(currentLineNumberTableOffset);
-				int lineNumber = ReadUnsignedShort(currentLineNumberTableOffset + 2);
+				var startPc = ReadUnsignedShort(currentLineNumberTableOffset);
+				var lineNumber = ReadUnsignedShort(currentLineNumberTableOffset + 2);
 				currentLineNumberTableOffset += 4;
 				CreateDebugLabel(startPc, labels);
 				labels[startPc].AddLineNumber(lineNumber);
@@ -1971,7 +1971,7 @@ namespace ObjectWeb.Asm
 		  }
 		  else
 		  {
-			Attribute attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, codeOffset, labels);
+			var attribute = ReadAttribute(context.attributePrototypes, attributeName, currentOffset, attributeLength, charBuffer, codeOffset, labels);
 			attribute.nextAttribute = attributes;
 			attributes = attribute;
 		  }
@@ -1980,7 +1980,7 @@ namespace ObjectWeb.Asm
 
 		// Initialize the context fields related to stack map frames, and generate the first
 		// (implicit) stack map frame, if needed.
-		bool expandFrames = (context.parsingOptions & Expand_Frames) != 0;
+		var expandFrames = (context.parsingOptions & Expand_Frames) != 0;
 		if (stackMapFrameOffset != 0)
 		{
 		  // The bytecode offset of the first explicit frame is not offset_delta + 1 but only
@@ -2004,11 +2004,11 @@ namespace ObjectWeb.Asm
 		  // and the only consequence will be the creation of an unneeded label. This is better than
 		  // creating a label for each NEW instruction, and faster than fully decoding the whole stack
 		  // map table.
-		  for (int offset = stackMapFrameOffset; offset < stackMapTableEndOffset - 2; ++offset)
+		  for (var offset = stackMapFrameOffset; offset < stackMapTableEndOffset - 2; ++offset)
 		  {
 			if (classBuffer[offset] == Frame.Item_Uninitialized)
 			{
-			  int potentialBytecodeOffset = ReadUnsignedShort(offset + 1);
+			  var potentialBytecodeOffset = ReadUnsignedShort(offset + 1);
 			  if (potentialBytecodeOffset >= 0 && potentialBytecodeOffset < codeLength && (classBuffer[bytecodeStartOffset + potentialBytecodeOffset] & 0xFF) == IOpcodes.New)
 			  {
 				CreateLabel(potentialBytecodeOffset, labels);
@@ -2032,30 +2032,30 @@ namespace ObjectWeb.Asm
 
 		// Index of the next runtime visible type annotation to read (in the
 		// visibleTypeAnnotationOffsets array).
-		int currentVisibleTypeAnnotationIndex = 0;
+		var currentVisibleTypeAnnotationIndex = 0;
 		// The bytecode offset of the next runtime visible type annotation to read, or -1.
-		int currentVisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(visibleTypeAnnotationOffsets, 0);
+		var currentVisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(visibleTypeAnnotationOffsets, 0);
 		// Index of the next runtime invisible type annotation to read (in the
 		// invisibleTypeAnnotationOffsets array).
-		int currentInvisibleTypeAnnotationIndex = 0;
+		var currentInvisibleTypeAnnotationIndex = 0;
 		// The bytecode offset of the next runtime invisible type annotation to read, or -1.
-		int currentInvisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(invisibleTypeAnnotationOffsets, 0);
+		var currentInvisibleTypeAnnotationBytecodeOffset = GetTypeAnnotationBytecodeOffset(invisibleTypeAnnotationOffsets, 0);
 
 		// Whether a F_INSERT stack map frame must be inserted before the current instruction.
-		bool insertFrame = false;
+		var insertFrame = false;
 
 		// The delta to subtract from a goto_w or jsr_w opcode to get the corresponding goto or jsr
 		// opcode, or 0 if goto_w and jsr_w must be left unchanged (i.e. when expanding ASM specific
 		// instructions).
-		int wideJumpOpcodeDelta = (context.parsingOptions & Expand_Asm_Insns) == 0 ? Constants.WideJumpOpcodeDelta : 0;
+		var wideJumpOpcodeDelta = (context.parsingOptions & Expand_Asm_Insns) == 0 ? Constants.WideJumpOpcodeDelta : 0;
 
 		currentOffset = bytecodeStartOffset;
 		while (currentOffset < bytecodeEndOffset)
 		{
-		  int currentBytecodeOffset = currentOffset - bytecodeStartOffset;
+		  var currentBytecodeOffset = currentOffset - bytecodeStartOffset;
 
 		  // Visit the label and the line number(s) for this bytecode offset, if any.
-		  Label currentLabel = labels[currentBytecodeOffset];
+		  var currentLabel = labels[currentBytecodeOffset];
 		  if (currentLabel != null)
 		  {
 			currentLabel.Accept(methodVisitor, (context.parsingOptions & Skip_Debug) == 0);
@@ -2102,7 +2102,7 @@ namespace ObjectWeb.Asm
 		  }
 
 		  // Visit the instruction at this bytecode offset.
-		  int opcode = classBuffer[currentOffset] & 0xFF;
+		  var opcode = classBuffer[currentOffset] & 0xFF;
 		  switch (opcode)
 		  {
 			case IOpcodes.Nop:
@@ -2315,7 +2315,7 @@ namespace ObjectWeb.Asm
 				// First, change the ASM specific opcodes ASM_IFEQ ... ASM_JSR, ASM_IFNULL and
 				// ASM_IFNONNULL to IFEQ ... JSR, IFNULL and IFNONNULL.
 				opcode = opcode < Constants.Asm_Ifnull ? opcode - Constants.Asm_Opcode_Delta : opcode - Constants.Asm_Ifnull_Opcode_Delta;
-				Label target = labels[currentBytecodeOffset + ReadUnsignedShort(currentOffset + 1)];
+				var target = labels[currentBytecodeOffset + ReadUnsignedShort(currentOffset + 1)];
 				if (opcode == IOpcodes.Goto || opcode == IOpcodes.Jsr)
 				{
 				  // Replace GOTO with GOTO_W and JSR with JSR_W.
@@ -2327,7 +2327,7 @@ namespace ObjectWeb.Asm
 				  // significant bit for IFNULL and IFNONNULL, and similarly for IFEQ ... IF_ACMPEQ
 				  // (with a pre and post offset by 1).
 				  opcode = opcode < IOpcodes.Goto ? ((opcode + 1) ^ 1) - 1 : opcode ^ 1;
-				  Label endif = CreateLabel(currentBytecodeOffset + 3, labels);
+				  var endif = CreateLabel(currentBytecodeOffset + 3, labels);
 				  methodVisitor.VisitJumpInsn(opcode, endif);
 				  methodVisitor.VisitJumpInsn(Constants.Goto_W, target);
 				  // endif designates the instruction just after GOTO_W, and is visited as part of the
@@ -2364,12 +2364,12 @@ namespace ObjectWeb.Asm
 				// Skip 0 to 3 padding bytes.
 				currentOffset += 4 - (currentBytecodeOffset & 3);
 				// Read the instruction.
-				Label defaultLabel = labels[currentBytecodeOffset + ReadInt(currentOffset)];
-				int low = ReadInt(currentOffset + 4);
-				int high = ReadInt(currentOffset + 8);
+				var defaultLabel = labels[currentBytecodeOffset + ReadInt(currentOffset)];
+				var low = ReadInt(currentOffset + 4);
+				var high = ReadInt(currentOffset + 8);
 				currentOffset += 12;
-				Label[] table = new Label[high - low + 1];
-				for (int i = 0; i < table.Length; ++i)
+				var table = new Label[high - low + 1];
+				for (var i = 0; i < table.Length; ++i)
 				{
 				  table[i] = labels[currentBytecodeOffset + ReadInt(currentOffset)];
 				  currentOffset += 4;
@@ -2382,12 +2382,12 @@ namespace ObjectWeb.Asm
 				// Skip 0 to 3 padding bytes.
 				currentOffset += 4 - (currentBytecodeOffset & 3);
 				// Read the instruction.
-				Label defaultLabel = labels[currentBytecodeOffset + ReadInt(currentOffset)];
-				int numPairs = ReadInt(currentOffset + 4);
+				var defaultLabel = labels[currentBytecodeOffset + ReadInt(currentOffset)];
+				var numPairs = ReadInt(currentOffset + 4);
 				currentOffset += 8;
-				int[] keys = new int[numPairs];
-				Label[] values = new Label[numPairs];
-				for (int i = 0; i < numPairs; ++i)
+				var keys = new int[numPairs];
+				var values = new Label[numPairs];
+				for (var i = 0; i < numPairs; ++i)
 				{
 				  keys[i] = ReadInt(currentOffset);
 				  values[i] = labels[currentBytecodeOffset + ReadInt(currentOffset + 4)];
@@ -2437,18 +2437,18 @@ namespace ObjectWeb.Asm
 			case IOpcodes.Invokestatic:
 			case IOpcodes.Invokeinterface:
 			{
-				int cpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)];
-				int nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
-				string owner = ReadClass(cpInfoOffset, charBuffer);
-				string name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
-				string descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
+				var cpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)];
+				var nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
+				var owner = ReadClass(cpInfoOffset, charBuffer);
+				var name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
+				var descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
 				if (opcode < IOpcodes.Invokevirtual)
 				{
 				  methodVisitor.VisitFieldInsn(opcode, owner, name, descriptor);
 				}
 				else
 				{
-				  bool isInterface = classBuffer[cpInfoOffset - 1] == Symbol.Constant_Interface_Methodref_Tag;
+				  var isInterface = classBuffer[cpInfoOffset - 1] == Symbol.Constant_Interface_Methodref_Tag;
 				  methodVisitor.VisitMethodInsn(opcode, owner, name, descriptor, isInterface);
 				}
 				if (opcode == IOpcodes.Invokeinterface)
@@ -2463,15 +2463,15 @@ namespace ObjectWeb.Asm
 			}
 			case IOpcodes.Invokedynamic:
 			{
-				int cpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)];
-				int nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
-				string name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
-				string descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
-				int bootstrapMethodOffset = _bootstrapMethodOffsets[ReadUnsignedShort(cpInfoOffset)];
-				Handle handle = (Handle) ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
-				object[] bootstrapMethodArguments = new object[ReadUnsignedShort(bootstrapMethodOffset + 2)];
+				var cpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)];
+				var nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
+				var name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
+				var descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
+				var bootstrapMethodOffset = _bootstrapMethodOffsets[ReadUnsignedShort(cpInfoOffset)];
+				var handle = (Handle) ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
+				var bootstrapMethodArguments = new object[ReadUnsignedShort(bootstrapMethodOffset + 2)];
 				bootstrapMethodOffset += 4;
-				for (int i = 0; i < bootstrapMethodArguments.Length; i++)
+				for (var i = 0; i < bootstrapMethodArguments.Length; i++)
 				{
 				  bootstrapMethodArguments[i] = ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
 				  bootstrapMethodOffset += 2;
@@ -2505,9 +2505,9 @@ namespace ObjectWeb.Asm
 			if (currentVisibleTypeAnnotationBytecodeOffset == currentBytecodeOffset)
 			{
 			  // Parse the target_type, target_info and target_path fields.
-			  int currentAnnotationOffset = ReadTypeAnnotationTarget(context, visibleTypeAnnotationOffsets[currentVisibleTypeAnnotationIndex]);
+			  var currentAnnotationOffset = ReadTypeAnnotationTarget(context, visibleTypeAnnotationOffsets[currentVisibleTypeAnnotationIndex]);
 			  // Parse the type_index field.
-			  string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			  var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			  currentAnnotationOffset += 2;
 			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
 			  ReadElementValues(methodVisitor.VisitInsnAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, true), currentAnnotationOffset, true, charBuffer);
@@ -2521,9 +2521,9 @@ namespace ObjectWeb.Asm
 			if (currentInvisibleTypeAnnotationBytecodeOffset == currentBytecodeOffset)
 			{
 			  // Parse the target_type, target_info and target_path fields.
-			  int currentAnnotationOffset = ReadTypeAnnotationTarget(context, invisibleTypeAnnotationOffsets[currentInvisibleTypeAnnotationIndex]);
+			  var currentAnnotationOffset = ReadTypeAnnotationTarget(context, invisibleTypeAnnotationOffsets[currentInvisibleTypeAnnotationIndex]);
 			  // Parse the type_index field.
-			  string annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
+			  var annotationDescriptor = ReadUtf8(currentAnnotationOffset, charBuffer);
 			  currentAnnotationOffset += 2;
 			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
 			  ReadElementValues(methodVisitor.VisitInsnAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, annotationDescriptor, false), currentAnnotationOffset, true, charBuffer);
@@ -2545,7 +2545,7 @@ namespace ObjectWeb.Asm
 		  {
 			typeTable = new int[ReadUnsignedShort(localVariableTypeTableOffset) * 3];
 			currentOffset = localVariableTypeTableOffset + 2;
-			int typeTableIndex = typeTable.Length;
+			var typeTableIndex = typeTable.Length;
 			while (typeTableIndex > 0)
 			{
 			  // Store the offset of 'signature_index', and the value of 'index' and 'start_pc'.
@@ -2555,20 +2555,20 @@ namespace ObjectWeb.Asm
 			  currentOffset += 10;
 			}
 		  }
-		  int localVariableTableLength = ReadUnsignedShort(localVariableTableOffset);
+		  var localVariableTableLength = ReadUnsignedShort(localVariableTableOffset);
 		  currentOffset = localVariableTableOffset + 2;
 		  while (localVariableTableLength-- > 0)
 		  {
-			int startPc = ReadUnsignedShort(currentOffset);
-			int length = ReadUnsignedShort(currentOffset + 2);
-			string name = ReadUtf8(currentOffset + 4, charBuffer);
-			string descriptor = ReadUtf8(currentOffset + 6, charBuffer);
-			int index = ReadUnsignedShort(currentOffset + 8);
+			var startPc = ReadUnsignedShort(currentOffset);
+			var length = ReadUnsignedShort(currentOffset + 2);
+			var name = ReadUtf8(currentOffset + 4, charBuffer);
+			var descriptor = ReadUtf8(currentOffset + 6, charBuffer);
+			var index = ReadUnsignedShort(currentOffset + 8);
 			currentOffset += 10;
 			string signature = null;
 			if (typeTable != null)
 			{
-			  for (int i = 0; i < typeTable.Length; i += 3)
+			  for (var i = 0; i < typeTable.Length; i += 3)
 			  {
 				if (typeTable[i] == startPc && typeTable[i + 1] == index)
 				{
@@ -2584,15 +2584,15 @@ namespace ObjectWeb.Asm
 		// Visit the local variable type annotations of the RuntimeVisibleTypeAnnotations attribute.
 		if (visibleTypeAnnotationOffsets != null)
 		{
-		  foreach (int typeAnnotationOffset in visibleTypeAnnotationOffsets)
+		  foreach (var typeAnnotationOffset in visibleTypeAnnotationOffsets)
 		  {
-			int targetType = ReadByte(typeAnnotationOffset);
+			var targetType = ReadByte(typeAnnotationOffset);
 			if (targetType == TypeReference.Local_Variable || targetType == TypeReference.Resource_Variable)
 			{
 			  // Parse the target_type, target_info and target_path fields.
 			  currentOffset = ReadTypeAnnotationTarget(context, typeAnnotationOffset);
 			  // Parse the type_index field.
-			  string annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
+			  var annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			  currentOffset += 2;
 			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
 			  ReadElementValues(methodVisitor.VisitLocalVariableAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, context.currentLocalVariableAnnotationRangeStarts, context.currentLocalVariableAnnotationRangeEnds, context.currentLocalVariableAnnotationRangeIndices, annotationDescriptor, true), currentOffset, true, charBuffer);
@@ -2603,15 +2603,15 @@ namespace ObjectWeb.Asm
 		// Visit the local variable type annotations of the RuntimeInvisibleTypeAnnotations attribute.
 		if (invisibleTypeAnnotationOffsets != null)
 		{
-		  foreach (int typeAnnotationOffset in invisibleTypeAnnotationOffsets)
+		  foreach (var typeAnnotationOffset in invisibleTypeAnnotationOffsets)
 		  {
-			int targetType = ReadByte(typeAnnotationOffset);
+			var targetType = ReadByte(typeAnnotationOffset);
 			if (targetType == TypeReference.Local_Variable || targetType == TypeReference.Resource_Variable)
 			{
 			  // Parse the target_type, target_info and target_path fields.
 			  currentOffset = ReadTypeAnnotationTarget(context, typeAnnotationOffset);
 			  // Parse the type_index field.
-			  string annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
+			  var annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			  currentOffset += 2;
 			  // Parse num_element_value_pairs and element_value_pairs and visit these values.
 			  ReadElementValues(methodVisitor.VisitLocalVariableAnnotation(context.currentTypeAnnotationTarget, context.currentTypeAnnotationTargetPath, context.currentLocalVariableAnnotationRangeStarts, context.currentLocalVariableAnnotationRangeEnds, context.currentLocalVariableAnnotationRangeIndices, annotationDescriptor, false), currentOffset, true, charBuffer);
@@ -2623,7 +2623,7 @@ namespace ObjectWeb.Asm
 		while (attributes != null)
 		{
 		  // Copy and reset the nextAttribute field so that it can also be used in MethodWriter.
-		  Attribute nextAttribute = attributes.nextAttribute;
+		  var nextAttribute = attributes.nextAttribute;
 		  attributes.nextAttribute = null;
 		  methodVisitor.VisitAttribute(attributes);
 		  attributes = nextAttribute;
@@ -2661,7 +2661,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> a Label without the <seealso cref="Label.Flag_Debug_Only"/> flag set. </returns>
 	  private Label CreateLabel(int bytecodeOffset, Label[] labels)
 	  {
-		Label label = ReadLabel(bytecodeOffset, labels);
+		var label = ReadLabel(bytecodeOffset, labels);
 		label.flags &= (short)(~Label.Flag_Debug_Only);
 		return label;
 	  }
@@ -2700,30 +2700,30 @@ namespace ObjectWeb.Asm
 	  ///     'annotations' array field. </returns>
 	  private int[] ReadTypeAnnotations(MethodVisitor methodVisitor, Context context, int runtimeTypeAnnotationsOffset, bool visible)
 	  {
-		char[] charBuffer = context.charBuffer;
-		int currentOffset = runtimeTypeAnnotationsOffset;
+		var charBuffer = context.charBuffer;
+		var currentOffset = runtimeTypeAnnotationsOffset;
 		// Read the num_annotations field and create an array to store the type_annotation offsets.
-		int[] typeAnnotationsOffsets = new int[ReadUnsignedShort(currentOffset)];
+		var typeAnnotationsOffsets = new int[ReadUnsignedShort(currentOffset)];
 		currentOffset += 2;
 		// Parse the 'annotations' array field.
-		for (int i = 0; i < typeAnnotationsOffsets.Length; ++i)
+		for (var i = 0; i < typeAnnotationsOffsets.Length; ++i)
 		{
 		  typeAnnotationsOffsets[i] = currentOffset;
 		  // Parse the type_annotation's target_type and the target_info fields. The size of the
 		  // target_info field depends on the value of target_type.
-		  int targetType = ReadInt(currentOffset);
+		  var targetType = ReadInt(currentOffset);
 		  switch ((int)((uint)targetType >> 24))
 		  {
 			case TypeReference.Local_Variable:
 			case TypeReference.Resource_Variable:
 			  // A localvar_target has a variable size, which depends on the value of their table_length
 			  // field. It also references bytecode offsets, for which we need labels.
-			  int tableLength = ReadUnsignedShort(currentOffset + 1);
+			  var tableLength = ReadUnsignedShort(currentOffset + 1);
 			  currentOffset += 3;
 			  while (tableLength-- > 0)
 			  {
-				int startPc = ReadUnsignedShort(currentOffset);
-				int length = ReadUnsignedShort(currentOffset + 2);
+				var startPc = ReadUnsignedShort(currentOffset);
+				var length = ReadUnsignedShort(currentOffset + 2);
 				// Skip the index field (2 bytes).
 				currentOffset += 6;
 				CreateLabel(startPc, context.currentMethodLabels);
@@ -2760,14 +2760,14 @@ namespace ObjectWeb.Asm
 		  }
 		  // Parse the rest of the type_annotation structure, starting with the target_path structure
 		  // (whose size depends on its path_length field).
-		  int pathLength = ReadByte(currentOffset);
+		  var pathLength = ReadByte(currentOffset);
 		  if (((int)((uint)targetType >> 24)) == TypeReference.Exception_Parameter)
 		  {
 			// Parse the target_path structure and create a corresponding TypePath.
-			TypePath path = pathLength == 0 ? null : new TypePath(classFileBuffer, currentOffset);
+			var path = pathLength == 0 ? null : new TypePath(classFileBuffer, currentOffset);
 			currentOffset += 1 + 2 * pathLength;
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			currentOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentOffset = ReadElementValues(methodVisitor.VisitTryCatchAnnotation(targetType & unchecked((int)0xFFFFFF00), path, annotationDescriptor, visible), currentOffset, true, charBuffer);
@@ -2815,9 +2815,9 @@ namespace ObjectWeb.Asm
 	  /// <returns> the start offset of the rest of the type_annotation structure. </returns>
 	  private int ReadTypeAnnotationTarget(Context context, int typeAnnotationOffset)
 	  {
-		int currentOffset = typeAnnotationOffset;
+		var currentOffset = typeAnnotationOffset;
 		// Parse and store the target_type structure.
-		int targetType = ReadInt(typeAnnotationOffset);
+		var targetType = ReadInt(typeAnnotationOffset);
 		switch ((int)((uint)targetType >> 24))
 		{
 		  case TypeReference.Class_Type_Parameter:
@@ -2835,16 +2835,16 @@ namespace ObjectWeb.Asm
 		  case TypeReference.Local_Variable:
 		  case TypeReference.Resource_Variable:
 			targetType &= unchecked((int)0xFF000000);
-			int tableLength = ReadUnsignedShort(currentOffset + 1);
+			var tableLength = ReadUnsignedShort(currentOffset + 1);
 			currentOffset += 3;
 			context.currentLocalVariableAnnotationRangeStarts = new Label[tableLength];
 			context.currentLocalVariableAnnotationRangeEnds = new Label[tableLength];
 			context.currentLocalVariableAnnotationRangeIndices = new int[tableLength];
-			for (int i = 0; i < tableLength; ++i)
+			for (var i = 0; i < tableLength; ++i)
 			{
-			  int startPc = ReadUnsignedShort(currentOffset);
-			  int length = ReadUnsignedShort(currentOffset + 2);
-			  int index = ReadUnsignedShort(currentOffset + 4);
+			  var startPc = ReadUnsignedShort(currentOffset);
+			  var length = ReadUnsignedShort(currentOffset + 2);
+			  var index = ReadUnsignedShort(currentOffset + 4);
 			  currentOffset += 6;
 			  context.currentLocalVariableAnnotationRangeStarts[i] = CreateLabel(startPc, context.currentMethodLabels);
 			  context.currentLocalVariableAnnotationRangeEnds[i] = CreateLabel(startPc + length, context.currentMethodLabels);
@@ -2879,7 +2879,7 @@ namespace ObjectWeb.Asm
 		}
 		context.currentTypeAnnotationTarget = targetType;
 		// Parse and store the target_path structure.
-		int pathLength = ReadByte(currentOffset);
+		var pathLength = ReadByte(currentOffset);
 		context.currentTypeAnnotationTargetPath = pathLength == 0 ? null : new TypePath(classFileBuffer, currentOffset);
 		// Return the start offset of the rest of the type_annotation structure.
 		return currentOffset + 1 + 2 * pathLength;
@@ -2897,18 +2897,18 @@ namespace ObjectWeb.Asm
 	  ///     attribute, false it is a RuntimeInvisibleParameterAnnotations attribute. </param>
 	  private void ReadParameterAnnotations(MethodVisitor methodVisitor, Context context, int runtimeParameterAnnotationsOffset, bool visible)
 	  {
-		int currentOffset = runtimeParameterAnnotationsOffset;
-		int numParameters = classFileBuffer[currentOffset++] & 0xFF;
+		var currentOffset = runtimeParameterAnnotationsOffset;
+		var numParameters = classFileBuffer[currentOffset++] & 0xFF;
 		methodVisitor.VisitAnnotableParameterCount(numParameters, visible);
-		char[] charBuffer = context.charBuffer;
-		for (int i = 0; i < numParameters; ++i)
+		var charBuffer = context.charBuffer;
+		for (var i = 0; i < numParameters; ++i)
 		{
-		  int numAnnotations = ReadUnsignedShort(currentOffset);
+		  var numAnnotations = ReadUnsignedShort(currentOffset);
 		  currentOffset += 2;
 		  while (numAnnotations-- > 0)
 		  {
 			// Parse the type_index field.
-			string annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
+			var annotationDescriptor = ReadUtf8(currentOffset, charBuffer);
 			currentOffset += 2;
 			// Parse num_element_value_pairs and element_value_pairs and visit these values.
 			currentOffset = ReadElementValues(methodVisitor.VisitParameterAnnotation(i, annotationDescriptor, visible), currentOffset, true, charBuffer);
@@ -2931,16 +2931,16 @@ namespace ObjectWeb.Asm
 	  /// <returns> the end offset of the JVMS 'annotation' or 'array_value' structure. </returns>
 	  private int ReadElementValues(AnnotationVisitor annotationVisitor, int annotationOffset, bool named, char[] charBuffer)
 	  {
-		int currentOffset = annotationOffset;
+		var currentOffset = annotationOffset;
 		// Read the num_element_value_pairs field (or num_values field for an array_value).
-		int numElementValuePairs = ReadUnsignedShort(currentOffset);
+		var numElementValuePairs = ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 		if (named)
 		{
 		  // Parse the element_value_pairs array.
 		  while (numElementValuePairs-- > 0)
 		  {
-			string elementName = ReadUtf8(currentOffset, charBuffer);
+			var elementName = ReadUtf8(currentOffset, charBuffer);
 			currentOffset = ReadElementValue(annotationVisitor, currentOffset + 2, elementName, charBuffer);
 		  }
 		}
@@ -2970,7 +2970,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the end offset of the JVMS 'element_value' structure. </returns>
 	  private int ReadElementValue(AnnotationVisitor annotationVisitor, int elementValueOffset, string elementName, char[] charBuffer)
 	  {
-		int currentOffset = elementValueOffset;
+		var currentOffset = elementValueOffset;
 		if (annotationVisitor == null)
 		{
 		  switch (classFileBuffer[currentOffset] & 0xFF)
@@ -3027,7 +3027,7 @@ namespace ObjectWeb.Asm
 			currentOffset = ReadElementValues(annotationVisitor.VisitAnnotation(elementName, ReadUtf8(currentOffset, charBuffer)), currentOffset + 2, true, charBuffer);
 			break;
 		  case '[': // array_value
-			int numValues = ReadUnsignedShort(currentOffset);
+			var numValues = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			if (numValues == 0)
 			{
@@ -3036,8 +3036,8 @@ namespace ObjectWeb.Asm
 			switch (classFileBuffer[currentOffset] & 0xFF)
 			{
 			  case 'B':
-				byte[] byteValues = new byte[numValues];
-				for (int i = 0; i < numValues; i++)
+				var byteValues = new byte[numValues];
+				for (var i = 0; i < numValues; i++)
 				{
 				  byteValues[i] = (byte) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
@@ -3045,8 +3045,8 @@ namespace ObjectWeb.Asm
 				annotationVisitor.Visit(elementName, byteValues);
 				break;
 			  case 'Z':
-				bool[] booleanValues = new bool[numValues];
-				for (int i = 0; i < numValues; i++)
+				var booleanValues = new bool[numValues];
+				for (var i = 0; i < numValues; i++)
 				{
 				  booleanValues[i] = ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]) != 0;
 				  currentOffset += 3;
@@ -3054,8 +3054,8 @@ namespace ObjectWeb.Asm
 				annotationVisitor.Visit(elementName, booleanValues);
 				break;
 			  case 'S':
-				short[] shortValues = new short[numValues];
-				for (int i = 0; i < numValues; i++)
+				var shortValues = new short[numValues];
+				for (var i = 0; i < numValues; i++)
 				{
 				  shortValues[i] = (short) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
@@ -3063,8 +3063,8 @@ namespace ObjectWeb.Asm
 				annotationVisitor.Visit(elementName, shortValues);
 				break;
 			  case 'C':
-				char[] charValues = new char[numValues];
-				for (int i = 0; i < numValues; i++)
+				var charValues = new char[numValues];
+				for (var i = 0; i < numValues; i++)
 				{
 				  charValues[i] = (char) ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
@@ -3072,8 +3072,8 @@ namespace ObjectWeb.Asm
 				annotationVisitor.Visit(elementName, charValues);
 				break;
 			  case 'I':
-				int[] intValues = new int[numValues];
-				for (int i = 0; i < numValues; i++)
+				var intValues = new int[numValues];
+				for (var i = 0; i < numValues; i++)
 				{
 				  intValues[i] = ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
@@ -3081,8 +3081,8 @@ namespace ObjectWeb.Asm
 				annotationVisitor.Visit(elementName, intValues);
 				break;
 			  case 'J':
-				long[] longValues = new long[numValues];
-				for (int i = 0; i < numValues; i++)
+				var longValues = new long[numValues];
+				for (var i = 0; i < numValues; i++)
 				{
 				  longValues[i] = ReadLong(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]);
 				  currentOffset += 3;
@@ -3090,8 +3090,8 @@ namespace ObjectWeb.Asm
 				annotationVisitor.Visit(elementName, longValues);
 				break;
 			  case 'F':
-				float[] floatValues = new float[numValues];
-				for (int i = 0; i < numValues; i++)
+				var floatValues = new float[numValues];
+				for (var i = 0; i < numValues; i++)
 				{
 				  floatValues[i] = BitConverter.Int32BitsToSingle(ReadInt(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]));
 				  currentOffset += 3;
@@ -3099,8 +3099,8 @@ namespace ObjectWeb.Asm
 				annotationVisitor.Visit(elementName, floatValues);
 				break;
 			  case 'D':
-				double[] doubleValues = new double[numValues];
-				for (int i = 0; i < numValues; i++)
+				var doubleValues = new double[numValues];
+				for (var i = 0; i < numValues; i++)
 				{
 				  doubleValues[i] = BitConverter.Int64BitsToDouble(ReadLong(_cpInfoOffsets[ReadUnsignedShort(currentOffset + 1)]));
 				  currentOffset += 3;
@@ -3129,9 +3129,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="context"> information about the class being parsed. </param>
 	  private void ComputeImplicitFrame(Context context)
 	  {
-		string methodDescriptor = context.currentMethodDescriptor;
-		object[] locals = context.currentFrameLocalTypes;
-		int numLocal = 0;
+		var methodDescriptor = context.currentMethodDescriptor;
+		var locals = context.currentFrameLocalTypes;
+		var numLocal = 0;
 		if ((context.currentMethodAccessFlags & IOpcodes.Acc_Static) == 0)
 		{
 		  if ("<init>".Equals(context.currentMethodName))
@@ -3145,10 +3145,10 @@ namespace ObjectWeb.Asm
 		}
 		// Parse the method descriptor, one argument type descriptor at each iteration. Start by
 		// skipping the first method descriptor character, which is always '('.
-		int currentMethodDescritorOffset = 1;
+		var currentMethodDescritorOffset = 1;
 		while (true)
 		{
-		  int currentArgumentDescriptorStartOffset = currentMethodDescritorOffset;
+		  var currentArgumentDescriptorStartOffset = currentMethodDescritorOffset;
 		  switch (methodDescriptor[currentMethodDescritorOffset++])
 		  {
 			case 'Z':
@@ -3211,9 +3211,9 @@ namespace ObjectWeb.Asm
 	  /// <returns> the end offset of the JVMS 'stack_map_frame' or 'full_frame' structure. </returns>
 	  private int ReadStackMapFrame(int stackMapFrameOffset, bool compressed, bool expand, Context context)
 	  {
-		int currentOffset = stackMapFrameOffset;
-		char[] charBuffer = context.charBuffer;
-		Label[] labels = context.currentMethodLabels;
+		var currentOffset = stackMapFrameOffset;
+		var charBuffer = context.charBuffer;
+		var labels = context.currentMethodLabels;
 		int frameType;
 		if (compressed)
 		{
@@ -3264,8 +3264,8 @@ namespace ObjectWeb.Asm
 		  }
 		  else if (frameType < Frame.Full_Frame)
 		  {
-			int local = expand ? context.currentFrameLocalCount : 0;
-			for (int k = frameType - Frame.Same_Frame_Extended; k > 0; k--)
+			var local = expand ? context.currentFrameLocalCount : 0;
+			for (var k = frameType - Frame.Same_Frame_Extended; k > 0; k--)
 			{
 			  currentOffset = ReadVerificationTypeInfo(currentOffset, context.currentFrameLocalTypes, local++, charBuffer, labels);
 			}
@@ -3276,19 +3276,19 @@ namespace ObjectWeb.Asm
 		  }
 		  else
 		  {
-			int numberOfLocals = ReadUnsignedShort(currentOffset);
+			var numberOfLocals = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			context.currentFrameType = IOpcodes.F_Full;
 			context.currentFrameLocalCountDelta = numberOfLocals;
 			context.currentFrameLocalCount = numberOfLocals;
-			for (int local = 0; local < numberOfLocals; ++local)
+			for (var local = 0; local < numberOfLocals; ++local)
 			{
 			  currentOffset = ReadVerificationTypeInfo(currentOffset, context.currentFrameLocalTypes, local, charBuffer, labels);
 			}
-			int numberOfStackItems = ReadUnsignedShort(currentOffset);
+			var numberOfStackItems = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			context.currentFrameStackCount = numberOfStackItems;
-			for (int stack = 0; stack < numberOfStackItems; ++stack)
+			for (var stack = 0; stack < numberOfStackItems; ++stack)
 			{
 			  currentOffset = ReadVerificationTypeInfo(currentOffset, context.currentFrameStackTypes, stack, charBuffer, labels);
 			}
@@ -3318,8 +3318,8 @@ namespace ObjectWeb.Asm
 	  /// <returns> the end offset of the JVMS 'verification_type_info' structure. </returns>
 	  private int ReadVerificationTypeInfo(int verificationTypeInfoOffset, object[] frame, int index, char[] charBuffer, Label[] labels)
 	  {
-		int currentOffset = verificationTypeInfoOffset;
-		int tag = classFileBuffer[currentOffset++] & 0xFF;
+		var currentOffset = verificationTypeInfoOffset;
+		var tag = classFileBuffer[currentOffset++] & 0xFF;
 		switch (tag)
 		{
 		  case Frame.Item_Top:
@@ -3373,10 +3373,10 @@ namespace ObjectWeb.Asm
 		  {
 			// Skip the access_flags, this_class, super_class, and interfaces_count fields (using 2 bytes
 			// each), as well as the interfaces array field (2 bytes per interface).
-			int currentOffset = header + 8 + ReadUnsignedShort(header + 6) * 2;
+			var currentOffset = header + 8 + ReadUnsignedShort(header + 6) * 2;
     
 			// Read the fields_count field.
-			int fieldsCount = ReadUnsignedShort(currentOffset);
+			var fieldsCount = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			// Skip the 'fields' array field.
 			while (fieldsCount-- > 0)
@@ -3384,7 +3384,7 @@ namespace ObjectWeb.Asm
 			  // Invariant: currentOffset is the offset of a field_info structure.
 			  // Skip the access_flags, name_index and descriptor_index fields (2 bytes each), and read the
 			  // attributes_count field.
-			  int attributesCount = ReadUnsignedShort(currentOffset + 6);
+			  var attributesCount = ReadUnsignedShort(currentOffset + 6);
 			  currentOffset += 8;
 			  // Skip the 'attributes' array field.
 			  while (attributesCount-- > 0)
@@ -3398,11 +3398,11 @@ namespace ObjectWeb.Asm
 			}
     
 			// Skip the methods_count and 'methods' fields, using the same method as above.
-			int methodsCount = ReadUnsignedShort(currentOffset);
+			var methodsCount = ReadUnsignedShort(currentOffset);
 			currentOffset += 2;
 			while (methodsCount-- > 0)
 			{
-			  int attributesCount = ReadUnsignedShort(currentOffset + 6);
+			  var attributesCount = ReadUnsignedShort(currentOffset + 6);
 			  currentOffset += 8;
 			  while (attributesCount-- > 0)
 			  {
@@ -3423,21 +3423,21 @@ namespace ObjectWeb.Asm
 	  /// <returns> the offsets of the bootstrap methods. </returns>
 	  private int[] ReadBootstrapMethodsAttribute(int maxStringLength)
 	  {
-		char[] charBuffer = new char[maxStringLength];
-		int currentAttributeOffset = FirstAttributeOffset;
-		for (int i = ReadUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
+		var charBuffer = new char[maxStringLength];
+		var currentAttributeOffset = FirstAttributeOffset;
+		for (var i = ReadUnsignedShort(currentAttributeOffset - 2); i > 0; --i)
 		{
 		  // Read the attribute_info's attribute_name and attribute_length fields.
-		  string attributeName = ReadUtf8(currentAttributeOffset, charBuffer);
-		  int attributeLength = ReadInt(currentAttributeOffset + 2);
+		  var attributeName = ReadUtf8(currentAttributeOffset, charBuffer);
+		  var attributeLength = ReadInt(currentAttributeOffset + 2);
 		  currentAttributeOffset += 6;
 		  if (Constants.Bootstrap_Methods.Equals(attributeName))
 		  {
 			// Read the num_bootstrap_methods field and create an array of this size.
-			int[] result = new int[ReadUnsignedShort(currentAttributeOffset)];
+			var result = new int[ReadUnsignedShort(currentAttributeOffset)];
 			// Compute and store the offset of each 'bootstrap_methods' array field entry.
-			int currentBootstrapMethodOffset = currentAttributeOffset + 2;
-			for (int j = 0; j < result.Length; ++j)
+			var currentBootstrapMethodOffset = currentAttributeOffset + 2;
+			for (var j = 0; j < result.Length; ++j)
 			{
 			  result[j] = currentBootstrapMethodOffset;
 			  // Skip the bootstrap_method_ref and num_bootstrap_arguments fields (2 bytes each),
@@ -3472,7 +3472,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the attribute that has been read. </returns>
 	  private Attribute ReadAttribute(Attribute[] attributePrototypes, string type, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
 	  {
-		foreach (Attribute attributePrototype in attributePrototypes)
+		foreach (var attributePrototype in attributePrototypes)
 		{
 		  if (attributePrototype.type.Equals(type))
 		  {
@@ -3533,7 +3533,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the read value. </returns>
 	  public virtual int ReadUnsignedShort(int offset)
 	  {
-		byte[] classBuffer = classFileBuffer;
+		var classBuffer = classFileBuffer;
 		return ((classBuffer[offset] & 0xFF) << 8) | (classBuffer[offset + 1] & 0xFF);
 	  }
 
@@ -3545,7 +3545,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the read value. </returns>
 	  public virtual short ReadShort(int offset)
 	  {
-		byte[] classBuffer = classFileBuffer;
+		var classBuffer = classFileBuffer;
 		return (short)(((classBuffer[offset] & 0xFF) << 8) | (classBuffer[offset + 1] & 0xFF));
 	  }
 
@@ -3557,7 +3557,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> the read value. </returns>
 	  public virtual int ReadInt(int offset)
 	  {
-		byte[] classBuffer = classFileBuffer;
+		var classBuffer = classFileBuffer;
 		return ((classBuffer[offset] & 0xFF) << 24) | ((classBuffer[offset + 1] & 0xFF) << 16) | ((classBuffer[offset + 2] & 0xFF) << 8) | (classBuffer[offset + 3] & 0xFF);
 	  }
 
@@ -3570,7 +3570,7 @@ namespace ObjectWeb.Asm
 	  public virtual long ReadLong(int offset)
 	  {
 		long l1 = ReadInt(offset);
-		long l0 = ReadInt(offset + 4) & 0xFFFFFFFFL;
+		var l0 = ReadInt(offset + 4) & 0xFFFFFFFFL;
 		return (l1 << 32) | l0;
 	  }
 
@@ -3587,7 +3587,7 @@ namespace ObjectWeb.Asm
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
 	  public virtual string ReadUtf8(int offset, char[] charBuffer)
 	  {
-		int constantPoolEntryIndex = ReadUnsignedShort(offset);
+		var constantPoolEntryIndex = ReadUnsignedShort(offset);
 		if (offset == 0 || constantPoolEntryIndex == 0)
 		{
 		  return null;
@@ -3605,12 +3605,12 @@ namespace ObjectWeb.Asm
 	  /// <returns> the String corresponding to the specified CONSTANT_Utf8 entry. </returns>
 	  public string ReadUtf(int constantPoolEntryIndex, char[] charBuffer)
 	  {
-		string value = _constantUtf8Values[constantPoolEntryIndex];
+		var value = _constantUtf8Values[constantPoolEntryIndex];
 		if (!string.ReferenceEquals(value, null))
 		{
 		  return value;
 		}
-		int cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
+		var cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
 		return _constantUtf8Values[constantPoolEntryIndex] = ReadUtf(cpInfoOffset + 2, ReadUnsignedShort(cpInfoOffset), charBuffer);
 	  }
 
@@ -3624,10 +3624,10 @@ namespace ObjectWeb.Asm
 	  /// <returns> the String corresponding to the specified UTF8 string. </returns>
 	  private string ReadUtf(int utfOffset, int utfLength, char[] charBuffer)
 	  {
-		int currentOffset = utfOffset;
-		int endOffset = currentOffset + utfLength;
-		int strLength = 0;
-		byte[] classBuffer = classFileBuffer;
+		var currentOffset = utfOffset;
+		var endOffset = currentOffset + utfLength;
+		var strLength = 0;
+		var classBuffer = classFileBuffer;
 		while (currentOffset < endOffset)
 		{
 		  int currentByte = classBuffer[currentOffset++];
@@ -3721,20 +3721,20 @@ namespace ObjectWeb.Asm
 	  /// <returns> the ConstantDynamic corresponding to the specified CONSTANT_Dynamic entry. </returns>
 	  private ConstantDynamic ReadConstantDynamic(int constantPoolEntryIndex, char[] charBuffer)
 	  {
-		ConstantDynamic constantDynamic = _constantDynamicValues[constantPoolEntryIndex];
+		var constantDynamic = _constantDynamicValues[constantPoolEntryIndex];
 		if (constantDynamic != null)
 		{
 		  return constantDynamic;
 		}
-		int cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
-		int nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
-		string name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
-		string descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
-		int bootstrapMethodOffset = _bootstrapMethodOffsets[ReadUnsignedShort(cpInfoOffset)];
-		Handle handle = (Handle) ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
-		object[] bootstrapMethodArguments = new object[ReadUnsignedShort(bootstrapMethodOffset + 2)];
+		var cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
+		var nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 2)];
+		var name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
+		var descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
+		var bootstrapMethodOffset = _bootstrapMethodOffsets[ReadUnsignedShort(cpInfoOffset)];
+		var handle = (Handle) ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
+		var bootstrapMethodArguments = new object[ReadUnsignedShort(bootstrapMethodOffset + 2)];
 		bootstrapMethodOffset += 4;
-		for (int i = 0; i < bootstrapMethodArguments.Length; i++)
+		for (var i = 0; i < bootstrapMethodArguments.Length; i++)
 		{
 		  bootstrapMethodArguments[i] = ReadConst(ReadUnsignedShort(bootstrapMethodOffset), charBuffer);
 		  bootstrapMethodOffset += 2;
@@ -3757,7 +3757,7 @@ namespace ObjectWeb.Asm
 	  ///     constant pool entry. </returns>
 	  public virtual object ReadConst(int constantPoolEntryIndex, char[] charBuffer)
 	  {
-		int cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
+		var cpInfoOffset = _cpInfoOffsets[constantPoolEntryIndex];
 		switch (classFileBuffer[cpInfoOffset - 1])
 		{
 		  case Symbol.Constant_Integer_Tag:
@@ -3775,13 +3775,13 @@ namespace ObjectWeb.Asm
 		  case Symbol.Constant_Method_Type_Tag:
 			return JType.GetMethodType(ReadUtf8(cpInfoOffset, charBuffer));
 		  case Symbol.Constant_Method_Handle_Tag:
-			int referenceKind = ReadByte(cpInfoOffset);
-			int referenceCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 1)];
-			int nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(referenceCpInfoOffset + 2)];
-			string owner = ReadClass(referenceCpInfoOffset, charBuffer);
-			string name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
-			string descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
-			bool isInterface = classFileBuffer[referenceCpInfoOffset - 1] == Symbol.Constant_Interface_Methodref_Tag;
+			var referenceKind = ReadByte(cpInfoOffset);
+			var referenceCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(cpInfoOffset + 1)];
+			var nameAndTypeCpInfoOffset = _cpInfoOffsets[ReadUnsignedShort(referenceCpInfoOffset + 2)];
+			var owner = ReadClass(referenceCpInfoOffset, charBuffer);
+			var name = ReadUtf8(nameAndTypeCpInfoOffset, charBuffer);
+			var descriptor = ReadUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
+			var isInterface = classFileBuffer[referenceCpInfoOffset - 1] == Symbol.Constant_Interface_Methodref_Tag;
 			return new Handle(referenceKind, owner, name, descriptor, isInterface);
 		  case Symbol.Constant_Dynamic_Tag:
 			return ReadConstantDynamic(constantPoolEntryIndex, charBuffer);

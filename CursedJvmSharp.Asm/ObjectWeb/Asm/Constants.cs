@@ -194,7 +194,7 @@ namespace ObjectWeb.Asm
 		{
 		  return false;
 		}
-		string member = "(Annotation|Class|Field|Method|Module|RecordComponent|Signature)";
+		var member = "(Annotation|Class|Field|Method|Module|RecordComponent|Signature)";
 		return internalName.Contains("Test$") || Regex.IsMatch(internalName, "org/objectweb/asm/util/Trace" + member + "Visitor(\\$.*)?") || Regex.IsMatch(internalName, "org/objectweb/asm/util/Check" + member + "Adapter(\\$.*)?");
 	  }
 
@@ -207,7 +207,7 @@ namespace ObjectWeb.Asm
 		int minorVersion;
 		try
 		{
-				using (DataInputStream callerClassStream = new DataInputStream(classInputStream))
+				using (var callerClassStream = new DataInputStream(classInputStream))
 				{
 			  callerClassStream.ReadInt();
 			  minorVersion = callerClassStream.ReadUnsignedShort();

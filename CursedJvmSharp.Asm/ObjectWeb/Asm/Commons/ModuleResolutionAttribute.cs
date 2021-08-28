@@ -93,7 +93,7 @@ namespace ObjectWeb.Asm.Commons
 
 	  public override ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
-		ByteVector byteVector = new ByteVector();
+		var byteVector = new ByteVector();
 		byteVector.PutShort(resolution);
 		return byteVector;
 	  }

@@ -210,7 +210,7 @@ namespace ObjectWeb.Asm.Commons
 		  // Collect the non private constructors and methods. Only the ACC_PUBLIC, ACC_PRIVATE,
 		  // ACC_PROTECTED, ACC_STATIC, ACC_FINAL, ACC_SYNCHRONIZED, ACC_NATIVE, ACC_ABSTRACT and
 		  // ACC_STRICT flags are used.
-		  int mods = access & (IOpcodes.Acc_Public | IOpcodes.Acc_Private | IOpcodes.Acc_Protected | IOpcodes.Acc_Static | IOpcodes.Acc_Final | IOpcodes.Acc_Synchronized | IOpcodes.Acc_Native | IOpcodes.Acc_Abstract | IOpcodes.Acc_Strict);
+		  var mods = access & (IOpcodes.Acc_Public | IOpcodes.Acc_Private | IOpcodes.Acc_Protected | IOpcodes.Acc_Static | IOpcodes.Acc_Final | IOpcodes.Acc_Synchronized | IOpcodes.Acc_Native | IOpcodes.Acc_Abstract | IOpcodes.Acc_Strict);
 
 		  if ((access & IOpcodes.Acc_Private) == 0)
 		  {
@@ -245,7 +245,7 @@ namespace ObjectWeb.Asm.Commons
 		  // serialVersionUID values.
 		  if ((access & IOpcodes.Acc_Private) == 0 || (access & (IOpcodes.Acc_Static | IOpcodes.Acc_Transient)) == 0)
 		  {
-			int mods = access & (IOpcodes.Acc_Public | IOpcodes.Acc_Private | IOpcodes.Acc_Protected | IOpcodes.Acc_Static | IOpcodes.Acc_Final | IOpcodes.Acc_Volatile | IOpcodes.Acc_Transient);
+			var mods = access & (IOpcodes.Acc_Public | IOpcodes.Acc_Private | IOpcodes.Acc_Protected | IOpcodes.Acc_Static | IOpcodes.Acc_Final | IOpcodes.Acc_Volatile | IOpcodes.Acc_Transient);
 			_svuidFields.Add(new Item(name, mods, desc));
 		  }
 		}
@@ -306,7 +306,7 @@ namespace ObjectWeb.Asm.Commons
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
 	  public virtual void AddSvuid(long svuid)
 	  {
-		FieldVisitor fieldVisitor = base.VisitField(IOpcodes.Acc_Final + IOpcodes.Acc_Static, "serialVersionUID", "J", null, svuid);
+		var fieldVisitor = base.VisitField(IOpcodes.Acc_Final + IOpcodes.Acc_Static, "serialVersionUID", "J", null, svuid);
 		if (fieldVisitor != null)
 		{
 		  fieldVisitor.VisitEnd();
@@ -323,15 +323,15 @@ namespace ObjectWeb.Asm.Commons
 	  {
 		long svuid = 0;
 
-		using (MemoryStream byteArrayOutputStream = new MemoryStream()) 
-        using(DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream))
+		using (var byteArrayOutputStream = new MemoryStream()) 
+        using(var dataOutputStream = new DataOutputStream(byteArrayOutputStream))
 		{
 
 		  // 1. The class name written using UTF encoding.
 		  dataOutputStream.WriteUtf(_name.Replace('/', '.'));
 
 		  // 2. The class modifiers written as a 32-bit integer.
-		  int mods = _access;
+		  var mods = _access;
 		  if ((mods & IOpcodes.Acc_Interface) != 0)
 		  {
 			mods = _svuidMethods.Count == 0 ? (mods & ~IOpcodes.Acc_Abstract) : (mods | IOpcodes.Acc_Abstract);
@@ -340,7 +340,7 @@ namespace ObjectWeb.Asm.Commons
 
 		  // 3. The name of each interface sorted by name written using UTF encoding.
 		  Array.Sort(_interfaces);
-		  foreach (string interfaceName in _interfaces)
+		  foreach (var interfaceName in _interfaces)
 		  {
 			dataOutputStream.WriteUtf(interfaceName.Replace('/', '.'));
 		  }
@@ -381,12 +381,12 @@ namespace ObjectWeb.Asm.Commons
 
 		  // 8. The SHA-1 algorithm is executed on the stream of bytes produced by DataOutputStream and
 		  // produces five 32-bit values sha[0..4].
-		  byte[] hashBytes = ComputeShAdigest(byteArrayOutputStream.ToArray());
+		  var hashBytes = ComputeShAdigest(byteArrayOutputStream.ToArray());
 
 		  // 9. The hash value is assembled from the first and second 32-bit values of the SHA-1 message
 		  // digest. If the result of the message digest, the five 32-bit words H0 H1 H2 H3 H4, is in an
 		  // array of five int values named sha, the hash value would be computed as follows:
-		  for (int i = Math.Min(hashBytes.Length, 8) - 1; i >= 0; i--)
+		  for (var i = Math.Min(hashBytes.Length, 8) - 1; i >= 0; i--)
 		  {
 			svuid = (svuid << 8) | (uint)(hashBytes[i] & 0xFF);
 		  }
@@ -416,9 +416,9 @@ namespace ObjectWeb.Asm.Commons
 	  /// <exception cref="IOException"> if an error occurs. </exception>
 	  private static void WriteItems(ICollection<Item> itemCollection, IDataOutput dataOutputStream, bool dotted)
 	  {
-		Item[] items = itemCollection.ToArray();
+		var items = itemCollection.ToArray();
 		Array.Sort(items);
-		foreach (Item item in items)
+		foreach (var item in items)
 		{
 		  dataOutputStream.WriteUtf(item.name);
 		  dataOutputStream.WriteInt(item.access);
@@ -446,7 +446,7 @@ namespace ObjectWeb.Asm.Commons
 
 		public int CompareTo(Item item)
 		{
-		  int result = string.CompareOrdinal(name, item.name);
+		  var result = string.CompareOrdinal(name, item.name);
 		  if (result == 0)
 		  {
 			result = string.CompareOrdinal(descriptor, item.descriptor);

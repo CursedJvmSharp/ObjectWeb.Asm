@@ -467,7 +467,7 @@ namespace ObjectWeb.Asm.Commons
 
 	  public override void VisitTypeInsn(int opcode, string type)
 	  {
-		JType objectType = JType.GetObjectType(type);
+		var objectType = JType.GetObjectType(type);
 		switch (opcode)
 		{
 		  case IOpcodes.New:
@@ -516,7 +516,7 @@ namespace ObjectWeb.Asm.Commons
 		  base.VisitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
 		  return;
 		}
-		int opcode = opcodeAndSource & ~IOpcodes.Source_Mask;
+		var opcode = opcodeAndSource & ~IOpcodes.Source_Mask;
 
 		switch (opcode)
 		{
@@ -770,7 +770,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="floatValue"> the constant to be pushed on the stack. </param>
 	  public virtual void Fconst(float floatValue)
 	  {
-		int bits = BitConverter.SingleToInt32Bits(floatValue);
+		var bits = BitConverter.SingleToInt32Bits(floatValue);
 		if (bits == 0L || bits == 0x3F800000 || bits == 0x40000000)
 		{ // 0..2
 		  mv.VisitInsn(IOpcodes.Fconst_0 + (int) floatValue);
@@ -787,7 +787,7 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="doubleValue"> the constant to be pushed on the stack. </param>
 	  public virtual void Dconst(double doubleValue)
 	  {
-		long bits = System.BitConverter.DoubleToInt64Bits(doubleValue);
+		var bits = System.BitConverter.DoubleToInt64Bits(doubleValue);
 		if (bits == 0L || bits == 0x3FF0000000000000L)
 		{ // +0.0d and 1.0d
 		  mv.VisitInsn(IOpcodes.Dconst_0 + (int) doubleValue);

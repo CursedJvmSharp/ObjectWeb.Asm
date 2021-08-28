@@ -79,7 +79,7 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public virtual ByteVector PutByte(int byteValue)
 	  {
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 1 > data.Length)
 		{
 		  Enlarge(1);
@@ -97,12 +97,12 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public ByteVector Put11(int byteValue1, int byteValue2)
 	  {
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 2 > data.Length)
 		{
 		  Enlarge(2);
 		}
-		byte[] currentData = data;
+		var currentData = data;
 		currentData[currentLength++] = (byte) byteValue1;
 		currentData[currentLength++] = (byte) byteValue2;
 		length = currentLength;
@@ -116,12 +116,12 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public virtual ByteVector PutShort(int shortValue)
 	  {
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 2 > data.Length)
 		{
 		  Enlarge(2);
 		}
-		byte[] currentData = data;
+		var currentData = data;
 		currentData[currentLength++] = (byte)((int)((uint)shortValue >> 8));
 		currentData[currentLength++] = (byte) shortValue;
 		length = currentLength;
@@ -137,12 +137,12 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public ByteVector Put12(int byteValue, int shortValue)
 	  {
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 3 > data.Length)
 		{
 		  Enlarge(3);
 		}
-		byte[] currentData = data;
+		var currentData = data;
 		currentData[currentLength++] = (byte) byteValue;
 		currentData[currentLength++] = (byte)((int)((uint)shortValue >> 8));
 		currentData[currentLength++] = (byte) shortValue;
@@ -160,12 +160,12 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public ByteVector Put112(int byteValue1, int byteValue2, int shortValue)
 	  {
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 4 > data.Length)
 		{
 		  Enlarge(4);
 		}
-		byte[] currentData = data;
+		var currentData = data;
 		currentData[currentLength++] = (byte) byteValue1;
 		currentData[currentLength++] = (byte) byteValue2;
 		currentData[currentLength++] = (byte)((int)((uint)shortValue >> 8));
@@ -181,12 +181,12 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public virtual ByteVector PutInt(int intValue)
 	  {
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 4 > data.Length)
 		{
 		  Enlarge(4);
 		}
-		byte[] currentData = data;
+		var currentData = data;
 		currentData[currentLength++] = (byte)((int)((uint)intValue >> 24));
 		currentData[currentLength++] = (byte)((int)((uint)intValue >> 16));
 		currentData[currentLength++] = (byte)((int)((uint)intValue >> 8));
@@ -205,12 +205,12 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public ByteVector Put122(int byteValue, int shortValue1, int shortValue2)
 	  {
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 5 > data.Length)
 		{
 		  Enlarge(5);
 		}
-		byte[] currentData = data;
+		var currentData = data;
 		currentData[currentLength++] = (byte) byteValue;
 		currentData[currentLength++] = (byte)((int)((uint)shortValue1 >> 8));
 		currentData[currentLength++] = (byte) shortValue1;
@@ -227,13 +227,13 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public virtual ByteVector PutLong(long longValue)
 	  {
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 8 > data.Length)
 		{
 		  Enlarge(8);
 		}
-		byte[] currentData = data;
-		int intValue = (int)((long)((ulong)longValue >> 32));
+		var currentData = data;
+		var intValue = (int)((long)((ulong)longValue >> 32));
 		currentData[currentLength++] = (byte)((int)((uint)intValue >> 24));
 		currentData[currentLength++] = (byte)((int)((uint)intValue >> 16));
 		currentData[currentLength++] = (byte)((int)((uint)intValue >> 8));
@@ -256,26 +256,26 @@ namespace ObjectWeb.Asm
 	  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
 	  public virtual ByteVector PutUtf8(string stringValue)
 	  {
-		int charLength = stringValue.Length;
+		var charLength = stringValue.Length;
 		if (charLength > 65535)
 		{
 		  throw new System.ArgumentException("UTF8 string too large");
 		}
-		int currentLength = length;
+		var currentLength = length;
 		if (currentLength + 2 + charLength > data.Length)
 		{
 		  Enlarge(2 + charLength);
 		}
-		byte[] currentData = data;
+		var currentData = data;
 		// Optimistic algorithm: instead of computing the byte length and then serializing the string
 		// (which requires two loops), we assume the byte length is equal to char length (which is the
 		// most frequent case), and we start serializing the string right away. During the
 		// serialization, if we find that this assumption is wrong, we continue with the general method.
 		currentData[currentLength++] = (byte)((int)((uint)charLength >> 8));
 		currentData[currentLength++] = (byte) charLength;
-		for (int i = 0; i < charLength; ++i)
+		for (var i = 0; i < charLength; ++i)
 		{
-		  char charValue = stringValue[i];
+		  var charValue = stringValue[i];
 		  if (charValue >= '\u0001' && charValue <= '\u007F')
 		  {
 			currentData[currentLength++] = (byte) charValue;
@@ -303,11 +303,11 @@ namespace ObjectWeb.Asm
 	  /// <returns> this byte vector. </returns>
 	  public ByteVector EncodeUtf8(string stringValue, int offset, int maxByteLength)
 	  {
-		int charLength = stringValue.Length;
-		int byteLength = offset;
-		for (int i = offset; i < charLength; ++i)
+		var charLength = stringValue.Length;
+		var byteLength = offset;
+		for (var i = offset; i < charLength; ++i)
 		{
-		  char charValue = stringValue[i];
+		  var charValue = stringValue[i];
 		  if (charValue >= (char)0x0001 && charValue <= (char)0x007F)
 		  {
 			byteLength++;
@@ -326,7 +326,7 @@ namespace ObjectWeb.Asm
 		  throw new System.ArgumentException("UTF8 string too large");
 		}
 		// Compute where 'byteLength' must be stored in 'data', and store it at this location.
-		int byteLengthOffset = length - offset - 2;
+		var byteLengthOffset = length - offset - 2;
 		if (byteLengthOffset >= 0)
 		{
 		  data[byteLengthOffset] = (byte)((int)((uint)byteLength >> 8));
@@ -336,10 +336,10 @@ namespace ObjectWeb.Asm
 		{
 		  Enlarge(byteLength - offset);
 		}
-		int currentLength = length;
-		for (int i = offset; i < charLength; ++i)
+		var currentLength = length;
+		for (var i = offset; i < charLength; ++i)
 		{
-		  char charValue = stringValue[i];
+		  var charValue = stringValue[i];
 		  if (charValue >= (char)0x0001 && charValue <= (char)0x007F)
 		  {
 			data[currentLength++] = (byte) charValue;
@@ -389,9 +389,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="size"> number of additional bytes that this byte vector should be able to receive. </param>
 	  private void Enlarge(int size)
 	  {
-		int doubleCapacity = 2 * data.Length;
-		int minimalCapacity = length + size;
-		byte[] newData = new byte[doubleCapacity > minimalCapacity ? doubleCapacity : minimalCapacity];
+		var doubleCapacity = 2 * data.Length;
+		var minimalCapacity = length + size;
+		var newData = new byte[doubleCapacity > minimalCapacity ? doubleCapacity : minimalCapacity];
 		Array.Copy(data, 0, newData, 0, length);
 		data = newData;
 	  }

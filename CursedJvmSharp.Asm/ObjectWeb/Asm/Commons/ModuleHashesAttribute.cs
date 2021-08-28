@@ -74,27 +74,27 @@ namespace ObjectWeb.Asm.Commons
 
 	  public override Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
 	  {
-		int currentOffset = offset;
+		var currentOffset = offset;
 
-		string hashAlgorithm = classReader.ReadUtf8(currentOffset, charBuffer);
+		var hashAlgorithm = classReader.ReadUtf8(currentOffset, charBuffer);
 		currentOffset += 2;
 
-		int numModules = classReader.ReadUnsignedShort(currentOffset);
+		var numModules = classReader.ReadUnsignedShort(currentOffset);
 		currentOffset += 2;
 
-		List<string> moduleList = new List<string>(numModules);
-		List<byte[]> hashList = new List<byte[]>(numModules);
+		var moduleList = new List<string>(numModules);
+		var hashList = new List<byte[]>(numModules);
 
-		for (int i = 0; i < numModules; ++i)
+		for (var i = 0; i < numModules; ++i)
 		{
-		  string module = classReader.ReadModule(currentOffset, charBuffer);
+		  var module = classReader.ReadModule(currentOffset, charBuffer);
 		  currentOffset += 2;
 		  moduleList.Add(module);
 
-		  int hashLength = classReader.ReadUnsignedShort(currentOffset);
+		  var hashLength = classReader.ReadUnsignedShort(currentOffset);
 		  currentOffset += 2;
-		  byte[] hash = new byte[hashLength];
-		  for (int j = 0; j < hashLength; ++j)
+		  var hash = new byte[hashLength];
+		  for (var j = 0; j < hashLength; ++j)
 		  {
 			hash[j] = (byte) classReader.ReadByte(currentOffset);
 			currentOffset += 1;
@@ -106,7 +106,7 @@ namespace ObjectWeb.Asm.Commons
 
 	  public override ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack, int maxLocals)
 	  {
-		ByteVector byteVector = new ByteVector();
+		var byteVector = new ByteVector();
 		byteVector.PutShort(classWriter.NewUtf8(algorithm));
 		if (modules == null)
 		{
@@ -114,12 +114,12 @@ namespace ObjectWeb.Asm.Commons
 		}
 		else
 		{
-		  int numModules = modules.Count;
+		  var numModules = modules.Count;
 		  byteVector.PutShort(numModules);
-		  for (int i = 0; i < numModules; ++i)
+		  for (var i = 0; i < numModules; ++i)
 		  {
-			string module = modules[i];
-			byte[] hash = hashes[i];
+			var module = modules[i];
+			var hash = hashes[i];
 			byteVector.PutShort(classWriter.NewModule(module)).PutShort(hash.Length).PutByteArray(hash, 0, hash.Length);
 		  }
 		}

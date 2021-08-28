@@ -147,7 +147,7 @@ namespace ObjectWeb.Asm
 		{
 		  return false;
 		}
-		Handle handle = (Handle) @object;
+		var handle = (Handle) @object;
 		return _tag == handle._tag && _isInterface == handle._isInterface && _owner.Equals(handle._owner) && _name.Equals(handle._name) && _descriptor.Equals(handle._descriptor);
 	  }
 

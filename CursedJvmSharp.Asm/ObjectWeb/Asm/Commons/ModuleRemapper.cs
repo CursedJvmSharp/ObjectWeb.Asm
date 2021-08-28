@@ -86,7 +86,7 @@ namespace ObjectWeb.Asm.Commons
 		if (modules != null)
 		{
 		  remappedModules = new string[modules.Length];
-		  for (int i = 0; i < modules.Length; ++i)
+		  for (var i = 0; i < modules.Length; ++i)
 		  {
 			remappedModules[i] = remapper.MapModuleName(modules[i]);
 		  }
@@ -100,7 +100,7 @@ namespace ObjectWeb.Asm.Commons
 		if (modules != null)
 		{
 		  remappedModules = new string[modules.Length];
-		  for (int i = 0; i < modules.Length; ++i)
+		  for (var i = 0; i < modules.Length; ++i)
 		  {
 			remappedModules[i] = remapper.MapModuleName(modules[i]);
 		  }
@@ -115,8 +115,8 @@ namespace ObjectWeb.Asm.Commons
 
 	  public override void VisitProvide(string service, params string[] providers)
 	  {
-		string[] remappedProviders = new string[providers.Length];
-		for (int i = 0; i < providers.Length; ++i)
+		var remappedProviders = new string[providers.Length];
+		for (var i = 0; i < providers.Length; ++i)
 		{
 		  remappedProviders[i] = remapper.MapType(providers[i]);
 		}

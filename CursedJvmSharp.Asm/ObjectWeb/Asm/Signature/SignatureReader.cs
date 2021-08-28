@@ -64,8 +64,8 @@ namespace ObjectWeb.Asm.Signature
 	  /// <param name="signatureVistor"> the visitor that must visit this signature. </param>
 	  public virtual void Accept(SignatureVisitor signatureVistor)
 	  {
-		string signature = this._signatureValue;
-		int length = signature.Length;
+		var signature = this._signatureValue;
+		var length = signature.Length;
 		int offset; // Current offset in the parsed signature (parsed from left to right).
 		char currentChar; // The signature character at 'offset', or just before.
 
@@ -80,7 +80,7 @@ namespace ObjectWeb.Asm.Signature
 		  do
 		  {
 			// The formal type parameter name is everything between offset - 1 and the first ':'.
-			int classBoundStartOffset = signature.IndexOf(':', offset);
+			var classBoundStartOffset = signature.IndexOf(':', offset);
 			signatureVistor.VisitFormalTypeParameter(signature.Substring(offset - 1, classBoundStartOffset - (offset - 1)));
 
 			// If the character after the ':' class bound marker is not the start of a
@@ -163,8 +163,8 @@ namespace ObjectWeb.Asm.Signature
 	  /// <returns> the index of the first character after the parsed signature. </returns>
 	  private static int ParseType(string signature, int startOffset, SignatureVisitor signatureVisitor)
 	  {
-		int offset = startOffset; // Current offset in the parsed signature.
-		char currentChar = signature[offset++]; // The signature character at 'offset'.
+		var offset = startOffset; // Current offset in the parsed signature.
+		var currentChar = signature[offset++]; // The signature character at 'offset'.
 
 		// Switch based on the first character of the JavaTypeSignature, which indicates its kind.
 		switch (currentChar)
@@ -188,7 +188,7 @@ namespace ObjectWeb.Asm.Signature
 
 		  case 'T':
 			// Case of TypeVariableSignature, an identifier between 'T' and ';'.
-			int endOffset = signature.IndexOf(';', offset);
+			var endOffset = signature.IndexOf(';', offset);
 			signatureVisitor.VisitTypeVariable(signature.Substring(offset, endOffset - offset));
 			return endOffset + 1;
 
@@ -196,9 +196,9 @@ namespace ObjectWeb.Asm.Signature
 			// Case of a ClassTypeSignature, which ends with ';'.
 			// These signatures have a main class type followed by zero or more inner class types
 			// (separated by '.'). Each can have type arguments, inside '<' and '>'.
-			int start = offset; // The start offset of the currently parsed main or inner class name.
-			bool visited = false; // Whether the currently parsed class name has been visited.
-			bool inner = false; // Whether we are currently parsing an inner class type.
+			var start = offset; // The start offset of the currently parsed main or inner class name.
+			var visited = false; // Whether the currently parsed class name has been visited.
+			var inner = false; // Whether we are currently parsing an inner class type.
 			// Parses the signature, one character at a time.
 			while (true)
 			{
@@ -210,7 +210,7 @@ namespace ObjectWeb.Asm.Signature
 				// type arguments between '<' and '>'. If not, we need to visit it here.
 				if (!visited)
 				{
-				  string name = signature.Substring(start, (offset - 1) - start);
+				  var name = signature.Substring(start, (offset - 1) - start);
 				  if (inner)
 				  {
 					signatureVisitor.VisitInnerClassType(name);
@@ -236,7 +236,7 @@ namespace ObjectWeb.Asm.Signature
 				// If a '<' is encountered, this means we have fully parsed the main class name or an
 				// inner class name, and that we now need to parse TypeArguments. First, we need to
 				// visit the parsed class name.
-				string name = signature.Substring(start, (offset - 1) - start);
+				var name = signature.Substring(start, (offset - 1) - start);
 				if (inner)
 				{
 				  signatureVisitor.VisitInnerClassType(name);

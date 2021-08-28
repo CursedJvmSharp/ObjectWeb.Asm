@@ -108,9 +108,9 @@ namespace ObjectWeb.Asm.Tree
 	  /// <param name="visible"> {@literal true} if the annotation is visible at runtime. </param>
 	  public virtual void Accept(MethodVisitor methodVisitor, bool visible)
 	  {
-		Label[] startLabels = new Label[this.start.Count];
-		Label[] endLabels = new Label[this.end.Count];
-		int[] indices = new int[this.index.Count];
+		var startLabels = new Label[this.start.Count];
+		var endLabels = new Label[this.end.Count];
+		var indices = new int[this.index.Count];
 		for (int i = 0, n = startLabels.Length; i < n; ++i)
 		{
 		  startLabels[i] = this.start[i].Label;

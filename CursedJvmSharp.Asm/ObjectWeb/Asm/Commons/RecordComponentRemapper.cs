@@ -68,13 +68,13 @@ namespace ObjectWeb.Asm.Commons
 
 	  public override AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
 	  {
-		AnnotationVisitor annotationVisitor = base.VisitAnnotation(remapper.MapDesc(descriptor), visible);
+		var annotationVisitor = base.VisitAnnotation(remapper.MapDesc(descriptor), visible);
 		return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
 	  }
 
 	  public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
 	  {
-		AnnotationVisitor annotationVisitor = base.VisitTypeAnnotation(typeRef, typePath, remapper.MapDesc(descriptor), visible);
+		var annotationVisitor = base.VisitTypeAnnotation(typeRef, typePath, remapper.MapDesc(descriptor), visible);
 		return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
 	  }
 

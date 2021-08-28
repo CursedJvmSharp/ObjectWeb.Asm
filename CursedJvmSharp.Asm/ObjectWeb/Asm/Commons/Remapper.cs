@@ -69,15 +69,15 @@ namespace ObjectWeb.Asm.Commons
 		switch (type.Sort)
 		{
 		  case JType.Array:
-			StringBuilder remappedDescriptor = new StringBuilder();
-			for (int i = 0; i < type.Dimensions; ++i)
+			var remappedDescriptor = new StringBuilder();
+			for (var i = 0; i < type.Dimensions; ++i)
 			{
 			  remappedDescriptor.Append('[');
 			}
 			remappedDescriptor.Append(MapType(type.ElementType).Descriptor);
 			return JType.GetType(remappedDescriptor.ToString());
 		  case JType.Object:
-			string remappedInternalName = Map(type.InternalName);
+			var remappedInternalName = Map(type.InternalName);
 			return !string.ReferenceEquals(remappedInternalName, null) ? JType.GetObjectType(remappedInternalName) : type;
 		  case JType.Method:
 			return JType.GetMethodType(MapMethodDesc(type.Descriptor));
@@ -108,10 +108,10 @@ namespace ObjectWeb.Asm.Commons
 	  public virtual string[] MapTypes(string[] internalNames)
 	  {
 		string[] remappedInternalNames = null;
-		for (int i = 0; i < internalNames.Length; ++i)
+		for (var i = 0; i < internalNames.Length; ++i)
 		{
-		  string internalName = internalNames[i];
-		  string remappedInternalName = MapType(internalName);
+		  var internalName = internalNames[i];
+		  var remappedInternalName = MapType(internalName);
 		  if (!string.ReferenceEquals(remappedInternalName, null))
 		  {
 			if (remappedInternalNames == null)
@@ -138,12 +138,12 @@ namespace ObjectWeb.Asm.Commons
 		  return methodDescriptor;
 		}
 
-		StringBuilder stringBuilder = new StringBuilder("(");
-		foreach (JType argumentType in JType.GetArgumentTypes(methodDescriptor))
+		var stringBuilder = new StringBuilder("(");
+		foreach (var argumentType in JType.GetArgumentTypes(methodDescriptor))
 		{
 		  stringBuilder.Append(MapType(argumentType).Descriptor);
 		}
-		JType returnType = JType.GetReturnType(methodDescriptor);
+		var returnType = JType.GetReturnType(methodDescriptor);
 		if (returnType == JType.VoidType)
 		{
 		  stringBuilder.Append(")V");
@@ -172,19 +172,19 @@ namespace ObjectWeb.Asm.Commons
 		}
 		if (value is Handle)
 		{
-		  Handle handle = (Handle) value;
+		  var handle = (Handle) value;
 		  return new Handle(handle.Tag, MapType(handle.Owner), MapMethodName(handle.Owner, handle.Name, handle.Desc), handle.Tag <= IOpcodes.H_Putstatic ? MapDesc(handle.Desc) : MapMethodDesc(handle.Desc), handle.Interface);
 		}
 		if (value is ConstantDynamic)
 		{
-		  ConstantDynamic constantDynamic = (ConstantDynamic) value;
-		  int bootstrapMethodArgumentCount = constantDynamic.BootstrapMethodArgumentCount;
-		  object[] remappedBootstrapMethodArguments = new object[bootstrapMethodArgumentCount];
-		  for (int i = 0; i < bootstrapMethodArgumentCount; ++i)
+		  var constantDynamic = (ConstantDynamic) value;
+		  var bootstrapMethodArgumentCount = constantDynamic.BootstrapMethodArgumentCount;
+		  var remappedBootstrapMethodArguments = new object[bootstrapMethodArgumentCount];
+		  for (var i = 0; i < bootstrapMethodArgumentCount; ++i)
 		  {
 			remappedBootstrapMethodArguments[i] = MapValue(constantDynamic.GetBootstrapMethodArgument(i));
 		  }
-		  string descriptor = constantDynamic.Descriptor;
+		  var descriptor = constantDynamic.Descriptor;
 		  return new ConstantDynamic(MapInvokeDynamicMethodName(constantDynamic.Name, descriptor), MapDesc(descriptor), (Handle) MapValue(constantDynamic.BootstrapMethod), remappedBootstrapMethodArguments);
 		}
 		return value;
@@ -204,9 +204,9 @@ namespace ObjectWeb.Asm.Commons
 		{
 		  return null;
 		}
-		SignatureReader signatureReader = new SignatureReader(signature);
-		SignatureWriter signatureWriter = new SignatureWriter();
-		SignatureVisitor signatureRemapper = CreateSignatureRemapper(signatureWriter);
+		var signatureReader = new SignatureReader(signature);
+		var signatureWriter = new SignatureWriter();
+		var signatureRemapper = CreateSignatureRemapper(signatureWriter);
 		if (typeSignature)
 		{
 		  signatureReader.AcceptType(signatureRemapper);
@@ -265,10 +265,10 @@ namespace ObjectWeb.Asm.Commons
 	  /// <returns> the new inner name of the inner class. </returns>
 	  public virtual string MapInnerClassName(string name, string ownerName, string innerName)
 	  {
-		string remappedInnerName = this.MapType(name);
+		var remappedInnerName = this.MapType(name);
 		if (remappedInnerName.Contains("$"))
 		{
-		  int index = remappedInnerName.LastIndexOf('$') + 1;
+		  var index = remappedInnerName.LastIndexOf('$') + 1;
 		  while (index < remappedInnerName.Length && char.IsDigit(remappedInnerName[index]))
 		  {
 			index++;

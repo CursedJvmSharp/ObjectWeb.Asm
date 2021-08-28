@@ -163,7 +163,7 @@ namespace ObjectWeb.Asm.Tree
 		{
 		  values.Add(name);
 		}
-		AnnotationNode annotation = new AnnotationNode(descriptor);
+		var annotation = new AnnotationNode(descriptor);
 		values.Add(annotation);
 		return annotation;
 	  }
@@ -178,7 +178,7 @@ namespace ObjectWeb.Asm.Tree
 		{
 		  values.Add(name);
 		}
-		List<object> array = new List<object>();
+		var array = new List<object>();
 		values.Add(array);
 		return new AnnotationNode(array);
 	  }
@@ -216,8 +216,8 @@ namespace ObjectWeb.Asm.Tree
 		  {
 			for (int i = 0, n = values.Count; i < n; i += 2)
 			{
-			  string name = (string) values[i];
-			  object value = values[i + 1];
+			  var name = (string) values[i];
+			  var value = values[i + 1];
 			  Accept(annotationVisitor, name, value);
 			}
 		  }
@@ -237,17 +237,17 @@ namespace ObjectWeb.Asm.Tree
 		{
 		  if (value is string[])
 		  {
-			string[] typeValue = (string[]) value;
+			var typeValue = (string[]) value;
 			annotationVisitor.VisitEnum(name, typeValue[0], typeValue[1]);
 		  }
 		  else if (value is AnnotationNode)
 		  {
-			AnnotationNode annotationValue = (AnnotationNode) value;
+			var annotationValue = (AnnotationNode) value;
 			annotationValue.Accept(annotationVisitor.VisitAnnotation(name, annotationValue.desc));
 		  }
 		  else if (value is System.Collections.IList)
 		  {
-			AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.VisitArray(name);
+			var arrayAnnotationVisitor = annotationVisitor.VisitArray(name);
 			if (arrayAnnotationVisitor != null)
 			{
 			  var arrayValue = (IList) value;

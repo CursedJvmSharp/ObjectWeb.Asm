@@ -307,7 +307,7 @@ namespace ObjectWeb.Asm
 		{
 		  _interfaceCount = interfaces.Length;
 		  this._interfaces = new int[_interfaceCount];
-		  for (int i = 0; i < _interfaceCount; ++i)
+		  for (var i = 0; i < _interfaceCount; ++i)
 		  {
 			this._interfaces[i] = _symbolTable.AddConstantClass(interfaces[i]).index;
 		  }
@@ -412,7 +412,7 @@ namespace ObjectWeb.Asm
 		// field of the Symbol of each CONSTANT_Class_info entry C whether an inner class entry has
 		// already been added for C. If so, we store the index of this inner class entry (plus one) in
 		// the info field. This trick allows duplicate detection in O(1) time.
-		Symbol nameSymbol = _symbolTable.AddConstantClass(name);
+		var nameSymbol = _symbolTable.AddConstantClass(name);
 		if (nameSymbol.info == 0)
 		{
 		  ++_numberOfInnerClasses;
@@ -428,7 +428,7 @@ namespace ObjectWeb.Asm
 
 	  public override sealed RecordComponentVisitor VisitRecordComponent(string name, string descriptor, string signature)
 	  {
-		RecordComponentWriter recordComponentWriter = new RecordComponentWriter(_symbolTable, name, descriptor, signature);
+		var recordComponentWriter = new RecordComponentWriter(_symbolTable, name, descriptor, signature);
 		if (_firstRecordComponent == null)
 		{
 		  _firstRecordComponent = recordComponentWriter;
@@ -442,7 +442,7 @@ namespace ObjectWeb.Asm
 
 	  public override sealed FieldVisitor VisitField(int access, string name, string descriptor, string signature, object value)
 	  {
-		FieldWriter fieldWriter = new FieldWriter(_symbolTable, access, name, descriptor, signature, value);
+		var fieldWriter = new FieldWriter(_symbolTable, access, name, descriptor, signature, value);
 		if (_firstField == null)
 		{
 		  _firstField = fieldWriter;
@@ -456,7 +456,7 @@ namespace ObjectWeb.Asm
 
 	  public override sealed MethodVisitor VisitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
 	  {
-		MethodWriter methodWriter = new MethodWriter(_symbolTable, access, name, descriptor, signature, exceptions, _compute);
+		var methodWriter = new MethodWriter(_symbolTable, access, name, descriptor, signature, exceptions, _compute);
 		if (_firstMethod == null)
 		{
 		  _firstMethod = methodWriter;
@@ -489,17 +489,17 @@ namespace ObjectWeb.Asm
 		// The magic field uses 4 bytes, 10 mandatory fields (minor_version, major_version,
 		// constant_pool_count, access_flags, this_class, super_class, interfaces_count, fields_count,
 		// methods_count and attributes_count) use 2 bytes each, and each interface uses 2 bytes too.
-		int size = 24 + 2 * _interfaceCount;
-		int fieldsCount = 0;
-		FieldWriter fieldWriter = _firstField;
+		var size = 24 + 2 * _interfaceCount;
+		var fieldsCount = 0;
+		var fieldWriter = _firstField;
 		while (fieldWriter != null)
 		{
 		  ++fieldsCount;
 		  size += fieldWriter.ComputeFieldInfoSize();
 		  fieldWriter = (FieldWriter) fieldWriter.fv;
 		}
-		int methodsCount = 0;
-		MethodWriter methodWriter = _firstMethod;
+		var methodsCount = 0;
+		var methodWriter = _firstMethod;
 		while (methodWriter != null)
 		{
 		  ++methodsCount;
@@ -508,7 +508,7 @@ namespace ObjectWeb.Asm
 		}
 
 		// For ease of reference, we use here the same attribute order as in Section 4.7 of the JVMS.
-		int attributesCount = 0;
+		var attributesCount = 0;
 		if (_innerClasses != null)
 		{
 		  ++attributesCount;
@@ -599,11 +599,11 @@ namespace ObjectWeb.Asm
 		  size += 8 + _permittedSubclasses.length;
 		  _symbolTable.AddConstantUtf8(Constants.Permitted_Subclasses);
 		}
-		int recordComponentCount = 0;
-		int recordSize = 0;
+		var recordComponentCount = 0;
+		var recordSize = 0;
 		if ((_accessFlags & IOpcodes.Acc_Record) != 0 || _firstRecordComponent != null)
 		{
-		  RecordComponentWriter recordComponentWriter = _firstRecordComponent;
+		  var recordComponentWriter = _firstRecordComponent;
 		  while (recordComponentWriter != null)
 		  {
 			++recordComponentCount;
@@ -622,7 +622,7 @@ namespace ObjectWeb.Asm
 		// IMPORTANT: this must be the last part of the ClassFile size computation, because the previous
 		// statements can add attribute names to the constant pool, thereby changing its size!
 		size += _symbolTable.ConstantPoolLength;
-		int constantPoolCount = _symbolTable.ConstantPoolCount;
+		var constantPoolCount = _symbolTable.ConstantPoolCount;
 		if (constantPoolCount > 0xFFFF)
 		{
 		  throw new ClassTooLargeException(_symbolTable.ClassName, constantPoolCount);
@@ -630,13 +630,13 @@ namespace ObjectWeb.Asm
 
 		// Second step: allocate a ByteVector of the correct size (in order to avoid any array copy in
 		// dynamic resizes) and fill it with the ClassFile content.
-		ByteVector result = new ByteVector(size);
+		var result = new ByteVector(size);
 		result.PutInt(unchecked((int)0xCAFEBABE)).PutInt(_version);
 		_symbolTable.PutConstantPool(result);
-		int mask = (_version & 0xFFFF) < IOpcodes.V1_5 ? IOpcodes.Acc_Synthetic : 0;
+		var mask = (_version & 0xFFFF) < IOpcodes.V1_5 ? IOpcodes.Acc_Synthetic : 0;
 		result.PutShort(_accessFlags & ~mask).PutShort(_thisClass).PutShort(_superClass);
 		result.PutShort(_interfaceCount);
-		for (int i = 0; i < _interfaceCount; ++i)
+		for (var i = 0; i < _interfaceCount; ++i)
 		{
 		  result.PutShort(_interfaces[i]);
 		}
@@ -648,8 +648,8 @@ namespace ObjectWeb.Asm
 		  fieldWriter = (FieldWriter) fieldWriter.fv;
 		}
 		result.PutShort(methodsCount);
-		bool hasFrames = false;
-		bool hasAsmInstructions = false;
+		var hasFrames = false;
+		var hasAsmInstructions = false;
 		methodWriter = _firstMethod;
 		while (methodWriter != null)
 		{
@@ -682,7 +682,7 @@ namespace ObjectWeb.Asm
 		}
 		if (_debugExtension != null)
 		{
-		  int length = _debugExtension.length;
+		  var length = _debugExtension.length;
 		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Source_Debug_Extension)).PutInt(length).PutByteArray(_debugExtension.data, 0, length);
 		}
 		if ((_accessFlags & IOpcodes.Acc_Deprecated) != 0)
@@ -710,7 +710,7 @@ namespace ObjectWeb.Asm
 		if ((_accessFlags & IOpcodes.Acc_Record) != 0 || _firstRecordComponent != null)
 		{
 		  result.PutShort(_symbolTable.AddConstantUtf8(Constants.Record)).PutInt(recordSize + 2).PutShort(recordComponentCount);
-		  RecordComponentWriter recordComponentWriter = _firstRecordComponent;
+		  var recordComponentWriter = _firstRecordComponent;
 		  while (recordComponentWriter != null)
 		  {
 			recordComponentWriter.PutRecordComponentInfo(result);
@@ -744,7 +744,7 @@ namespace ObjectWeb.Asm
 	  ///     ones. </returns>
 	  private byte[] ReplaceAsmInstructions(byte[] classFile, bool hasFrames)
 	  {
-		Attribute[] attributes = AttributePrototypes;
+		var attributes = AttributePrototypes;
 		_firstField = null;
 		_lastField = null;
 		_firstMethod = null;
@@ -775,21 +775,21 @@ namespace ObjectWeb.Asm
 	  {
 		  get
 		  {
-			Attribute.Set attributePrototypes = new Attribute.Set();
+			var attributePrototypes = new Attribute.Set();
 			attributePrototypes.AddAttributes(_firstAttribute);
-			FieldWriter fieldWriter = _firstField;
+			var fieldWriter = _firstField;
 			while (fieldWriter != null)
 			{
 			  fieldWriter.CollectAttributePrototypes(attributePrototypes);
 			  fieldWriter = (FieldWriter) fieldWriter.fv;
 			}
-			MethodWriter methodWriter = _firstMethod;
+			var methodWriter = _firstMethod;
 			while (methodWriter != null)
 			{
 			  methodWriter.CollectAttributePrototypes(attributePrototypes);
 			  methodWriter = (MethodWriter) methodWriter.mv;
 			}
-			RecordComponentWriter recordComponentWriter = _firstRecordComponent;
+			var recordComponentWriter = _firstRecordComponent;
 			while (recordComponentWriter != null)
 			{
 			  recordComponentWriter.CollectAttributePrototypes(attributePrototypes);

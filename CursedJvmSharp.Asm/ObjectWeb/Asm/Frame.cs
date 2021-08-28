@@ -304,7 +304,7 @@ namespace ObjectWeb.Asm
 		}
 		else if (type is string)
 		{
-		  string descriptor = JType.GetObjectType((string) type).Descriptor;
+		  var descriptor = JType.GetObjectType((string) type).Descriptor;
 		  return GetAbstractTypeFromDescriptor(symbolTable, descriptor, 0);
 		}
 		else
@@ -355,7 +355,7 @@ namespace ObjectWeb.Asm
 			internalName = buffer.Substring(offset + 1, (buffer.Length - 1) - (offset + 1));
 			return ReferenceKind | symbolTable.AddType(internalName);
 		  case '[':
-			int elementDescriptorOffset = offset + 1;
+			var elementDescriptorOffset = offset + 1;
 			while (buffer[elementDescriptorOffset] == '[')
 			{
 			  ++elementDescriptorOffset;
@@ -417,7 +417,7 @@ namespace ObjectWeb.Asm
 	  {
 		_inputLocals = new int[maxLocals];
 		_inputStack = new int[0];
-		int inputLocalIndex = 0;
+		var inputLocalIndex = 0;
 		if ((access & IOpcodes.Acc_Static) == 0)
 		{
 		  if ((access & Constants.Acc_Constructor) == 0)
@@ -429,9 +429,9 @@ namespace ObjectWeb.Asm
 			_inputLocals[inputLocalIndex++] = UninitializedThis;
 		  }
 		}
-		foreach (JType argumentType in JType.GetArgumentTypes(descriptor))
+		foreach (var argumentType in JType.GetArgumentTypes(descriptor))
 		{
-		  int abstractType = GetAbstractTypeFromDescriptor(symbolTable, argumentType.Descriptor, 0);
+		  var abstractType = GetAbstractTypeFromDescriptor(symbolTable, argumentType.Descriptor, 0);
 		  _inputLocals[inputLocalIndex++] = abstractType;
 		  if (abstractType == Long || abstractType == Double)
 		  {
@@ -456,8 +456,8 @@ namespace ObjectWeb.Asm
 	  ///     MethodVisitor#visitFrame}. </param>
 	  public void SetInputFrameFromApiFormat(SymbolTable symbolTable, int numLocal, object[] local, int numStack, object[] stack)
 	  {
-		int inputLocalIndex = 0;
-		for (int i = 0; i < numLocal; ++i)
+		var inputLocalIndex = 0;
+		for (var i = 0; i < numLocal; ++i)
 		{
 		  _inputLocals[inputLocalIndex++] = GetAbstractTypeFromApiFormat(symbolTable, local[i]);
 		  if (Equals(local[i], IOpcodes.@long) || Equals(local[i], IOpcodes.@double))
@@ -469,8 +469,8 @@ namespace ObjectWeb.Asm
 		{
 		  _inputLocals[inputLocalIndex++] = Top;
 		}
-		int numStackTop = 0;
-		for (int i = 0; i < numStack; ++i)
+		var numStackTop = 0;
+		for (var i = 0; i < numStack; ++i)
 		{
 		  if (Equals(stack[i], IOpcodes.@long) || Equals(stack[i], IOpcodes.@double))
 		  {
@@ -478,8 +478,8 @@ namespace ObjectWeb.Asm
 		  }
 		}
 		_inputStack = new int[numStack + numStackTop];
-		int inputStackIndex = 0;
-		for (int i = 0; i < numStack; ++i)
+		var inputStackIndex = 0;
+		for (var i = 0; i < numStack; ++i)
 		{
 		  _inputStack[inputStackIndex++] = GetAbstractTypeFromApiFormat(symbolTable, stack[i]);
 		  if (Equals(stack[i], IOpcodes.@long) || Equals(stack[i], IOpcodes.@double))
@@ -512,7 +512,7 @@ namespace ObjectWeb.Asm
 		}
 		else
 		{
-		  int abstractType = _outputLocals[localIndex];
+		  var abstractType = _outputLocals[localIndex];
 		  if (abstractType == 0)
 		  {
 			// If this local has never been assigned in this basic block, so it is still equal to its
@@ -535,10 +535,10 @@ namespace ObjectWeb.Asm
 		{
 		  _outputLocals = new int[10];
 		}
-		int outputLocalsLength = _outputLocals.Length;
+		var outputLocalsLength = _outputLocals.Length;
 		if (localIndex >= outputLocalsLength)
 		{
-		  int[] newOutputLocals = new int[Math.Max(localIndex + 1, 2 * outputLocalsLength)];
+		  var newOutputLocals = new int[Math.Max(localIndex + 1, 2 * outputLocalsLength)];
 		  Array.Copy(_outputLocals, 0, newOutputLocals, 0, outputLocalsLength);
 		  _outputLocals = newOutputLocals;
 		}
@@ -557,10 +557,10 @@ namespace ObjectWeb.Asm
 		{
 		  _outputStack = new int[10];
 		}
-		int outputStackLength = _outputStack.Length;
+		var outputStackLength = _outputStack.Length;
 		if (_outputStackTop >= outputStackLength)
 		{
-		  int[] newOutputStack = new int[Math.Max(_outputStackTop + 1, 2 * outputStackLength)];
+		  var newOutputStack = new int[Math.Max(_outputStackTop + 1, 2 * outputStackLength)];
 		  Array.Copy(_outputStack, 0, newOutputStack, 0, outputStackLength);
 		  _outputStack = newOutputStack;
 		}
@@ -568,7 +568,7 @@ namespace ObjectWeb.Asm
 		_outputStack[_outputStackTop++] = abstractType;
 		// Updates the maximum size reached by the output stack, if needed (note that this size is
 		// relative to the input stack size, which is not known yet).
-		short outputStackSize = (short)(_outputStackStart + _outputStackTop);
+		var outputStackSize = (short)(_outputStackStart + _outputStackTop);
 		if (outputStackSize > owner.outputStackMax)
 		{
 		  owner.outputStackMax = outputStackSize;
@@ -582,8 +582,8 @@ namespace ObjectWeb.Asm
 	  /// <param name="descriptor"> a type or method descriptor (in which case its return type is pushed). </param>
 	  private void Push(SymbolTable symbolTable, string descriptor)
 	  {
-		int typeDescriptorOffset = descriptor[0] == '(' ? JType.GetReturnTypeOffset(descriptor) : 0;
-		int abstractType = GetAbstractTypeFromDescriptor(symbolTable, descriptor, typeDescriptorOffset);
+		var typeDescriptorOffset = descriptor[0] == '(' ? JType.GetReturnTypeOffset(descriptor) : 0;
+		var abstractType = GetAbstractTypeFromDescriptor(symbolTable, descriptor, typeDescriptorOffset);
 		if (abstractType != 0)
 		{
 		  Push(abstractType);
@@ -636,7 +636,7 @@ namespace ObjectWeb.Asm
 	  /// <param name="descriptor"> a type or method descriptor (in which case its argument types are popped). </param>
 	  private void Pop(string descriptor)
 	  {
-		char firstDescriptorChar = descriptor[0];
+		var firstDescriptorChar = descriptor[0];
 		if (firstDescriptorChar == '(')
 		{
 		  Pop((JType.GetArgumentsAndReturnSizes(descriptor) >> 2) - 1);
@@ -667,10 +667,10 @@ namespace ObjectWeb.Asm
 		{
 		  _initializations = new int[2];
 		}
-		int initializationsLength = _initializations.Length;
+		var initializationsLength = _initializations.Length;
 		if (_initializationCount >= initializationsLength)
 		{
-		  int[] newInitializations = new int[Math.Max(_initializationCount + 1, 2 * initializationsLength)];
+		  var newInitializations = new int[Math.Max(_initializationCount + 1, 2 * initializationsLength)];
 		  Array.Copy(_initializations, 0, newInitializations, 0, initializationsLength);
 		  _initializations = newInitializations;
 		}
@@ -690,12 +690,12 @@ namespace ObjectWeb.Asm
 	  {
 		if (abstractType == UninitializedThis || (abstractType & (DimMask | KindMask)) == UninitializedKind)
 		{
-		  for (int i = 0; i < _initializationCount; ++i)
+		  for (var i = 0; i < _initializationCount; ++i)
 		  {
-			int initializedType = _initializations[i];
-			int dim = initializedType & DimMask;
-			int kind = initializedType & KindMask;
-			int value = initializedType & ValueMask;
+			var initializedType = _initializations[i];
+			var dim = initializedType & DimMask;
+			var kind = initializedType & KindMask;
+			var value = initializedType & ValueMask;
 			if (kind == LocalKind)
 			{
 			  initializedType = dim + _inputLocals[value];
@@ -847,7 +847,7 @@ namespace ObjectWeb.Asm
 			SetLocal(arg, abstractType1);
 			if (arg > 0)
 			{
-			  int previousLocalType = GetLocal(arg - 1);
+			  var previousLocalType = GetLocal(arg - 1);
 			  if (previousLocalType == Long || previousLocalType == Double)
 			  {
 				SetLocal(arg - 1, Top);
@@ -868,7 +868,7 @@ namespace ObjectWeb.Asm
 			SetLocal(arg + 1, Top);
 			if (arg > 0)
 			{
-			  int previousLocalType = GetLocal(arg - 1);
+			  var previousLocalType = GetLocal(arg - 1);
 			  if (previousLocalType == Long || previousLocalType == Double)
 			  {
 				SetLocal(arg - 1, Top);
@@ -1146,7 +1146,7 @@ namespace ObjectWeb.Asm
 			}
 			break;
 		  case IOpcodes.Anewarray:
-			string arrayElementType = argSymbol.value;
+			var arrayElementType = argSymbol.value;
 			Pop();
 			if (arrayElementType[0] == '[')
 			{
@@ -1158,7 +1158,7 @@ namespace ObjectWeb.Asm
 			}
 			break;
 		  case IOpcodes.Checkcast:
-			string castType = argSymbol.value;
+			var castType = argSymbol.value;
 			Pop();
 			if (castType[0] == '[')
 			{
@@ -1191,14 +1191,14 @@ namespace ObjectWeb.Asm
 	  /// <returns> the concrete output type corresponding to 'abstractOutputType'. </returns>
 	  private int GetConcreteOutputType(int abstractOutputType, int numStack)
 	  {
-		int dim = abstractOutputType & DimMask;
-		int kind = abstractOutputType & KindMask;
+		var dim = abstractOutputType & DimMask;
+		var kind = abstractOutputType & KindMask;
 		if (kind == LocalKind)
 		{
 		  // By definition, a LOCAL_KIND type designates the concrete type of a local variable at
 		  // the beginning of the basic block corresponding to this frame (which is known when
 		  // this method is called, but was not when the abstract type was computed).
-		  int concreteOutputType = dim + _inputLocals[abstractOutputType & ValueMask];
+		  var concreteOutputType = dim + _inputLocals[abstractOutputType & ValueMask];
 		  if ((abstractOutputType & TopIfLongOrDoubleFlag) != 0 && (concreteOutputType == Long || concreteOutputType == Double))
 		  {
 			concreteOutputType = Top;
@@ -1210,7 +1210,7 @@ namespace ObjectWeb.Asm
 		  // By definition, a STACK_KIND type designates the concrete type of a local variable at
 		  // the beginning of the basic block corresponding to this frame (which is known when
 		  // this method is called, but was not when the abstract type was computed).
-		  int concreteOutputType = dim + _inputStack[numStack - (abstractOutputType & ValueMask)];
+		  var concreteOutputType = dim + _inputStack[numStack - (abstractOutputType & ValueMask)];
 		  if ((abstractOutputType & TopIfLongOrDoubleFlag) != 0 && (concreteOutputType == Long || concreteOutputType == Double))
 		  {
 			concreteOutputType = Top;
@@ -1236,24 +1236,24 @@ namespace ObjectWeb.Asm
 	  /// <returns> {@literal true} if the input frame of 'frame' has been changed by this operation. </returns>
 	  public bool Merge(SymbolTable symbolTable, Frame dstFrame, int catchTypeIndex)
 	  {
-		bool frameChanged = false;
+		var frameChanged = false;
 
 		// Compute the concrete types of the local variables at the end of the basic block corresponding
 		// to this frame, by resolving its abstract output types, and merge these concrete types with
 		// those of the local variables in the input frame of dstFrame.
-		int numLocal = _inputLocals.Length;
-		int numStack = _inputStack.Length;
+		var numLocal = _inputLocals.Length;
+		var numStack = _inputStack.Length;
 		if (dstFrame._inputLocals == null)
 		{
 		  dstFrame._inputLocals = new int[numLocal];
 		  frameChanged = true;
 		}
-		for (int i = 0; i < numLocal; ++i)
+		for (var i = 0; i < numLocal; ++i)
 		{
 		  int concreteOutputType;
 		  if (_outputLocals != null && i < _outputLocals.Length)
 		  {
-			int abstractOutputType = _outputLocals[i];
+			var abstractOutputType = _outputLocals[i];
 			if (abstractOutputType == 0)
 			{
 			  // If the local variable has never been assigned in this basic block, it is equal to its
@@ -1288,7 +1288,7 @@ namespace ObjectWeb.Asm
 		// element stack containing the caught exception type).
 		if (catchTypeIndex > 0)
 		{
-		  for (int i = 0; i < numLocal; ++i)
+		  for (var i = 0; i < numLocal; ++i)
 		  {
 			frameChanged |= Merge(symbolTable, _inputLocals[i], dstFrame._inputLocals, i);
 		  }
@@ -1304,7 +1304,7 @@ namespace ObjectWeb.Asm
 		// Compute the concrete types of the stack operands at the end of the basic block corresponding
 		// to this frame, by resolving its abstract output types, and merge these concrete types with
 		// those of the stack operands in the input frame of dstFrame.
-		int numInputStack = _inputStack.Length + _outputStackStart;
+		var numInputStack = _inputStack.Length + _outputStackStart;
 		if (dstFrame._inputStack == null)
 		{
 		  dstFrame._inputStack = new int[numInputStack + _outputStackTop];
@@ -1313,9 +1313,9 @@ namespace ObjectWeb.Asm
 		// First, do this for the stack operands that have not been popped in the basic block
 		// corresponding to this frame, and which are therefore equal to their value in the input
 		// frame (except for uninitialized types, which may have been initialized).
-		for (int i = 0; i < numInputStack; ++i)
+		for (var i = 0; i < numInputStack; ++i)
 		{
-		  int concreteOutputType = _inputStack[i];
+		  var concreteOutputType = _inputStack[i];
 		  if (_initializations != null)
 		  {
 			concreteOutputType = GetInitializedType(symbolTable, concreteOutputType);
@@ -1324,10 +1324,10 @@ namespace ObjectWeb.Asm
 		}
 		// Then, do this for the stack operands that have pushed in the basic block (this code is the
 		// same as the one above for local variables).
-		for (int i = 0; i < _outputStackTop; ++i)
+		for (var i = 0; i < _outputStackTop; ++i)
 		{
-		  int abstractOutputType = _outputStack[i];
-		  int concreteOutputType = GetConcreteOutputType(abstractOutputType, numStack);
+		  var abstractOutputType = _outputStack[i];
+		  var concreteOutputType = GetConcreteOutputType(abstractOutputType, numStack);
 		  if (_initializations != null)
 		  {
 			concreteOutputType = GetInitializedType(symbolTable, concreteOutputType);
@@ -1352,13 +1352,13 @@ namespace ObjectWeb.Asm
 	  /// <returns> {@literal true} if the type array has been modified by this operation. </returns>
 	  private static bool Merge(SymbolTable symbolTable, int sourceType, int[] dstTypes, int dstIndex)
 	  {
-		int dstType = dstTypes[dstIndex];
+		var dstType = dstTypes[dstIndex];
 		if (dstType == sourceType)
 		{
 		  // If the types are equal, merge(sourceType, dstType) = dstType, so there is no change.
 		  return false;
 		}
-		int srcType = sourceType;
+		var srcType = sourceType;
 		if ((sourceType & ~DimMask) == Null)
 		{
 		  if (dstType == Null)
@@ -1395,7 +1395,7 @@ namespace ObjectWeb.Asm
 			{
 			  // If srcType and dstType are array types of equal dimension but different element types,
 			  // merge(srcType, dstType) = dim(srcType) - 1 | java/lang/Object.
-			  int mergedDim = ElementOf + (srcType & DimMask);
+			  var mergedDim = ElementOf + (srcType & DimMask);
 			  mergedType = mergedDim | ReferenceKind | symbolTable.AddType("java/lang/Object");
 			}
 		  }
@@ -1405,12 +1405,12 @@ namespace ObjectWeb.Asm
 			// merge(srcType, dstType) = min(srcDdim, dstDim) | java/lang/Object
 			// where srcDim is the array dimension of srcType, minus 1 if srcType is an array type
 			// with a non reference element type (and similarly for dstDim).
-			int srcDim = srcType & DimMask;
+			var srcDim = srcType & DimMask;
 			if (srcDim != 0 && (srcType & KindMask) != ReferenceKind)
 			{
 			  srcDim = ElementOf + srcDim;
 			}
-			int dstDim = dstType & DimMask;
+			var dstDim = dstType & DimMask;
 			if (dstDim != 0 && (dstType & KindMask) != ReferenceKind)
 			{
 			  dstDim = ElementOf + dstDim;
@@ -1457,13 +1457,13 @@ namespace ObjectWeb.Asm
 	  {
 		// Compute the number of locals, ignoring TOP types that are just after a LONG or a DOUBLE, and
 		// all trailing TOP types.
-		int[] localTypes = _inputLocals;
-		int numLocal = 0;
-		int numTrailingTop = 0;
-		int i = 0;
+		var localTypes = _inputLocals;
+		var numLocal = 0;
+		var numTrailingTop = 0;
+		var i = 0;
 		while (i < localTypes.Length)
 		{
-		  int localType = localTypes[i];
+		  var localType = localTypes[i];
 		  i += (localType == Long || localType == Double) ? 2 : 1;
 		  if (localType == Top)
 		  {
@@ -1476,28 +1476,28 @@ namespace ObjectWeb.Asm
 		  }
 		}
 		// Compute the stack size, ignoring TOP types that are just after a LONG or a DOUBLE.
-		int[] stackTypes = _inputStack;
-		int numStack = 0;
+		var stackTypes = _inputStack;
+		var numStack = 0;
 		i = 0;
 		while (i < stackTypes.Length)
 		{
-		  int stackType = stackTypes[i];
+		  var stackType = stackTypes[i];
 		  i += (stackType == Long || stackType == Double) ? 2 : 1;
 		  numStack++;
 		}
 		// Visit the frame and its content.
-		int frameIndex = methodWriter.VisitFrameStart(owner.bytecodeOffset, numLocal, numStack);
+		var frameIndex = methodWriter.VisitFrameStart(owner.bytecodeOffset, numLocal, numStack);
 		i = 0;
 		while (numLocal-- > 0)
 		{
-		  int localType = localTypes[i];
+		  var localType = localTypes[i];
 		  i += (localType == Long || localType == Double) ? 2 : 1;
 		  methodWriter.VisitAbstractType(frameIndex++, localType);
 		}
 		i = 0;
 		while (numStack-- > 0)
 		{
-		  int stackType = stackTypes[i];
+		  var stackType = stackTypes[i];
 		  i += (stackType == Long || stackType == Double) ? 2 : 1;
 		  methodWriter.VisitAbstractType(frameIndex++, stackType);
 		}
@@ -1516,10 +1516,10 @@ namespace ObjectWeb.Asm
 	  ///     4.7.4</a> </seealso>
 	  internal static void PutAbstractType(SymbolTable symbolTable, int abstractType, ByteVector output)
 	  {
-		int arrayDimensions = (abstractType & Frame.DimMask) >> DimShift;
+		var arrayDimensions = (abstractType & Frame.DimMask) >> DimShift;
 		if (arrayDimensions == 0)
 		{
-		  int typeValue = abstractType & ValueMask;
+		  var typeValue = abstractType & ValueMask;
 		  switch (abstractType & KindMask)
 		  {
 			case ConstantKind:
@@ -1538,7 +1538,7 @@ namespace ObjectWeb.Asm
 		else
 		{
 		  // Case of an array type, we need to build its descriptor first.
-		  StringBuilder typeDescriptor = new StringBuilder();
+		  var typeDescriptor = new StringBuilder();
 		  while (arrayDimensions-- > 0)
 		  {
 			typeDescriptor.Append('[');

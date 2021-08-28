@@ -138,7 +138,7 @@ namespace ObjectWeb.Asm
 	  {
 		// Create a ByteVector to hold an 'annotation' JVMS structure.
 		// See https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.16.
-		ByteVector annotation = new ByteVector();
+		var annotation = new ByteVector();
 		// Write type_index and reserve space for num_element_value_pairs.
 		annotation.PutShort(symbolTable.AddConstantUtf8(descriptor)).PutShort(0);
 		return new AnnotationWriter(symbolTable, true, annotation, previousAnnotation);
@@ -164,7 +164,7 @@ namespace ObjectWeb.Asm
 	  {
 		// Create a ByteVector to hold a 'type_annotation' JVMS structure.
 		// See https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.20.
-		ByteVector typeAnnotation = new ByteVector();
+		var typeAnnotation = new ByteVector();
 		// Write target_type, target_info, and target_path.
 		TypeReference.PutTarget(typeRef, typeAnnotation);
 		TypePath.Put(typePath, typeAnnotation);
@@ -196,7 +196,7 @@ namespace ObjectWeb.Asm
 		}
 		else if (value is bool)
 		{
-		  int booleanValue = ((bool?) value).Value ? 1 : 0;
+		  var booleanValue = ((bool?) value).Value ? 1 : 0;
 		  _annotation.Put12('Z', _symbolTable.AddConstantInteger(booleanValue).index);
 		}
 		else if (value is char)
@@ -213,7 +213,7 @@ namespace ObjectWeb.Asm
 		}
 		else if (value is byte[] || value is byte[])
 		{
-		  byte[] byteArray = (byte[]) value;
+		  var byteArray = (byte[]) value;
 		  _annotation.Put12('[', byteArray.Length);
 		  foreach (sbyte byteValue in byteArray)
 		  {
@@ -222,70 +222,70 @@ namespace ObjectWeb.Asm
 		}
 		else if (value is bool[])
 		{
-		  bool[] booleanArray = (bool[]) value;
+		  var booleanArray = (bool[]) value;
 		  _annotation.Put12('[', booleanArray.Length);
-		  foreach (bool booleanValue in booleanArray)
+		  foreach (var booleanValue in booleanArray)
 		  {
 			_annotation.Put12('Z', _symbolTable.AddConstantInteger(booleanValue ? 1 : 0).index);
 		  }
 		}
 		else if (value is short[])
 		{
-		  short[] shortArray = (short[]) value;
+		  var shortArray = (short[]) value;
 		  _annotation.Put12('[', shortArray.Length);
-		  foreach (short shortValue in shortArray)
+		  foreach (var shortValue in shortArray)
 		  {
 			_annotation.Put12('S', _symbolTable.AddConstantInteger(shortValue).index);
 		  }
 		}
 		else if (value is char[])
 		{
-		  char[] charArray = (char[]) value;
+		  var charArray = (char[]) value;
 		  _annotation.Put12('[', charArray.Length);
-		  foreach (char charValue in charArray)
+		  foreach (var charValue in charArray)
 		  {
 			_annotation.Put12('C', _symbolTable.AddConstantInteger(charValue).index);
 		  }
 		}
 		else if (value is int[])
 		{
-		  int[] intArray = (int[]) value;
+		  var intArray = (int[]) value;
 		  _annotation.Put12('[', intArray.Length);
-		  foreach (int intValue in intArray)
+		  foreach (var intValue in intArray)
 		  {
 			_annotation.Put12('I', _symbolTable.AddConstantInteger(intValue).index);
 		  }
 		}
 		else if (value is long[])
 		{
-		  long[] longArray = (long[]) value;
+		  var longArray = (long[]) value;
 		  _annotation.Put12('[', longArray.Length);
-		  foreach (long longValue in longArray)
+		  foreach (var longValue in longArray)
 		  {
 			_annotation.Put12('J', _symbolTable.AddConstantLong(longValue).index);
 		  }
 		}
 		else if (value is float[])
 		{
-		  float[] floatArray = (float[]) value;
+		  var floatArray = (float[]) value;
 		  _annotation.Put12('[', floatArray.Length);
-		  foreach (float floatValue in floatArray)
+		  foreach (var floatValue in floatArray)
 		  {
 			_annotation.Put12('F', _symbolTable.AddConstantFloat(floatValue).index);
 		  }
 		}
 		else if (value is double[])
 		{
-		  double[] doubleArray = (double[]) value;
+		  var doubleArray = (double[]) value;
 		  _annotation.Put12('[', doubleArray.Length);
-		  foreach (double doubleValue in doubleArray)
+		  foreach (var doubleValue in doubleArray)
 		  {
 			_annotation.Put12('D', _symbolTable.AddConstantDouble(doubleValue).index);
 		  }
 		}
 		else
 		{
-		  Symbol symbol = _symbolTable.AddConstant(value);
+		  var symbol = _symbolTable.AddConstant(value);
 		  _annotation.Put12(".s.IFJDCS"[symbol.tag], symbol.index);
 		}
 	  }
@@ -340,7 +340,7 @@ namespace ObjectWeb.Asm
 	  {
 		if (_numElementValuePairsOffset != -1)
 		{
-		  byte[] data = _annotation.data;
+		  var data = _annotation.data;
 		  data[_numElementValuePairsOffset] = (byte)((int)((uint)_numElementValuePairs >> 8));
 		  data[_numElementValuePairsOffset + 1] = (byte) _numElementValuePairs;
 		}
@@ -366,8 +366,8 @@ namespace ObjectWeb.Asm
 		  _symbolTable.AddConstantUtf8(attributeName);
 		}
 		// The attribute_name_index, attribute_length and num_annotations fields use 8 bytes.
-		int attributeSize = 8;
-		AnnotationWriter annotationWriter = this;
+		var attributeSize = 8;
+		var annotationWriter = this;
 		while (annotationWriter != null)
 		{
 		  attributeSize += annotationWriter._annotation.length;
@@ -398,7 +398,7 @@ namespace ObjectWeb.Asm
 	  ///     attribute_name_index and attribute_length fields. </returns>
 	  internal static int ComputeAnnotationsSize(AnnotationWriter lastRuntimeVisibleAnnotation, AnnotationWriter lastRuntimeInvisibleAnnotation, AnnotationWriter lastRuntimeVisibleTypeAnnotation, AnnotationWriter lastRuntimeInvisibleTypeAnnotation)
 	  {
-		int size = 0;
+		var size = 0;
 		if (lastRuntimeVisibleAnnotation != null)
 		{
 		  size += lastRuntimeVisibleAnnotation.ComputeAnnotationsSize(Constants.Runtime_Visible_Annotations);
@@ -428,9 +428,9 @@ namespace ObjectWeb.Asm
 	  /// <param name="output"> where the attribute must be put. </param>
 	  public void PutAnnotations(int attributeNameIndex, ByteVector output)
 	  {
-		int attributeLength = 2; // For num_annotations.
-		int numAnnotations = 0;
-		AnnotationWriter annotationWriter = this;
+		var attributeLength = 2; // For num_annotations.
+		var numAnnotations = 0;
+		var annotationWriter = this;
 		AnnotationWriter firstAnnotation = null;
 		while (annotationWriter != null)
 		{
@@ -511,10 +511,10 @@ namespace ObjectWeb.Asm
 		// sub-array (which is ensured by the lazy instantiation of this array in MethodWriter).
 		// The attribute_name_index, attribute_length and num_parameters fields use 7 bytes, and each
 		// element of the parameter_annotations array uses 2 bytes for its num_annotations field.
-		int attributeSize = 7 + 2 * annotableParameterCount;
-		for (int i = 0; i < annotableParameterCount; ++i)
+		var attributeSize = 7 + 2 * annotableParameterCount;
+		for (var i = 0; i < annotableParameterCount; ++i)
 		{
-		  AnnotationWriter annotationWriter = annotationWriters[i];
+		  var annotationWriter = annotationWriters[i];
 		  attributeSize += annotationWriter == null ? 0 : annotationWriter.ComputeAnnotationsSize(attributeName) - 8;
 		}
 		return attributeSize;
@@ -535,20 +535,20 @@ namespace ObjectWeb.Asm
 	  {
 		// The num_parameters field uses 1 byte, and each element of the parameter_annotations array
 		// uses 2 bytes for its num_annotations field.
-		int attributeLength = 1 + 2 * annotableParameterCount;
-		for (int i = 0; i < annotableParameterCount; ++i)
+		var attributeLength = 1 + 2 * annotableParameterCount;
+		for (var i = 0; i < annotableParameterCount; ++i)
 		{
-		  AnnotationWriter annotationWriter = annotationWriters[i];
+		  var annotationWriter = annotationWriters[i];
 		  attributeLength += annotationWriter == null ? 0 : annotationWriter.ComputeAnnotationsSize(null) - 8;
 		}
 		output.PutShort(attributeNameIndex);
 		output.PutInt(attributeLength);
 		output.PutByte(annotableParameterCount);
-		for (int i = 0; i < annotableParameterCount; ++i)
+		for (var i = 0; i < annotableParameterCount; ++i)
 		{
-		  AnnotationWriter annotationWriter = annotationWriters[i];
+		  var annotationWriter = annotationWriters[i];
 		  AnnotationWriter firstAnnotation = null;
-		  int numAnnotations = 0;
+		  var numAnnotations = 0;
 		  while (annotationWriter != null)
 		  {
 			// In case user the forgot to call visitEnd().

@@ -188,7 +188,7 @@ namespace ObjectWeb.Asm.Tree
 		{
 		  for (int i = 0, n = visibleTypeAnnotations.Count; i < n; ++i)
 		  {
-			TypeAnnotationNode typeAnnotation = visibleTypeAnnotations[i];
+			var typeAnnotation = visibleTypeAnnotations[i];
 			typeAnnotation.Accept(methodVisitor.VisitInsnAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
 		  }
 		}
@@ -196,7 +196,7 @@ namespace ObjectWeb.Asm.Tree
 		{
 		  for (int i = 0, n = invisibleTypeAnnotations.Count; i < n; ++i)
 		  {
-			TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations[i];
+			var typeAnnotation = invisibleTypeAnnotations[i];
 			typeAnnotation.Accept(methodVisitor.VisitInsnAnnotation(typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
 		  }
 		}
@@ -229,7 +229,7 @@ namespace ObjectWeb.Asm.Tree
 	  /// <returns> the clones of the given labels. </returns>
 	  internal static LabelNode[] Clone(List<LabelNode> labels, IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		LabelNode[] clones = new LabelNode[labels.Count];
+		var clones = new LabelNode[labels.Count];
 		for (int i = 0, n = clones.Length; i < n; ++i)
 		{
 		  clones[i] = clonedLabels.GetValueOrNull(labels[i]);
@@ -249,8 +249,8 @@ namespace ObjectWeb.Asm.Tree
 		  this.visibleTypeAnnotations = new List<TypeAnnotationNode>();
 		  for (int i = 0, n = insnNode.visibleTypeAnnotations.Count; i < n; ++i)
 		  {
-			TypeAnnotationNode sourceAnnotation = insnNode.visibleTypeAnnotations[i];
-			TypeAnnotationNode cloneAnnotation = new TypeAnnotationNode(sourceAnnotation.typeRef, sourceAnnotation.typePath, sourceAnnotation.desc);
+			var sourceAnnotation = insnNode.visibleTypeAnnotations[i];
+			var cloneAnnotation = new TypeAnnotationNode(sourceAnnotation.typeRef, sourceAnnotation.typePath, sourceAnnotation.desc);
 			sourceAnnotation.Accept(cloneAnnotation);
 			this.visibleTypeAnnotations.Add(cloneAnnotation);
 		  }
@@ -260,8 +260,8 @@ namespace ObjectWeb.Asm.Tree
 		  this.invisibleTypeAnnotations = new List<TypeAnnotationNode>();
 		  for (int i = 0, n = insnNode.invisibleTypeAnnotations.Count; i < n; ++i)
 		  {
-			TypeAnnotationNode sourceAnnotation = insnNode.invisibleTypeAnnotations[i];
-			TypeAnnotationNode cloneAnnotation = new TypeAnnotationNode(sourceAnnotation.typeRef, sourceAnnotation.typePath, sourceAnnotation.desc);
+			var sourceAnnotation = insnNode.invisibleTypeAnnotations[i];
+			var cloneAnnotation = new TypeAnnotationNode(sourceAnnotation.typeRef, sourceAnnotation.typePath, sourceAnnotation.desc);
 			sourceAnnotation.Accept(cloneAnnotation);
 			this.invisibleTypeAnnotations.Add(cloneAnnotation);
 		  }
