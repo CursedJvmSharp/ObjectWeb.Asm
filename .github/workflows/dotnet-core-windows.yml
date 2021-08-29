@@ -1,0 +1,35 @@
+name: Build ObjectWeb.Asm (Windows)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')" 
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.100-rc.2.20479.15'
+
+    - name: Build ObjectWeb.Asm
+      run: dotnet build ObjectWeb.Asm -c Release
+      
+    - name: Pack ObjectWeb.Asm
+      run: dotnet pack ObjectWeb.Asm -o . -c Release
+      
+    - name: NuGet Push Packages
+      if: ${{ github.event_name != 'pull_request' }}
+      run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_APIKEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+    - name: Upload NuGet Build Artifacts
+      uses: actions/upload-artifact@v2.2.0
+      with:
+        name: 'Built NuGet Packages'
+        path: '.\*.nupkg'
