@@ -95,7 +95,7 @@ namespace ObjectWeb.Asm.Tree
                     this.Local = Util.AsArrayList(numLocal, local);
                     break;
                 case IOpcodes.F_Chop:
-                    this.Local = Util.AsArrayList(numLocal, new object[0]);
+                    this.Local = Util.AsArrayList<object>(numLocal);
                     break;
                 case IOpcodes.F_Same:
                     break;

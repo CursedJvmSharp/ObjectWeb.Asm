@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace />
-    <Version>9.3</Version>
+    <Version>9.3.0.1</Version>
     <Authors>INRIA, France Telecom;NickAc</Authors>
     <Company />
     <Description>A very small and fast Java bytecode manipulation framework</Description>
