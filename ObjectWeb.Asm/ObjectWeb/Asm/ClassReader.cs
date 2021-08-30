@@ -305,7 +305,7 @@ namespace ObjectWeb.Asm
 			  var data = new byte[bufferSize];
 			  int bytesRead;
 			  var readCount = 0;
-			  while ((bytesRead = inputStream.Read(data, 0, bufferSize)) != -1)
+			  while ((bytesRead = inputStream.Read(data, 0, bufferSize)) != 0)
 			  {
 				outputStream.Write(data, 0, bytesRead);
 				readCount++;
