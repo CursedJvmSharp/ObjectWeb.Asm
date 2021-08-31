@@ -38,7 +38,6 @@ namespace Java.IO
     ///     then use a data input stream to read the data back in.
     /// </remarks>
     /// <author>unascribed</author>
-    /// <seealso cref="DataInputStream" />
     /// <since>JDK1.0</since>
     public class DataOutputStream : IDataOutput, IDisposable
     {

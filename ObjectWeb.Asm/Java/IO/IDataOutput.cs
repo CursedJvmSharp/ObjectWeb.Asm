@@ -48,7 +48,6 @@ namespace Java.IO
     ///         an <code>IOException</code> is thrown.
     /// </remarks>
     /// <author>Frank Yellin</author>
-    /// <seealso cref="IDataInput" />
     /// <seealso cref="DataOutputStream" />
     /// <since>JDK1.0</since>
     public interface IDataOutput
