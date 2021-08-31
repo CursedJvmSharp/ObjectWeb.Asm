@@ -136,8 +136,7 @@ namespace ObjectWeb.Asm.Commons
             base.VisitLabel(label);
             if (_isConstructor && _forwardJumpStackFrames != null)
             {
-                var labelStackFrame = _forwardJumpStackFrames.GetValueOrNull(label);
-                if (labelStackFrame != null)
+                if (_forwardJumpStackFrames.TryGetValue(label, out var labelStackFrame))
                 {
                     _stackFrame = labelStackFrame;
                     _superClassConstructorCalled = false;

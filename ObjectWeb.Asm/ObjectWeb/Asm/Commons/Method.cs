@@ -227,8 +227,7 @@ namespace ObjectWeb.Asm.Commons
                 stringBuilder.Append('[');
 
             var elementType = type.Substring(0, type.Length - stringBuilder.Length * 2);
-            var descriptor = PRIMITIVE_TYPE_DESCRIPTORS.GetValueOrNull(elementType);
-            if (!ReferenceEquals(descriptor, null))
+            if (PRIMITIVE_TYPE_DESCRIPTORS.TryGetValue(elementType, out var descriptor))
             {
                 stringBuilder.Append(descriptor);
             }

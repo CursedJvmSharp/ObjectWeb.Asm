@@ -136,10 +136,8 @@ namespace ObjectWeb.Asm.Commons
             var visitedInsns = new BitArray(64);
             FindSubroutineInsns(0, _mainSubroutineInsns, visitedInsns);
             // For each subroutine, find the instructions that belong to this subroutine.
-            foreach (var entry in _subroutinesInsns.SetOfKeyValuePairs())
+            foreach (var (jsrLabelNode, subroutineInsns) in _subroutinesInsns)
             {
-                var jsrLabelNode = entry.Key;
-                var subroutineInsns = entry.Value;
                 FindSubroutineInsns(Instructions.IndexOf(jsrLabelNode), subroutineInsns, visitedInsns);
             }
         }
@@ -347,7 +345,7 @@ namespace ObjectWeb.Asm.Commons
                     else if (insnNode.Opcode == IOpcodes.Jsr)
                     {
                         var jsrLabelNode = ((JumpInsnNode)insnNode).Label;
-                        var subroutineInsns = _subroutinesInsns.GetValueOrNull(jsrLabelNode);
+                        _subroutinesInsns.TryGetValue(jsrLabelNode, out var subroutineInsns);
                         var newInstantiation = new Instantiation(this, instantiation, subroutineInsns);
                         var clonedJsrLabelNode = newInstantiation.GetClonedLabelForJumpInsn(jsrLabelNode);
                         // Replace the JSR instruction with a GOTO to the instantiated subroutine, and push NULL
@@ -498,7 +496,8 @@ namespace ObjectWeb.Asm.Commons
             {
                 // findOwner should never return null, because owner is null only if an instruction cannot be
                 // reached from this subroutine.
-                return FindOwner(_outerInstance.Instructions.IndexOf(labelNode)).clonedLabels.GetValueOrNull(labelNode);
+                FindOwner(_outerInstance.Instructions.IndexOf(labelNode)).clonedLabels.TryGetValue(labelNode, out var ret);
+                return ret;
             }
 
             /// <summary>
@@ -512,7 +511,8 @@ namespace ObjectWeb.Asm.Commons
             /// </returns>
             public virtual LabelNode GetClonedLabel(LabelNode labelNode)
             {
-                return clonedLabels.GetValueOrNull(labelNode);
+                clonedLabels.TryGetValue(labelNode, out var ret);
+                return ret;
             }
 
             // AbstractMap implementation

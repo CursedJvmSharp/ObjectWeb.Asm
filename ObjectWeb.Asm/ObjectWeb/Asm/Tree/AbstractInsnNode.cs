@@ -192,7 +192,8 @@ namespace ObjectWeb.Asm.Tree
         /// <returns> the clone of the given label. </returns>
         internal static LabelNode Clone(LabelNode label, IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return clonedLabels.GetValueOrNull(label);
+            clonedLabels.TryGetValue(label, out var ret);
+            return ret;
         }
 
         /// <summary>
@@ -206,7 +207,7 @@ namespace ObjectWeb.Asm.Tree
             var clones = new LabelNode[labels.Count];
             for (int i = 0, n = clones.Length; i < n; ++i)
             {
-                clones[i] = clonedLabels.GetValueOrNull(labels[i]);
+                clonedLabels.TryGetValue(labels[i], out clones[i]);
             }
 
             return clones;

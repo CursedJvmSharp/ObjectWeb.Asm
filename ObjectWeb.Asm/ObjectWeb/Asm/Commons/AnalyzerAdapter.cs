@@ -283,7 +283,10 @@ namespace ObjectWeb.Asm.Commons
                     if (Equals(value, IOpcodes.uninitializedThis))
                         initializedValue = this._owner;
                     else
-                        initializedValue = UninitializedTypes.GetValueOrNull(value);
+                    {
+                        UninitializedTypes.TryGetValue(value, out initializedValue);
+                    }
+
                     for (var i = 0; i < Locals.Count; ++i)
                         if (Locals[i] == value)
                             Locals[i] = initializedValue;

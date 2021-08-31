@@ -145,7 +145,8 @@ namespace ObjectWeb.Asm.Tree
                     var localElement = Local[i];
                     if (localElement is LabelNode)
                     {
-                        localElement = clonedLabels.GetValueOrNull((LabelNode)localElement);
+                        clonedLabels.TryGetValue((LabelNode)localElement, out var ret);
+                        localElement = ret;
                     }
 
                     clone.Local.Add(localElement);
@@ -160,7 +161,8 @@ namespace ObjectWeb.Asm.Tree
                     var stackElement = Stack[i];
                     if (stackElement is LabelNode)
                     {
-                        stackElement = clonedLabels.GetValueOrNull((LabelNode)stackElement);
+                        clonedLabels.TryGetValue((LabelNode)stackElement, out var ret);
+                        stackElement = ret;
                     }
 
                     clone.Stack.Add(stackElement);

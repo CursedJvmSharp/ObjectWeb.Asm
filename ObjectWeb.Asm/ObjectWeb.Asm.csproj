@@ -13,8 +13,4 @@
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Java\Lang\" />
-  </ItemGroup>
-
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -1144,8 +1145,7 @@ namespace ObjectWeb.Asm.Commons
                     var min = keys[0];
                     var max = keys[numKeys - 1];
                     var range = max - min + 1;
-                    var labels = new Label[range];
-                    Arrays.Fill(labels, defaultLabel);
+                    var labels = Enumerable.Repeat(defaultLabel, range).ToArray();
                     for (var i = 0; i < numKeys; ++i) labels[keys[i] - min] = NewLabel();
                     mv.VisitTableSwitchInsn(min, max, defaultLabel, labels);
                     for (var i = 0; i < range; ++i)

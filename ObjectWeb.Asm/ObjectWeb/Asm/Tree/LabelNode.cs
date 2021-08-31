@@ -72,7 +72,8 @@ namespace ObjectWeb.Asm.Tree
 
 	  public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
 	  {
-		return clonedLabels.GetValueOrNull(this);
+		  clonedLabels.TryGetValue(this, out var ret);
+		  return ret;
 	  }
 
 	  public virtual void ResetLabel()
