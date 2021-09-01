@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace />
     <Version>9.3.0.2</Version>
     <Authors>INRIA, France Telecom;NickAc</Authors>
     <Company />
