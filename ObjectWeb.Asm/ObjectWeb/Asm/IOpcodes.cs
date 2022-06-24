@@ -289,6 +289,8 @@ namespace ObjectWeb.Asm
         public const int V16 = (0 << 16) | 60;
         public const int V17 = (0 << 16) | 61;
         public const int V18 = (0 << 16) | 62;
+        public const int V19 = (0 << 16) | 63;
+        public const int V20 = (0 << 16) | 64;
 
         /// <summary>
         ///     Version flag indicating that the class is using 'preview' features.

@@ -399,6 +399,7 @@ namespace ObjectWeb.Asm
 		Array.Copy(data, 0, newData, 0, length);
 		data = newData;
 	  }
-	}
 
+	  public int Size => length;
+	}
 }

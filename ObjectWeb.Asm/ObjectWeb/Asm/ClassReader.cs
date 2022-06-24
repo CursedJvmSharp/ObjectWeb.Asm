@@ -190,7 +190,7 @@ namespace ObjectWeb.Asm
 		this.b = classFileBuffer;
 		// Check the class' major_version. This field is after the magic and minor_version fields, which
 		// use 4 and 2 bytes respectively.
-		if (checkClassVersion && ReadShort(classFileOffset + 6) > IOpcodes.V18)
+		if (checkClassVersion && ReadShort(classFileOffset + 6) > IOpcodes.V20)
 		{
 		  throw new System.ArgumentException("Unsupported class file major version " + ReadShort(classFileOffset + 6));
 		}

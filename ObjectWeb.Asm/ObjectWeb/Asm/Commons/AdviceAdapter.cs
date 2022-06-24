@@ -335,9 +335,9 @@ namespace ObjectWeb.Asm.Commons
             base.VisitInsn(opcode);
         }
 
-        public override void VisitVarInsn(int opcode, int var)
+        public override void VisitVarInsn(int opcode, int varIndex)
         {
-            base.VisitVarInsn(opcode, var);
+            base.VisitVarInsn(opcode, varIndex);
             if (_isConstructor && !_superClassConstructorCalled)
                 switch (opcode)
                 {
@@ -351,7 +351,7 @@ namespace ObjectWeb.Asm.Commons
                         PushValue(OTHER);
                         break;
                     case IOpcodes.Aload:
-                        PushValue(var == 0 ? UNINITIALIZED_THIS : OTHER);
+                        PushValue(varIndex == 0 ? UNINITIALIZED_THIS : OTHER);
                         break;
                     case IOpcodes.Astore:
                     case IOpcodes.Istore:

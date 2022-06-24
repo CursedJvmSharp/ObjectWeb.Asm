@@ -79,14 +79,14 @@ namespace ObjectWeb.Asm.Commons
             base.VisitIntInsn(opcode, operand);
         }
 
-        public override void VisitVarInsn(int opcode, int var)
+        public override void VisitVarInsn(int opcode, int varIndex)
         {
-            if (var < 4 && opcode != IOpcodes.Ret)
+            if (varIndex < 4 && opcode != IOpcodes.Ret)
             {
                 _minSize += 1;
                 _maxSize += 1;
             }
-            else if (var >= 256)
+            else if (varIndex >= 256)
             {
                 _minSize += 4;
                 _maxSize += 4;
@@ -97,7 +97,7 @@ namespace ObjectWeb.Asm.Commons
                 _maxSize += 2;
             }
 
-            base.VisitVarInsn(opcode, var);
+            base.VisitVarInsn(opcode, varIndex);
         }
 
         public override void VisitTypeInsn(int opcode, string type)
@@ -174,9 +174,9 @@ namespace ObjectWeb.Asm.Commons
             base.VisitLdcInsn(value);
         }
 
-        public override void VisitIincInsn(int var, int increment)
+        public override void VisitIincInsn(int varIndex, int increment)
         {
-            if (var > 255 || increment > 127 || increment < -128)
+            if (varIndex > 255 || increment > 127 || increment < -128)
             {
                 _minSize += 6;
                 _maxSize += 6;
@@ -187,7 +187,7 @@ namespace ObjectWeb.Asm.Commons
                 _maxSize += 3;
             }
 
-            base.VisitIincInsn(var, increment);
+            base.VisitIincInsn(varIndex, increment);
         }
 
         public override void VisitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)

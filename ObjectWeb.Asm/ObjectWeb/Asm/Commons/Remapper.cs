@@ -173,7 +173,12 @@ namespace ObjectWeb.Asm.Commons
 		if (value is Handle)
 		{
 		  var handle = (Handle) value;
-		  return new Handle(handle.Tag, MapType(handle.Owner), MapMethodName(handle.Owner, handle.Name, handle.Desc), handle.Tag <= IOpcodes.H_Putstatic ? MapDesc(handle.Desc) : MapMethodDesc(handle.Desc), handle.Interface);
+		  var isFieldHandle = handle.Tag <= IOpcodes.H_Putstatic;
+		  return new Handle(handle.Tag,
+			  MapType(handle.Owner),
+			  isFieldHandle ? MapFieldName(handle.Owner, handle.Name, handle.Desc) : MapMethodName(handle.Owner, handle.Name, handle.Desc),
+			  isFieldHandle ? MapDesc(handle.Desc) : MapMethodDesc(handle.Desc),
+			  handle.Interface);
 		}
 		if (value is ConstantDynamic)
 		{

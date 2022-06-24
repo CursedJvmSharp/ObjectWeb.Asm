@@ -102,7 +102,7 @@ namespace ObjectWeb.Asm.Commons
             firstLocal = nextLocal;
         }
 
-        public override void VisitVarInsn(int opcode, int var)
+        public override void VisitVarInsn(int opcode, int varIndex)
         {
             JType varType;
             switch (opcode)
@@ -132,12 +132,12 @@ namespace ObjectWeb.Asm.Commons
                     throw new ArgumentException("Invalid opcode " + opcode);
             }
 
-            base.VisitVarInsn(opcode, Remap(var, varType));
+            base.VisitVarInsn(opcode, Remap(varIndex, varType));
         }
 
-        public override void VisitIincInsn(int var, int increment)
+        public override void VisitIincInsn(int varIndex, int increment)
         {
-            base.VisitIincInsn(Remap(var, JType.IntType), increment);
+            base.VisitIincInsn(Remap(varIndex, JType.IntType), increment);
         }
 
         public override void VisitMaxs(int maxStack, int maxLocals)

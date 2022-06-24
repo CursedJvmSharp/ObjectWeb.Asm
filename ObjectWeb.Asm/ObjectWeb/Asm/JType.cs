@@ -643,7 +643,7 @@ namespace ObjectWeb.Asm
                 case '(':
                     return new JType(Method, descriptorBuffer, descriptorBegin, descriptorEnd);
                 default:
-                    throw new ArgumentException();
+                    throw new ArgumentException("Invalid descriptor: " + descriptorBuffer);
             }
         }
 

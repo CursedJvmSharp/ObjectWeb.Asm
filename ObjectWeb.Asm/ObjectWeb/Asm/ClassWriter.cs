@@ -66,6 +66,8 @@ namespace ObjectWeb.Asm
 	  /// </summary>
 	  /// <seealso cref= #ClassWriter(int) </seealso>
 	  public const int Compute_Frames = 2;
+	  
+	  private int flags;
 
 	  // Note: fields are ordered as in the ClassFile structure, and those related to attributes are
 	  // ordered as in Section 4.7 of the JVMS.
@@ -274,6 +276,7 @@ namespace ObjectWeb.Asm
 	  ///     maximum stack size nor the stack frames will be computed for these methods</i>. </param>
 	  public ClassWriter(ClassReader classReader, int flags) : base(IOpcodes.Asm9)
 	  {
+		  this.flags = flags;
 		_symbolTable = classReader == null ? new SymbolTable(this) : new SymbolTable(this, classReader);
 		if ((flags & Compute_Frames) != 0)
 		{
@@ -288,6 +291,21 @@ namespace ObjectWeb.Asm
 		  this._compute = MethodWriter.Compute_Nothing;
 		}
 	  }
+	  
+	  // -----------------------------------------------------------------------------------------------
+	  // Accessors
+	  // -----------------------------------------------------------------------------------------------
+	  
+	  /**
+	   * Returns true if all the given flags were passed to the constructor.
+	   *
+	   * @param flags some option flags. Must be zero or more of {@link #COMPUTE_MAXS} and {@link
+	   *     #COMPUTE_FRAMES}.
+	   * @return true if all the given flags, or more, were passed to the constructor.
+	   */
+	    public bool HasFlags(int flags) { 
+		  return (this.flags & flags) == flags;
+		}
 
 	  // -----------------------------------------------------------------------------------------------
 	  // Implementation of the ClassVisitor abstract class

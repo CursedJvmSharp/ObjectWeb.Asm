@@ -755,26 +755,26 @@ namespace ObjectWeb.Asm
             }
         }
 
-        public override void VisitVarInsn(int opcode, int var)
+        public override void VisitVarInsn(int opcode, int varIndex)
         {
             _lastBytecodeOffset = _code.length;
             // Add the instruction to the bytecode of the method.
-            if (var < 4 && opcode != IOpcodes.Ret)
+            if (varIndex < 4 && opcode != IOpcodes.Ret)
             {
                 int optimizedOpcode;
                 if (opcode < IOpcodes.Istore)
-                    optimizedOpcode = Constants.Iload_0 + ((opcode - IOpcodes.Iload) << 2) + var;
+                    optimizedOpcode = Constants.Iload_0 + ((opcode - IOpcodes.Iload) << 2) + varIndex;
                 else
-                    optimizedOpcode = Constants.Istore_0 + ((opcode - IOpcodes.Istore) << 2) + var;
+                    optimizedOpcode = Constants.Istore_0 + ((opcode - IOpcodes.Istore) << 2) + varIndex;
                 _code.PutByte(optimizedOpcode);
             }
-            else if (var >= 256)
+            else if (varIndex >= 256)
             {
-                _code.PutByte(Constants.Wide).Put12(opcode, var);
+                _code.PutByte(Constants.Wide).Put12(opcode, varIndex);
             }
             else
             {
-                _code.Put11(opcode, var);
+                _code.Put11(opcode, varIndex);
             }
 
             // If needed, update the maximum stack size and number of locals, and stack map frames.
@@ -782,7 +782,7 @@ namespace ObjectWeb.Asm
             {
                 if (_compute == Compute_All_Frames || _compute == Compute_Inserted_Frames)
                 {
-                    _currentBasicBlock.frame.Execute(opcode, var, null, null);
+                    _currentBasicBlock.frame.Execute(opcode, varIndex, null, null);
                 }
                 else
                 {
@@ -808,9 +808,9 @@ namespace ObjectWeb.Asm
                 int currentMaxLocals;
                 if (opcode == IOpcodes.Lload || opcode == IOpcodes.Dload || opcode == IOpcodes.Lstore ||
                     opcode == IOpcodes.Dstore)
-                    currentMaxLocals = var + 2;
+                    currentMaxLocals = varIndex + 2;
                 else
-                    currentMaxLocals = var + 1;
+                    currentMaxLocals = varIndex + 1;
                 if (currentMaxLocals > _maxLocals) _maxLocals = currentMaxLocals;
             }
 
@@ -1195,20 +1195,20 @@ namespace ObjectWeb.Asm
             }
         }
 
-        public override void VisitIincInsn(int var, int increment)
+        public override void VisitIincInsn(int varIndex, int increment)
         {
             _lastBytecodeOffset = _code.length;
             // Add the instruction to the bytecode of the method.
-            if (var > 255 || increment > 127 || increment < -128)
-                _code.PutByte(Constants.Wide).Put12(IOpcodes.Iinc, var).PutShort(increment);
+            if (varIndex > 255 || increment > 127 || increment < -128)
+                _code.PutByte(Constants.Wide).Put12(IOpcodes.Iinc, varIndex).PutShort(increment);
             else
-                _code.PutByte(IOpcodes.Iinc).Put11(var, increment);
+                _code.PutByte(IOpcodes.Iinc).Put11(varIndex, increment);
             // If needed, update the maximum stack size and number of locals, and stack map frames.
             if (_currentBasicBlock != null && (_compute == Compute_All_Frames || _compute == Compute_Inserted_Frames))
-                _currentBasicBlock.frame.Execute(IOpcodes.Iinc, var, null, null);
+                _currentBasicBlock.frame.Execute(IOpcodes.Iinc, varIndex, null, null);
             if (_compute != Compute_Nothing)
             {
-                var currentMaxLocals = var + 1;
+                var currentMaxLocals = varIndex + 1;
                 if (currentMaxLocals > _maxLocals) _maxLocals = currentMaxLocals;
             }
         }

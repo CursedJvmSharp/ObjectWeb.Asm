@@ -423,42 +423,42 @@ namespace ObjectWeb.Asm.Commons
 		}
 	  }
 
-	  public override void VisitVarInsn(int opcode, int var)
+	  public override void VisitVarInsn(int opcode, int varIndex)
 	  {
 		switch (opcode)
 		{
 		  case IOpcodes.Iload:
-			Load(var, JType.IntType);
+			Load(varIndex, JType.IntType);
 			break;
 		  case IOpcodes.Lload:
-			Load(var, JType.LongType);
+			Load(varIndex, JType.LongType);
 			break;
 		  case IOpcodes.Fload:
-			Load(var, JType.FloatType);
+			Load(varIndex, JType.FloatType);
 			break;
 		  case IOpcodes.Dload:
-			Load(var, JType.DoubleType);
+			Load(varIndex, JType.DoubleType);
 			break;
 		  case IOpcodes.Aload:
-			Load(var, ObjectType);
+			Load(varIndex, ObjectType);
 			break;
 		  case IOpcodes.Istore:
-			Store(var, JType.IntType);
+			Store(varIndex, JType.IntType);
 			break;
 		  case IOpcodes.Lstore:
-			Store(var, JType.LongType);
+			Store(varIndex, JType.LongType);
 			break;
 		  case IOpcodes.Fstore:
-			Store(var, JType.FloatType);
+			Store(varIndex, JType.FloatType);
 			break;
 		  case IOpcodes.Dstore:
-			Store(var, JType.DoubleType);
+			Store(varIndex, JType.DoubleType);
 			break;
 		  case IOpcodes.Astore:
-			Store(var, ObjectType);
+			Store(varIndex, ObjectType);
 			break;
 		  case IOpcodes.Ret:
-			Ret(var);
+			Ret(varIndex);
 			break;
 		  default:
 			throw new System.ArgumentException();
@@ -674,9 +674,9 @@ namespace ObjectWeb.Asm.Commons
 		}
 	  }
 
-	  public override void VisitIincInsn(int var, int increment)
+	  public override void VisitIincInsn(int varIndex, int increment)
 	  {
-		Iinc(var, increment);
+		Iinc(varIndex, increment);
 	  }
 
 	  public override void VisitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)

@@ -355,9 +355,9 @@ namespace ObjectWeb.Asm.Tree
             Instructions.Add(new IntInsnNode(opcode, operand));
         }
 
-        public override void VisitVarInsn(int opcode, int var)
+        public override void VisitVarInsn(int opcode, int varIndex)
         {
-            Instructions.Add(new VarInsnNode(opcode, var));
+            Instructions.Add(new VarInsnNode(opcode, varIndex));
         }
 
         public override void VisitTypeInsn(int opcode, string type)
@@ -403,9 +403,9 @@ namespace ObjectWeb.Asm.Tree
             Instructions.Add(new LdcInsnNode(value));
         }
 
-        public override void VisitIincInsn(int var, int increment)
+        public override void VisitIincInsn(int varIndex, int increment)
         {
-            Instructions.Add(new IincInsnNode(var, increment));
+            Instructions.Add(new IincInsnNode(varIndex, increment));
         }
 
         public override void VisitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)

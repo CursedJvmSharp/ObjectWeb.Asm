@@ -382,13 +382,13 @@ namespace ObjectWeb.Asm
         ///     the opcode of the local variable instruction to be visited. This opcode is either
         ///     ILOAD, LLOAD, FLOAD, DLOAD, ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET.
         /// </param>
-        /// <param name="var">
+        /// <param name="varIndex">
         ///     the operand of the instruction to be visited. This operand is the index of a local
         ///     variable.
         /// </param>
-        public virtual void VisitVarInsn(int opcode, int var)
+        public virtual void VisitVarInsn(int opcode, int varIndex)
         {
-            if (mv != null) mv.VisitVarInsn(opcode, var);
+            if (mv != null) mv.VisitVarInsn(opcode, varIndex);
         }
 
         /// <summary>
@@ -582,11 +582,11 @@ namespace ObjectWeb.Asm
         /// <summary>
         ///     Visits an IINC instruction.
         /// </summary>
-        /// <param name="var"> index of the local variable to be incremented. </param>
+        /// <param name="varIndex"> index of the local variable to be incremented. </param>
         /// <param name="increment"> amount to increment the local variable by. </param>
-        public virtual void VisitIincInsn(int var, int increment)
+        public virtual void VisitIincInsn(int varIndex, int increment)
         {
-            if (mv != null) mv.VisitIincInsn(var, increment);
+            if (mv != null) mv.VisitIincInsn(varIndex, increment);
         }
 
         /// <summary>

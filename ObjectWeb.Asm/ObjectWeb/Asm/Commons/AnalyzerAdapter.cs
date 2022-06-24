@@ -221,12 +221,12 @@ namespace ObjectWeb.Asm.Commons
             Execute(opcode, operand, null);
         }
 
-        public override void VisitVarInsn(int opcode, int var)
+        public override void VisitVarInsn(int opcode, int varIndex)
         {
-            base.VisitVarInsn(opcode, var);
+            base.VisitVarInsn(opcode, varIndex);
             var isLongOrDouble = opcode == IOpcodes.Lload || opcode == IOpcodes.Dload || opcode == IOpcodes.Lstore || opcode == IOpcodes.Dstore;
-            _maxLocals = Math.Max(_maxLocals, var + (isLongOrDouble ? 2 : 1));
-            Execute(opcode, var, null);
+            _maxLocals = Math.Max(_maxLocals, varIndex + (isLongOrDouble ? 2 : 1));
+            Execute(opcode, varIndex, null);
         }
 
         public override void VisitTypeInsn(int opcode, string type)
@@ -387,11 +387,11 @@ namespace ObjectWeb.Asm.Commons
             _labels = null;
         }
 
-        public override void VisitIincInsn(int var, int increment)
+        public override void VisitIincInsn(int varIndex, int increment)
         {
-            base.VisitIincInsn(var, increment);
-            _maxLocals = Math.Max(_maxLocals, var + 1);
-            Execute(IOpcodes.Iinc, var, null);
+            base.VisitIincInsn(varIndex, increment);
+            _maxLocals = Math.Max(_maxLocals, varIndex + 1);
+            Execute(IOpcodes.Iinc, varIndex, null);
         }
 
         public override void VisitTableSwitchInsn(int min, int max, Label dflt, params Label[] labels)
