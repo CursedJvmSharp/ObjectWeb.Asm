@@ -599,7 +599,8 @@ namespace ObjectWeb.Asm
                     // in ClassReader if the EXPAND_ASM_INSNS option is used - and COMPUTE_INSERTED_FRAMES
                     // can't be set if EXPAND_ASM_INSNS is not used).
                     _currentBasicBlock.frame = new CurrentFrame(_currentBasicBlock);
-                    _currentBasicBlock.frame.SetInputFrameFromDescriptor(_symbolTable, _accessFlags, _descriptor, numLocal);
+                    _currentBasicBlock.frame.SetInputFrameFromDescriptor(_symbolTable, _accessFlags, _descriptor,
+                        numLocal);
                     _currentBasicBlock.frame.Accept(this);
                 }
                 else
@@ -619,7 +620,8 @@ namespace ObjectWeb.Asm
                 {
                     var argumentsSize = JType.GetArgumentsAndReturnSizes(_descriptor) >> 2;
                     var implicitFirstFrame = new Frame(new Label());
-                    implicitFirstFrame.SetInputFrameFromDescriptor(_symbolTable, _accessFlags, _descriptor, argumentsSize);
+                    implicitFirstFrame.SetInputFrameFromDescriptor(_symbolTable, _accessFlags, _descriptor,
+                        argumentsSize);
                     implicitFirstFrame.Accept(this);
                 }
 
@@ -926,7 +928,8 @@ namespace ObjectWeb.Asm
             _lastBytecodeOffset = _code.length;
             // Add the instruction to the bytecode of the method.
             var invokeDynamicSymbol =
-                _symbolTable.AddConstantInvokeDynamic(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
+                _symbolTable.AddConstantInvokeDynamic(name, descriptor, bootstrapMethodHandle,
+                    bootstrapMethodArguments);
             _code.Put12(IOpcodes.Invokedynamic, invokeDynamicSymbol.index);
             _code.PutShort(0);
             // If needed, update the maximum stack size and number of locals, and stack map frames.
@@ -1829,7 +1832,8 @@ namespace ObjectWeb.Asm
         /// <param name="end"> index of last type in <seealso cref="_currentFrame" /> to write (exclusive). </param>
         private void PutAbstractTypes(int start, int end)
         {
-            for (var i = start; i < end; ++i) Frame.PutAbstractType(_symbolTable, _currentFrame[i], _stackMapTableEntries);
+            for (var i = start; i < end; ++i)
+                Frame.PutAbstractType(_symbolTable, _currentFrame[i], _stackMapTableEntries);
         }
 
         /// <summary>
@@ -2014,7 +2018,8 @@ namespace ObjectWeb.Asm
 
             size += Attribute.ComputeAttributesSize(_symbolTable, _accessFlags, _signatureIndex);
             size += AnnotationWriter.ComputeAnnotationsSize(_lastRuntimeVisibleAnnotation,
-                _lastRuntimeInvisibleAnnotation, _lastRuntimeVisibleTypeAnnotation, _lastRuntimeInvisibleTypeAnnotation);
+                _lastRuntimeInvisibleAnnotation, _lastRuntimeVisibleTypeAnnotation,
+                _lastRuntimeInvisibleTypeAnnotation);
             if (_lastRuntimeVisibleParameterAnnotations != null)
                 size += AnnotationWriter.ComputeParameterAnnotationsSize(
                     Constants.Runtime_Visible_Parameter_Annotations, _lastRuntimeVisibleParameterAnnotations,
@@ -2167,7 +2172,8 @@ namespace ObjectWeb.Asm
                     _lastCodeRuntimeInvisibleTypeAnnotation.PutAnnotations(
                         _symbolTable.AddConstantUtf8(Constants.Runtime_Invisible_Type_Annotations), output);
                 if (_firstCodeAttribute != null)
-                    _firstCodeAttribute.PutAttributes(_symbolTable, _code.data, _code.length, _maxStack, _maxLocals, output);
+                    _firstCodeAttribute.PutAttributes(_symbolTable, _code.data, _code.length, _maxStack, _maxLocals,
+                        output);
             }
 
             if (_numberOfExceptions > 0)
@@ -2178,7 +2184,8 @@ namespace ObjectWeb.Asm
             }
 
             Attribute.PutAttributes(_symbolTable, _accessFlags, _signatureIndex, output);
-            AnnotationWriter.PutAnnotations(_symbolTable, _lastRuntimeVisibleAnnotation, _lastRuntimeInvisibleAnnotation,
+            AnnotationWriter.PutAnnotations(_symbolTable, _lastRuntimeVisibleAnnotation,
+                _lastRuntimeInvisibleAnnotation,
                 _lastRuntimeVisibleTypeAnnotation, _lastRuntimeInvisibleTypeAnnotation, output);
             if (_lastRuntimeVisibleParameterAnnotations != null)
                 AnnotationWriter.PutParameterAnnotations(
@@ -2198,7 +2205,8 @@ namespace ObjectWeb.Asm
                 output.PutShort(_symbolTable.AddConstantUtf8(Constants.Annotation_Default)).PutInt(_defaultValue.length)
                     .PutByteArray(_defaultValue.data, 0, _defaultValue.length);
             if (_parameters != null)
-                output.PutShort(_symbolTable.AddConstantUtf8(Constants.Method_Parameters)).PutInt(1 + _parameters.length)
+                output.PutShort(_symbolTable.AddConstantUtf8(Constants.Method_Parameters))
+                    .PutInt(1 + _parameters.length)
                     .PutByte(_parametersCount).PutByteArray(_parameters.data, 0, _parameters.length);
             if (_firstAttribute != null) _firstAttribute.PutAttributes(_symbolTable, output);
         }

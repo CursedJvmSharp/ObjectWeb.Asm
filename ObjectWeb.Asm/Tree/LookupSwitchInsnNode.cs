@@ -55,7 +55,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "keys"> the values of the keys. </param>
         /// <param name = "labels"> beginnings of the handler blocks. {@code labels[i]} is the beginning of the
         ///     handler block for the {@code keys[i]} key. </param>
-        public LookupSwitchInsnNode(LabelNode dflt, int[] keys, LabelNode[] labels): base(IOpcodes.Lookupswitch)
+        public LookupSwitchInsnNode(LabelNode dflt, int[] keys, LabelNode[] labels) : base(IOpcodes.Lookupswitch)
         {
             this.Dflt = dflt;
             this.Keys = Util.AsArrayList(keys);
@@ -63,6 +63,7 @@ namespace ObjectWeb.Asm.Tree
         }
 
         public override int Type => Lookupswitch_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             var keysArray = new int[this.Keys.Count];
@@ -83,7 +84,8 @@ namespace ObjectWeb.Asm.Tree
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            var clone = new LookupSwitchInsnNode(LookupSwitchInsnNode.Clone(Dflt, clonedLabels), null, LookupSwitchInsnNode.Clone(Labels, clonedLabels));
+            var clone = new LookupSwitchInsnNode(LookupSwitchInsnNode.Clone(Dflt, clonedLabels), null,
+                LookupSwitchInsnNode.Clone(Labels, clonedLabels));
             ((List<int>)clone.Keys).AddRange(Keys);
             return clone.CloneAnnotations(this);
         }

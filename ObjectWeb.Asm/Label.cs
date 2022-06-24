@@ -44,19 +44,23 @@ namespace ObjectWeb.Asm
         ///     ignored in control flow graph analysis algorithms (for optimization purposes).
         /// </summary>
         internal const int Flag_Debug_Only = 1;
+
         /// <summary>
         ///     A flag indicating that a label is the target of a jump instruction, or the start of an
         ///     exception handler.
         /// </summary>
         internal const int Flag_Jump_Target = 2;
+
         /// <summary>
         ///     A flag indicating that the bytecode offset of a label is known.
         /// </summary>
         internal const int Flag_Resolved = 4;
+
         /// <summary>
         ///     A flag indicating that a label corresponds to a reachable basic block.
         /// </summary>
         internal const int Flag_Reachable = 8;
+
         /// <summary>
         ///     A flag indicating that the basic block corresponding to a label ends with a subroutine call. By
         ///     construction in <seealso cref = "MethodWriter.VisitJumpInsn"/>, labels with this flag set have at least two
@@ -73,24 +77,29 @@ namespace ObjectWeb.Asm
         ///     </ul>
         /// </summary>
         internal const int Flag_Subroutine_Caller = 16;
+
         /// <summary>
         ///     A flag indicating that the basic block corresponding to a label is the start of a subroutine.
         /// </summary>
         internal const int Flag_Subroutine_Start = 32;
+
         /// <summary>
         ///     A flag indicating that the basic block corresponding to a label is the end of a subroutine.
         /// </summary>
         internal const int Flag_Subroutine_End = 64;
+
         /// <summary>
         ///     The number of elements to add to the <seealso cref = "_otherLineNumbers"/> array when it needs to be
         ///     resized to store a new source line number.
         /// </summary>
         internal const int Line_Numbers_Capacity_Increment = 4;
+
         /// <summary>
         ///     The number of elements to add to the <seealso cref = "_forwardReferences"/> array when it needs to be
         ///     resized to store a new forward reference.
         /// </summary>
         internal const int Forward_References_Capacity_Increment = 6;
+
         /// <summary>
         ///     The bit mask to extract the type of a forward reference to this label. The extracted type is
         ///     either <seealso cref = "Forward_Reference_Type_Short"/> or <seealso cref = "Forward_Reference_Type_Wide"/>.
@@ -98,16 +107,19 @@ namespace ObjectWeb.Asm
         /// <seealso cref =  # forwardReferences
         /// </seealso>
         internal const int Forward_Reference_Type_Mask = unchecked((int)0xF0000000);
+
         /// <summary>
         ///     The type of forward references stored with two bytes in the bytecode. This is the case, for
         ///     instance, of a forward reference from an ifnull instruction.
         /// </summary>
         internal const int Forward_Reference_Type_Short = 0x10000000;
+
         /// <summary>
         ///     The type of forward references stored in four bytes in the bytecode. This is the case, for
         ///     instance, of a forward reference from a lookupswitch instruction.
         /// </summary>
         internal const int Forward_Reference_Type_Wide = 0x20000000;
+
         /// <summary>
         ///     The bit mask to extract the 'handle' of a forward reference to this label. The extracted handle
         ///     is the bytecode offset where the forward reference value is stored (using either 2 or 4 bytes,
@@ -116,17 +128,20 @@ namespace ObjectWeb.Asm
         /// <seealso cref =  # forwardReferences
         /// </seealso>
         internal const int Forward_Reference_Handle_Mask = 0x0FFFFFFF;
+
         /// <summary>
         ///     A sentinel element used to indicate the end of a list of labels.
         /// </summary>
         /// <seealso cref =  # nextListElement
         /// </seealso>
         internal static readonly Label EmptyList = new();
+
         /// <summary>
         ///     The offset of this label in the bytecode of its method, in bytes. This value is set if and only
         ///     if the <seealso cref = "Flag_Resolved"/> flag is set.
         /// </summary>
         internal int bytecodeOffset;
+
         /// <summary>
         ///     The type and status of this label or its corresponding basic block. Must be zero or more of
         ///     <seealso cref = "Flag_Debug_Only"/>, <seealso cref = "Flag_Jump_Target"/>, <seealso cref = "Flag_Resolved"/>, {@link
@@ -134,6 +149,7 @@ namespace ObjectWeb.Asm
         ///     #FLAG_SUBROUTINE_END}.
         /// </summary>
         internal short flags;
+
         /// <summary>
         ///     The forward references to this label. The first element is the number of forward references,
         ///     times 2 (this corresponds to the index of the last element actually used in this array). Then,
@@ -160,12 +176,14 @@ namespace ObjectWeb.Asm
         ///     </para>
         /// </summary>
         private int[] _forwardReferences;
+
         /// <summary>
         ///     The input and output stack map frames of the basic block corresponding to this label. This
         ///     field is only used when the <seealso cref = "MethodWriter.Compute_All_Frames"/> or {@link
         ///     MethodWriter#COMPUTE_INSERTED_FRAMES} option is used.
         /// </summary>
         internal Frame frame;
+
         /// <summary>
         ///     A user managed state associated with this label. Warning: this field is used by the ASM tree
         ///     package. In order to use it with the ASM tree package you must override the getLabelNode method
@@ -200,12 +218,14 @@ namespace ObjectWeb.Asm
         ///     field is computed in <seealso cref = "MethodWriter.ComputeMaxStackAndLocal"/>.
         /// </summary>
         internal short inputStackSize;
+
         /// <summary>
         ///     The source line number corresponding to this label, or 0. If there are several source line
         ///     numbers corresponding to this label, the first one is stored in this field, and the remaining
         ///     ones are stored in <seealso cref = "_otherLineNumbers"/>.
         /// </summary>
         private short _lineNumber;
+
         /// <summary>
         ///     The successor of this label, in the order they are visited in <seealso cref = "MethodVisitor.VisitLabel"/>.
         ///     This linked list does not include labels used for debug info only. If the {@link
@@ -214,6 +234,7 @@ namespace ObjectWeb.Asm
         ///     case only the first label appears in this list).
         /// </summary>
         internal Label nextBasicBlock;
+
         /// <summary>
         ///     The next element in the list of labels to which this label belongs, or {@literal null} if it
         ///     does not belong to any list. All lists of labels must end with the <seealso cref = "EmptyList"/>
@@ -232,29 +253,34 @@ namespace ObjectWeb.Asm
         ///     </para>
         /// </summary>
         internal Label nextListElement;
+
         /// <summary>
         ///     The source line numbers corresponding to this label, in addition to <seealso cref = "_lineNumber"/>, or
         ///     null. The first element of this array is the number n of source line numbers it contains, which
         ///     are stored between indices 1 and n (inclusive).
         /// </summary>
         private int[] _otherLineNumbers;
+
         /// <summary>
         ///     The outgoing edges of the basic block corresponding to this label, in the control flow graph of
         ///     its method. These edges are stored in a linked list of <seealso cref = "Edge"/> objects, linked to each
         ///     other by their <seealso cref = "Edge.nextEdge"/> field.
         /// </summary>
         internal Edge outgoingEdges;
+
         /// <summary>
         ///     The maximum height reached by the output stack, relatively to the top of the input stack, in
         ///     the basic block corresponding to this label. This maximum is always positive or {@literal
         ///     null}.
         /// </summary>
         internal short outputStackMax;
+
         /// <summary>
         ///     The number of elements in the output stack, at the end of the basic block corresponding to this
         ///     label. This field is only computed for basic blocks that end with a RET instruction.
         /// </summary>
         internal short outputStackSize;
+
         /// <summary>
         ///     The id of the subroutine to which this basic block belongs, or 0. If the basic block belongs to
         ///     several subroutines, this is the id of the "oldest" subroutine that contains it (with the
@@ -263,6 +289,7 @@ namespace ObjectWeb.Asm
         ///     instructions.
         /// </summary>
         internal short subroutineId;
+
         // -----------------------------------------------------------------------------------------------
         // Constructor and accessors
         // -----------------------------------------------------------------------------------------------
@@ -304,6 +331,7 @@ namespace ObjectWeb.Asm
         ///     frame is set in <seealso cref = "MethodWriter.VisitLabel"/>.
         /// </returns>
         public Label CanonicalInstance => frame == null ? this : frame.owner;
+
         // -----------------------------------------------------------------------------------------------
         // Methods to manage line numbers
         // -----------------------------------------------------------------------------------------------
@@ -560,8 +588,10 @@ namespace ObjectWeb.Asm
                 // Add an edge from this block to the successor of the caller basic block, if this block is
                 // the end of a subroutine and if this block and subroutineCaller do not belong to the same
                 // subroutine.
-                if ((basicBlock.flags & Flag_Subroutine_End) != 0 && basicBlock.subroutineId != subroutineCaller.subroutineId)
-                    basicBlock.outgoingEdges = new Edge(basicBlock.outputStackSize, subroutineCaller.outgoingEdges.successor, basicBlock.outgoingEdges);
+                if ((basicBlock.flags & Flag_Subroutine_End) != 0 &&
+                    basicBlock.subroutineId != subroutineCaller.subroutineId)
+                    basicBlock.outgoingEdges = new Edge(basicBlock.outputStackSize,
+                        subroutineCaller.outgoingEdges.successor, basicBlock.outgoingEdges);
                 // Add its successors to the list of blocks to process. Note that {@link #pushSuccessors} does
                 // not push basic blocks which are already in a list. Here this means either in the list of
                 // blocks to process, or in the list of already processed blocks. This second list is

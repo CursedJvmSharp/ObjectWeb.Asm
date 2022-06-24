@@ -157,7 +157,8 @@ namespace ObjectWeb.Asm
             var size = 6;
             size += Attribute.ComputeAttributesSize(_symbolTable, 0, _signatureIndex);
             size += AnnotationWriter.ComputeAnnotationsSize(_lastRuntimeVisibleAnnotation,
-                _lastRuntimeInvisibleAnnotation, _lastRuntimeVisibleTypeAnnotation, _lastRuntimeInvisibleTypeAnnotation);
+                _lastRuntimeInvisibleAnnotation, _lastRuntimeVisibleTypeAnnotation,
+                _lastRuntimeInvisibleTypeAnnotation);
             if (_firstAttribute != null) size += _firstAttribute.ComputeAttributesSize(_symbolTable);
             return size;
         }
@@ -181,7 +182,8 @@ namespace ObjectWeb.Asm
             if (_firstAttribute != null) attributesCount += _firstAttribute.AttributeCount;
             output.PutShort(attributesCount);
             Attribute.PutAttributes(_symbolTable, 0, _signatureIndex, output);
-            AnnotationWriter.PutAnnotations(_symbolTable, _lastRuntimeVisibleAnnotation, _lastRuntimeInvisibleAnnotation,
+            AnnotationWriter.PutAnnotations(_symbolTable, _lastRuntimeVisibleAnnotation,
+                _lastRuntimeInvisibleAnnotation,
                 _lastRuntimeVisibleTypeAnnotation, _lastRuntimeInvisibleTypeAnnotation, output);
             if (_firstAttribute != null) _firstAttribute.PutAttributes(_symbolTable, output);
         }

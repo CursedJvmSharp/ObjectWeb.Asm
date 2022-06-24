@@ -62,8 +62,10 @@ namespace ObjectWeb.Asm.Tree
         ///     an <seealso cref = "Integer"/>, <seealso cref = "Float"/>, <seealso cref = "Long"/>, <seealso cref = "Double"/>, <seealso cref = "string "/>, {@link
         ///     org.objectweb.asm.Type} or <seealso cref = "Handle"/> value. This method is allowed to modify the
         ///     content of the array so a caller should expect that this array may change. </param>
-        public InvokeDynamicInsnNode(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments): base(IOpcodes.Invokedynamic)
-        { // NOPMD(ArrayIsStoredDirectly): public field.
+        public InvokeDynamicInsnNode(string name, string descriptor, Handle bootstrapMethodHandle,
+            params object[] bootstrapMethodArguments) : base(IOpcodes.Invokedynamic)
+        {
+            // NOPMD(ArrayIsStoredDirectly): public field.
             this.Name = name;
             this.Desc = descriptor;
             this.Bsm = bootstrapMethodHandle;
@@ -71,6 +73,7 @@ namespace ObjectWeb.Asm.Tree
         }
 
         public override int Type => Invoke_Dynamic_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitInvokeDynamicInsn(Name, Desc, Bsm, BsmArgs);

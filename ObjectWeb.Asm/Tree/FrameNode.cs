@@ -64,7 +64,7 @@ namespace ObjectWeb.Asm.Tree
         /// </summary>
         public List<object> Stack { get; set; }
 
-        private FrameNode(): base(-1)
+        private FrameNode() : base(-1)
         {
         }
 
@@ -81,7 +81,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "stack"> the types of the operand stack elements of this stack map frame. Elements of this
         ///     list can be Integer, String or LabelNode objects (for primitive, reference and
         ///     uninitialized types respectively - see <seealso cref = "MethodVisitor"/>). </param>
-        public FrameNode(int type, int numLocal, object[] local, int numStack, object[] stack): base(-1)
+        public FrameNode(int type, int numLocal, object[] local, int numStack, object[] stack) : base(-1)
         {
             this.FrameType = type;
             switch (type)
@@ -108,6 +108,7 @@ namespace ObjectWeb.Asm.Tree
         }
 
         public override int Type => Frame;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             switch (FrameType)

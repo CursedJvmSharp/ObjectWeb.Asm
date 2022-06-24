@@ -46,7 +46,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "opcode"> the opcode of the instruction to be constructed. This opcode must be BIPUSH,
         ///     SIPUSH or NEWARRAY. </param>
         /// <param name = "operand"> the operand of the instruction to be constructed. </param>
-        public IntInsnNode(int opcode, int operand): base(opcode)
+        public IntInsnNode(int opcode, int operand) : base(opcode)
         {
             this.Operand = operand;
         }
@@ -55,9 +55,13 @@ namespace ObjectWeb.Asm.Tree
         /// Sets the opcode of this instruction.
         /// </summary>
         /// <param name = "opcode"> the new instruction opcode. This opcode must be BIPUSH, SIPUSH or NEWARRAY. </param>
-        public virtual int Opcode { set => this.opcode = value; }
+        public virtual int Opcode
+        {
+            set => this.opcode = value;
+        }
 
         public override int Type => Int_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitIntInsn(opcode, Operand);

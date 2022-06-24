@@ -60,7 +60,7 @@ namespace ObjectWeb.Asm.Tree
         ///     org.objectweb.asm.Type#getInternalName}). </param>
         /// <param name = "name"> the field's name. </param>
         /// <param name = "descriptor"> the field's descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </param>
-        public FieldInsnNode(int opcode, string owner, string name, string descriptor): base(opcode)
+        public FieldInsnNode(int opcode, string owner, string name, string descriptor) : base(opcode)
         {
             this.Owner = owner;
             this.Name = name;
@@ -72,9 +72,13 @@ namespace ObjectWeb.Asm.Tree
         /// </summary>
         /// <param name = "opcode"> the new instruction opcode. This opcode must be GETSTATIC, PUTSTATIC, GETFIELD or
         ///     PUTFIELD. </param>
-        public virtual int Opcode { set => this.opcode = value; }
+        public virtual int Opcode
+        {
+            set => this.opcode = value;
+        }
 
         public override int Type => Field_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitFieldInsn(opcode, Owner, Name, Desc);

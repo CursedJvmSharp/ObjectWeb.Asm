@@ -156,12 +156,13 @@ namespace ObjectWeb.Asm.Tree
         /// <summary>
         /// Whether the accept method has been called on this object. </summary>
         private bool _visited;
+
         /// <summary>
         /// Constructs an uninitialized <seealso cref = "MethodNode"/>. <i>Subclasses must not use this
         /// constructor</i>. Instead, they must use the <seealso cref = "MethodNode(int)"/> version.
         /// </summary>
         /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
-        public MethodNode(): this(IOpcodes.Asm9)
+        public MethodNode() : this(IOpcodes.Asm9)
         {
             if (this.GetType() != typeof(MethodNode))
             {
@@ -174,7 +175,7 @@ namespace ObjectWeb.Asm.Tree
         /// </summary>
         /// <param name = "api"> the ASM API version implemented by this visitor. Must be one of the {@code
         ///     ASM}<i>x</i> values in <seealso cref = "IOpcodes"/>. </param>
-        public MethodNode(int api): base(api)
+        public MethodNode(int api) : base(api)
         {
             this.Instructions = new InsnList();
         }
@@ -191,7 +192,8 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "exceptions"> the internal names of the method's exception classes (see {@link
         ///     Type#getInternalName()}). May be {@literal null}. </param>
         /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
-        public MethodNode(int access, string name, string descriptor, string signature, string[] exceptions): this(IOpcodes.Asm9, access, name, descriptor, signature, exceptions)
+        public MethodNode(int access, string name, string descriptor, string signature, string[] exceptions) : this(
+            IOpcodes.Asm9, access, name, descriptor, signature, exceptions)
         {
             if (this.GetType() != typeof(MethodNode))
             {
@@ -211,7 +213,8 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "signature"> the method's signature. May be {@literal null}. </param>
         /// <param name = "exceptions"> the internal names of the method's exception classes (see {@link
         ///     Type#getInternalName()}). May be {@literal null}. </param>
-        public MethodNode(int api, int access, string name, string descriptor, string signature, string[] exceptions): base(api)
+        public MethodNode(int api, int access, string name, string descriptor, string signature,
+            string[] exceptions) : base(api)
         {
             this.Access = access;
             this.Name = name;
@@ -248,7 +251,8 @@ namespace ObjectWeb.Asm.Tree
         private class ArrayListAnonymousInnerClass : List<object>
         {
             private readonly MethodNode _outerInstance;
-            public ArrayListAnonymousInnerClass(MethodNode outerInstance): base(0)
+
+            public ArrayListAnonymousInnerClass(MethodNode outerInstance) : base(0)
             {
                 this._outerInstance = outerInstance;
             }
@@ -276,7 +280,8 @@ namespace ObjectWeb.Asm.Tree
             return annotation;
         }
 
-        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+            bool visible)
         {
             var typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
             if (visible)
@@ -324,7 +329,8 @@ namespace ObjectWeb.Asm.Tree
                     InvisibleParameterAnnotations = new List<AnnotationNode>[@params];
                 }
 
-                InvisibleParameterAnnotations[parameter] = Util.Add(InvisibleParameterAnnotations[parameter], annotation);
+                InvisibleParameterAnnotations[parameter] =
+                    Util.Add(InvisibleParameterAnnotations[parameter], annotation);
             }
 
             return annotation;
@@ -337,12 +343,13 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitCode()
         {
-        // Nothing to do.
+            // Nothing to do.
         }
 
         public override void VisitFrame(int type, int numLocal, object[] local, int numStack, object[] stack)
         {
-            Instructions.Add(new FrameNode(type, numLocal, local == null ? null : GetLabelNodes(local), numStack, stack == null ? null : GetLabelNodes(stack)));
+            Instructions.Add(new FrameNode(type, numLocal, local == null ? null : GetLabelNodes(local), numStack,
+                stack == null ? null : GetLabelNodes(stack)));
         }
 
         public override void VisitInsn(int opcode)
@@ -370,7 +377,8 @@ namespace ObjectWeb.Asm.Tree
             Instructions.Add(new FieldInsnNode(opcode, owner, name, descriptor));
         }
 
-        public override void VisitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor, bool isInterface)
+        public override void VisitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor,
+            bool isInterface)
         {
             if (api < IOpcodes.Asm5 && (opcodeAndSource & IOpcodes.Source_Deprecated) == 0)
             {
@@ -383,9 +391,11 @@ namespace ObjectWeb.Asm.Tree
             Instructions.Add(new MethodInsnNode(opcode, owner, name, descriptor, isInterface));
         }
 
-        public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
+        public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle,
+            params object[] bootstrapMethodArguments)
         {
-            Instructions.Add(new InvokeDynamicInsnNode(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments));
+            Instructions.Add(new InvokeDynamicInsnNode(name, descriptor, bootstrapMethodHandle,
+                bootstrapMethodArguments));
         }
 
         public override void VisitJumpInsn(int opcode, Label label)
@@ -423,7 +433,8 @@ namespace ObjectWeb.Asm.Tree
             Instructions.Add(new MultiANewArrayInsnNode(descriptor, numDimensions));
         }
 
-        public override AnnotationVisitor VisitInsnAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+        public override AnnotationVisitor VisitInsnAnnotation(int typeRef, TypePath typePath, string descriptor,
+            bool visible)
         {
             // Find the last real instruction, i.e. the instruction targeted by this annotation.
             var currentInsn = Instructions.Last;
@@ -448,11 +459,13 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitTryCatchBlock(Label start, Label end, Label handler, string type)
         {
-            var tryCatchBlock = new TryCatchBlockNode(GetLabelNode(start), GetLabelNode(end), GetLabelNode(handler), type);
+            var tryCatchBlock =
+                new TryCatchBlockNode(GetLabelNode(start), GetLabelNode(end), GetLabelNode(handler), type);
             TryCatchBlocks = Util.Add(TryCatchBlocks, tryCatchBlock);
         }
 
-        public override AnnotationVisitor VisitTryCatchAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+        public override AnnotationVisitor VisitTryCatchAnnotation(int typeRef, TypePath typePath, string descriptor,
+            bool visible)
         {
             var tryCatchBlock = TryCatchBlocks[(typeRef & 0x00FFFF00) >> 8];
             var typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
@@ -462,28 +475,34 @@ namespace ObjectWeb.Asm.Tree
             }
             else
             {
-                tryCatchBlock.InvisibleTypeAnnotations = Util.Add(tryCatchBlock.InvisibleTypeAnnotations, typeAnnotation);
+                tryCatchBlock.InvisibleTypeAnnotations =
+                    Util.Add(tryCatchBlock.InvisibleTypeAnnotations, typeAnnotation);
             }
 
             return typeAnnotation;
         }
 
-        public override void VisitLocalVariable(string name, string descriptor, string signature, Label start, Label end, int index)
+        public override void VisitLocalVariable(string name, string descriptor, string signature, Label start,
+            Label end, int index)
         {
-            var localVariable = new LocalVariableNode(name, descriptor, signature, GetLabelNode(start), GetLabelNode(end), index);
+            var localVariable = new LocalVariableNode(name, descriptor, signature, GetLabelNode(start),
+                GetLabelNode(end), index);
             LocalVariables = Util.Add(LocalVariables, localVariable);
         }
 
-        public override AnnotationVisitor VisitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start, Label[] end, int[] index, string descriptor, bool visible)
+        public override AnnotationVisitor VisitLocalVariableAnnotation(int typeRef, TypePath typePath, Label[] start,
+            Label[] end, int[] index, string descriptor, bool visible)
         {
-            var localVariableAnnotation = new LocalVariableAnnotationNode(typeRef, typePath, GetLabelNodes(start), GetLabelNodes(end), index, descriptor);
+            var localVariableAnnotation = new LocalVariableAnnotationNode(typeRef, typePath, GetLabelNodes(start),
+                GetLabelNodes(end), index, descriptor);
             if (visible)
             {
                 VisibleLocalVariableAnnotations = Util.Add(VisibleLocalVariableAnnotations, localVariableAnnotation);
             }
             else
             {
-                InvisibleLocalVariableAnnotations = Util.Add(InvisibleLocalVariableAnnotations, localVariableAnnotation);
+                InvisibleLocalVariableAnnotations =
+                    Util.Add(InvisibleLocalVariableAnnotations, localVariableAnnotation);
             }
 
             return localVariableAnnotation;
@@ -502,7 +521,7 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitEnd()
         {
-        // Nothing to do.
+            // Nothing to do.
         }
 
         /// <summary>
@@ -584,12 +603,14 @@ namespace ObjectWeb.Asm.Tree
                     for (var i = TryCatchBlocks.Count - 1; i >= 0; --i)
                     {
                         var tryCatchBlock = TryCatchBlocks[i];
-                        if (tryCatchBlock.VisibleTypeAnnotations != null && tryCatchBlock.VisibleTypeAnnotations.Count > 0)
+                        if (tryCatchBlock.VisibleTypeAnnotations != null &&
+                            tryCatchBlock.VisibleTypeAnnotations.Count > 0)
                         {
                             throw new UnsupportedClassVersionException();
                         }
 
-                        if (tryCatchBlock.InvisibleTypeAnnotations != null && tryCatchBlock.InvisibleTypeAnnotations.Count > 0)
+                        if (tryCatchBlock.InvisibleTypeAnnotations != null &&
+                            tryCatchBlock.InvisibleTypeAnnotations.Count > 0)
                         {
                             throw new UnsupportedClassVersionException();
                         }
@@ -718,7 +739,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = VisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(methodVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
+                    typeAnnotation.Accept(methodVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
@@ -727,7 +749,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = InVisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = InVisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(methodVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
+                    typeAnnotation.Accept(methodVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }
 

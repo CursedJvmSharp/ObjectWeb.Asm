@@ -25,6 +25,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 // THE POSSIBILITY OF SUCH DAMAGE.
+
 namespace ObjectWeb.Asm.Tree
 {
     /// <summary>
@@ -55,7 +56,8 @@ namespace ObjectWeb.Asm.Tree
         ///     'typeRef' as a whole. </param>
         /// <param name = "descriptor"> the class descriptor of the annotation class. </param>
         /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
-        public TypeAnnotationNode(int typeRef, TypePath typePath, string descriptor): this(IOpcodes.Asm9, typeRef, typePath, descriptor)
+        public TypeAnnotationNode(int typeRef, TypePath typePath, string descriptor) : this(IOpcodes.Asm9, typeRef,
+            typePath, descriptor)
         {
             if (this.GetType() != typeof(TypeAnnotationNode))
             {
@@ -73,7 +75,7 @@ namespace ObjectWeb.Asm.Tree
         ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets
         ///     'typeRef' as a whole. </param>
         /// <param name = "descriptor"> the class descriptor of the annotation class. </param>
-        public TypeAnnotationNode(int api, int typeRef, TypePath typePath, string descriptor): base(api, descriptor)
+        public TypeAnnotationNode(int api, int typeRef, TypePath typePath, string descriptor) : base(api, descriptor)
         {
             this.TypeRef = typeRef;
             this.TypePath = typePath;

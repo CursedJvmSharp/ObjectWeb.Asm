@@ -60,7 +60,8 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "dflt"> beginning of the default handler block. </param>
         /// <param name = "labels"> beginnings of the handler blocks. {@code labels[i]} is the beginning of the
         ///     handler block for the {@code min + i} key. </param>
-        public TableSwitchInsnNode(int min, int max, LabelNode dflt, params LabelNode[] labels): base(IOpcodes.Tableswitch)
+        public TableSwitchInsnNode(int min, int max, LabelNode dflt, params LabelNode[] labels) : base(
+            IOpcodes.Tableswitch)
         {
             this.Min = min;
             this.Max = max;
@@ -69,6 +70,7 @@ namespace ObjectWeb.Asm.Tree
         }
 
         public override int Type => Tableswitch_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             var labelsArray = new Label[this.Labels.Count];
@@ -83,7 +85,8 @@ namespace ObjectWeb.Asm.Tree
 
         public override AbstractInsnNode Clone(IDictionary<LabelNode, LabelNode> clonedLabels)
         {
-            return (new TableSwitchInsnNode(Min, Max, Clone(Dflt, clonedLabels), Clone(Labels, clonedLabels))).CloneAnnotations(this);
+            return (new TableSwitchInsnNode(Min, Max, Clone(Dflt, clonedLabels), Clone(Labels, clonedLabels)))
+                .CloneAnnotations(this);
         }
     }
 }

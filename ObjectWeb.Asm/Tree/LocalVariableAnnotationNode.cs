@@ -71,7 +71,8 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "index"> the local variable's index in each range. This array must have the same size as
         ///     the 'start' array. </param>
         /// <param name = "descriptor"> the class descriptor of the annotation class. </param>
-        public LocalVariableAnnotationNode(int typeRef, TypePath typePath, LabelNode[] start, LabelNode[] end, int[] index, string descriptor): this(IOpcodes.Asm9, typeRef, typePath, start, end, index, descriptor)
+        public LocalVariableAnnotationNode(int typeRef, TypePath typePath, LabelNode[] start, LabelNode[] end,
+            int[] index, string descriptor) : this(IOpcodes.Asm9, typeRef, typePath, start, end, index, descriptor)
         {
         }
 
@@ -91,7 +92,8 @@ namespace ObjectWeb.Asm.Tree
         ///     static inner type within 'typeRef'. May be {@literal null} if the annotation targets
         ///     'typeRef' as a whole. </param>
         /// <param name = "descriptor"> the class descriptor of the annotation class. </param>
-        public LocalVariableAnnotationNode(int api, int typeRef, TypePath typePath, LabelNode[] start, LabelNode[] end, int[] index, string descriptor): base(api, typeRef, typePath, descriptor)
+        public LocalVariableAnnotationNode(int api, int typeRef, TypePath typePath, LabelNode[] start, LabelNode[] end,
+            int[] index, string descriptor) : base(api, typeRef, typePath, descriptor)
         {
             this.Start = Util.AsArrayList(start);
             this.End = Util.AsArrayList(end);
@@ -115,7 +117,8 @@ namespace ObjectWeb.Asm.Tree
                 indices[i] = this.Index[i];
             }
 
-            Accept(methodVisitor.VisitLocalVariableAnnotation(TypeRef, TypePath, startLabels, endLabels, indices, Desc, visible));
+            Accept(methodVisitor.VisitLocalVariableAnnotation(TypeRef, TypePath, startLabels, endLabels, indices, Desc,
+                visible));
         }
     }
 }

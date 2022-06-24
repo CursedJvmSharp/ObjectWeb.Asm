@@ -30,78 +30,80 @@
 
 namespace ObjectWeb.Asm.Commons
 {
+    /// <summary>
+    /// A <seealso cref="RecordComponentVisitor"/> that remaps types with a <seealso cref="Remapper"/>.
+    /// 
+    /// @author Remi Forax
+    /// </summary>
+    public class RecordComponentRemapper : RecordComponentVisitor
+    {
+        /// <summary>
+        /// The remapper used to remap the types in the visited field. </summary>
+        protected internal readonly Remapper remapper;
 
-	/// <summary>
-	/// A <seealso cref="RecordComponentVisitor"/> that remaps types with a <seealso cref="Remapper"/>.
-	/// 
-	/// @author Remi Forax
-	/// </summary>
-	public class RecordComponentRemapper : RecordComponentVisitor
-	{
+        /// <summary>
+        /// Constructs a new <seealso cref="RecordComponentRemapper"/>. <i>Subclasses must not use this
+        /// constructor</i>. Instead, they must use the {@link
+        /// #RecordComponentRemapper(int,RecordComponentVisitor,Remapper)} version.
+        /// </summary>
+        /// <param name="recordComponentVisitor"> the record component visitor this remapper must delegate to. </param>
+        /// <param name="remapper"> the remapper to use to remap the types in the visited record component. </param>
+        public RecordComponentRemapper(RecordComponentVisitor recordComponentVisitor, Remapper remapper) : this(
+            IOpcodes.Asm9, recordComponentVisitor, remapper)
+        {
+        }
 
-	  /// <summary>
-	  /// The remapper used to remap the types in the visited field. </summary>
-	  protected internal readonly Remapper remapper;
+        /// <summary>
+        /// Constructs a new <seealso cref="RecordComponentRemapper"/>.
+        /// </summary>
+        /// <param name="api"> the ASM API version supported by this remapper. Must be one of {@link
+        ///     org.objectweb.asm.Opcodes#ASM8} or <seealso cref="IIOpcodes.Asm9/>. </param>
+        /// <param name="recordComponentVisitor"> the record component visitor this remapper must delegate to. </param>
+        /// <param name="remapper"> the remapper to use to remap the types in the visited record component. </param>
+        public RecordComponentRemapper(int api, RecordComponentVisitor recordComponentVisitor, Remapper remapper) :
+            base(api, recordComponentVisitor)
+        {
+            this.remapper = remapper;
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="RecordComponentRemapper"/>. <i>Subclasses must not use this
-	  /// constructor</i>. Instead, they must use the {@link
-	  /// #RecordComponentRemapper(int,RecordComponentVisitor,Remapper)} version.
-	  /// </summary>
-	  /// <param name="recordComponentVisitor"> the record component visitor this remapper must delegate to. </param>
-	  /// <param name="remapper"> the remapper to use to remap the types in the visited record component. </param>
-	  public RecordComponentRemapper(RecordComponentVisitor recordComponentVisitor, Remapper remapper) : this(IOpcodes.Asm9, recordComponentVisitor, remapper)
-	  {
-	  }
+        public override AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
+        {
+            var annotationVisitor = base.VisitAnnotation(remapper.MapDesc(descriptor), visible);
+            return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="RecordComponentRemapper"/>.
-	  /// </summary>
-	  /// <param name="api"> the ASM API version supported by this remapper. Must be one of {@link
-	  ///     org.objectweb.asm.Opcodes#ASM8} or <seealso cref="IIOpcodes.Asm9/>. </param>
-	  /// <param name="recordComponentVisitor"> the record component visitor this remapper must delegate to. </param>
-	  /// <param name="remapper"> the remapper to use to remap the types in the visited record component. </param>
-	  public RecordComponentRemapper(int api, RecordComponentVisitor recordComponentVisitor, Remapper remapper) : base(api, recordComponentVisitor)
-	  {
-		this.remapper = remapper;
-	  }
+        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+            bool visible)
+        {
+            var annotationVisitor = base.VisitTypeAnnotation(typeRef, typePath, remapper.MapDesc(descriptor), visible);
+            return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
+        }
 
-	  public override AnnotationVisitor VisitAnnotation(string descriptor, bool visible)
-	  {
-		var annotationVisitor = base.VisitAnnotation(remapper.MapDesc(descriptor), visible);
-		return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
-	  }
+        /// <summary>
+        /// Constructs a new remapper for annotations. The default implementation of this method returns a
+        /// new <seealso cref="AnnotationRemapper"/>.
+        /// </summary>
+        /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
+        /// <returns> the newly created remapper. </returns>
+        /// @deprecated use <seealso cref="CreateAnnotationRemapper(string,ObjectWeb.Asm.AnnotationVisitor)"/> instead. 
+        [Obsolete("use <seealso cref=\"createAnnotationRemapper(String, AnnotationVisitor)\"/> instead.")]
+        public virtual AnnotationVisitor CreateAnnotationRemapper(AnnotationVisitor annotationVisitor)
+        {
+            return new AnnotationRemapper(api, null, annotationVisitor, remapper);
+        }
 
-	  public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
-	  {
-		var annotationVisitor = base.VisitTypeAnnotation(typeRef, typePath, remapper.MapDesc(descriptor), visible);
-		return annotationVisitor == null ? null : CreateAnnotationRemapper(descriptor, annotationVisitor);
-	  }
-
-	  /// <summary>
-	  /// Constructs a new remapper for annotations. The default implementation of this method returns a
-	  /// new <seealso cref="AnnotationRemapper"/>.
-	  /// </summary>
-	  /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
-	  /// <returns> the newly created remapper. </returns>
-	  /// @deprecated use <seealso cref="CreateAnnotationRemapper(string,ObjectWeb.Asm.AnnotationVisitor)"/> instead. 
-	  [Obsolete("use <seealso cref=\"createAnnotationRemapper(String, AnnotationVisitor)\"/> instead.")]
-	  public virtual AnnotationVisitor CreateAnnotationRemapper(AnnotationVisitor annotationVisitor)
-	  {
-		return new AnnotationRemapper(api, null, annotationVisitor, remapper);
-	  }
-
-	  /// <summary>
-	  /// Constructs a new remapper for annotations. The default implementation of this method returns a
-	  /// new <seealso cref="AnnotationRemapper"/>.
-	  /// </summary>
-	  /// <param name="descriptor"> the descriptor sof the visited annotation. </param>
-	  /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
-	  /// <returns> the newly created remapper. </returns>
-	  public virtual AnnotationVisitor CreateAnnotationRemapper(string descriptor, AnnotationVisitor annotationVisitor)
-	  {
-		return (new AnnotationRemapper(api, descriptor, annotationVisitor, remapper)).OrDeprecatedValue(CreateAnnotationRemapper(annotationVisitor));
-	  }
-	}
-
+        /// <summary>
+        /// Constructs a new remapper for annotations. The default implementation of this method returns a
+        /// new <seealso cref="AnnotationRemapper"/>.
+        /// </summary>
+        /// <param name="descriptor"> the descriptor sof the visited annotation. </param>
+        /// <param name="annotationVisitor"> the AnnotationVisitor the remapper must delegate to. </param>
+        /// <returns> the newly created remapper. </returns>
+        public virtual AnnotationVisitor CreateAnnotationRemapper(string descriptor,
+            AnnotationVisitor annotationVisitor)
+        {
+            return (new AnnotationRemapper(api, descriptor, annotationVisitor, remapper)).OrDeprecatedValue(
+                CreateAnnotationRemapper(annotationVisitor));
+        }
+    }
 }

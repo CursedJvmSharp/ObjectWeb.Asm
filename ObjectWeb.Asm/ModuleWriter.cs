@@ -267,14 +267,16 @@ namespace ObjectWeb.Asm
             var moduleAttributeLength = 16 + _requires.length + _exports.length + _opens.length + _usesIndex.length +
                                         _provides.length;
             output.PutShort(_symbolTable.AddConstantUtf8(Constants.Module)).PutInt(moduleAttributeLength)
-                .PutShort(_moduleNameIndex).PutShort(_moduleFlags).PutShort(_moduleVersionIndex).PutShort(_requiresCount)
+                .PutShort(_moduleNameIndex).PutShort(_moduleFlags).PutShort(_moduleVersionIndex)
+                .PutShort(_requiresCount)
                 .PutByteArray(_requires.data, 0, _requires.length).PutShort(_exportsCount)
                 .PutByteArray(_exports.data, 0, _exports.length).PutShort(_opensCount)
                 .PutByteArray(_opens.data, 0, _opens.length).PutShort(_usesCount)
                 .PutByteArray(_usesIndex.data, 0, _usesIndex.length).PutShort(_providesCount)
                 .PutByteArray(_provides.data, 0, _provides.length);
             if (_packageCount > 0)
-                output.PutShort(_symbolTable.AddConstantUtf8(Constants.Module_Packages)).PutInt(2 + _packageIndex.length)
+                output.PutShort(_symbolTable.AddConstantUtf8(Constants.Module_Packages))
+                    .PutInt(2 + _packageIndex.length)
                     .PutShort(_packageCount).PutByteArray(_packageIndex.data, 0, _packageIndex.length);
             if (_mainClassIndex > 0)
                 output.PutShort(_symbolTable.AddConstantUtf8(Constants.Module_Main_Class)).PutInt(2)

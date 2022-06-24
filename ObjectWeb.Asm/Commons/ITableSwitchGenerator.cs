@@ -1,6 +1,4 @@
-﻿
-
-// ASM: a very small and fast Java bytecode manipulation framework
+﻿// ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
 // All rights reserved.
 //
@@ -27,29 +25,27 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 // THE POSSIBILITY OF SUCH DAMAGE.
+
 namespace ObjectWeb.Asm.Commons
 {
+    /// <summary>
+    /// A code generator for switch statements.
+    /// 
+    /// @author Juozas Baliuka
+    /// @author Chris Nokleberg
+    /// @author Eric Bruneton
+    /// </summary>
+    public interface ITableSwitchGenerator
+    {
+        /// <summary>
+        /// Generates the code for a switch case.
+        /// </summary>
+        /// <param name="key"> the switch case key. </param>
+        /// <param name="end"> a label that corresponds to the end of the switch statement. </param>
+        void GenerateCase(int key, Label end);
 
-	/// <summary>
-	/// A code generator for switch statements.
-	/// 
-	/// @author Juozas Baliuka
-	/// @author Chris Nokleberg
-	/// @author Eric Bruneton
-	/// </summary>
-	public interface ITableSwitchGenerator
-	{
-
-	  /// <summary>
-	  /// Generates the code for a switch case.
-	  /// </summary>
-	  /// <param name="key"> the switch case key. </param>
-	  /// <param name="end"> a label that corresponds to the end of the switch statement. </param>
-	  void GenerateCase(int key, Label end);
-
-	  /// <summary>
-	  /// Generates the code for the default switch case. </summary>
-	  void GenerateDefault();
-	}
-
+        /// <summary>
+        /// Generates the code for the default switch case. </summary>
+        void GenerateDefault();
+    }
 }

@@ -1,6 +1,4 @@
-﻿
-
-// ASM: a very small and fast Java bytecode manipulation framework
+﻿// ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
 // All rights reserved.
 //
@@ -27,43 +25,43 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 // THE POSSIBILITY OF SUCH DAMAGE.
+
 namespace ObjectWeb.Asm
 {
-	/// <summary>
-	/// Exception thrown when the constant pool of a class produced by a <seealso cref="ClassWriter"/> is too
-	/// large.
-	/// 
-	/// @author Jason Zaugg
-	/// </summary>
-	public sealed class ClassTooLargeException : System.Exception
-	{
-	  private const long SerialVersionUid = 160715609518896765L;
+    /// <summary>
+    /// Exception thrown when the constant pool of a class produced by a <seealso cref="ClassWriter"/> is too
+    /// large.
+    /// 
+    /// @author Jason Zaugg
+    /// </summary>
+    public sealed class ClassTooLargeException : System.Exception
+    {
+        private const long SerialVersionUid = 160715609518896765L;
 
-	  private readonly string _className;
-	  private readonly int _constantPoolCount;
+        private readonly string _className;
+        private readonly int _constantPoolCount;
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="ClassTooLargeException"/>.
-	  /// </summary>
-	  /// <param name="className"> the internal name of the class. </param>
-	  /// <param name="constantPoolCount"> the number of constant pool items of the class. </param>
-	  public ClassTooLargeException(string className, int constantPoolCount) : base("Class too large: " + className)
-	  {
-		this._className = className;
-		this._constantPoolCount = constantPoolCount;
-	  }
+        /// <summary>
+        /// Constructs a new <seealso cref="ClassTooLargeException"/>.
+        /// </summary>
+        /// <param name="className"> the internal name of the class. </param>
+        /// <param name="constantPoolCount"> the number of constant pool items of the class. </param>
+        public ClassTooLargeException(string className, int constantPoolCount) : base("Class too large: " + className)
+        {
+            this._className = className;
+            this._constantPoolCount = constantPoolCount;
+        }
 
-	  /// <summary>
-	  /// Returns the internal name of the class.
-	  /// </summary>
-	  /// <returns> the internal name of the class. </returns>
-	  public string ClassName => _className;
+        /// <summary>
+        /// Returns the internal name of the class.
+        /// </summary>
+        /// <returns> the internal name of the class. </returns>
+        public string ClassName => _className;
 
-      /// <summary>
-	  /// Returns the number of constant pool items of the class.
-	  /// </summary>
-	  /// <returns> the number of constant pool items of the class. </returns>
-	  public int ConstantPoolCount => _constantPoolCount;
+        /// <summary>
+        /// Returns the number of constant pool items of the class.
+        /// </summary>
+        /// <returns> the number of constant pool items of the class. </returns>
+        public int ConstantPoolCount => _constantPoolCount;
     }
-
 }

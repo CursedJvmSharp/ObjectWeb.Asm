@@ -94,7 +94,8 @@ namespace ObjectWeb.Asm.Tree
         ///     field does not have an initial value, must be an <seealso cref = "Integer"/>, a <seealso cref = "Float"/>, a {@link
         ///     Long}, a <seealso cref = "Double"/> or a <seealso cref = "string "/>. </param>
         /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
-        public FieldNode(int access, string name, string descriptor, string signature, object value): this(IOpcodes.Asm9, access, name, descriptor, signature, value)
+        public FieldNode(int access, string name, string descriptor, string signature, object value) : this(
+            IOpcodes.Asm9, access, name, descriptor, signature, value)
         {
             if (this.GetType() != typeof(FieldNode))
             {
@@ -115,7 +116,8 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "value"> the field's initial value. This parameter, which may be {@literal null} if the
         ///     field does not have an initial value, must be an <seealso cref = "Integer"/>, a <seealso cref = "Float"/>, a {@link
         ///     Long}, a <seealso cref = "Double"/> or a <seealso cref = "string "/>. </param>
-        public FieldNode(int api, int access, string name, string descriptor, string signature, object value): base(api)
+        public FieldNode(int api, int access, string name, string descriptor, string signature, object value) :
+            base(api)
         {
             this.Access = access;
             this.Name = name;
@@ -142,7 +144,8 @@ namespace ObjectWeb.Asm.Tree
             return annotation;
         }
 
-        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+            bool visible)
         {
             var typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
             if (visible)
@@ -164,7 +167,7 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitEnd()
         {
-        // Nothing to do.
+            // Nothing to do.
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -229,7 +232,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = VisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(fieldVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
+                    typeAnnotation.Accept(fieldVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
@@ -238,7 +242,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = InvisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(fieldVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
+                    typeAnnotation.Accept(fieldVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }
 

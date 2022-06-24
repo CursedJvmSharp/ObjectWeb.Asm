@@ -54,7 +54,7 @@ namespace ObjectWeb.Asm.Commons
         /// <param name = "algorithm"> the name of the hashing algorithm. </param>
         /// <param name = "modules"> a list of module names. </param>
         /// <param name = "hashes"> the hash of the modules in 'modules'. The two lists must have the same size. </param>
-        public ModuleHashesAttribute(string algorithm, List<string> modules, List<byte[]> hashes): base("ModuleHashes")
+        public ModuleHashesAttribute(string algorithm, List<string> modules, List<byte[]> hashes) : base("ModuleHashes")
         {
             this.Algorithm = algorithm;
             this.Modules = modules;
@@ -65,11 +65,12 @@ namespace ObjectWeb.Asm.Commons
         /// Constructs an empty <seealso cref = "ModuleHashesAttribute"/>. This object can be passed as a prototype to
         /// the <seealso cref = "ClassReader.Accept(ObjectWeb.Asm.ClassVisitor, ObjectWeb.Asm.Attribute[], int)"/> method.
         /// </summary>
-        public ModuleHashesAttribute(): this(null, null, null)
+        public ModuleHashesAttribute() : this(null, null, null)
         {
         }
 
-        public override Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeAttributeOffset, Label[] labels)
+        public override Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer,
+            int codeAttributeOffset, Label[] labels)
         {
             var currentOffset = offset;
             var hashAlgorithm = classReader.ReadUtf8(currentOffset, charBuffer);
@@ -98,7 +99,8 @@ namespace ObjectWeb.Asm.Commons
             return new ModuleHashesAttribute(hashAlgorithm, moduleList, hashList);
         }
 
-        public override ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack, int maxLocals)
+        public override ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack,
+            int maxLocals)
         {
             var byteVector = new ByteVector();
             byteVector.PutShort(classWriter.NewUtf8(Algorithm));
@@ -114,7 +116,8 @@ namespace ObjectWeb.Asm.Commons
                 {
                     var module = Modules[i];
                     var hash = Hashes[i];
-                    byteVector.PutShort(classWriter.NewModule(module)).PutShort(hash.Length).PutByteArray(hash, 0, hash.Length);
+                    byteVector.PutShort(classWriter.NewModule(module)).PutShort(hash.Length)
+                        .PutByteArray(hash, 0, hash.Length);
                 }
             }
 

@@ -76,7 +76,8 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "descriptor"> the record component descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </param>
         /// <param name = "signature"> the record component signature. </param>
         /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
-        public RecordComponentNode(string name, string descriptor, string signature): this(IOpcodes.Asm9, name, descriptor, signature)
+        public RecordComponentNode(string name, string descriptor, string signature) : this(IOpcodes.Asm9, name,
+            descriptor, signature)
         {
             if (this.GetType() != typeof(RecordComponentNode))
             {
@@ -91,7 +92,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "name"> the record component name. </param>
         /// <param name = "descriptor"> the record component descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </param>
         /// <param name = "signature"> the record component signature. </param>
-        public RecordComponentNode(int api, string name, string descriptor, string signature): base(api)
+        public RecordComponentNode(int api, string name, string descriptor, string signature) : base(api)
         {
             this.Name = name;
             this.Descriptor = descriptor;
@@ -116,7 +117,8 @@ namespace ObjectWeb.Asm.Tree
             return annotation;
         }
 
-        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+            bool visible)
         {
             var typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
             if (visible)
@@ -138,7 +140,7 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitEnd()
         {
-        // Nothing to do.
+            // Nothing to do.
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -194,7 +196,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = VisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(recordComponentVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
+                    typeAnnotation.Accept(recordComponentVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
@@ -203,7 +206,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = InvisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(recordComponentVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
+                    typeAnnotation.Accept(recordComponentVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }
 

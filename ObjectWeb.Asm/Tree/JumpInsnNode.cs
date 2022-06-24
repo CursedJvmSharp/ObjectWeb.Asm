@@ -51,7 +51,7 @@ namespace ObjectWeb.Asm.Tree
         ///     IF_ICMPLE, IF_ACMPEQ, IF_ACMPNE, GOTO, JSR, IFNULL or IFNONNULL. </param>
         /// <param name = "label"> the operand of the instruction to be constructed. This operand is a label that
         ///     designates the instruction to which the jump instruction may jump. </param>
-        public JumpInsnNode(int opcode, LabelNode label): base(opcode)
+        public JumpInsnNode(int opcode, LabelNode label) : base(opcode)
         {
             this.Label = label;
         }
@@ -62,9 +62,13 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "opcode"> the new instruction opcode. This opcode must be IFEQ, IFNE, IFLT, IFGE, IFGT,
         ///     IFLE, IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT, IF_ICMPGE, IF_ICMPGT, IF_ICMPLE, IF_ACMPEQ,
         ///     IF_ACMPNE, GOTO, JSR, IFNULL or IFNONNULL. </param>
-        public virtual int Opcode { set => this.opcode = value; }
+        public virtual int Opcode
+        {
+            set => this.opcode = value;
+        }
 
         public override int Type => Jump_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitJumpInsn(opcode, Label.Label);

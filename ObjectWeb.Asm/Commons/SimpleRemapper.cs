@@ -30,78 +30,75 @@
 
 namespace ObjectWeb.Asm.Commons
 {
+    /// <summary>
+    /// A <seealso cref="Remapper"/> using a <seealso cref="System.Collections.IDictionary"/> to define its mapping.
+    /// 
+    /// @author Eugene Kuleshov
+    /// </summary>
+    public class SimpleRemapper : Remapper
+    {
+        private readonly IDictionary<string, string> _mapping;
 
-	/// <summary>
-	/// A <seealso cref="Remapper"/> using a <seealso cref="System.Collections.IDictionary"/> to define its mapping.
-	/// 
-	/// @author Eugene Kuleshov
-	/// </summary>
-	public class SimpleRemapper : Remapper
-	{
+        /// <summary>
+        /// Constructs a new <seealso cref="SimpleRemapper"/> with the given mapping.
+        /// </summary>
+        /// <param name="mapping"> a map specifying a remapping as follows:
+        ///     <ul>
+        ///       <li>for method names, the key is the owner, name and descriptor of the method (in the
+        ///           form &lt;owner&gt;.&lt;name&gt;&lt;descriptor&gt;), and the value is the new method
+        ///           name.
+        ///       <li>for invokedynamic method names, the key is the name and descriptor of the method (in
+        ///           the form .&lt;name&gt;&lt;descriptor&gt;), and the value is the new method name.
+        ///       <li>for field and attribute names, the key is the owner and name of the field or
+        ///           attribute (in the form &lt;owner&gt;.&lt;name&gt;), and the value is the new field
+        ///           name.
+        ///       <li>for internal names, the key is the old internal name, and the value is the new
+        ///           internal name.
+        ///     </ul> </param>
+        public SimpleRemapper(IDictionary<string, string> mapping)
+        {
+            this._mapping = mapping;
+        }
 
-	  private readonly IDictionary<string, string> _mapping;
+        /// <summary>
+        /// Constructs a new <seealso cref="SimpleRemapper"/> with the given mapping.
+        /// </summary>
+        /// <param name="oldName"> the key corresponding to a method, field or internal name (see {@link
+        ///     #SimpleRemapper(Map)} for the format of these keys). </param>
+        /// <param name="newName"> the new method, field or internal name. </param>
+        public SimpleRemapper(string oldName, string newName)
+        {
+            this._mapping = new Dictionary<string, string> { { oldName, newName } };
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="SimpleRemapper"/> with the given mapping.
-	  /// </summary>
-	  /// <param name="mapping"> a map specifying a remapping as follows:
-	  ///     <ul>
-	  ///       <li>for method names, the key is the owner, name and descriptor of the method (in the
-	  ///           form &lt;owner&gt;.&lt;name&gt;&lt;descriptor&gt;), and the value is the new method
-	  ///           name.
-	  ///       <li>for invokedynamic method names, the key is the name and descriptor of the method (in
-	  ///           the form .&lt;name&gt;&lt;descriptor&gt;), and the value is the new method name.
-	  ///       <li>for field and attribute names, the key is the owner and name of the field or
-	  ///           attribute (in the form &lt;owner&gt;.&lt;name&gt;), and the value is the new field
-	  ///           name.
-	  ///       <li>for internal names, the key is the old internal name, and the value is the new
-	  ///           internal name.
-	  ///     </ul> </param>
-	  public SimpleRemapper(IDictionary<string, string> mapping)
-	  {
-		this._mapping = mapping;
-	  }
+        public override string MapMethodName(string owner, string name, string descriptor)
+        {
+            var remappedName = Map(owner + '.' + name + descriptor);
+            return string.ReferenceEquals(remappedName, null) ? name : remappedName;
+        }
 
-	  /// <summary>
-	  /// Constructs a new <seealso cref="SimpleRemapper"/> with the given mapping.
-	  /// </summary>
-	  /// <param name="oldName"> the key corresponding to a method, field or internal name (see {@link
-	  ///     #SimpleRemapper(Map)} for the format of these keys). </param>
-	  /// <param name="newName"> the new method, field or internal name. </param>
-	  public SimpleRemapper(string oldName, string newName)
-	  {
-          this._mapping = new Dictionary<string, string> { { oldName, newName } };
-	  }
+        public override string MapInvokeDynamicMethodName(string name, string descriptor)
+        {
+            var remappedName = Map('.' + name + descriptor);
+            return string.ReferenceEquals(remappedName, null) ? name : remappedName;
+        }
 
-	  public override string MapMethodName(string owner, string name, string descriptor)
-	  {
-		var remappedName = Map(owner + '.' + name + descriptor);
-		return string.ReferenceEquals(remappedName, null) ? name : remappedName;
-	  }
+        public override string MapAnnotationAttributeName(string descriptor, string name)
+        {
+            var remappedName = Map(descriptor + '.' + name);
+            return string.ReferenceEquals(remappedName, null) ? name : remappedName;
+        }
 
-	  public override string MapInvokeDynamicMethodName(string name, string descriptor)
-	  {
-		var remappedName = Map('.' + name + descriptor);
-		return string.ReferenceEquals(remappedName, null) ? name : remappedName;
-	  }
+        public override string MapFieldName(string owner, string name, string descriptor)
+        {
+            var remappedName = Map(owner + '.' + name);
+            return string.ReferenceEquals(remappedName, null) ? name : remappedName;
+        }
 
-	  public override string MapAnnotationAttributeName(string descriptor, string name)
-	  {
-		var remappedName = Map(descriptor + '.' + name);
-		return string.ReferenceEquals(remappedName, null) ? name : remappedName;
-	  }
-
-	  public override string MapFieldName(string owner, string name, string descriptor)
-	  {
-		var remappedName = Map(owner + '.' + name);
-		return string.ReferenceEquals(remappedName, null) ? name : remappedName;
-	  }
-
-	  public override string Map(string key)
-	  {
-		_mapping.TryGetValue(key, out var value);
-		return value;
-	  }
-	}
-
+        public override string Map(string key)
+        {
+            _mapping.TryGetValue(key, out var value);
+            return value;
+        }
+    }
 }

@@ -48,7 +48,7 @@ namespace ObjectWeb.Asm.Tree
         ///     be ILOAD, LLOAD, FLOAD, DLOAD, ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET. </param>
         /// <param name = "var"> the operand of the instruction to be constructed. This operand is the index of a
         ///     local variable. </param>
-        public VarInsnNode(int opcode, int var): base(opcode)
+        public VarInsnNode(int opcode, int var) : base(opcode)
         {
             this.Var = var;
         }
@@ -58,9 +58,13 @@ namespace ObjectWeb.Asm.Tree
         /// </summary>
         /// <param name = "opcode"> the new instruction opcode. This opcode must be ILOAD, LLOAD, FLOAD, DLOAD,
         ///     ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET. </param>
-        public virtual int Opcode { set => this.opcode = value; }
+        public virtual int Opcode
+        {
+            set => this.opcode = value;
+        }
 
         public override int Type => Var_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitVarInsn(opcode, Var);

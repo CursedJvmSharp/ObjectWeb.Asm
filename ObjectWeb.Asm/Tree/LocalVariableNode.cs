@@ -25,6 +25,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 // THE POSSIBILITY OF SUCH DAMAGE.
+
 namespace ObjectWeb.Asm.Tree
 {
     /// <summary>
@@ -68,7 +69,8 @@ namespace ObjectWeb.Asm.Tree
         ///     (inclusive). </param>
         /// <param name = "end"> the last instruction corresponding to the scope of this local variable (exclusive). </param>
         /// <param name = "index"> the local variable's index. </param>
-        public LocalVariableNode(string name, string descriptor, string signature, LabelNode start, LabelNode end, int index)
+        public LocalVariableNode(string name, string descriptor, string signature, LabelNode start, LabelNode end,
+            int index)
         {
             this.Name = name;
             this.Desc = descriptor;

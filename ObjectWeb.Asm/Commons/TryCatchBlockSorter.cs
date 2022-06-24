@@ -58,7 +58,9 @@ namespace ObjectWeb.Asm.Commons
         ///     return type and exceptions do not use generic types. </param>
         /// <param name = "exceptions"> the internal names of the method's exception classes (see {@link
         ///     org.objectweb.asm.Type#getInternalName()}). May be {@literal null}. </param>
-        public TryCatchBlockSorter(MethodVisitor methodVisitor, int access, string name, string descriptor, string signature, string[] exceptions): this(IOpcodes.Asm9, methodVisitor, access, name, descriptor, signature, exceptions)
+        public TryCatchBlockSorter(MethodVisitor methodVisitor, int access, string name, string descriptor,
+            string signature, string[] exceptions) : this(IOpcodes.Asm9, methodVisitor, access, name, descriptor,
+            signature, exceptions)
         {
             if (this.GetType() != typeof(TryCatchBlockSorter))
             {
@@ -66,7 +68,8 @@ namespace ObjectWeb.Asm.Commons
             }
         }
 
-        public TryCatchBlockSorter(int api, MethodVisitor methodVisitor, int access, string name, string descriptor, string signature, string[] exceptions): base(api, access, name, descriptor, signature, exceptions)
+        public TryCatchBlockSorter(int api, MethodVisitor methodVisitor, int access, string name, string descriptor,
+            string signature, string[] exceptions) : base(api, access, name, descriptor, signature, exceptions)
         {
             this.mv = methodVisitor;
         }
@@ -90,6 +93,7 @@ namespace ObjectWeb.Asm.Commons
         private class ComparatorAnonymousInnerClass : IComparer<Tree.TryCatchBlockNode>
         {
             private readonly TryCatchBlockSorter _outerInstance;
+
             public ComparatorAnonymousInnerClass(TryCatchBlockSorter outerInstance)
             {
                 this._outerInstance = outerInstance;

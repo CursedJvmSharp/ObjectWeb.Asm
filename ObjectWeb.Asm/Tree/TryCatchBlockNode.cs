@@ -117,7 +117,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = VisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
+                    typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
@@ -126,7 +127,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = InvisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
+                    typeAnnotation.Accept(methodVisitor.VisitTryCatchAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }
         }

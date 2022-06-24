@@ -51,13 +51,14 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "line"> a line number. This number refers to the source file from which the class was
         ///     compiled. </param>
         /// <param name = "start"> the first instruction corresponding to this line number. </param>
-        public LineNumberNode(int line, LabelNode start): base(-1)
+        public LineNumberNode(int line, LabelNode start) : base(-1)
         {
             this.Line = line;
             this.Start = start;
         }
 
         public override int Type => Line;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitLineNumber(Line, Start.Label);

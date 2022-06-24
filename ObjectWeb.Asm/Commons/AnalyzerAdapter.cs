@@ -51,6 +51,7 @@ namespace ObjectWeb.Asm.Commons
         ///     The labels that designate the next instruction to be visited. May be {@literal null}.
         /// </summary>
         private List<Label> _labels;
+
         /// <summary>
         ///     The local variable slots for the current execution frame. Primitive types are represented by
         ///     <seealso cref = "IIOpcodes.top / > , <seealso cref = "IIOpcodes.integer / > , <seealso cref = "IIOpcodes. float  / > , 
@@ -63,14 +64,17 @@ namespace ObjectWeb.Asm.Commons
         ///     The maximum number of local variables of this method.
         /// </summary>
         private int _maxLocals;
+
         /// <summary>
         ///     The maximum stack size of this method.
         /// </summary>
         private int _maxStack;
+
         /// <summary>
         ///     The owner's class name.
         /// </summary>
         private readonly string _owner;
+
         /// <summary>
         ///     The operand stack slots for the current execution frame. Primitive types are represented by
         ///     <seealso cref = "IIOpcodes.top / > , <seealso cref = "IIOpcodes.integer / > , <seealso cref = "IIOpcodes. float  / > , 
@@ -101,7 +105,8 @@ namespace ObjectWeb.Asm.Commons
         ///     null}.
         /// </param>
         /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
-        public AnalyzerAdapter(string owner, int access, string name, string descriptor, MethodVisitor methodVisitor): this(IOpcodes.Asm9, owner, access, name, descriptor, methodVisitor)
+        public AnalyzerAdapter(string owner, int access, string name, string descriptor, MethodVisitor methodVisitor) :
+            this(IOpcodes.Asm9, owner, access, name, descriptor, methodVisitor)
         {
             if (GetType() != typeof(AnalyzerAdapter))
                 throw new InvalidOperationException();
@@ -122,7 +127,8 @@ namespace ObjectWeb.Asm.Commons
         ///     the method visitor to which this adapter delegates calls. May be {@literal
         ///     null}.
         /// </param>
-        public AnalyzerAdapter(int api, string owner, int access, string name, string descriptor, MethodVisitor methodVisitor): base(api, methodVisitor)
+        public AnalyzerAdapter(int api, string owner, int access, string name, string descriptor,
+            MethodVisitor methodVisitor) : base(api, methodVisitor)
         {
             this._owner = owner;
             Locals = new List<object>();
@@ -174,7 +180,8 @@ namespace ObjectWeb.Asm.Commons
         {
             if (type != IOpcodes.F_New)
                 // Uncompressed frame.
-                throw new ArgumentException("AnalyzerAdapter only accepts expanded frames (see ClassReader.EXPAND_FRAMES)");
+                throw new ArgumentException(
+                    "AnalyzerAdapter only accepts expanded frames (see ClassReader.EXPAND_FRAMES)");
             base.VisitFrame(type, numLocal, local, numStack, stack);
             if (Locals != null)
             {
@@ -224,7 +231,8 @@ namespace ObjectWeb.Asm.Commons
         public override void VisitVarInsn(int opcode, int varIndex)
         {
             base.VisitVarInsn(opcode, varIndex);
-            var isLongOrDouble = opcode == IOpcodes.Lload || opcode == IOpcodes.Dload || opcode == IOpcodes.Lstore || opcode == IOpcodes.Dstore;
+            var isLongOrDouble = opcode == IOpcodes.Lload || opcode == IOpcodes.Dload || opcode == IOpcodes.Lstore ||
+                                 opcode == IOpcodes.Dstore;
             _maxLocals = Math.Max(_maxLocals, varIndex + (isLongOrDouble ? 2 : 1));
             Execute(opcode, varIndex, null);
         }
@@ -256,7 +264,8 @@ namespace ObjectWeb.Asm.Commons
             Execute(opcode, 0, descriptor);
         }
 
-        public override void VisitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor, bool isInterface)
+        public override void VisitMethodInsn(int opcodeAndSource, string owner, string name, string descriptor,
+            bool isInterface)
         {
             if (api < IOpcodes.Asm5 && (opcodeAndSource & IOpcodes.Source_Deprecated) == 0)
             {
@@ -300,7 +309,8 @@ namespace ObjectWeb.Asm.Commons
             _labels = null;
         }
 
-        public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle, params object[] bootstrapMethodArguments)
+        public override void VisitInvokeDynamicInsn(string name, string descriptor, Handle bootstrapMethodHandle,
+            params object[] bootstrapMethodArguments)
         {
             base.VisitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
             if (Locals == null)
@@ -419,10 +429,12 @@ namespace ObjectWeb.Asm.Commons
             Execute(IOpcodes.Multianewarray, numDimensions, descriptor);
         }
 
-        public override void VisitLocalVariable(string name, string descriptor, string signature, Label start, Label end, int index)
+        public override void VisitLocalVariable(string name, string descriptor, string signature, Label start,
+            Label end, int index)
         {
             var firstDescriptorChar = descriptor[0];
-            _maxLocals = Math.Max(_maxLocals, index + (firstDescriptorChar == 'J' || firstDescriptorChar == 'D' ? 2 : 1));
+            _maxLocals = Math.Max(_maxLocals,
+                index + (firstDescriptorChar == 'J' || firstDescriptorChar == 'D' ? 2 : 1));
             base.VisitLocalVariable(name, descriptor, signature, start, end, index);
         }
 
@@ -459,7 +471,9 @@ namespace ObjectWeb.Asm.Commons
 
         private void PushDescriptor(string fieldOrMethodDescriptor)
         {
-            var descriptor = fieldOrMethodDescriptor[0] == '(' ? JType.GetReturnType(fieldOrMethodDescriptor).Descriptor : fieldOrMethodDescriptor;
+            var descriptor = fieldOrMethodDescriptor[0] == '('
+                ? JType.GetReturnType(fieldOrMethodDescriptor).Descriptor
+                : fieldOrMethodDescriptor;
             switch (descriptor[0])
             {
                 case 'V':

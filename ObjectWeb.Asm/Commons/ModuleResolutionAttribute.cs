@@ -25,6 +25,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 // THE POSSIBILITY OF SUCH DAMAGE.
+
 namespace ObjectWeb.Asm.Commons
 {
     /// <summary>
@@ -40,19 +41,23 @@ namespace ObjectWeb.Asm.Commons
         /// by default.
         /// </summary>
         public const int Resolution_Do_Not_Resolve_By_Default = 1;
+
         /// <summary>
         /// The resolution state of a module meaning the module is marked as deprecated. </summary>
         public const int Resolution_Warn_Deprecated = 2;
+
         /// <summary>
         /// The resolution state of a module meaning the module is marked as deprecated and will be removed
         /// in a future release.
         /// </summary>
         public const int Resolution_Warn_Deprecated_For_Removal = 4;
+
         /// <summary>
         /// The resolution state of a module meaning the module is not yet standardized, so in incubating
         /// mode.
         /// </summary>
         public const int Resolution_Warn_Incubating = 8;
+
         /// <summary>
         /// The resolution state of the module. Must be one of <seealso cref = "Resolution_Warn_Deprecated"/>, {@link
         /// #RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL}, and <seealso cref = "Resolution_Warn_Incubating"/>.
@@ -65,7 +70,7 @@ namespace ObjectWeb.Asm.Commons
         /// <param name = "resolution"> the resolution state of the module. Must be one of {@link
         ///     #RESOLUTION_WARN_DEPRECATED}, <seealso cref = "Resolution_Warn_Deprecated_For_Removal"/>, and {@link
         ///     #RESOLUTION_WARN_INCUBATING}. </param>
-        public ModuleResolutionAttribute(int resolution): base("ModuleResolution")
+        public ModuleResolutionAttribute(int resolution) : base("ModuleResolution")
         {
             this.Resolution = resolution;
         }
@@ -74,16 +79,18 @@ namespace ObjectWeb.Asm.Commons
         /// Constructs an empty <seealso cref = "ModuleResolutionAttribute"/>. This object can be passed as a prototype
         /// to the <seealso cref = "ClassReader.Accept(ObjectWeb.Asm.ClassVisitor, ObjectWeb.Asm.Attribute[], int)"/> method.
         /// </summary>
-        public ModuleResolutionAttribute(): this(0)
+        public ModuleResolutionAttribute() : this(0)
         {
         }
 
-        public override Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer, int codeOffset, Label[] labels)
+        public override Attribute Read(ClassReader classReader, int offset, int length, char[] charBuffer,
+            int codeOffset, Label[] labels)
         {
             return new ModuleResolutionAttribute(classReader.ReadUnsignedShort(offset));
         }
 
-        public override ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack, int maxLocals)
+        public override ByteVector Write(ClassWriter classWriter, byte[] code, int codeLength, int maxStack,
+            int maxLocals)
         {
             var byteVector = new ByteVector();
             byteVector.PutShort(Resolution);

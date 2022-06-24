@@ -50,7 +50,7 @@ namespace ObjectWeb.Asm.Tree
         ///     ANEWARRAY, CHECKCAST or INSTANCEOF. </param>
         /// <param name = "descriptor"> the operand of the instruction to be constructed. This operand is an internal
         ///     name (see <seealso cref = "org.objectweb.asm.Type"/>). </param>
-        public TypeInsnNode(int opcode, string descriptor): base(opcode)
+        public TypeInsnNode(int opcode, string descriptor) : base(opcode)
         {
             this.Desc = descriptor;
         }
@@ -60,9 +60,13 @@ namespace ObjectWeb.Asm.Tree
         /// </summary>
         /// <param name = "opcode"> the new instruction opcode. This opcode must be NEW, ANEWARRAY, CHECKCAST or
         ///     INSTANCEOF. </param>
-        public virtual int Opcode { set => this.opcode = value; }
+        public virtual int Opcode
+        {
+            set => this.opcode = value;
+        }
 
         public override int Type => Type_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitTypeInsn(opcode, Desc);

@@ -1,6 +1,4 @@
-﻿
-
-// ASM: a very small and fast Java bytecode manipulation framework
+﻿// ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
 // All rights reserved.
 //
@@ -30,122 +28,120 @@
 
 namespace ObjectWeb.Asm
 {
-	/// <summary>
-	/// Information about a class being parsed in a <seealso cref="ClassReader"/>.
-	/// 
-	/// @author Eric Bruneton
-	/// </summary>
-	internal sealed class Context
-	{
+    /// <summary>
+    /// Information about a class being parsed in a <seealso cref="ClassReader"/>.
+    /// 
+    /// @author Eric Bruneton
+    /// </summary>
+    internal sealed class Context
+    {
+        /// <summary>
+        /// The prototypes of the attributes that must be parsed in this class. </summary>
+        internal Attribute[] attributePrototypes;
 
-	  /// <summary>
-	  /// The prototypes of the attributes that must be parsed in this class. </summary>
-	  internal Attribute[] attributePrototypes;
+        /// <summary>
+        /// The options used to parse this class. One or more of <seealso cref="ClassReader.Skip_Code"/>, {@link
+        /// ClassReader#SKIP_DEBUG}, <seealso cref="ClassReader.Skip_Frames"/>, <seealso cref="ClassReader.Expand_Frames"/> or
+        /// <seealso cref="ClassReader.Expand_Asm_Insns"/>.
+        /// </summary>
+        internal int parsingOptions;
 
-	  /// <summary>
-	  /// The options used to parse this class. One or more of <seealso cref="ClassReader.Skip_Code"/>, {@link
-	  /// ClassReader#SKIP_DEBUG}, <seealso cref="ClassReader.Skip_Frames"/>, <seealso cref="ClassReader.Expand_Frames"/> or
-	  /// <seealso cref="ClassReader.Expand_Asm_Insns"/>.
-	  /// </summary>
-	  internal int parsingOptions;
+        /// <summary>
+        /// The buffer used to read strings in the constant pool. </summary>
+        internal char[] charBuffer;
 
-	  /// <summary>
-	  /// The buffer used to read strings in the constant pool. </summary>
-	  internal char[] charBuffer;
+        // Information about the current method, i.e. the one read in the current (or latest) call
+        // to {@link ClassReader#readMethod()}.
 
-	  // Information about the current method, i.e. the one read in the current (or latest) call
-	  // to {@link ClassReader#readMethod()}.
+        /// <summary>
+        /// The access flags of the current method. </summary>
+        internal int currentMethodAccessFlags;
 
-	  /// <summary>
-	  /// The access flags of the current method. </summary>
-	  internal int currentMethodAccessFlags;
+        /// <summary>
+        /// The name of the current method. </summary>
+        internal string currentMethodName;
 
-	  /// <summary>
-	  /// The name of the current method. </summary>
-	  internal string currentMethodName;
+        /// <summary>
+        /// The descriptor of the current method. </summary>
+        internal string currentMethodDescriptor;
 
-	  /// <summary>
-	  /// The descriptor of the current method. </summary>
-	  internal string currentMethodDescriptor;
+        /// <summary>
+        /// The labels of the current method, indexed by bytecode offset (only bytecode offsets for which a
+        /// label is needed have a non null associated Label).
+        /// </summary>
+        internal Label[] currentMethodLabels;
 
-	  /// <summary>
-	  /// The labels of the current method, indexed by bytecode offset (only bytecode offsets for which a
-	  /// label is needed have a non null associated Label).
-	  /// </summary>
-	  internal Label[] currentMethodLabels;
+        // Information about the current type annotation target, i.e. the one read in the current
+        // (or latest) call to {@link ClassReader#readAnnotationTarget()}.
 
-	  // Information about the current type annotation target, i.e. the one read in the current
-	  // (or latest) call to {@link ClassReader#readAnnotationTarget()}.
+        /// <summary>
+        /// The target_type and target_info of the current type annotation target, encoded as described in
+        /// <seealso cref="TypeReference"/>.
+        /// </summary>
+        internal int currentTypeAnnotationTarget;
 
-	  /// <summary>
-	  /// The target_type and target_info of the current type annotation target, encoded as described in
-	  /// <seealso cref="TypeReference"/>.
-	  /// </summary>
-	  internal int currentTypeAnnotationTarget;
+        /// <summary>
+        /// The target_path of the current type annotation target. </summary>
+        internal TypePath currentTypeAnnotationTargetPath;
 
-	  /// <summary>
-	  /// The target_path of the current type annotation target. </summary>
-	  internal TypePath currentTypeAnnotationTargetPath;
+        /// <summary>
+        /// The start of each local variable range in the current local variable annotation. </summary>
+        internal Label[] currentLocalVariableAnnotationRangeStarts;
 
-	  /// <summary>
-	  /// The start of each local variable range in the current local variable annotation. </summary>
-	  internal Label[] currentLocalVariableAnnotationRangeStarts;
+        /// <summary>
+        /// The end of each local variable range in the current local variable annotation. </summary>
+        internal Label[] currentLocalVariableAnnotationRangeEnds;
 
-	  /// <summary>
-	  /// The end of each local variable range in the current local variable annotation. </summary>
-	  internal Label[] currentLocalVariableAnnotationRangeEnds;
+        /// <summary>
+        /// The local variable index of each local variable range in the current local variable annotation.
+        /// </summary>
+        internal int[] currentLocalVariableAnnotationRangeIndices;
 
-	  /// <summary>
-	  /// The local variable index of each local variable range in the current local variable annotation.
-	  /// </summary>
-	  internal int[] currentLocalVariableAnnotationRangeIndices;
+        // Information about the current stack map frame, i.e. the one read in the current (or latest)
+        // call to {@link ClassReader#readFrame()}.
 
-	  // Information about the current stack map frame, i.e. the one read in the current (or latest)
-	  // call to {@link ClassReader#readFrame()}.
+        /// <summary>
+        /// The bytecode offset of the current stack map frame. </summary>
+        internal int currentFrameOffset;
 
-	  /// <summary>
-	  /// The bytecode offset of the current stack map frame. </summary>
-	  internal int currentFrameOffset;
+        /// <summary>
+        /// The type of the current stack map frame. One of <seealso cref="IOpcodes.F_FULL"/>, {@link
+        /// Opcodes#F_APPEND}, <seealso cref="IOpcodes.F_CHOP"/>, <seealso cref="IOpcodes.F_SAME"/> or <seealso cref="IOpcodes.F_SAME1"/>.
+        /// </summary>
+        internal int currentFrameType;
 
-	  /// <summary>
-	  /// The type of the current stack map frame. One of <seealso cref="IOpcodes.F_FULL"/>, {@link
-	  /// Opcodes#F_APPEND}, <seealso cref="IOpcodes.F_CHOP"/>, <seealso cref="IOpcodes.F_SAME"/> or <seealso cref="IOpcodes.F_SAME1"/>.
-	  /// </summary>
-	  internal int currentFrameType;
+        /// <summary>
+        /// The number of local variable types in the current stack map frame. Each type is represented
+        /// with a single array element (even long and double).
+        /// </summary>
+        internal int currentFrameLocalCount;
 
-	  /// <summary>
-	  /// The number of local variable types in the current stack map frame. Each type is represented
-	  /// with a single array element (even long and double).
-	  /// </summary>
-	  internal int currentFrameLocalCount;
+        /// <summary>
+        /// The delta number of local variable types in the current stack map frame (each type is
+        /// represented with a single array element - even long and double). This is the number of local
+        /// variable types in this frame, minus the number of local variable types in the previous frame.
+        /// </summary>
+        internal int currentFrameLocalCountDelta;
 
-	  /// <summary>
-	  /// The delta number of local variable types in the current stack map frame (each type is
-	  /// represented with a single array element - even long and double). This is the number of local
-	  /// variable types in this frame, minus the number of local variable types in the previous frame.
-	  /// </summary>
-	  internal int currentFrameLocalCountDelta;
+        /// <summary>
+        /// The types of the local variables in the current stack map frame. Each type is represented with
+        /// a single array element (even long and double), using the format described in {@link
+        /// MethodVisitor#visitFrame}. Depending on <seealso cref="currentFrameType"/>, this contains the types of
+        /// all the local variables, or only those of the additional ones (compared to the previous frame).
+        /// </summary>
+        internal object[] currentFrameLocalTypes;
 
-	  /// <summary>
-	  /// The types of the local variables in the current stack map frame. Each type is represented with
-	  /// a single array element (even long and double), using the format described in {@link
-	  /// MethodVisitor#visitFrame}. Depending on <seealso cref="currentFrameType"/>, this contains the types of
-	  /// all the local variables, or only those of the additional ones (compared to the previous frame).
-	  /// </summary>
-	  internal object[] currentFrameLocalTypes;
+        /// <summary>
+        /// The number stack element types in the current stack map frame. Each type is represented with a
+        /// single array element (even long and double).
+        /// </summary>
+        internal int currentFrameStackCount;
 
-	  /// <summary>
-	  /// The number stack element types in the current stack map frame. Each type is represented with a
-	  /// single array element (even long and double).
-	  /// </summary>
-	  internal int currentFrameStackCount;
-
-	  /// <summary>
-	  /// The types of the stack elements in the current stack map frame. Each type is represented with a
-	  /// single array element (even long and double), using the format described in {@link
-	  /// MethodVisitor#visitFrame}.
-	  /// </summary>
-	  internal object[] currentFrameStackTypes;
-	}
-
+        /// <summary>
+        /// The types of the stack elements in the current stack map frame. Each type is represented with a
+        /// single array element (even long and double), using the format described in {@link
+        /// MethodVisitor#visitFrame}.
+        /// </summary>
+        internal object[] currentFrameStackTypes;
+    }
 }

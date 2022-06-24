@@ -67,7 +67,8 @@ namespace ObjectWeb.Asm.Tree
         ///     org.objectweb.asm.Type#getInternalName()}). </param>
         /// <param name = "name"> the method's name. </param>
         /// <param name = "descriptor"> the method's descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </param>
-        public MethodInsnNode(int opcode, string owner, string name, string descriptor): this(opcode, owner, name, descriptor, opcode == IOpcodes.Invokeinterface)
+        public MethodInsnNode(int opcode, string owner, string name, string descriptor) : this(opcode, owner, name,
+            descriptor, opcode == IOpcodes.Invokeinterface)
         {
         }
 
@@ -81,7 +82,7 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "name"> the method's name. </param>
         /// <param name = "descriptor"> the method's descriptor (see <seealso cref = "org.objectweb.asm.Type"/>). </param>
         /// <param name = "isInterface"> if the method's owner class is an interface. </param>
-        public MethodInsnNode(int opcode, string owner, string name, string descriptor, bool isInterface): base(opcode)
+        public MethodInsnNode(int opcode, string owner, string name, string descriptor, bool isInterface) : base(opcode)
         {
             this.Owner = owner;
             this.Name = name;
@@ -94,9 +95,13 @@ namespace ObjectWeb.Asm.Tree
         /// </summary>
         /// <param name = "opcode"> the new instruction opcode. This opcode must be INVOKEVIRTUAL, INVOKESPECIAL,
         ///     INVOKESTATIC or INVOKEINTERFACE. </param>
-        public virtual int Opcode { set => this.opcode = value; }
+        public virtual int Opcode
+        {
+            set => this.opcode = value;
+        }
 
         public override int Type => Method_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitMethodInsn(opcode, Owner, Name, Desc, Itf);

@@ -87,7 +87,7 @@ namespace ObjectWeb.Asm.Tree
         ///     ACC_MANDATED}. </param>
         /// <param name = "version"> the module version, or {@literal null}. </param>
         /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
-        public ModuleNode(string name, int access, string version): base(IOpcodes.Asm9)
+        public ModuleNode(string name, int access, string version) : base(IOpcodes.Asm9)
         {
             if (this.GetType() != typeof(ModuleNode))
             {
@@ -114,7 +114,9 @@ namespace ObjectWeb.Asm.Tree
         /// <param name = "opens"> The packages opened by this module. May be {@literal null}. </param>
         /// <param name = "uses"> The internal names of the services used by this module. May be {@literal null}. </param>
         /// <param name = "provides"> The services provided by this module. May be {@literal null}. </param>
-        public ModuleNode(int api, string name, int access, string version, List<ModuleRequireNode> requires, List<ModuleExportNode> exports, List<ModuleOpenNode> opens, List<string> uses, List<ModuleProvideNode> provides): base(api)
+        public ModuleNode(int api, string name, int access, string version, List<ModuleRequireNode> requires,
+            List<ModuleExportNode> exports, List<ModuleOpenNode> opens, List<string> uses,
+            List<ModuleProvideNode> provides) : base(api)
         {
             this.Name = name;
             this.Access = access;
@@ -193,7 +195,7 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitEnd()
         {
-        // Nothing to do.
+            // Nothing to do.
         }
 
         /// <summary>

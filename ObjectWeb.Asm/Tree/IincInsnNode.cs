@@ -49,13 +49,14 @@ namespace ObjectWeb.Asm.Tree
         /// </summary>
         /// <param name = "var"> index of the local variable to be incremented. </param>
         /// <param name = "incr"> increment amount to increment the local variable by. </param>
-        public IincInsnNode(int var, int incr): base(IOpcodes.Iinc)
+        public IincInsnNode(int var, int incr) : base(IOpcodes.Iinc)
         {
             this.Var = var;
             this.Incr = incr;
         }
 
         public override int Type => Iinc_Insn;
+
         public override void Accept(MethodVisitor methodVisitor)
         {
             methodVisitor.VisitIincInsn(Var, Incr);

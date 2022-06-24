@@ -151,7 +151,7 @@ namespace ObjectWeb.Asm.Tree
         /// they must use the <seealso cref = "ClassNode(int)"/> version.
         /// </summary>
         /// <exception cref = "IllegalStateException"> If a subclass calls this constructor. </exception>
-        public ClassNode(): this(IOpcodes.Asm9)
+        public ClassNode() : this(IOpcodes.Asm9)
         {
             if (this.GetType() != typeof(ClassNode))
             {
@@ -164,7 +164,7 @@ namespace ObjectWeb.Asm.Tree
         /// </summary>
         /// <param name = "api"> the ASM API version implemented by this visitor. Must be one of the {@code
         ///     ASM}<i>x</i> values in <seealso cref = "IOpcodes"/>. </param>
-        public ClassNode(int api): base(api)
+        public ClassNode(int api) : base(api)
         {
             this.Interfaces = new List<string>();
             this.InnerClasses = new List<InnerClassNode>();
@@ -175,7 +175,8 @@ namespace ObjectWeb.Asm.Tree
         // -----------------------------------------------------------------------------------------------
         // Implementation of the ClassVisitor abstract class
         // -----------------------------------------------------------------------------------------------
-        public override void Visit(int version, int access, string name, string signature, string superName, string[] interfaces)
+        public override void Visit(int version, int access, string name, string signature, string superName,
+            string[] interfaces)
         {
             this.Version = version;
             this.Access = access;
@@ -224,7 +225,8 @@ namespace ObjectWeb.Asm.Tree
             return annotation;
         }
 
-        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor, bool visible)
+        public override AnnotationVisitor VisitTypeAnnotation(int typeRef, TypePath typePath, string descriptor,
+            bool visible)
         {
             var typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
             if (visible)
@@ -267,14 +269,16 @@ namespace ObjectWeb.Asm.Tree
             return recordComponent;
         }
 
-        public override FieldVisitor VisitField(int access, string name, string descriptor, string signature, object value)
+        public override FieldVisitor VisitField(int access, string name, string descriptor, string signature,
+            object value)
         {
             var field = new FieldNode(access, name, descriptor, signature, value);
             Fields.Add(field);
             return field;
         }
 
-        public override MethodVisitor VisitMethod(int access, string name, string descriptor, string signature, string[] exceptions)
+        public override MethodVisitor VisitMethod(int access, string name, string descriptor, string signature,
+            string[] exceptions)
         {
             var method = new MethodNode(access, name, descriptor, signature, exceptions);
             Methods.Add(method);
@@ -283,7 +287,7 @@ namespace ObjectWeb.Asm.Tree
 
         public override void VisitEnd()
         {
-        // Nothing to do.
+            // Nothing to do.
         }
 
         // -----------------------------------------------------------------------------------------------
@@ -440,7 +444,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = VisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = VisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(classVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, true));
+                    typeAnnotation.Accept(classVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, true));
                 }
             }
 
@@ -449,7 +454,8 @@ namespace ObjectWeb.Asm.Tree
                 for (int i = 0, n = InvisibleTypeAnnotations.Count; i < n; ++i)
                 {
                     var typeAnnotation = InvisibleTypeAnnotations[i];
-                    typeAnnotation.Accept(classVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef, typeAnnotation.TypePath, typeAnnotation.Desc, false));
+                    typeAnnotation.Accept(classVisitor.VisitTypeAnnotation(typeAnnotation.TypeRef,
+                        typeAnnotation.TypePath, typeAnnotation.Desc, false));
                 }
             }
 
