@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
-using Java.IO;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -204,22 +204,21 @@ namespace ObjectWeb.Asm
 		{
 		  throw new System.InvalidOperationException("Bytecode not available, can't check class version");
 		}
-		int minorVersion;
-		try
+
+		using var binary = new BinaryReader(classInputStream);
+		binary.ReadInt32();
+		var bytes = binary.ReadBytes(2);
+
+		if (BitConverter.IsLittleEndian)
 		{
-				using (var callerClassStream = new DataInputStream(classInputStream))
-				{
-			  callerClassStream.ReadInt();
-			  minorVersion = callerClassStream.ReadUnsignedShort();
-				}
+			bytes = bytes.Reverse().ToArray();
 		}
-		catch (IOException ioe)
-		{
-		  throw new System.InvalidOperationException("I/O error, can't check class version", ioe);
-		}
+		
+		int minorVersion = BitConverter.ToInt16(bytes.ToArray());
+		
 		if (minorVersion != 0xFFFF)
 		{
-		  throw new System.InvalidOperationException("ASM9_EXPERIMENTAL can only be used by classes compiled with --enable-preview");
+		  throw new InvalidOperationException("ASM9_EXPERIMENTAL can only be used by classes compiled with --enable-preview");
 		}
 	  }
 	}

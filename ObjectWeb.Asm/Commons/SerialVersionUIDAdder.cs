@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using Java.IO;
 
 // ASM: a very small and fast Java bytecode manipulation framework
 // Copyright (c) 2000-2011 INRIA, France Telecom
@@ -323,73 +322,68 @@ namespace ObjectWeb.Asm.Commons
 	  {
 		long svuid = 0;
 
-		using (var byteArrayOutputStream = new MemoryStream()) 
-        using(var dataOutputStream = new DataOutputStream(byteArrayOutputStream))
+		using var stream = new MemoryStream();
+
+		// 1. The class name written using UTF encoding.
+		stream.WriteUtf(_name.Replace('/', '.'));
+
+		// 2. The class modifiers written as a 32-bit integer.
+		var mods = _access;
+		if ((mods & IOpcodes.Acc_Interface) != 0)
 		{
+		  mods = _svuidMethods.Count == 0 ? (mods & ~IOpcodes.Acc_Abstract) : (mods | IOpcodes.Acc_Abstract);
+		}
+		stream.WriteInt(mods & (IOpcodes.Acc_Public | IOpcodes.Acc_Final | IOpcodes.Acc_Interface | IOpcodes.Acc_Abstract));
 
-		  // 1. The class name written using UTF encoding.
-		  dataOutputStream.WriteUtf(_name.Replace('/', '.'));
+		// 3. The name of each interface sorted by name written using UTF encoding.
+		Array.Sort(_interfaces);
+		foreach (var interfaceName in _interfaces)
+		{
+		  stream.WriteUtf(interfaceName.Replace('/', '.'));
+		}
 
-		  // 2. The class modifiers written as a 32-bit integer.
-		  var mods = _access;
-		  if ((mods & IOpcodes.Acc_Interface) != 0)
-		  {
-			mods = _svuidMethods.Count == 0 ? (mods & ~IOpcodes.Acc_Abstract) : (mods | IOpcodes.Acc_Abstract);
-		  }
-		  dataOutputStream.WriteInt(mods & (IOpcodes.Acc_Public | IOpcodes.Acc_Final | IOpcodes.Acc_Interface | IOpcodes.Acc_Abstract));
+		// 4. For each field of the class sorted by field name (except private static and private
+		// transient fields):
+		//   1. The name of the field in UTF encoding.
+		//   2. The modifiers of the field written as a 32-bit integer.
+		//   3. The descriptor of the field in UTF encoding.
+		// Note that field signatures are not dot separated. Method and constructor signatures are dot
+		// separated. Go figure...
+		WriteItems(_svuidFields, stream, false);
 
-		  // 3. The name of each interface sorted by name written using UTF encoding.
-		  Array.Sort(_interfaces);
-		  foreach (var interfaceName in _interfaces)
-		  {
-			dataOutputStream.WriteUtf(interfaceName.Replace('/', '.'));
-		  }
+		// 5. If a class initializer exists, write out the following:
+		//   1. The name of the method, <clinit>, in UTF encoding.
+		//   2. The modifier of the method, ACC_STATIC, written as a 32-bit integer.
+		//   3. The descriptor of the method, ()V, in UTF encoding.
+		if (_hasStaticInitializer)
+		{
+		  stream.WriteUtf(Clinit);
+		  stream.WriteInt(IOpcodes.Acc_Static);
+		  stream.WriteUtf("()V");
+		}
 
-		  // 4. For each field of the class sorted by field name (except private static and private
-		  // transient fields):
-		  //   1. The name of the field in UTF encoding.
-		  //   2. The modifiers of the field written as a 32-bit integer.
-		  //   3. The descriptor of the field in UTF encoding.
-		  // Note that field signatures are not dot separated. Method and constructor signatures are dot
-		  // separated. Go figure...
-		  WriteItems(_svuidFields, dataOutputStream, false);
+		// 6. For each non-private constructor sorted by method name and signature:
+		//   1. The name of the method, <init>, in UTF encoding.
+		//   2. The modifiers of the method written as a 32-bit integer.
+		//   3. The descriptor of the method in UTF encoding.
+		WriteItems(_svuidConstructors, stream, true);
 
-		  // 5. If a class initializer exists, write out the following:
-		  //   1. The name of the method, <clinit>, in UTF encoding.
-		  //   2. The modifier of the method, ACC_STATIC, written as a 32-bit integer.
-		  //   3. The descriptor of the method, ()V, in UTF encoding.
-		  if (_hasStaticInitializer)
-		  {
-			dataOutputStream.WriteUtf(Clinit);
-			dataOutputStream.WriteInt(IOpcodes.Acc_Static);
-			dataOutputStream.WriteUtf("()V");
-		  }
+		// 7. For each non-private method sorted by method name and signature:
+		//   1. The name of the method in UTF encoding.
+		//   2. The modifiers of the method written as a 32-bit integer.
+		//   3. The descriptor of the method in UTF encoding.
+		WriteItems(_svuidMethods, stream, true);
 
-		  // 6. For each non-private constructor sorted by method name and signature:
-		  //   1. The name of the method, <init>, in UTF encoding.
-		  //   2. The modifiers of the method written as a 32-bit integer.
-		  //   3. The descriptor of the method in UTF encoding.
-		  WriteItems(_svuidConstructors, dataOutputStream, true);
+		// 8. The SHA-1 algorithm is executed on the stream of bytes produced by DataOutputStream and
+		// produces five 32-bit values sha[0..4].
+		var hashBytes = ComputeShAdigest(stream.ToArray());
 
-		  // 7. For each non-private method sorted by method name and signature:
-		  //   1. The name of the method in UTF encoding.
-		  //   2. The modifiers of the method written as a 32-bit integer.
-		  //   3. The descriptor of the method in UTF encoding.
-		  WriteItems(_svuidMethods, dataOutputStream, true);
-
-		  dataOutputStream.Flush();
-
-		  // 8. The SHA-1 algorithm is executed on the stream of bytes produced by DataOutputStream and
-		  // produces five 32-bit values sha[0..4].
-		  var hashBytes = ComputeShAdigest(byteArrayOutputStream.ToArray());
-
-		  // 9. The hash value is assembled from the first and second 32-bit values of the SHA-1 message
-		  // digest. If the result of the message digest, the five 32-bit words H0 H1 H2 H3 H4, is in an
-		  // array of five int values named sha, the hash value would be computed as follows:
-		  for (var i = Math.Min(hashBytes.Length, 8) - 1; i >= 0; i--)
-		  {
-			svuid = (svuid << 8) | (uint)(hashBytes[i] & 0xFF);
-		  }
+		// 9. The hash value is assembled from the first and second 32-bit values of the SHA-1 message
+		// digest. If the result of the message digest, the five 32-bit words H0 H1 H2 H3 H4, is in an
+		// array of five int values named sha, the hash value would be computed as follows:
+		for (var i = Math.Min(hashBytes.Length, 8) - 1; i >= 0; i--)
+		{
+		  svuid = (svuid << 8) | (uint)(hashBytes[i] & 0xFF);
 		}
 
 		return svuid;
@@ -414,15 +408,15 @@ namespace ObjectWeb.Asm.Commons
 	  /// <param name="dataOutputStream"> where the items must be written. </param>
 	  /// <param name="dotted"> whether package names must use dots, instead of slashes. </param>
 	  /// <exception cref="IOException"> if an error occurs. </exception>
-	  private static void WriteItems(ICollection<Item> itemCollection, IDataOutput dataOutputStream, bool dotted)
+	  private static void WriteItems(ICollection<Item> itemCollection, Stream stream, bool dotted)
 	  {
 		var items = itemCollection.ToArray();
 		Array.Sort(items);
 		foreach (var item in items)
 		{
-		  dataOutputStream.WriteUtf(item.name);
-		  dataOutputStream.WriteInt(item.access);
-		  dataOutputStream.WriteUtf(dotted ? item.descriptor.Replace('/', '.') : item.descriptor);
+			stream.WriteUtf(item.name);
+			stream.WriteInt(item.access);
+			stream.WriteUtf(dotted ? item.descriptor.Replace('/', '.') : item.descriptor);
 		}
 	  }
 
@@ -470,4 +464,73 @@ namespace ObjectWeb.Asm.Commons
 	  }
 	}
 
+	internal static class DataOutputStream
+	{
+		internal static void WriteInt(this Stream memoryStream, int v)
+		{
+			memoryStream.WriteByte((byte)((int)((uint)v >> 24) & 0xFF));
+			memoryStream.WriteByte((byte)((int)((uint)v >> 16) & 0xFF));
+			memoryStream.WriteByte((byte)((int)((uint)v >> 8) & 0xFF));
+			memoryStream.WriteByte((byte)((int)((uint)v >> 0) & 0xFF));
+		}
+
+		internal static void WriteUtf(this Stream memoryStream, string str)
+        {
+            var strlen = str.Length;
+            var utflen = 0;
+            int c;
+            var count = 0;
+            for (var i = 0; i < strlen; i++)
+            {
+                c = str[i];
+                switch (c)
+                {
+                    case >= 0x0001 and <= 0x007F:
+                        utflen++;
+                        break;
+                    case > 0x07FF:
+                        utflen += 3;
+                        break;
+                    default:
+                        utflen += 2;
+                        break;
+                }
+            }
+
+            if (utflen > 65535) throw new Exception("UTFDataFormat: encoded string too long: " + utflen + " bytes");
+            byte[] bytearr;
+            bytearr = new byte[utflen * 2 + 2];
+            bytearr[count++] = unchecked((byte)((int)((uint)utflen >> 8) & 0xFF));
+            bytearr[count++] = unchecked((byte)((int)((uint)utflen >> 0) & 0xFF));
+            int i1;
+            for (i1 = 0; i1 < strlen; i1++)
+            {
+                c = str[i1];
+                if (!(c >= 0x0001 && c <= 0x007F)) break;
+                bytearr[count++] = unchecked((byte)c);
+            }
+
+            for (; i1 < strlen; i1++)
+            {
+                c = str[i1];
+                switch (c)
+                {
+                    case >= 0x0001 and <= 0x007F:
+                        bytearr[count++] = unchecked((byte)c);
+                        break;
+                    case > 0x07FF:
+                        bytearr[count++] = unchecked((byte)(0xE0 | ((c >> 12) & 0x0F)));
+                        bytearr[count++] = unchecked((byte)(0x80 | ((c >> 6) & 0x3F)));
+                        bytearr[count++] = unchecked((byte)(0x80 | ((c >> 0) & 0x3F)));
+                        break;
+                    default:
+                        bytearr[count++] = unchecked((byte)(0xC0 | ((c >> 6) & 0x1F)));
+                        bytearr[count++] = unchecked((byte)(0x80 | ((c >> 0) & 0x3F)));
+                        break;
+                }
+            }
+
+            memoryStream.Write(bytearr, 0, utflen + 2);
+        }
+	}
 }

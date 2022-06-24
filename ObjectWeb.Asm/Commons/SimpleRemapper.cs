@@ -99,7 +99,8 @@ namespace ObjectWeb.Asm.Commons
 
 	  public override string Map(string key)
 	  {
-		return _mapping.GetValueOrNull(key);
+		_mapping.TryGetValue(key, out var value);
+		return value;
 	  }
 	}
 
